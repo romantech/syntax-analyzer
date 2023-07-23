@@ -1,9 +1,7 @@
-import { useState } from 'react';
+import classnames from 'classnames';
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <div>Hello World</div>;
+  return <div className={classnames('text-blue-400')}>Test</div>;
 }
 
 export default App;
