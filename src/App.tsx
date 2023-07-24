@@ -1,13 +1,12 @@
-import Layout from '@/components/Layout.tsx';
 import { Outlet, useMatch } from 'react-router-dom';
 import { siteUrls } from '@/constants/siteUrls.ts';
-import Intro from '@/components/Intro.tsx';
+import { Intro, Layout } from '@/components';
 
 function App() {
-  const isHome = useMatch(siteUrls.root);
+  const isRoot = useMatch(siteUrls.root);
   return (
     <Layout>
-      {isHome && <Intro />}
+      {isRoot && <Intro />}
       <Outlet />
     </Layout>
   );

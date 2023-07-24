@@ -5,7 +5,6 @@ import {
   Flex,
   Heading,
   Icon,
-  Link,
   Spacer,
   Tab,
   TabList,
@@ -34,7 +33,7 @@ export default function Header() {
             </Heading>
           </Box>
           <Box ml={6}>
-            <Tabs variant="soft-rounded" index={tabIndex}>
+            <Tabs variant="soft-rounded" defaultIndex={tabIndex}>
               <TabList>
                 {tabList.map((tab) => (
                   <NavLink to={tab.path} key={tab.label}>
@@ -47,13 +46,13 @@ export default function Header() {
         </Flex>
         <Spacer />
         <Flex align="center">
-          <Button variant="ghost">
-            <Link
-              href="https://github.com/romantech/syntax-analyzer-front"
-              isExternal
-            >
-              <Icon as={BsGithub} boxSize="1.2rem" />
-            </Link>
+          <Button
+            variant="ghost"
+            as="a"
+            target="_blank"
+            href="https://github.com/romantech/syntax-analyzer-front"
+          >
+            <Icon as={BsGithub} boxSize="1.2rem" />
           </Button>
           <Button onClick={toggleColorMode} variant="ghost">
             <Icon as={ToggleIcon} boxSize="1.2rem" />
