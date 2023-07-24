@@ -46,7 +46,7 @@ export default function Header() {
           </Box>
         </Flex>
         <Spacer />
-        <Flex gap={1} align="center">
+        <Flex align="center">
           <Button variant="ghost">
             <Link
               href="https://github.com/romantech/syntax-analyzer-front"

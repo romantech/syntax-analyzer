@@ -2,11 +2,7 @@ import React, { PropsWithChildren } from 'react';
 import { Container } from '@chakra-ui/react';
 import Header from '@/components/Header.tsx';
 
-interface MainLayoutProps {}
-
-export default function MainLayout({
-  children,
-}: PropsWithChildren<MainLayoutProps>) {
+export default function Layout({ children }: PropsWithChildren) {
   return (
     <Container maxW="8xl">
       <Header />
