@@ -15,10 +15,14 @@ import {
 import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
 import { BsGithub } from 'react-icons/bs';
 import { Fragment } from 'react';
+import { tabList } from '@/constants/tabList.ts';
+import { NavLink } from 'react-router-dom';
+import useTabIndex from '@/hooks/useTabIndex.ts';
 
 export default function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
   const ToggleIcon = colorMode === 'light' ? MdModeNight : MdOutlineLightMode;
+  const tabIndex = useTabIndex();
 
   return (
     <Fragment>
@@ -30,11 +34,13 @@ export default function Header() {
             </Heading>
           </Box>
           <Box ml={6}>
-            <Tabs variant="soft-rounded">
+            <Tabs variant="soft-rounded" index={tabIndex}>
               <TabList>
-                <Tab>Home</Tab>
-                <Tab>Syntax Analyzer</Tab>
-                <Tab>Syntax Editor</Tab>
+                {tabList.map((tab) => (
+                  <NavLink to={tab.path} key={tab.label}>
+                    <Tab textTransform="capitalize">{tab.label}</Tab>
+                  </NavLink>
+                ))}
               </TabList>
             </Tabs>
           </Box>
