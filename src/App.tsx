@@ -1,7 +1,12 @@
-import classnames from 'classnames';
+import MainLayout from '@/components/MainLayout.tsx';
+import { Outlet } from 'react-router-dom';
 
 function App() {
-  return <div className={classnames('text-blue-400')}>Test</div>;
+  return (
+    <MainLayout>
+      <Outlet />
+    </MainLayout>
+  );
 }
 
 export default App;
