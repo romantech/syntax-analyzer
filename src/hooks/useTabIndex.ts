@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
-import { tabList } from '@/constants/tabList.ts';
+import { TAB_LIST } from '@/constants/tabList.ts';
 
 export default function useTabIndex() {
   const { pathname } = useLocation();
-  return tabList.findIndex((tab) => tab.path === pathname);
+  return TAB_LIST.findIndex((tab) => tab.path === pathname);
 }

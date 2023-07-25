@@ -1,9 +1,9 @@
 import { Outlet, useMatch } from 'react-router-dom';
-import { siteUrls } from '@/constants/siteUrls.ts';
 import { Intro, Layout } from '@/components';
+import { SITE_URLS } from '@/constants/siteUrls.ts';
 
 function App() {
-  const isRoot = useMatch(siteUrls.root);
+  const isRoot = useMatch(SITE_URLS.root);
   return (
     <Layout>
       {isRoot && <Intro />}

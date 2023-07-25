@@ -1,16 +1,16 @@
-import { siteUrls } from '@/constants/siteUrls.ts';
+import { SITE_URLS } from '@/constants/siteUrls.ts';
 
-export const tabList = [
+export const TAB_LIST = [
   {
     label: 'home',
     path: '/',
   },
   {
     label: 'syntax analyzer',
-    path: siteUrls.syntaxAnalyzer,
+    path: SITE_URLS.syntaxAnalyzer,
   },
   {
     label: 'syntax editor',
-    path: siteUrls.syntaxEditor,
+    path: SITE_URLS.syntaxEditor,
   },
-];
+] as const;

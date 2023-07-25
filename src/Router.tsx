@@ -1,20 +1,20 @@
 import { createBrowserRouter } from 'react-router-dom';
 import React from 'react';
 import App from '@/App';
-import { siteUrls } from '@/constants/siteUrls.ts';
 import { ErrorPage, SyntaxAnalyzerPage, SyntaxEditorPage } from '@/pages';
+import { SITE_URLS } from '@/constants/siteUrls.ts';
 
 const router = createBrowserRouter([
   {
-    path: siteUrls.root,
+    path: SITE_URLS.root,
     element: <App />,
     children: [
       {
-        path: siteUrls.syntaxAnalyzer,
+        path: SITE_URLS.syntaxAnalyzer,
         element: <SyntaxAnalyzerPage />,
       },
       {
-        path: siteUrls.syntaxEditor,
+        path: SITE_URLS.syntaxEditor,
         element: <SyntaxEditorPage />,
       },
       {
