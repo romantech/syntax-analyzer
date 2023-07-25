@@ -15,8 +15,8 @@ import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
 import { BsGithub } from 'react-icons/bs';
 import { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
-import useTabIndex from '@/hooks/useTabIndex.ts';
 import { TAB_LIST } from '@/constants/tabList.ts';
+import { useTabIndex } from '@/hooks';
 
 export default function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
