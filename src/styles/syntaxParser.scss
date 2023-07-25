@@ -1,0 +1,61 @@
+$clause-padding-base: 0.1rem; // 절/구 하단 여백
+$clause-top-base: 3rem; // 절/구 이름 상단 여백
+$clause-offset-base: 1.6rem; // 절/구 점선 상하 간격
+$token-top-base: 2.5rem; // 단어 상단 여백
+$token-offset-base: 1rem; // 단어 상하 간격
+
+@for $i from 1 through 30 {
+  $offset: $clause-offset-base * ($i - 1);
+
+  .constituent.clause[data-clause-lv='#{$i}'],
+  .constituent.phrase[data-phrase-lv='#{$i}'] {
+    padding-bottom: $clause-padding-base + $offset;
+
+    &:after {
+      top: $clause-padding-base + $clause-top-base + $offset;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      border-left: 2px dashed;
+      border-right: 2px dashed;
+    }
+  }
+}
+
+@for $i from 1 through 30 {
+  $offset: $token-offset-base * ($i - 1);
+
+  .constituent.token[data-token-lv='#{$i}']:after {
+    top: $token-top-base + $offset;
+  }
+}
+
+.constituent {
+  position: relative;
+
+  &:after {
+    position: absolute;
+    left: 0;
+    font-size: 1rem;
+
+    content: attr(data-constituent);
+    text-align: center;
+    font-style: italic;
+    min-width: 100%;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  &.clause,
+  &.phrase {
+    border-bottom: dashed 2px;
+  }
+}

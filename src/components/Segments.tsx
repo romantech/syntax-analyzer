@@ -1,4 +1,4 @@
-import React, { Fragment, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Segment as TSegment } from '@/types/analysis.ts';
 import Segment from './Segment';
 
@@ -30,9 +30,51 @@ export default function Segments({ segment, tokenElements }: SegmentsProps) {
 
   return (
     <Segment segment={segment}>
-      {childrenWithSegment.map((item, i) => (
-        <Fragment key={i}>{item}</Fragment>
-      ))}
+      {childrenWithSegment.map((token) => token)}
     </Segment>
   );
 }
+
+/**
+ * 렌더링 시뮬레이션
+ * ['I', 'am', 'a', 'boy', 'who', 'likes', 'to', 'play', 'tennis', '.']
+ * segment1 : 0, 2 (I am)
+ * segment2 : 2, 10 (a boy who likes to play tennis.)
+ * segment2.child[0] : 2, 4 (a boy)
+ * segment2.child[1] : 4, 10 (who likes to play tennis.)
+ * -----------------------------------------------------------------------------
+ * i0 found child -> segment1 재귀 호출
+ * -----------------------------------------------------------------------------
+ * <segment1.begin = 0>
+ * i0 not found child -> ['I']
+ * i1 not found child -> ['I', 'am']
+ * return ['I', 'am'] -> <Segment1>
+ * -----------------------------------------------------------------------------
+ * back to root : childrenWithSegment = [<Segment1>]
+ * index : segment1.end - 1 + 1 = 2
+ * i2 found child -> segment2 재귀 호출
+ * -----------------------------------------------------------------------------
+ * <segment2.begin = 2>
+ * i2 found child -> segment2.child[0] 재귀 호출
+ * -----------------------------------------------------------------------------
+ * <segment2.child[0].begin 2>
+ * i2 not found child -> ['a']
+ * i3 not found child -> ['a', 'boy']
+ * return ['a', 'boy'] -> <Segment2.child[0]>
+ * -------------------------------------------------
+ * back to segment2 : childrenWithSegment = [<Segment2.child[0]>]
+ * index : segment2.child[0].end - 1 + 1 = 4
+ * i4 found child -> segment2.child[1] 재귀 호출
+ * -----------------------------------------------------------------------------
+ * <segment2.child[1].begin = 4>
+ * i4 not found child -> ['who']
+ * ...생략
+ * i9 not found child -> ['who', 'likes', 'to', 'play', 'tennis', '.']
+ * return ['who', 'likes', 'to', 'play', 'tennis', '.'] -> <Segment2.child[1]>
+ * -----------------------------------------------------------------------------
+ * back to segment2 : childrenWithSegment = [<Segment2.child[0]>, <Segment2.child[1]>]
+ * return ['a', 'boy', 'who', 'likes', ..., '.'] -> <Segment2>
+ * -----------------------------------------------------------------------------
+ * back to root : childrenWithSegment = [<Segment1>, <Segment2>]
+ * return ['I', 'am', 'a', 'boy', 'who', 'likes', ..., '.'] -> <Segments>
+ * */

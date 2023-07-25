@@ -13,11 +13,11 @@ export default function Segment({
   if (!segment.constituents.length) return <Fragment>{children}</Fragment>;
 
   return segment.constituents.reduce(
-    (nestedElements, constituent) => (
+    (tokens, constituent) => (
       <Constituent key={constituent.id} constituent={constituent}>
-        {nestedElements}
+        {tokens}
       </Constituent>
     ),
-    children,
+    children as JSX.Element,
   );
 }
