@@ -1,23 +1,23 @@
-export type TagType = 'clause' | 'phrase' | 'token';
+export type ConstituentType = 'clause' | 'phrase' | 'token';
 
-export type Tag = {
-  id: number; // Random 9-digit number
+export type Constituent = {
+  id: number; // A random 9-digit number
   label: string; // Grammatical constituent name in lowercase
   abbreviation: string; // Abbreviated constituent name in lowercase
-  type: TagType; // Constituent type
+  type: ConstituentType; // Constituent type
   comment?: string; // Optional comment
 };
 
 export type Segment = {
-  id: number; // Random 9-digit number
+  id: number; // A random 9-digit number
   begin: number; // Start token index
   end: number; // End token index
-  tag: Tag[]; // Can be empty
+  constituents: Constituent[]; // Can be empty
   children: Segment[]; // Can be empty
 };
 
 export type Analysis = {
-  id: string; // Random UUID v4
+  id: string; // A random string of 21 bytes
   sentence: string[]; // Tokenized sentence
-  segments: [Segment]; // The array contains only a single root segment
+  rootSegment: Segment; // The array contains only a single root segment
 };

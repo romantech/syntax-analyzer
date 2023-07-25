@@ -1,6 +1,6 @@
-import { Tag } from '@/types/analysis';
+import { Constituent } from '@/types/analysis';
 
-export const CONSTITUENTS: Omit<Tag, 'id'>[] = [
+export const CONSTITUENTS: Omit<Constituent, 'id'>[] = [
   { label: 'subject', abbreviation: 's', type: 'token' },
   { label: 'verb', abbreviation: 'v', type: 'token' },
   { label: 'auxiliary verb', abbreviation: 'aux.v', type: 'token' },
