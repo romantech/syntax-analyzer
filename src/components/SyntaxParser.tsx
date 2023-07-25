@@ -3,7 +3,7 @@ import { Segments, Token } from '@/components/index.ts';
 import { Text } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import { calculateNestingLevel } from '@/utils/nestingLevelCalculators.ts';
-import '@/styles/syntaxParser.scss';
+import '@/styles/constituent.scss';
 
 const Tokens = sampleData.sentence.map((token, i) => (
   <Token token={token} key={i} index={i} isFirst={i === 0} />
