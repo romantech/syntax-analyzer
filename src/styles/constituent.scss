@@ -1,24 +1,27 @@
-$clause-padding-base: 0.1rem; // 절/구 하단 여백
-$clause-top-base: 3rem; // 절/구 이름 상단 여백
-$clause-offset-base: 1.6rem; // 절/구 점선 상하 간격
-$token-top-base: 2.5rem; // 단어 상단 여백
-$token-offset-base: 1rem; // 단어 상하 간격
+$constituent-margin: 0.2rem; // 절&구 좌우 여백
+$constituent-top-base: 1.9rem; // 절&구 이름과 상단 점선 사이의 간격
+$constituent-offset: 2rem; // 절&구 전체 영역 높이
+$token-top-base: 2.5rem; // 토큰 상단 여백
+$token-offset: 2rem; // 각 토큰 사이의 간격
 
 @for $i from 1 through 30 {
-  $offset: $clause-offset-base * ($i - 1);
+  $offset: $constituent-offset * ($i - 0.5);
 
   .constituent.clause[data-clause-lv='#{$i}'],
   .constituent.phrase[data-phrase-lv='#{$i}'] {
-    padding-bottom: $clause-padding-base + $offset;
+    margin: 0 $constituent-margin;
+    padding: 0 $constituent-margin $constituent-margin + $offset;
 
+    // 문장 성분 이름
     &:after {
-      top: $clause-padding-base + $clause-top-base + $offset;
+      top: $constituent-margin + $constituent-top-base + $offset;
     }
 
-    &::before {
+    // 좌우 점선
+    &:before {
       content: '';
       position: absolute;
-      top: 10px;
+      top: 15px;
       bottom: 0;
       right: 0;
       left: 0;
@@ -29,8 +32,9 @@ $token-offset-base: 1rem; // 단어 상하 간격
 }
 
 @for $i from 1 through 30 {
-  $offset: $token-offset-base * ($i - 1);
+  $offset: $token-offset * ($i - 0.8);
 
+  // 문장 성분 영역
   .constituent.token[data-token-lv='#{$i}']:after {
     top: $token-top-base + $offset;
   }
@@ -39,15 +43,19 @@ $token-offset-base: 1rem; // 단어 상하 간격
 .constituent {
   position: relative;
 
+  // 문장 성분 이름
   &:after {
     position: absolute;
-    left: 0;
-    font-size: 1rem;
+    width: fit-content;
+    left: 50%;
+    padding: 0 0.5rem 0.15rem 0.5rem;
+    transform: translateX(-50%);
+    background-color: black;
+    border-radius: 0.5rem;
 
-    content: attr(data-constituent);
-    text-align: center;
+    font-size: 1rem;
     font-style: italic;
-    min-width: 100%;
+    content: attr(data-constituent);
 
     text-overflow: ellipsis;
     overflow: hidden;

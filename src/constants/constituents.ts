@@ -1,9 +1,9 @@
 import { Constituent, ConstituentType } from '@/types/analysis';
 
 export const CONSTITUENT_COLORS: Record<ConstituentType, string> = {
-  token: 'white',
+  token: 'red.200',
   phrase: 'teal.200',
-  clause: 'yellow.200',
+  clause: 'yellow.400',
 };
 
 export const CONSTITUENTS: Omit<Constituent, 'id'>[] = [

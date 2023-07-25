@@ -8,7 +8,7 @@ interface TokenProps {
 
 const Token = ({ token, padding }: TokenProps) => {
   return (
-    <Text as="span" p={padding}>
+    <Text position="relative" as="span" p={padding} zIndex={1}>
       {token}
     </Text>
   );
