@@ -1,4 +1,4 @@
-import React, { Fragment, PropsWithChildren, ReactElement } from 'react';
+import React, { Fragment, PropsWithChildren } from 'react';
 import { Segment as TSegment } from '@/types/analysis.ts';
 import Constituent from '@/components/Constituent';
 
@@ -10,14 +10,14 @@ export default function Segment({
   segment,
   children,
 }: PropsWithChildren<SegmentProps>) {
-  if (segment.constituents.length) {
-    return segment.constituents.reduce((acc, constituent) => {
-      return (
-        <Constituent key={constituent.id} constituent={constituent}>
-          {acc}
-        </Constituent>
-      );
-    }, children) as ReactElement;
-  }
-  return <Fragment>{children}</Fragment>;
+  if (!segment.constituents.length) return <Fragment>{children}</Fragment>;
+
+  return segment.constituents.reduce(
+    (nestedElements, constituent) => (
+      <Constituent key={constituent.id} constituent={constituent}>
+        {nestedElements}
+      </Constituent>
+    ),
+    children,
+  );
 }
