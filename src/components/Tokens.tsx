@@ -3,15 +3,12 @@ import { isPunctuation } from '@/utils/common.ts';
 
 interface TokenProps {
   token: string;
-  space: boolean;
-  isPunctuation: boolean;
+  padding: number[];
 }
 
-const Token = ({ token, space, isPunctuation }: TokenProps) => {
-  const paddingRight = space ? 1 : 0;
-  const paddingLeft = !isPunctuation ? 1 : 0;
+const Token = ({ token, padding }: TokenProps) => {
   return (
-    <Text as="span" pr={paddingRight} pl={paddingLeft}>
+    <Text as="span" p={padding}>
       {token}
     </Text>
   );
@@ -25,13 +22,10 @@ export default function Tokens({ sentence }: TokensProps) {
   return sentence.map((token, i) => {
     const isNextTokenPunctuation = isPunctuation(sentence[i + 1]);
     const isCurrentTokenPunctuation = isPunctuation(token);
+    const spaceAfter = isNextTokenPunctuation ? 0 : 1;
+    const spaceBefore = isCurrentTokenPunctuation ? 0 : 1;
     return (
-      <Token
-        token={token}
-        key={i}
-        space={!isNextTokenPunctuation}
-        isPunctuation={Boolean(isCurrentTokenPunctuation)}
-      />
+      <Token token={token} key={i} padding={[0, spaceAfter, 0, spaceBefore]} />
     );
   });
 }
