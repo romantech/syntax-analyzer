@@ -1,5 +1,8 @@
-import { NonWordCharPattern } from '@/constants/regex';
+import { NonWordCharPattern, PunctuationPattern } from '@/constants/regex';
 import { customAlphabet } from 'nanoid';
+
+export const isPunctuation = (token?: string) =>
+  Boolean(token?.match(PunctuationPattern));
 
 /** split(/\s+/) : 1개 이상의 연속된 공백을 기준으로 분리 */
 export const tokenizer = (text: string) => {

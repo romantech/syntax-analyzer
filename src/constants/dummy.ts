@@ -1,26 +1,16 @@
 import { Analysis } from '@/types/analysis.ts';
+import { tokenizer } from '@/utils/common.ts';
+
+const sentences = ['I am a boy who likes to play tennis which is fun.'];
+const currentSentence = sentences[0];
 
 export const sampleData: Analysis = {
   id: '7b8c92ef935647db9b24',
-  sentence: [
-    'I',
-    'am',
-    'a',
-    'boy',
-    'who',
-    'likes',
-    'to',
-    'play',
-    'tennis',
-    'which',
-    'is',
-    'fun',
-    '.',
-  ],
+  sentence: tokenizer(currentSentence),
   rootSegment: {
     id: 498734612,
     begin: 0,
-    end: 13,
+    end: currentSentence.length,
     constituents: [],
     children: [
       {

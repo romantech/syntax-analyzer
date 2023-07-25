@@ -1,17 +1,13 @@
 import { sampleData } from '@/constants/dummy.ts';
-import { Segments, Token } from '@/components/index.ts';
+import { Segments, Tokens } from '@/components';
 import { Text } from '@chakra-ui/react';
 import { useEffect, useRef } from 'react';
 import { calculateNestingLevel } from '@/utils/nestingLevelCalculators.ts';
 import '@/styles/constituent.scss';
 
-const Tokens = sampleData.sentence.map((token, i) => (
-  <Token token={token} key={i} index={i} isFirst={i === 0} />
-));
-
 export default function SyntaxParser() {
   const sentenceRef = useRef<HTMLParagraphElement>(null);
-  const { rootSegment } = sampleData;
+  const { rootSegment, sentence } = sampleData;
 
   useEffect(() => {
     if (sentenceRef.current) calculateNestingLevel(sentenceRef);
@@ -22,7 +18,7 @@ export default function SyntaxParser() {
       <Segments
         key={rootSegment.id}
         segment={rootSegment}
-        tokenElements={Tokens}
+        tokenElements={Tokens({ sentence })}
       />
     </Text>
   );
