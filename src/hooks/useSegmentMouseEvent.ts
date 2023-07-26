@@ -3,14 +3,17 @@ import { getNearestConstituent } from '@/utils/common.ts';
 import { ConstituentDataSet } from '@/types/analysis.ts';
 import { useColorMode } from '@chakra-ui/react';
 import { DELETE_MODE_COLOR } from '@/constants/constituents.ts';
+import { deleteModeAtom } from '@/store/controlPanelStore.ts';
+import { useAtomValue } from 'jotai';
 
 export default function useSegmentMouseEvent() {
   const hoverRef = useRef<HTMLElement | null>(null);
   const [targetInfo, setTargetInfo] = useState<ConstituentDataSet | null>(null);
   const { colorMode } = useColorMode();
+  const isDeleteMode = useAtomValue(deleteModeAtom);
 
   const setOriginalColor = () => {
-    if (hoverRef.current) {
+    if (hoverRef.current && isDeleteMode) {
       hoverRef.current.style.removeProperty('color');
       hoverRef.current = null;
     }
@@ -27,6 +30,7 @@ export default function useSegmentMouseEvent() {
   };
 
   const onMouseOver = (event: MouseEvent<HTMLElement>) => {
+    if (!isDeleteMode) return;
     const target = event.target as HTMLElement;
 
     if (target !== hoverRef.current) {

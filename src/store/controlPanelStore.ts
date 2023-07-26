@@ -1,4 +1,5 @@
 import { atom } from 'jotai';
 
-export const tagTooltipModeAtom = atom(true);
-export const abbrTooltipModeAtom = atom(true);
+export const tagInfoMode = atom(true);
+export const abbrInfoMode = atom(true);
+export const deleteModeAtom = atom(false);
