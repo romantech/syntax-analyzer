@@ -4,7 +4,7 @@ import Header from '@/layout/Header.tsx';
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <Container maxW="8xl">
+    <Container minW="90%">
       <Flex direction="column" h="100vh">
         <Header />
         <Box flex="1">{children}</Box>

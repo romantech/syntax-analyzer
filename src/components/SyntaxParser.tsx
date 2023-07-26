@@ -14,7 +14,7 @@ export default function SyntaxParser() {
   return (
     <SlideFade in={isNestingLevelCalculated} offsetY={100}>
       <Text
-        fontSize="4xl"
+        fontSize="3xl"
         fontWeight="bold"
         ref={sentenceRef}
         whiteSpace="nowrap"

@@ -1,6 +1,15 @@
 import { NonWordCharPattern, PunctuationPattern } from '@/constants/regex';
 import { customAlphabet } from 'nanoid';
 
+export const getNearestConstituent = (elementParam: HTMLElement | null) => {
+  let element = elementParam;
+  while (element) {
+    if (element.dataset.constituent) return element;
+    element = element.parentElement;
+  }
+  return null;
+};
+
 export const isPunctuation = (token?: string) =>
   Boolean(token?.match(PunctuationPattern));
 

@@ -1,10 +1,13 @@
-import { VStack } from '@chakra-ui/react';
-import { SyntaxParser } from '@/components';
+import { TagList, SyntaxParser } from '@/components';
+import { Box, Flex } from '@chakra-ui/react';
 
 export default function SyntaxEditorPage() {
   return (
-    <VStack justify="center" align="center" minH="90%">
-      <SyntaxParser />
-    </VStack>
+    <Flex direction="column" minH="full" overflowX="auto">
+      <TagList />
+      <Box>
+        <SyntaxParser />
+      </Box>
+    </Flex>
   );
 }
