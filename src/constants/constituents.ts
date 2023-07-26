@@ -1,4 +1,4 @@
-import { Constituent } from '@/types/analysis';
+import { Constituent, ConstituentType } from '@/types/analysis';
 import { ConstituentColors } from '@/types/common';
 
 export const CONSTITUENT_COLORS: ConstituentColors = {
@@ -47,4 +47,61 @@ export const CONSTITUENTS: Omit<Constituent, 'id'>[] = [
   { label: 'relative clause', abbreviation: 'rel.cl', type: 'clause' },
   { label: 'dependent clause', abbreviation: 'dep.cl', type: 'clause' },
   { label: 'independent clause', abbreviation: 'ind.cl', type: 'clause' },
+];
+
+type EnglishLabels = Extract<Constituent, { label: string }>['label'];
+
+export const ConstituentTranslations: Record<EnglishLabels, string> = {
+  subject: '주어',
+  verb: '동사',
+  'auxiliary verb': '조동사',
+  'modal verb': '법조동사',
+  object: '목적어',
+  'indirect object': '간접 목적어',
+  'direct object': '직접 목적어',
+  'prepositional object': '전치사 목적어',
+  complement: '보어',
+  'object complement': '목적보어',
+  'to-infinitive': 'to부정사',
+  'infinitive object': '부정사 목적어',
+  gerund: '동명사',
+  'gerund object': '동명사 목적어',
+  participle: '분사',
+  'participle object': '분사 목적어',
+  'participle phrase': '분사 구문',
+  'prepositional phrase': '전치사구',
+  'adverbial phrase': '부사구',
+  'adjectival phrase': '형용사구',
+  'coordinating conjunction': '등위어',
+  'coordinating clause': '등위절',
+  'parallel clause': '병렬절',
+  'noun clause': '명사절',
+  'adjectival clause': '형용사절',
+  'adverbial clause': '부사절',
+  'inserted clause': '삽입절',
+  'relative clause': '관계절',
+  'dependent clause': '의존절',
+  'independent clause': '독립절',
+};
+
+type ConstituentGroup = { [key in ConstituentType]: Omit<Constituent, 'id'>[] };
+const groupedConstituentsByType = CONSTITUENTS.reduce((group, cons) => {
+  if (!group[cons.type]) group[cons.type] = [];
+  group[cons.type].push(cons);
+  return group;
+}, {} as ConstituentGroup);
+
+export const CONSTITUENT_CATEGORIES = [
+  {
+    label: 'general | 주어/동사 등',
+    constituents: groupedConstituentsByType.token,
+  },
+  {
+    label: 'phrase | 전치사구/동명사구 등',
+    constituents: groupedConstituentsByType.phrase,
+  },
+  {
+    label: 'clause | 독립절/의존절 등',
+    constituents: groupedConstituentsByType.clause,
+  },
 ];

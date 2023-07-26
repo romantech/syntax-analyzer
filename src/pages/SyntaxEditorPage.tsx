@@ -1,4 +1,4 @@
-import { TagList, SyntaxParser } from '@/components';
+import { SyntaxParser, TagList } from '@/components';
 import { Box, Flex } from '@chakra-ui/react';
 
 export default function SyntaxEditorPage() {

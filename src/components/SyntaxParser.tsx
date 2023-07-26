@@ -8,7 +8,7 @@ import useCalculateNestingLevel from '../hooks/useCalculateNestingLevel.ts';
 export default function SyntaxParser() {
   const sentenceRef = useRef<HTMLParagraphElement>(null);
   const isNestingLevelCalculated = useCalculateNestingLevel(sentenceRef);
-  const textColor = useColorModeValue('gray.700', 'gray.200');
+  const textColor = useColorModeValue('gray.700', 'gray.300');
   const { rootSegment, sentence } = sampleData;
 
   return (
