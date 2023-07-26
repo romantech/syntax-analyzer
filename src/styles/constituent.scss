@@ -1,23 +1,31 @@
-$constituent-margin: 0.2rem; // 절&구 좌우 여백
-$constituent-top-base: 1.9rem; // 절&구 이름과 상단 점선 사이의 간격
-$constituent-offset: 2rem; // 절&구 전체 영역 높이
-$token-top-base: 2.5rem; // 토큰 상단 여백
-$token-offset: 2rem; // 각 토큰 사이의 간격
+$max-styling-count: 30; // 스타일을 계산할 최대 문장 성분 개수
 
-@for $i from 1 through 30 {
-  $offset: $constituent-offset * ($i - 0.5);
+// 절&구
+$constituent-margin: 0.15rem; // 문장 성분 좌우 여백
+$constituent-label-y-pos: 1.8rem; // 문장 성분 라벨의 y축 위치
+$constituent-height: 2.2rem; // 문장 성분 전체 영역 높이
+$constituent-initial-pos-factor: 0.48; // 첫번째 문장 성분과 글자 사이 간격 (낮을수록 간격 벌어짐)
+$constituent-dashed-border: 2px dashed;
+
+// 토큰
+$token-spacing: 2rem; // 토큰과 토큰 사이의 간격
+$token-top: 2.5rem; // 토큰 상단 여백
+$token-initial-pos-factor: 0.8; // 첫번째 토큰과 글자 사이 간격 (낮을수록 간격 벌어짐)
+
+@for $i from 1 through $max-styling-count {
+  $offset: $constituent-height * ($i - $constituent-initial-pos-factor);
 
   .constituent.clause[data-clause-lv='#{$i}'],
   .constituent.phrase[data-phrase-lv='#{$i}'] {
     margin: 0 $constituent-margin;
-    padding: 0 $constituent-margin $constituent-margin + $offset;
+    padding: 0 $constituent-margin $offset;
 
-    // 문장 성분 이름
+    // 문장 성분 라벨
     &:after {
-      top: $constituent-margin + $constituent-top-base + $offset;
+      top: $offset + $constituent-label-y-pos;
     }
 
-    // 좌우 점선
+    // 좌/우/하단 점선
     &:before {
       content: '';
       position: absolute;
@@ -25,32 +33,35 @@ $token-offset: 2rem; // 각 토큰 사이의 간격
       bottom: 0;
       right: 0;
       left: 0;
-      border-left: 2px dashed;
-      border-right: 2px dashed;
+      border-left: $constituent-dashed-border;
+      border-right: $constituent-dashed-border;
+      border-bottom: $constituent-dashed-border;
     }
   }
 }
 
-@for $i from 1 through 30 {
-  $offset: $token-offset * ($i - 0.8);
+@for $i from 1 through $max-styling-count {
+  $offset: $token-spacing * ($i - $token-initial-pos-factor);
 
-  // 문장 성분 영역
-  .constituent.token[data-token-lv='#{$i}']:after {
-    top: $token-top-base + $offset;
+  .constituent.token[data-token-lv='#{$i}'] {
+    // 문장 성분 라벨
+    &:after {
+      top: $token-top + $offset;
+    }
   }
 }
 
 .constituent {
   position: relative;
 
-  // 문장 성분 이름
+  // 문장 성분 라벨
   &:after {
     position: absolute;
     width: fit-content;
     left: 50%;
     padding: 0 0.5rem 0.15rem 0.5rem;
     transform: translateX(-50%);
-    background-color: black;
+    background-color: var(--chakra-colors-gray-900);
     border-radius: 0.5rem;
 
     font-size: 1rem;
@@ -60,10 +71,5 @@ $token-offset: 2rem; // 각 토큰 사이의 간격
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-  }
-
-  &.clause,
-  &.phrase {
-    border-bottom: dashed 2px;
   }
 }
