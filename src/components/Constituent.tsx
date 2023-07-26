@@ -31,6 +31,7 @@ export default function Constituent({
       textTransform="capitalize"
       offset={offset}
       isDisabled={!abbrTooltipMode || isDeleteMode}
+      openDelay={200}
     >
       <Text
         as="span"

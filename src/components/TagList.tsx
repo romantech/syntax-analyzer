@@ -54,7 +54,11 @@ export default function TagList({ ...accordionProps }: AccordionProps) {
               const isSelected = tagList?.elementId === constituent.elementId;
               return (
                 <WrapItem key={constituent.label}>
-                  <Tooltip label={desc} isDisabled={!tagTooltipMode}>
+                  <Tooltip
+                    label={desc}
+                    isDisabled={!tagTooltipMode}
+                    openDelay={200}
+                  >
                     <Button
                       textTransform="capitalize"
                       size="sm"
