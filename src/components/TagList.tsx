@@ -4,13 +4,10 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  AccordionProps,
   Button,
-  Card,
-  CardBody,
   Heading,
   HStack,
-  Icon,
-  Stack,
   Text,
   Tooltip,
   WrapItem,
@@ -18,55 +15,43 @@ import {
 import {
   CONSTITUENT_CATEGORIES,
   ConstituentTranslations,
-} from '@/constants/constituents.ts';
-import { FaMagnifyingGlass } from 'react-icons/fa6';
+} from '@/constants/constituents';
+import { useAtomValue } from 'jotai';
+import { tagTooltipModeAtom } from '@/store/controlPanelStore.ts';
 
-export default function TagList() {
+export default function TagList({ ...accordionProps }: AccordionProps) {
+  const tagTooltipMode = useAtomValue(tagTooltipModeAtom);
+
   return (
-    <Stack>
-      <Card variant="filled">
-        <CardBody>
-          <HStack>
-            <Icon as={FaMagnifyingGlass} />
-            <Text>태그를 선택한 후 문장을 드래그해주세요</Text>
-          </HStack>
-        </CardBody>
-      </Card>
-      <Accordion defaultIndex={[0]} allowToggle>
-        {CONSTITUENT_CATEGORIES.map((category) => (
-          <AccordionItem key={category.label}>
-            <AccordionButton>
-              <HStack
-                flex="1"
-                textAlign="left"
-                textTransform="uppercase"
-                py={2}
-              >
-                <Heading as="h2" size="md">
-                  {category.label}
-                </Heading>
-                <Text>{category.desc}</Text>
-              </HStack>
-              <AccordionIcon />
-            </AccordionButton>
+    <Accordion defaultIndex={[0]} allowToggle {...accordionProps}>
+      {CONSTITUENT_CATEGORIES.map((category) => (
+        <AccordionItem key={category.label}>
+          <AccordionButton>
+            <HStack flex="1" textAlign="left" textTransform="uppercase" py={2}>
+              <Heading as="h2" size="md">
+                {category.label}
+              </Heading>
+              <Text>{category.desc}</Text>
+            </HStack>
+            <AccordionIcon />
+          </AccordionButton>
 
-            <AccordionPanel display="flex" flexWrap="wrap" gap={2}>
-              {category.constituents.map((constituent) => {
-                const { ko, desc } = ConstituentTranslations[constituent.label];
-                return (
-                  <WrapItem key={constituent.label}>
-                    <Tooltip label={desc}>
-                      <Button textTransform="capitalize" size="sm">
-                        {ko}
-                      </Button>
-                    </Tooltip>
-                  </WrapItem>
-                );
-              })}
-            </AccordionPanel>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    </Stack>
+          <AccordionPanel display="flex" flexWrap="wrap" gap={2}>
+            {category.constituents.map((constituent) => {
+              const { ko, desc } = ConstituentTranslations[constituent.label];
+              return (
+                <WrapItem key={constituent.label}>
+                  <Tooltip label={desc} isDisabled={!tagTooltipMode}>
+                    <Button textTransform="capitalize" size="sm">
+                      {ko}
+                    </Button>
+                  </Tooltip>
+                </WrapItem>
+              );
+            })}
+          </AccordionPanel>
+        </AccordionItem>
+      ))}
+    </Accordion>
   );
 }
