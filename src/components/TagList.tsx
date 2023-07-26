@@ -12,6 +12,7 @@ import {
   Icon,
   Stack,
   Text,
+  Tooltip,
   WrapItem,
 } from '@chakra-ui/react';
 import {
@@ -50,14 +51,18 @@ export default function TagList() {
             </AccordionButton>
 
             <AccordionPanel display="flex" flexWrap="wrap" gap={2}>
-              {category.constituents.map((constituent) => (
-                <WrapItem key={constituent.label}>
-                  <Button textTransform="capitalize" size="sm">
-                    {ConstituentTranslations[constituent.label] ??
-                      constituent.label}
-                  </Button>
-                </WrapItem>
-              ))}
+              {category.constituents.map((constituent) => {
+                const { ko, desc } = ConstituentTranslations[constituent.label];
+                return (
+                  <WrapItem key={constituent.label}>
+                    <Tooltip label={desc}>
+                      <Button textTransform="capitalize" size="sm">
+                        {ko}
+                      </Button>
+                    </Tooltip>
+                  </WrapItem>
+                );
+              })}
             </AccordionPanel>
           </AccordionItem>
         ))}
