@@ -7,7 +7,7 @@ export default function TagNotice() {
       <CardBody>
         <HStack>
           <Icon as={FaMagnifyingGlass} />
-          <Text>태그를 선택한 후 문장을 드래그해주세요</Text>
+          <Text>태그를 선택한 후 단어를 드래그 해주세요</Text>
         </HStack>
       </CardBody>
     </Card>
