@@ -1,4 +1,4 @@
-import { sampleData } from '@/constants/dummy.ts';
+import { sampleData } from '@/constants/sample.ts';
 import { Segments, TokenList } from '@/components';
 import { SlideFade, Text, useColorModeValue } from '@chakra-ui/react';
 import { useRef } from 'react';
