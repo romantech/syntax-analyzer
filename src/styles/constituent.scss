@@ -51,6 +51,18 @@ $token-initial-pos-factor: 0.8; // 첫번째 토큰과 글자 사이 간격 (낮
   }
 }
 
+html[data-theme='light'] {
+  .constituent:after {
+    background-color: var(--chakra-colors-gray-100);
+  }
+}
+
+html[data-theme='dark'] {
+  .constituent:after {
+    background-color: var(--chakra-colors-gray-900);
+  }
+}
+
 .constituent {
   position: relative;
 
@@ -61,7 +73,6 @@ $token-initial-pos-factor: 0.8; // 첫번째 토큰과 글자 사이 간격 (낮
     left: 50%;
     padding: 0 0.5rem 0.15rem 0.5rem;
     transform: translateX(-50%);
-    background-color: var(--chakra-colors-gray-900);
     border-radius: 0.5rem;
 
     font-size: 1rem;

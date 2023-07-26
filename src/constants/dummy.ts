@@ -31,28 +31,14 @@ export const sampleData: Analysis = {
         id: 934572134,
         begin: 1,
         end: 2,
-        constituents: [
-          {
-            id: 291345678,
-            label: 'verb',
-            abbreviation: 'v',
-            type: 'token',
-          },
-        ],
+        constituents: [],
         children: [],
       },
       {
         id: 789123450,
         begin: 2,
         end: 4,
-        constituents: [
-          {
-            id: 876912345,
-            label: 'object',
-            abbreviation: 'o',
-            type: 'token',
-          },
-        ],
+        constituents: [],
         children: [],
       },
       {

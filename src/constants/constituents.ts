@@ -1,9 +1,19 @@
-import { Constituent, ConstituentType } from '@/types/analysis';
+import { Constituent } from '@/types/analysis';
+import { ConstituentColors } from '@/types/common';
 
-export const CONSTITUENT_COLORS: Record<ConstituentType, string> = {
-  token: 'red.200',
-  phrase: 'teal.200',
-  clause: 'yellow.400',
+export const CONSTITUENT_COLORS: ConstituentColors = {
+  token: {
+    dark: 'red.200',
+    light: 'red.400',
+  },
+  phrase: {
+    dark: 'purple.200',
+    light: 'purple.400',
+  },
+  clause: {
+    dark: 'teal.200',
+    light: 'teal.400',
+  },
 };
 
 export const CONSTITUENTS: Omit<Constituent, 'id'>[] = [

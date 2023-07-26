@@ -1,25 +1,25 @@
 import { sampleData } from '@/constants/dummy.ts';
 import { Segments, TokenList } from '@/components';
-import { SlideFade, Text, useBoolean } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
-import { calculateNestingLevel } from '@/utils/nestingLevelCalculators.ts';
+import { SlideFade, Text, useColorModeValue } from '@chakra-ui/react';
+import { useRef } from 'react';
 import '@/styles/constituent.scss';
+import useCalculateNestingLevel from '../hooks/useCalculateNestingLevel.ts';
 
 export default function SyntaxParser() {
   const sentenceRef = useRef<HTMLParagraphElement>(null);
+  const isNestingLevelCalculated = useCalculateNestingLevel(sentenceRef);
+  const textColor = useColorModeValue('gray.700', 'gray.200');
   const { rootSegment, sentence } = sampleData;
-  const [show, setShow] = useBoolean();
-
-  useEffect(() => {
-    if (sentenceRef.current) {
-      calculateNestingLevel(sentenceRef);
-      setShow.on();
-    }
-  }, [setShow]);
 
   return (
-    <SlideFade in={show} offsetY={100}>
-      <Text fontSize="4xl" ref={sentenceRef} whiteSpace="nowrap">
+    <SlideFade in={isNestingLevelCalculated} offsetY={100}>
+      <Text
+        fontSize="4xl"
+        fontWeight="bold"
+        ref={sentenceRef}
+        whiteSpace="nowrap"
+        color={textColor}
+      >
         <Segments
           key={rootSegment.id}
           segment={rootSegment}
