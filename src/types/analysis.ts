@@ -1,12 +1,17 @@
 export type ConstituentType = 'clause' | 'phrase' | 'token';
 
+type ConstituentDataSetKey = 'constituent' | 'constituentId';
+export type ConstituentDataSet = { [key in ConstituentDataSetKey]?: string };
+
 export type Constituent = {
   id: number; // A random 9-digit number
+  elementId: number; // Constituent ID with a fixed value
   label: string; // Grammatical constituent name in lowercase
   abbreviation: string; // Abbreviated constituent name in lowercase
   type: ConstituentType; // Constituent type
   comment?: string; // Optional comment
 };
+export type ConstituentWithoutId = Omit<Constituent, 'id'>;
 
 export type Segment = {
   id: number; // A random 9-digit number

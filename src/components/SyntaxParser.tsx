@@ -3,11 +3,12 @@ import { Segments, TokenList } from '@/components';
 import { SlideFade, Text, useColorModeValue } from '@chakra-ui/react';
 import { useRef } from 'react';
 import '@/styles/constituent.scss';
-import useCalculateNestingLevel from '../hooks/useCalculateNestingLevel.ts';
+import { useCalculateNestingLevel, useSegmentMouseEvent } from '@/hooks';
 
 export default function SyntaxParser() {
   const sentenceRef = useRef<HTMLParagraphElement>(null);
   const isNestingLevelCalculated = useCalculateNestingLevel(sentenceRef);
+  const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
   const textColor = useColorModeValue('gray.700', 'gray.300');
   const { rootSegment, sentence } = sampleData;
 
@@ -19,6 +20,8 @@ export default function SyntaxParser() {
         ref={sentenceRef}
         whiteSpace="nowrap"
         color={textColor}
+        onMouseOver={onMouseOver}
+        onMouseLeave={onMouseLeave}
       >
         <Segments
           key={rootSegment.id}

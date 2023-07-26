@@ -23,7 +23,6 @@ export default function Constituent({
   return (
     <Tooltip
       label={constituent.label}
-      // isOpen={openTooltip}
       textTransform="capitalize"
       offset={offset}
       isDisabled={!abbrTooltipMode}

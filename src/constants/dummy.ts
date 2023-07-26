@@ -1,5 +1,6 @@
 import { Analysis } from '@/types/analysis.ts';
-import { tokenizer } from '@/utils/common.ts';
+import { generateNumberID, tokenizer } from '@/utils/common.ts';
+import { nanoid } from 'nanoid';
 
 const sentences = [
   'I am a boy who likes to play tennis which is fun.',
@@ -9,21 +10,22 @@ const sentences = [
 const currentSentence = sentences[1];
 
 export const sampleData: Analysis = {
-  id: '7b8c92ef935647db9b24',
+  id: nanoid(),
   sentence: tokenizer(currentSentence),
   rootSegment: {
-    id: 498734612,
+    id: generateNumberID(),
     begin: 0,
     end: currentSentence.length,
     constituents: [],
     children: [
       {
-        id: 132451678,
+        id: 561382940,
         begin: 0,
-        end: 1,
+        end: 2,
         constituents: [
           {
-            id: 567123498,
+            id: 724183612,
+            elementId: 1,
             label: 'subject',
             abbreviation: 's',
             type: 'token',
@@ -32,26 +34,43 @@ export const sampleData: Analysis = {
         children: [],
       },
       {
-        id: 934572134,
-        begin: 1,
-        end: 2,
-        constituents: [],
-        children: [],
-      },
-      {
-        id: 789123450,
+        id: 178304516,
         begin: 2,
-        end: 4,
-        constituents: [],
-        children: [],
-      },
-      {
-        id: 874512309,
-        begin: 4,
-        end: 9,
+        end: 3,
         constituents: [
           {
-            id: 567894123,
+            id: 236842789,
+            elementId: 2,
+            label: 'verb',
+            abbreviation: 'v',
+            type: 'token',
+          },
+        ],
+        children: [],
+      },
+      {
+        id: 495381627,
+        begin: 3,
+        end: 5,
+        constituents: [
+          {
+            id: 918237456,
+            elementId: 5,
+            label: 'object',
+            abbreviation: 'o',
+            type: 'token',
+          },
+        ],
+        children: [],
+      },
+      {
+        id: 867394810,
+        begin: 5,
+        end: 13,
+        constituents: [
+          {
+            id: 182739485,
+            elementId: 28,
             label: 'relative clause',
             abbreviation: 'rel.cl',
             type: 'clause',
@@ -59,105 +78,79 @@ export const sampleData: Analysis = {
         ],
         children: [
           {
-            id: 652893127,
-            begin: 4,
-            end: 5,
-            constituents: [
-              {
-                id: 789123456,
-                label: 'subject',
-                abbreviation: 's',
-                type: 'token',
-              },
-            ],
-            children: [],
-          },
-          {
-            id: 129384756,
+            id: 926358930,
             begin: 5,
             end: 6,
             constituents: [
               {
-                id: 987123456,
-                label: 'verb',
-                abbreviation: 'v',
+                id: 123985723,
+                elementId: 5,
+                label: 'object',
+                abbreviation: 'o',
                 type: 'token',
               },
             ],
             children: [],
           },
           {
-            id: 192837465,
+            id: 153892740,
             begin: 6,
-            end: 9,
-            constituents: [
-              {
-                id: 891234567,
-                label: 'to-infinitive',
-                abbreviation: 't-inf',
-                type: 'phrase',
-              },
-            ],
-            children: [],
-          },
-        ],
-      },
-      {
-        id: 384756123,
-        begin: 9,
-        end: 12,
-        constituents: [
-          {
-            id: 675123489,
-            label: 'relative clause',
-            abbreviation: 'rel.cl',
-            type: 'clause',
-          },
-        ],
-        children: [
-          {
-            id: 928374561,
-            begin: 9,
-            end: 10,
+            end: 7,
             constituents: [],
             children: [],
           },
           {
-            id: 562839174,
-            begin: 10,
-            end: 11,
+            id: 283749293,
+            begin: 7,
+            end: 9,
             constituents: [
               {
-                id: 812345678,
-                label: 'verb',
-                abbreviation: 'v',
+                id: 237849283,
+                elementId: 3,
+                label: 'auxiliary verb',
+                abbreviation: 'aux.v',
                 type: 'token',
               },
             ],
             children: [],
           },
           {
-            id: 293847561,
-            begin: 11,
-            end: 12,
+            id: 159238740,
+            begin: 9,
+            end: 11,
             constituents: [
               {
-                id: 123456789,
-                label: 'complement',
-                abbreviation: 'c',
+                id: 102918475,
+                elementId: 9,
+                label: 'complement1',
+                abbreviation: 'c1',
+                type: 'token',
+              },
+              {
+                id: 103938475,
+                elementId: 9,
+                label: 'complement2',
+                abbreviation: 'c2',
+                type: 'token',
+              },
+              {
+                id: 102738475,
+                elementId: 9,
+                label: 'complement3',
+                abbreviation: 'c3',
                 type: 'token',
               },
             ],
             children: [],
           },
+          {
+            id: 193874920,
+            begin: 11,
+            end: 13,
+            constituents: [],
+            children: [],
+          },
         ],
-      },
-      {
-        id: 127845693,
-        begin: 12,
-        end: 13,
-        constituents: [],
-        children: [],
       },
     ],
   },

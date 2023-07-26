@@ -1,5 +1,15 @@
-import { Constituent, ConstituentType } from '@/types/analysis';
-import { ConstituentColors } from '@/types/common';
+import {
+  Constituent,
+  ConstituentType,
+  ConstituentWithoutId,
+} from '@/types/analysis';
+import { ColorMode, ConstituentColors } from '@/types/common';
+
+export const DELETE_MODE_COLOR = (mode: ColorMode) => {
+  return mode === 'dark'
+    ? 'var(--chakra-colors-gray-500)'
+    : 'var(--chakra-colors-gray-300)';
+};
 
 export const CONSTITUENT_COLORS: ConstituentColors = {
   token: {
@@ -16,37 +26,157 @@ export const CONSTITUENT_COLORS: ConstituentColors = {
   },
 };
 
-export const CONSTITUENTS: Omit<Constituent, 'id'>[] = [
-  { label: 'subject', abbreviation: 's', type: 'token' },
-  { label: 'verb', abbreviation: 'v', type: 'token' },
-  { label: 'auxiliary verb', abbreviation: 'aux.v', type: 'token' },
-  { label: 'modal verb', abbreviation: 'mod.v', type: 'token' },
-  { label: 'object', abbreviation: 'o', type: 'token' },
-  { label: 'indirect object', abbreviation: 'i.o.', type: 'token' },
-  { label: 'direct object', abbreviation: 'd.o.', type: 'token' },
-  { label: 'prepositional object', abbreviation: 'prp.o.', type: 'token' },
-  { label: 'complement', abbreviation: 'c', type: 'token' },
-  { label: 'object complement', abbreviation: 'o.c.', type: 'token' },
-  { label: 'to-infinitive', abbreviation: 't-inf', type: 'token' },
-  { label: 'infinitive object', abbreviation: 'inf.o.', type: 'token' },
-  { label: 'gerund', abbreviation: 'g', type: 'token' },
-  { label: 'gerund object', abbreviation: 'g.o.', type: 'phrase' },
-  { label: 'participle', abbreviation: 'pt', type: 'token' },
-  { label: 'participle object', abbreviation: 'pt.o.', type: 'phrase' },
-  { label: 'participle phrase', abbreviation: 'pt.phr', type: 'phrase' },
-  { label: 'prepositional phrase', abbreviation: 'prp.phr', type: 'phrase' },
-  { label: 'adverbial phrase', abbreviation: 'adv.phr', type: 'phrase' },
-  { label: 'adjectival phrase', abbreviation: 'adj.phr', type: 'phrase' },
-  { label: 'coordinating conjunction', abbreviation: 'co.t', type: 'phrase' },
-  { label: 'coordinating clause', abbreviation: 'co.cl', type: 'clause' },
-  { label: 'parallel clause', abbreviation: 'p.cl', type: 'clause' },
-  { label: 'noun clause', abbreviation: 'n.cl', type: 'clause' },
-  { label: 'adjectival clause', abbreviation: 'adj.cl', type: 'clause' },
-  { label: 'adverbial clause', abbreviation: 'adv.cl', type: 'clause' },
-  { label: 'inserted clause', abbreviation: 'i.cl', type: 'clause' },
-  { label: 'relative clause', abbreviation: 'rel.cl', type: 'clause' },
-  { label: 'dependent clause', abbreviation: 'dep.cl', type: 'clause' },
-  { label: 'independent clause', abbreviation: 'ind.cl', type: 'clause' },
+export const CONSTITUENTS: ConstituentWithoutId[] = [
+  { elementId: 1, label: 'subject', abbreviation: 's', type: 'token' },
+  { elementId: 2, label: 'verb', abbreviation: 'v', type: 'token' },
+  {
+    elementId: 3,
+    label: 'auxiliary verb',
+    abbreviation: 'aux.v',
+    type: 'token',
+  },
+  {
+    elementId: 4,
+    label: 'modal verb',
+    abbreviation: 'mod.v',
+    type: 'token',
+  },
+  { elementId: 5, label: 'object', abbreviation: 'o', type: 'token' },
+  {
+    elementId: 6,
+    label: 'indirect object',
+    abbreviation: 'i.o.',
+    type: 'token',
+  },
+  {
+    elementId: 7,
+    label: 'direct object',
+    abbreviation: 'd.o.',
+    type: 'token',
+  },
+  {
+    elementId: 8,
+    label: 'prepositional object',
+    abbreviation: 'prp.o.',
+    type: 'token',
+  },
+  { elementId: 9, label: 'complement', abbreviation: 'c', type: 'token' },
+  {
+    elementId: 10,
+    label: 'object complement',
+    abbreviation: 'o.c.',
+    type: 'token',
+  },
+  {
+    elementId: 11,
+    label: 'to-infinitive',
+    abbreviation: 't-inf',
+    type: 'token',
+  },
+  {
+    elementId: 12,
+    label: 'infinitive object',
+    abbreviation: 'inf.o.',
+    type: 'token',
+  },
+  { elementId: 13, label: 'gerund', abbreviation: 'g', type: 'token' },
+  {
+    elementId: 14,
+    label: 'gerund object',
+    abbreviation: 'g.o.',
+    type: 'phrase',
+  },
+  { elementId: 15, label: 'participle', abbreviation: 'pt', type: 'token' },
+  {
+    elementId: 16,
+    label: 'participle object',
+    abbreviation: 'pt.o.',
+    type: 'phrase',
+  },
+  {
+    elementId: 17,
+    label: 'participle phrase',
+    abbreviation: 'pt.phr',
+    type: 'phrase',
+  },
+  {
+    elementId: 18,
+    label: 'prepositional phrase',
+    abbreviation: 'prp.phr',
+    type: 'phrase',
+  },
+  {
+    elementId: 19,
+    label: 'adverbial phrase',
+    abbreviation: 'adv.phr',
+    type: 'phrase',
+  },
+  {
+    elementId: 20,
+    label: 'adjectival phrase',
+    abbreviation: 'adj.phr',
+    type: 'phrase',
+  },
+  {
+    elementId: 21,
+    label: 'coordinating conjunction',
+    abbreviation: 'co.t',
+    type: 'phrase',
+  },
+  {
+    elementId: 22,
+    label: 'coordinating clause',
+    abbreviation: 'co.cl',
+    type: 'clause',
+  },
+  {
+    elementId: 23,
+    label: 'parallel clause',
+    abbreviation: 'p.cl',
+    type: 'clause',
+  },
+  {
+    elementId: 24,
+    label: 'noun clause',
+    abbreviation: 'n.cl',
+    type: 'clause',
+  },
+  {
+    elementId: 25,
+    label: 'adjectival clause',
+    abbreviation: 'adj.cl',
+    type: 'clause',
+  },
+  {
+    elementId: 26,
+    label: 'adverbial clause',
+    abbreviation: 'adv.cl',
+    type: 'clause',
+  },
+  {
+    elementId: 27,
+    label: 'inserted clause',
+    abbreviation: 'i.cl',
+    type: 'clause',
+  },
+  {
+    elementId: 28,
+    label: 'relative clause',
+    abbreviation: 'rel.cl',
+    type: 'clause',
+  },
+  {
+    elementId: 29,
+    label: 'dependent clause',
+    abbreviation: 'dep.cl',
+    type: 'clause',
+  },
+  {
+    elementId: 30,
+    label: 'independent clause',
+    abbreviation: 'ind.cl',
+    type: 'clause',
+  },
 ];
 
 type EnglishLabels = Extract<Constituent, { label: string }>['label'];
@@ -168,7 +298,7 @@ export const ConstituentTranslations: Record<
   },
 };
 
-type ConstituentGroup = { [key in ConstituentType]: Omit<Constituent, 'id'>[] };
+type ConstituentGroup = { [key in ConstituentType]: ConstituentWithoutId[] };
 const groupedConstituentsByType = CONSTITUENTS.reduce((group, cons) => {
   if (!group[cons.type]) group[cons.type] = [];
   group[cons.type].push(cons);

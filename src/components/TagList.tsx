@@ -16,11 +16,23 @@ import {
   CONSTITUENT_CATEGORIES,
   ConstituentTranslations,
 } from '@/constants/constituents';
-import { useAtomValue } from 'jotai';
-import { tagTooltipModeAtom } from '@/store/controlPanelStore.ts';
+import { useAtom, useAtomValue } from 'jotai';
+import { tagTooltipModeAtom } from '@/store/controlPanelStore';
+import { ConstituentWithoutId } from '@/types/analysis';
+import { selectedTagAtom } from '@/store/analysisStore';
+import { generateNumberID } from '@/utils/common';
 
 export default function TagList({ ...accordionProps }: AccordionProps) {
   const tagTooltipMode = useAtomValue(tagTooltipModeAtom);
+  const [tagList, setTagList] = useAtom(selectedTagAtom);
+  const onTagClick = (tag: ConstituentWithoutId) => {
+    if (tagList?.elementId === tag.elementId) {
+      setTagList(null);
+      return;
+    }
+    const constituentWithId = { ...tag, id: generateNumberID() };
+    setTagList(constituentWithId);
+  };
 
   return (
     <Accordion defaultIndex={[0]} allowToggle {...accordionProps}>
@@ -39,10 +51,16 @@ export default function TagList({ ...accordionProps }: AccordionProps) {
           <AccordionPanel display="flex" flexWrap="wrap" gap={2}>
             {category.constituents.map((constituent) => {
               const { ko, desc } = ConstituentTranslations[constituent.label];
+              const isSelected = tagList?.elementId === constituent.elementId;
               return (
                 <WrapItem key={constituent.label}>
                   <Tooltip label={desc} isDisabled={!tagTooltipMode}>
-                    <Button textTransform="capitalize" size="sm">
+                    <Button
+                      textTransform="capitalize"
+                      size="sm"
+                      onClick={() => onTagClick(constituent)}
+                      colorScheme={isSelected ? 'blue' : 'gray'}
+                    >
                       {ko}
                     </Button>
                   </Tooltip>
