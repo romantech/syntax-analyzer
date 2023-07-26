@@ -93,15 +93,18 @@ const groupedConstituentsByType = CONSTITUENTS.reduce((group, cons) => {
 
 export const CONSTITUENT_CATEGORIES = [
   {
-    label: 'general | 주어/동사 등',
+    label: 'general',
+    desc: '주어/동사 등 태그',
     constituents: groupedConstituentsByType.token,
   },
   {
-    label: 'phrase | 전치사구/동명사구 등',
+    label: 'phrase',
+    desc: '전치사구/동명사구 등 태그',
     constituents: groupedConstituentsByType.phrase,
   },
   {
-    label: 'clause | 독립절/의존절 등',
+    label: 'clause',
+    desc: '독립절/의존절 등 태그',
     constituents: groupedConstituentsByType.clause,
   },
 ];

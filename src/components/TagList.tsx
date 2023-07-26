@@ -4,31 +4,48 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  Box,
   Button,
+  Card,
+  CardBody,
+  Heading,
+  HStack,
+  Icon,
   Stack,
+  Text,
   WrapItem,
 } from '@chakra-ui/react';
 import {
   CONSTITUENT_CATEGORIES,
   ConstituentTranslations,
 } from '@/constants/constituents.ts';
+import { FaMagnifyingGlass } from 'react-icons/fa6';
 
 export default function TagList() {
   return (
     <Stack>
+      <Card variant="filled">
+        <CardBody>
+          <HStack>
+            <Icon as={FaMagnifyingGlass} />
+            <Text>태그를 선택한 후 문장을 드래그해주세요</Text>
+          </HStack>
+        </CardBody>
+      </Card>
       <Accordion defaultIndex={[0]} allowMultiple>
         {CONSTITUENT_CATEGORIES.map((category) => (
           <AccordionItem key={category.label}>
             <AccordionButton>
-              <Box
-                as="span"
+              <HStack
                 flex="1"
                 textAlign="left"
                 textTransform="uppercase"
+                py={2}
               >
-                {category.label}
-              </Box>
+                <Heading as="h2" size="md">
+                  {category.label}
+                </Heading>
+                <Text>{category.desc}</Text>
+              </HStack>
               <AccordionIcon />
             </AccordionButton>
 
