@@ -52,12 +52,6 @@ export const sampleData: Analysis = {
             abbreviation: 'o',
             type: 'token',
           },
-          {
-            id: 876912345,
-            label: 'object',
-            abbreviation: 'o',
-            type: 'token',
-          },
         ],
         children: [],
       },
@@ -66,12 +60,6 @@ export const sampleData: Analysis = {
         begin: 4,
         end: 9,
         constituents: [
-          {
-            id: 567894123,
-            label: 'relative clause',
-            abbreviation: 'rel.cl',
-            type: 'clause',
-          },
           {
             id: 567894123,
             label: 'relative clause',
@@ -119,18 +107,6 @@ export const sampleData: Analysis = {
                 abbreviation: 't-inf',
                 type: 'phrase',
               },
-              {
-                id: 891234567,
-                label: 'to-infinitive',
-                abbreviation: 't-inf',
-                type: 'phrase',
-              },
-              {
-                id: 891234567,
-                label: 'to-infinitive',
-                abbreviation: 't-inf',
-                type: 'phrase',
-              },
             ],
             children: [],
           },
@@ -141,12 +117,6 @@ export const sampleData: Analysis = {
         begin: 9,
         end: 12,
         constituents: [
-          {
-            id: 675123489,
-            label: 'relative clause',
-            abbreviation: 'rel.cl',
-            type: 'clause',
-          },
           {
             id: 675123489,
             label: 'relative clause',
@@ -167,12 +137,6 @@ export const sampleData: Analysis = {
             begin: 10,
             end: 11,
             constituents: [
-              {
-                id: 812345678,
-                label: 'verb',
-                abbreviation: 'v',
-                type: 'token',
-              },
               {
                 id: 812345678,
                 label: 'verb',

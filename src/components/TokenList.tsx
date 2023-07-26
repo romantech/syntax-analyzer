@@ -1,24 +1,11 @@
-import { Text } from '@chakra-ui/react';
 import { isPunctuation } from '@/utils/common.ts';
-
-interface TokenProps {
-  token: string;
-  padding: number[];
-}
-
-const Token = ({ token, padding }: TokenProps) => {
-  return (
-    <Text position="relative" as="span" p={padding} zIndex={1}>
-      {token}
-    </Text>
-  );
-};
+import Token from '@/components/Token';
 
 interface TokensProps {
   sentence: string[];
 }
 
-export default function Tokens({ sentence }: TokensProps) {
+export default function TokenList({ sentence }: TokensProps) {
   return sentence.map((token, i) => {
     const isNextTokenPunctuation = isPunctuation(sentence[i + 1]);
     const isCurrentTokenPunctuation = isPunctuation(token);
