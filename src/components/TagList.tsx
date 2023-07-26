@@ -31,7 +31,7 @@ export default function TagList() {
           </HStack>
         </CardBody>
       </Card>
-      <Accordion defaultIndex={[0]} allowMultiple>
+      <Accordion defaultIndex={[0]} allowToggle>
         {CONSTITUENT_CATEGORIES.map((category) => (
           <AccordionItem key={category.label}>
             <AccordionButton>
