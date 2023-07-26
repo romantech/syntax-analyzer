@@ -8,15 +8,15 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import {
-  abbrInfoMode,
+  abbrInfoModeAtom,
   deleteModeAtom,
-  tagInfoMode,
+  tagInfoModeAtom,
 } from '@/store/controlPanelStore.ts';
 import { BsFillEraserFill } from 'react-icons/bs';
 
 export default function ControlPanel() {
-  const [isTagInfoMode, setTagInfoMode] = useAtom(tagInfoMode);
-  const [isAbbrInfoMode, setIsAbbrInfoMode] = useAtom(abbrInfoMode);
+  const [isTagInfoMode, setTagInfoMode] = useAtom(tagInfoModeAtom);
+  const [isAbbrInfoMode, setIsAbbrInfoMode] = useAtom(abbrInfoModeAtom);
   const [isDeleteMode, setIsDeleteMode] = useAtom(deleteModeAtom);
 
   return (

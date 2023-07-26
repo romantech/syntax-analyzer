@@ -12,7 +12,7 @@ export default function useSegmentMouseEvent() {
   const { colorMode } = useColorMode();
   const isDeleteMode = useAtomValue(deleteModeAtom);
 
-  const setOriginalColor = () => {
+  const restoreOriginalColor = () => {
     if (hoverRef.current && isDeleteMode) {
       hoverRef.current.style.removeProperty('color');
       hoverRef.current = null;
@@ -34,14 +34,14 @@ export default function useSegmentMouseEvent() {
     const target = event.target as HTMLElement;
 
     if (target !== hoverRef.current) {
-      setOriginalColor();
+      restoreOriginalColor();
       swapColor(getNearestConstituent(target));
     }
   };
 
   return {
     onMouseOver,
-    onMouseLeave: setOriginalColor,
+    onMouseLeave: restoreOriginalColor,
     targetInfo,
   };
 }

@@ -17,13 +17,13 @@ import {
   ConstituentTranslations,
 } from '@/constants/constituents';
 import { useAtom, useAtomValue } from 'jotai';
-import { tagInfoMode } from '@/store/controlPanelStore';
+import { tagInfoModeAtom } from '@/store/controlPanelStore';
 import { ConstituentWithoutId } from '@/types/analysis';
 import { selectedTagAtom } from '@/store/analysisStore';
 import { generateNumberID } from '@/utils/common';
 
 export default function TagList({ ...accordionProps }: AccordionProps) {
-  const tagTooltipMode = useAtomValue(tagInfoMode);
+  const tagTooltipMode = useAtomValue(tagInfoModeAtom);
   const [tagList, setTagList] = useAtom(selectedTagAtom);
   const onTagClick = (tag: ConstituentWithoutId) => {
     if (tagList?.elementId === tag.elementId) {
