@@ -2,6 +2,7 @@ import { atom } from 'jotai/index';
 import { Segment } from '@/types/analysis.ts';
 import { atomWithDefault, atomWithReset } from 'jotai/utils';
 import { currentAnalysisAtom } from '@/store/analysisStore.ts';
+import { Nullable } from '@/types/common';
 
 /**
  * useResetAtom 혹은 RESET 심볼을 이용해 초기값으로 되돌릴 수 있음
@@ -15,26 +16,31 @@ export const segmentHistoryIndexAtom = atomWithReset(0);
  * useResetAtom 혹은 RESET 심볼을 이용해 초기값으로 되돌릴 수 있음
  * @see https://jotai.org/docs/utilities/resettable#atomwithdefault
  * */
+
 export const segmentHistoryAtom = atomWithDefault<Segment[]>((get) => {
   const currentAnalysis = get(currentAnalysisAtom);
   return currentAnalysis ? [currentAnalysis.rootSegment] : [];
 });
 
-export const currentSegmentAtom = atom<Segment>((get) => {
+export const currentSegmentAtom = atom<Nullable<Segment>>((get) => {
   const history = get(segmentHistoryAtom);
   const index = get(segmentHistoryIndexAtom);
-  return history[index] ?? [];
+  return history[index] ?? null;
 });
-export const updateHistoryIndexAtom = atom(null, (get, set) => {
+
+export const incrementHistoryIndexAtom = atom(null, (get, set) => {
   set(segmentHistoryIndexAtom, get(segmentHistoryIndexAtom) + 1);
 });
-export const updateSegmentAtom = atom(
+
+export const updateSegmentAndIncrementIndexAtom = atom(
   (get) => get(currentSegmentAtom),
   (get, set, updatedChildren: Segment[]) => {
     const currentSegment = get(currentSegmentAtom);
+    if (!currentSegment) return;
+
     const updatedSegment = { ...currentSegment, children: updatedChildren };
 
     set(segmentHistoryAtom, (prev) => [...prev, updatedSegment]);
-    set(updateHistoryIndexAtom);
+    set(incrementHistoryIndexAtom);
   },
 );
