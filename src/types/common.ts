@@ -7,3 +7,4 @@ export type ConstituentColors = {
 
 export type Tuple<T> = [T, T];
 export type NumberTuple = Tuple<number>;
+export type Nullable<T> = T | null;

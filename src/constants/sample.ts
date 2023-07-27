@@ -8,14 +8,15 @@ const sentences = [
   'Experts have identified a large number of measures that promote energy efficiency.',
 ];
 const currentSentence = sentences[1];
+const tokenized = tokenizer(currentSentence);
 
 export const sampleData: Analysis = {
   id: nanoid(),
-  sentence: tokenizer(currentSentence),
+  sentence: tokenized,
   rootSegment: {
     id: generateNumberID(),
     begin: 0,
-    end: currentSentence.length,
+    end: tokenized.length,
     constituents: [],
     children: [
       {
