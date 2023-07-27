@@ -44,3 +44,13 @@ export const updateSegmentAndIncrementIndexAtom = atom(
     set(incrementHistoryIndexAtom);
   },
 );
+
+export const undoRedoAbilityAtom = atom((get) => {
+  const index = get(segmentHistoryIndexAtom);
+  const history = get(segmentHistoryAtom);
+
+  return {
+    canUndo: index > 0,
+    canRedo: index < history.length - 1,
+  };
+});
