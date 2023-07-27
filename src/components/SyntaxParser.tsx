@@ -2,7 +2,7 @@ import { Segments, TokenList } from '@/components';
 import { SlideFade, Text, useColorModeValue } from '@chakra-ui/react';
 import { useRef } from 'react';
 import '@/styles/constituent.scss';
-import { useCalculateNestingLevel, useSegmentMouseEvent } from '@/hooks';
+import { useCalculateNestingLevel, useSegmentHandler } from '@/hooks';
 import { useAtomValue } from 'jotai';
 import { deleteModeAtom } from '@/store/controlPanelStore.ts';
 import { Analysis } from '@/types/analysis';
@@ -19,7 +19,7 @@ export default function SyntaxParser({
   const sentenceRef = useRef<HTMLParagraphElement>(null);
   const isDeleteMode = useAtomValue(deleteModeAtom);
   const isNestingLevelCalculated = useCalculateNestingLevel(sentenceRef);
-  const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
+  const handlers = useSegmentHandler();
   const textColor = useColorModeValue('gray.700', 'gray.300');
 
   return (
@@ -30,9 +30,8 @@ export default function SyntaxParser({
         ref={sentenceRef}
         whiteSpace="nowrap"
         color={textColor}
-        onMouseOver={onMouseOver}
-        onMouseLeave={onMouseLeave}
         cursor={isDeleteMode ? 'pointer' : 'text'}
+        {...handlers}
       >
         <Segments
           segment={rootSegment}
