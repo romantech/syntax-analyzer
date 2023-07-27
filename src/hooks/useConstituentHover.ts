@@ -1,7 +1,9 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { getNearestConstituent } from '@/utils/common.ts';
-import { shouldOpenAbbrTooltipAtom } from '@/store/controlPanelStore.ts';
-import { hoveredConstituentAtom } from '@/store/analysisStore.ts';
+import {
+  hoveredConstituentAtom,
+  isAbbrTooltipVisibleAtom,
+} from '@/store/controlPanelStore.ts';
 import { DOMAttributes, MouseEvent } from 'react';
 
 type ConstituentMouseEventType = 'onMouseOver' | 'onMouseLeave';
@@ -11,11 +13,11 @@ type UseConstituentHoverReturnType = Pick<
 >;
 
 export default function useConstituentHover(): UseConstituentHoverReturnType {
-  const isTooltipOpen = useAtomValue(shouldOpenAbbrTooltipAtom);
-  const [, setHoveredConstituent] = useAtom(hoveredConstituentAtom);
+  const isAbbrTooltipVisible = useAtomValue(isAbbrTooltipVisibleAtom);
+  const setHoveredConstituent = useSetAtom(hoveredConstituentAtom);
 
   const onMouseOver = (e: MouseEvent) => {
-    if (!isTooltipOpen) return;
+    if (!isAbbrTooltipVisible) return;
     const element = getNearestConstituent(e.target as HTMLElement);
     if (element) {
       setHoveredConstituent(Number(element.dataset.constituentId));

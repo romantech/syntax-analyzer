@@ -7,8 +7,10 @@ import {
 } from '@/constants/constituents.ts';
 import { NumberTuple } from '@/types/common.ts';
 import { useAtomValue } from 'jotai';
-import { shouldOpenAbbrTooltipAtom } from '@/store/controlPanelStore.ts';
-import { hoveredConstituentAtom } from '@/store/analysisStore.ts';
+import {
+  hoveredConstituentAtom,
+  isAbbrTooltipVisibleAtom,
+} from '@/store/controlPanelStore.ts';
 import { useConstituentHover } from '@/hooks';
 
 interface ConstituentProps {
@@ -21,7 +23,7 @@ export default function Constituent({
 }: PropsWithChildren<ConstituentProps>) {
   const { dark, light } = CONSTITUENT_COLORS[constituent.type];
   const colorValue = useColorModeValue(light, dark);
-  const canShowTooltip = useAtomValue(shouldOpenAbbrTooltipAtom);
+  const isAbbrTooltipVisible = useAtomValue(isAbbrTooltipVisibleAtom);
   const hoveredConstituent = useAtomValue(hoveredConstituentAtom);
   const handlers = useConstituentHover();
 
@@ -34,7 +36,7 @@ export default function Constituent({
       label={koLabel ?? constituent.label}
       textTransform="capitalize"
       offset={offset}
-      isOpen={canShowTooltip && isCurrentHovered}
+      isOpen={isAbbrTooltipVisible && isCurrentHovered}
     >
       <Text
         as="span"

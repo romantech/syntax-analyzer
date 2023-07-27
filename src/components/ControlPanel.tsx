@@ -9,15 +9,15 @@ import {
 } from '@chakra-ui/react';
 import {
   abbrInfoModeAtom,
-  deleteModeAtom,
   tagInfoModeAtom,
+  toggleDeleteModeActionAtom,
 } from '@/store/controlPanelStore.ts';
 import { BsFillEraserFill } from 'react-icons/bs';
 
 export default function ControlPanel() {
   const [isTagInfoMode, setTagInfoMode] = useAtom(tagInfoModeAtom);
   const [isAbbrInfoMode, setIsAbbrInfoMode] = useAtom(abbrInfoModeAtom);
-  const [isDeleteMode, setIsDeleteMode] = useAtom(deleteModeAtom);
+  const [isDeleteMode, toggleDeleteMode] = useAtom(toggleDeleteModeActionAtom);
 
   return (
     <Card h={175} w="20%" p={4} variant="outline">
@@ -42,7 +42,7 @@ export default function ControlPanel() {
             colorScheme={isDeleteMode ? 'blue' : 'gray'}
             aria-label="Delete Tag"
             icon={<BsFillEraserFill />}
-            onClick={() => setIsDeleteMode((prev) => !prev)}
+            onClick={toggleDeleteMode}
           />
         </HStack>
       </VStack>

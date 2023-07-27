@@ -17,21 +17,21 @@ import {
   ConstituentTranslations,
 } from '@/constants/constituents';
 import { useAtom, useAtomValue } from 'jotai';
-import { tagInfoModeAtom } from '@/store/controlPanelStore';
+import {
+  selectedTagActionAtom,
+  tagInfoModeAtom,
+} from '@/store/controlPanelStore';
 import { ConstituentWithoutId } from '@/types/analysis';
-import { selectedTagAtom } from '@/store/analysisStore';
-import { generateNumberID } from '@/utils/common';
 
 export default function TagList({ ...accordionProps }: AccordionProps) {
-  const tagTooltipMode = useAtomValue(tagInfoModeAtom);
-  const [tagList, setTagList] = useAtom(selectedTagAtom);
+  const isTagInfoMode = useAtomValue(tagInfoModeAtom);
+  const [selectedTag, setSelectedTag] = useAtom(selectedTagActionAtom);
   const onTagClick = (tag: ConstituentWithoutId) => {
-    if (tagList?.elementId === tag.elementId) {
-      setTagList(null);
+    if (selectedTag?.elementId === tag.elementId) {
+      setSelectedTag(null);
       return;
     }
-    const constituentWithId = { ...tag, id: generateNumberID() };
-    setTagList(constituentWithId);
+    setSelectedTag(tag);
   };
 
   return (
@@ -51,12 +51,13 @@ export default function TagList({ ...accordionProps }: AccordionProps) {
           <AccordionPanel display="flex" flexWrap="wrap" gap={2}>
             {category.constituents.map((constituent) => {
               const { ko, desc } = ConstituentTranslations[constituent.label];
-              const isSelected = tagList?.elementId === constituent.elementId;
+              const isSelected =
+                selectedTag?.elementId === constituent.elementId;
               return (
                 <WrapItem key={constituent.label}>
                   <Tooltip
                     label={desc}
-                    isDisabled={!tagTooltipMode}
+                    isDisabled={!isTagInfoMode}
                     openDelay={200}
                   >
                     <Button
