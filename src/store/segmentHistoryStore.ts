@@ -1,4 +1,4 @@
-import { atom } from 'jotai/index';
+import { atom } from 'jotai';
 import { Segment } from '@/types/analysis.ts';
 import { atomWithDefault, atomWithReset } from 'jotai/utils';
 import { currentAnalysisAtom } from '@/store/analysisStore.ts';

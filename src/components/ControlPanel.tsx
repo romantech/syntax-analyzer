@@ -1,11 +1,12 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   Card,
+  Divider,
+  FormLabel,
   HStack,
   IconButton,
   Skeleton,
   Switch,
-  Text,
   useBoolean,
   VStack,
 } from '@chakra-ui/react';
@@ -21,6 +22,7 @@ import {
   segmentHistoryIndexAtom,
   undoRedoAbilityAtom,
 } from '@/store/segmentHistoryStore.ts';
+import { IoSaveSharp } from 'react-icons/io5';
 
 export default function ControlPanel() {
   const [isTagInfoMode, setTagInfoMode] = useAtom(tagInfoModeAtom);
@@ -49,24 +51,33 @@ export default function ControlPanel() {
   };
 
   return (
-    <Skeleton h={175} w="20%" fitContent isLoaded={mounted} borderRadius={6}>
-      <Card h="full" w="full" p={4} variant="outline">
-        <VStack align="start" gap={3}>
-          <HStack minW="full" justify="space-between">
-            <Text noOfLines={1}>태그 정보 툴팁</Text>
-            <Switch
-              isChecked={isTagInfoMode}
-              onChange={() => setTagInfoMode(!isTagInfoMode)}
-            />
-          </HStack>
-          <HStack minW="full" justify="space-between">
-            <Text noOfLines={1}>태그 약어 툴팁</Text>
-            <Switch
-              isChecked={isAbbrInfoMode}
-              onChange={() => setIsAbbrInfoMode(!isAbbrInfoMode)}
-            />
-          </HStack>
-          <HStack>
+    <Skeleton maxH={175} w="20%" fitContent isLoaded={mounted} borderRadius={6}>
+      <Card h="full" p={4} variant="outline">
+        <VStack align="stretch" h="full" justify="space-between">
+          <VStack>
+            <HStack w="full" justify="space-between">
+              <FormLabel noOfLines={1}>태그 정보 툴팁</FormLabel>
+              <Switch
+                isChecked={isTagInfoMode}
+                onChange={() => setTagInfoMode(!isTagInfoMode)}
+              />
+            </HStack>
+            <HStack w="full" justify="space-between">
+              <FormLabel noOfLines={1}>태그 약어 툴팁</FormLabel>
+              <Switch
+                isChecked={isAbbrInfoMode}
+                onChange={() => setIsAbbrInfoMode(!isAbbrInfoMode)}
+              />
+            </HStack>
+          </VStack>
+          <Divider />
+          <HStack
+            overflowY="hidden"
+            overflowX="scroll"
+            sx={{
+              '::-webkit-scrollbar': { display: 'none' },
+            }}
+          >
             <IconButton
               variant="solid"
               colorScheme={isDeleteMode ? 'blue' : 'gray'}
@@ -87,6 +98,13 @@ export default function ControlPanel() {
               icon={<ImRedo />}
               isDisabled={!canRedo}
               onClick={() => onUndoRedo('redo')}
+            />
+            <IconButton
+              variant="solid"
+              aria-label="Save your tagging result"
+              icon={<IoSaveSharp />}
+              isDisabled
+              // TODO 구현
             />
           </HStack>
         </VStack>
