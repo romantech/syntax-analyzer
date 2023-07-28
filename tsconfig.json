@@ -19,6 +19,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
+      /** alias 사용시 폴더명에 대문자 있으면 오류 발생하므로 주의 */
       "@/*": ["src/*"]
     }
   },
