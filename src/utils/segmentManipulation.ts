@@ -29,10 +29,7 @@ const isSegmentLargerThanRange = (
   begin: number,
   end: number,
 ) => {
-  return (
-    (segment.begin < begin && segment.end >= end) ||
-    (segment.begin <= begin && segment.end > end)
-  );
+  return segment.begin <= begin && segment.end >= end;
 };
 
 const isSegmentSmallerThanRange = (
@@ -40,10 +37,7 @@ const isSegmentSmallerThanRange = (
   begin: number,
   end: number,
 ) => {
-  return (
-    (segment.begin > begin && segment.end <= end) ||
-    (segment.begin >= begin && segment.end < end)
-  );
+  return segment.begin >= begin && segment.end <= end;
 };
 
 const checkPhraseOrClause = (constituent: Constituent) => {
@@ -100,16 +94,18 @@ export const addConstituent = (
 
   // begin-end 범위가 현재 세그먼트보다 작다면, 현재 세그먼트에 속하므로 재귀적으로 자식 탐색
   if (isSegmentLargerThanRange(clonedSegment, begin, end)) {
-    for (let i = 0; i < clonedSegment.children.length; i++) {
-      if (isSegmentLargerThanRange(clonedSegment.children[i], begin, end)) {
-        clonedSegment.children[i] = addConstituent(
-          clonedSegment.children[i],
-          begin,
-          end,
-          constituent,
-        );
-        return clonedSegment;
-      }
+    const index = clonedSegment.children.findIndex((child) =>
+      isSegmentLargerThanRange(child, begin, end),
+    );
+
+    if (index !== -1) {
+      clonedSegment.children[index] = addConstituent(
+        clonedSegment.children[index],
+        begin,
+        end,
+        constituent,
+      );
+      return clonedSegment;
     }
   }
 
