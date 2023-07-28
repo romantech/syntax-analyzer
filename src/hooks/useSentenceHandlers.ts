@@ -4,7 +4,7 @@ import { deleteModeAtom } from '@/store/controlPanelStore';
 import { removeConstituent } from '@/utils/segmentManipulation.ts';
 import { updateSegmentAndIncrementIndexAtom } from '@/store/segmentHistoryStore.ts';
 
-export default function useSegmentHandler() {
+export default function useSentenceHandlers() {
   const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
   const isDeleteMode = useAtomValue(deleteModeAtom);
   const [segment, updateSegment] = useAtom(updateSegmentAndIncrementIndexAtom);

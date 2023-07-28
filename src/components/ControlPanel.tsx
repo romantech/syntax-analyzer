@@ -6,6 +6,7 @@ import {
   HStack,
   IconButton,
   Skeleton,
+  StackProps,
   Switch,
   useBoolean,
   VStack,
@@ -24,12 +25,82 @@ import {
 } from '@/store/segmentHistoryStore.ts';
 import { IoSaveSharp } from 'react-icons/io5';
 
-export default function ControlPanel() {
+const TagInfoSwitch = ({
+  w = 'full',
+  justify = 'space-between',
+  ...stackProps
+}: StackProps) => {
   const [isTagInfoMode, setTagInfoMode] = useAtom(tagInfoModeAtom);
+  return (
+    <HStack {...stackProps} w={w} justify={justify}>
+      <FormLabel noOfLines={1}>태그 정보 툴팁</FormLabel>
+      <Switch
+        isChecked={isTagInfoMode}
+        onChange={() => setTagInfoMode(!isTagInfoMode)}
+      />
+    </HStack>
+  );
+};
+
+const AbbrInfoSwitch = ({
+  w = 'full',
+  justify = 'space-between',
+  ...stackProps
+}: StackProps) => {
   const [isAbbrInfoMode, setIsAbbrInfoMode] = useAtom(abbrInfoModeAtom);
+  return (
+    <HStack {...stackProps} w={w} justify={justify}>
+      <FormLabel noOfLines={1}>태그 약어 툴팁</FormLabel>
+      <Switch
+        isChecked={isAbbrInfoMode}
+        onChange={() => setIsAbbrInfoMode(!isAbbrInfoMode)}
+      />
+    </HStack>
+  );
+};
+
+const DeleteButton = () => {
   const [isDeleteMode, toggleDeleteMode] = useAtom(toggleDeleteModeActionAtom);
+  return (
+    <IconButton
+      variant="solid"
+      colorScheme={isDeleteMode ? 'blue' : 'gray'}
+      aria-label="Delete Tag"
+      icon={<BsFillEraserFill />}
+      onClick={toggleDeleteMode}
+    />
+  );
+};
+
+const UndoButton = () => {
+  const { canUndo } = useAtomValue(undoRedoAbilityAtom);
   const setSegmentHistoryIndex = useSetAtom(segmentHistoryIndexAtom);
-  const { canUndo, canRedo } = useAtomValue(undoRedoAbilityAtom);
+  return (
+    <IconButton
+      variant="solid"
+      aria-label="Undo the last action"
+      icon={<ImUndo />}
+      isDisabled={!canUndo}
+      onClick={() => setSegmentHistoryIndex((prev) => prev - 1)}
+    />
+  );
+};
+
+const RedoButton = () => {
+  const { canRedo } = useAtomValue(undoRedoAbilityAtom);
+  const setSegmentHistoryIndex = useSetAtom(segmentHistoryIndexAtom);
+  return (
+    <IconButton
+      variant="solid"
+      aria-label="Redo the last undone action"
+      icon={<ImRedo />}
+      isDisabled={!canRedo}
+      onClick={() => setSegmentHistoryIndex((prev) => prev + 1)}
+    />
+  );
+};
+
+export default function ControlPanel() {
   const [mounted, setIsMounted] = useBoolean();
 
   useEffect(() => {
@@ -41,34 +112,15 @@ export default function ControlPanel() {
      * 이처럼 토클이 자동으로 스위치되는 현상을 방지하기 위해 마운트 후에 컴포넌트 표시
      * */
     setIsMounted.on();
-  }, [isAbbrInfoMode, setIsMounted]);
-
-  const onUndoRedo = (type: 'undo' | 'redo') => {
-    setSegmentHistoryIndex((index) => {
-      if (type === 'undo') return index - 1;
-      return index + 1;
-    });
-  };
+  }, [setIsMounted]);
 
   return (
     <Skeleton maxH={175} w="20%" fitContent isLoaded={mounted} borderRadius={6}>
       <Card h="full" p={4} variant="outline">
         <VStack align="stretch" h="full" justify="space-between">
           <VStack>
-            <HStack w="full" justify="space-between">
-              <FormLabel noOfLines={1}>태그 정보 툴팁</FormLabel>
-              <Switch
-                isChecked={isTagInfoMode}
-                onChange={() => setTagInfoMode(!isTagInfoMode)}
-              />
-            </HStack>
-            <HStack w="full" justify="space-between">
-              <FormLabel noOfLines={1}>태그 약어 툴팁</FormLabel>
-              <Switch
-                isChecked={isAbbrInfoMode}
-                onChange={() => setIsAbbrInfoMode(!isAbbrInfoMode)}
-              />
-            </HStack>
+            <TagInfoSwitch />
+            <AbbrInfoSwitch />
           </VStack>
           <Divider />
           <HStack
@@ -78,27 +130,9 @@ export default function ControlPanel() {
               '::-webkit-scrollbar': { display: 'none' },
             }}
           >
-            <IconButton
-              variant="solid"
-              colorScheme={isDeleteMode ? 'blue' : 'gray'}
-              aria-label="Delete Tag"
-              icon={<BsFillEraserFill />}
-              onClick={toggleDeleteMode}
-            />
-            <IconButton
-              variant="solid"
-              aria-label="Undo the last action"
-              icon={<ImUndo />}
-              isDisabled={!canUndo}
-              onClick={() => onUndoRedo('undo')}
-            />
-            <IconButton
-              variant="solid"
-              aria-label="Redo the last undone action"
-              icon={<ImRedo />}
-              isDisabled={!canRedo}
-              onClick={() => onUndoRedo('redo')}
-            />
+            <DeleteButton />
+            <UndoButton />
+            <RedoButton />
             <IconButton
               variant="solid"
               aria-label="Save your tagging result"

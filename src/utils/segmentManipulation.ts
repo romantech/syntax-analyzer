@@ -16,6 +16,11 @@ const generateSegment = (
   children,
 });
 
+/**
+ * 입력받은 constituent.id를 찾아 삭제하는 함수
+ * 현재 레벨의 세그먼트에서 찾지 못하면,
+ * 다음 레벨을 탐색하는 너비 우선 탐색 방식 사용
+ * */
 export const removeConstituent = (segment: Segment, id: Constituent['id']) => {
   const clonedSegment = cloneSegment(segment);
   const queue: Segment[] = [clonedSegment];
@@ -25,15 +30,19 @@ export const removeConstituent = (segment: Segment, id: Constituent['id']) => {
     const currentSegment = queue.shift();
     if (!currentSegment) continue;
 
+    // filter 후의 배열 길이와 비교하기 위해 원본 배열 길이 임시 저장
     const { length: originalLength } = currentSegment.constituents;
+    // constituent.id를 찾으면 constituents 배열에서 제외
     currentSegment.constituents = currentSegment.constituents.filter(
       (constituent) => constituent.id !== id,
     );
+    // originalLength 길이가 더 크면 constituent.id를 찾아 삭제했으므로 함수 종료
     if (originalLength > currentSegment.constituents.length) {
       found = true;
       break;
     }
 
+    // 현재 레벨의 세그먼트에서 찾지 못하면 큐에 추가한 후 위 과정 반복
     if (currentSegment.children.length) {
       queue.push(...currentSegment.children);
     }

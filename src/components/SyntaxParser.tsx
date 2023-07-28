@@ -1,43 +1,53 @@
 import { Segments, TokenList } from '@/components';
 import { SlideFade, Text, useColorModeValue } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { forwardRef, PropsWithChildren, useRef } from 'react';
 import '@/styles/constituent.scss';
-import { useCalculateNestingLevel, useSegmentHandler } from '@/hooks';
+import { useCalculateNestingLevel, useSentenceHandlers } from '@/hooks';
 import { useAtomValue } from 'jotai';
 import { deleteModeAtom } from '@/store/controlPanelStore.ts';
-import { Analysis } from '@/types/analysis';
+import { currentSegmentAtom } from '@/store/segmentHistoryStore.ts';
+import { currentSentenceAtom } from '@/store/analysisStore.ts';
 
-interface SyntaxParserProps {
-  rootSegment: Analysis['rootSegment'];
-  sentence: Analysis['sentence'];
-}
+const RootSegment = () => {
+  const segment = useAtomValue(currentSegmentAtom);
+  const sentence = useAtomValue(currentSentenceAtom);
+  const hasAnalysisData = segment && sentence;
+  if (!hasAnalysisData) return null;
 
-export default function SyntaxParser({
-  rootSegment,
-  sentence,
-}: SyntaxParserProps) {
-  const sentenceRef = useRef<HTMLParagraphElement>(null);
-  const isDeleteMode = useAtomValue(deleteModeAtom);
-  const isNestingLevelCalculated = useCalculateNestingLevel(sentenceRef);
-  const handlers = useSegmentHandler();
-  const textColor = useColorModeValue('gray.700', 'gray.300');
+  return <Segments segment={segment} tokenElements={TokenList({ sentence })} />;
+};
 
-  return (
-    <SlideFade in={isNestingLevelCalculated} offsetY={100}>
+const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren>(
+  ({ children }, ref) => {
+    const isDeleteMode = useAtomValue(deleteModeAtom);
+    const handlers = useSentenceHandlers();
+    const textColor = useColorModeValue('gray.700', 'gray.300');
+    return (
       <Text
         fontSize="3xl"
         fontWeight="bold"
-        ref={sentenceRef}
+        ref={ref}
         whiteSpace="nowrap"
         color={textColor}
         cursor={isDeleteMode ? 'pointer' : 'text'}
         {...handlers}
       >
-        <Segments
-          segment={rootSegment}
-          tokenElements={TokenList({ sentence })}
-        />
+        {children}
       </Text>
+    );
+  },
+);
+Sentence.displayName = 'Sentence';
+
+export default function SyntaxParser() {
+  const sentenceRef = useRef<HTMLParagraphElement>(null);
+  const isNestingLevelCalculated = useCalculateNestingLevel(sentenceRef);
+
+  return (
+    <SlideFade in={isNestingLevelCalculated} offsetY={100}>
+      <Sentence ref={sentenceRef}>
+        <RootSegment />
+      </Sentence>
     </SlideFade>
   );
 }

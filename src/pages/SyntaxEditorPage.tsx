@@ -1,16 +1,10 @@
 import { SyntaxParser, TagList, TagNotice } from '@/components';
 import { Box, Flex, Stack } from '@chakra-ui/react';
 import ControlPanel from '@/components/ControlPanel.tsx';
-import { currentSentenceAtom } from '@/store/analysisStore.ts';
-import { Provider, useAtomValue } from 'jotai';
-import { currentSegmentAtom } from '@/store/segmentHistoryStore.ts';
+import { Provider } from 'jotai';
 import { DevTools } from 'jotai-devtools';
 
 const SyntaxEditor = () => {
-  const currentSegment = useAtomValue(currentSegmentAtom);
-  const currentSentence = useAtomValue(currentSentenceAtom);
-  const hasAnalysisData = currentSegment && currentSentence;
-
   return (
     <Flex direction="column" minH="full" overflowX="auto" py={2} gap={8}>
       <Stack>
@@ -21,12 +15,7 @@ const SyntaxEditor = () => {
         </Flex>
       </Stack>
       <Box>
-        {hasAnalysisData && (
-          <SyntaxParser
-            rootSegment={currentSegment}
-            sentence={currentSentence}
-          />
-        )}
+        <SyntaxParser />
       </Box>
     </Flex>
   );
