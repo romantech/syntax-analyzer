@@ -77,14 +77,7 @@ export const addConstituent = (
   end: number,
   constituent: Constituent,
 ) => {
-  const clonedSegment: Segment = structuredClone(segment);
-
-  // 자식 세그먼트가 없을 때
-  if (clonedSegment.children.length === 0) {
-    const newSegment = generateSegment(begin, end, [constituent]);
-    clonedSegment.children.push(newSegment);
-    return clonedSegment;
-  }
+  const clonedSegment: Segment = cloneSegment(segment);
 
   // begin-end 범위가 정확히 일치한다면 현재 세그먼트에 추가
   if (isSegmentMatchingRange(clonedSegment, begin, end)) {
@@ -107,6 +100,13 @@ export const addConstituent = (
       );
       return clonedSegment;
     }
+  }
+
+  // 자식 세그먼트가 없을 때
+  if (clonedSegment.children.length === 0) {
+    const newSegment = generateSegment(begin, end, [constituent]);
+    clonedSegment.children.push(newSegment);
+    return clonedSegment;
   }
 
   // begin-end 범위가 현재 세그먼트보다 크면,

@@ -4,6 +4,10 @@ import { atomWithDefault, atomWithReset } from 'jotai/utils';
 import { currentAnalysisAtom } from '@/store/analysisStore';
 import { Nullable } from '@/types/common';
 import { deleteModeAtom, selectedTagAtom } from './controlPanelStore';
+import {
+  fillSegment,
+  removeEmptySegment,
+} from '@/utils/segmentManipulation.ts';
 
 /**
  * useResetAtom 혹은 RESET 심볼을 이용해 초기값으로 되돌릴 수 있음
@@ -37,9 +41,13 @@ export const hasAddedTagAtom = atomWithDefault((get) => {
 export const updateSegmentHistoryAndIndexAtom = atom(
   (get) => get(currentSegmentAtom),
   (get, set, updatedSegment: Segment) => {
-    set(segmentHistoryAtom, (prev) => [...prev, updatedSegment]);
+    const cleanedSegment = removeEmptySegment(updatedSegment);
+    const filledSegment = fillSegment(cleanedSegment, updatedSegment.end);
+    set(segmentHistoryAtom, (prev) => [...prev, filledSegment]);
+
     const currentHistory = get(segmentHistoryAtom);
     set(segmentHistoryIndexAtom, currentHistory.length - 1);
+
     if (!get(hasAddedTagAtom)) set(deleteModeAtom, false);
   },
 );

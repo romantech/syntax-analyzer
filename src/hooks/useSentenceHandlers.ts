@@ -1,12 +1,7 @@
 import { useSegmentMouseEvent } from '@/hooks/index';
 import { useAtom, useAtomValue } from 'jotai';
 import { deleteModeAtom, selectedTagAtom } from '@/store/controlPanelStore';
-import {
-  addConstituent,
-  fillSegment,
-  removeConstituent,
-  removeEmptySegment,
-} from '@/utils/segmentManipulation';
+import { addConstituent, removeConstituent } from '@/utils/segmentManipulation';
 import { updateSegmentHistoryAndIndexAtom } from '@/store/segmentHistoryStore';
 import { getBeginEndIdxFromSelection } from '@/utils/textSelection';
 import { generateNumberID } from '@/utils/common';
@@ -31,8 +26,7 @@ export default function useSentenceHandlers() {
         end,
         constituent,
       );
-      const filledSegment = fillSegment(updatedSegment, currentSegment.end);
-      updateSegment(filledSegment);
+      updateSegment(updatedSegment);
     }
   };
 
@@ -42,9 +36,7 @@ export default function useSentenceHandlers() {
     if (isDeleteMode && targetInfo && currentSegment) {
       const constituentId = Number(targetInfo.constituentId);
       const updatedSegment = removeConstituent(currentSegment, constituentId);
-      const cleanedSegment = removeEmptySegment(updatedSegment);
-      const filledSegment = fillSegment(cleanedSegment, currentSegment.end);
-      updateSegment(filledSegment);
+      updateSegment(updatedSegment);
     }
   };
 
