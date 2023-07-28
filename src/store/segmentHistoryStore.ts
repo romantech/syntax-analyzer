@@ -34,12 +34,7 @@ export const incrementHistoryIndexAtom = atom(null, (get, set) => {
 
 export const updateSegmentAndIncrementIndexAtom = atom(
   (get) => get(currentSegmentAtom),
-  (get, set, updatedChildren: Segment[]) => {
-    const currentSegment = get(currentSegmentAtom);
-    if (!currentSegment) return;
-
-    const updatedSegment = { ...currentSegment, children: updatedChildren };
-
+  (get, set, updatedSegment: Segment) => {
     set(segmentHistoryAtom, (prev) => [...prev, updatedSegment]);
     set(incrementHistoryIndexAtom);
   },

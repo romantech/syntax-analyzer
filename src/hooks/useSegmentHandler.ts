@@ -11,13 +11,10 @@ export default function useSegmentHandler() {
 
   /** 삭제 */
   const onClick = () => {
-    if (!isDeleteMode) return;
-    if (targetInfo?.constituentId && segment) {
-      const updatedSegments = removeConstituent(
-        segment.children,
-        Number(targetInfo.constituentId),
-      );
-      updateSegment(updatedSegments);
+    if (isDeleteMode && targetInfo && segment) {
+      const constituentId = Number(targetInfo.constituentId);
+      const updatedSegment = removeConstituent(segment, constituentId);
+      updateSegment(updatedSegment);
     }
   };
 
