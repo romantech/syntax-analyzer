@@ -6,4 +6,4 @@ export { default as TokenList } from './TokenList.tsx';
 export { default as Token } from './Token';
 export { default as TagList } from './TagList';
 export { default as TagNotice } from './TagNotice';
-export { default as ControlPanel } from './ControlPanel';
+export { default as ControlPanel } from './controlPanel/ControlPanel.tsx';

@@ -58,6 +58,12 @@ const addNewSegmentToChild = (child: Segment[], begin: number, end: number) => {
   child.push(newSegment);
 };
 
+/**
+ * 트리 구조의 세그먼트를 깊이 우선 방식으로 탐색하고,
+ * 빈 구간이 있으면 새로운 세그먼트를 생성하여 추가하는 함수
+ * e.g. 부모 세그먼트 begin 0, end 4 / 자식 세그먼트 begin 1, end 2
+ * [[1, 2]] -> [[0, 1], [1, 2], [2, 4]]
+ * */
 export const fillSegment = (
   existingSegment: Segment,
   totalRangeEnd: number,
@@ -77,7 +83,7 @@ export const fillSegment = (
       }
 
       filledChild.push(childSegment);
-      trackingBegin = childSegment.end;
+      trackingBegin = childSegment.end; // 시작 지점 업데이트
     });
 
     // 현재 세그먼트의 end 지점이 자식 세그먼트의 end 지점보다 큰 경우
