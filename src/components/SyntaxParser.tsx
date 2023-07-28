@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import '@/styles/constituent.scss';
 import { useCalculateNestingLevel } from '@/hooks';
 import { SegmentList, Sentence, TokenList } from '@/components/syntax-parser';
-import { useAtomValue } from 'jotai/index';
+import { useAtomValue } from 'jotai';
 import { currentSegmentAtom } from '@/store/segmentHistoryStore';
 import { currentSentenceAtom } from '@/store/analysisStore';
 

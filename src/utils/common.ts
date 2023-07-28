@@ -20,3 +20,12 @@ export const tokenizer = (text: string) => {
 
 const nanoId = customAlphabet('123456789', 10);
 export const generateNumberID = () => Number(nanoId());
+
+export const kebabToCamel = (str: string) => {
+  /**
+   * -([a-z]) : -로 시작하고 소문자로 끝나는 문자열
+   * e.g. hello-world -> '-w' 매칭
+   * 매칭된 문자열은 replacer 함수의 첫번째 인자로 전달됨
+   * */
+  return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+};

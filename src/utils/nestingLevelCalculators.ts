@@ -1,5 +1,6 @@
 import { RefObject } from 'react';
 import { ConstituentType } from '@/types/analysis.ts';
+import { kebabToCamel } from '@/utils/common.ts';
 
 const assignCalculatedLevel = (element: HTMLElement) => {
   let maxChildLevel = 0;
@@ -12,11 +13,16 @@ const assignCalculatedLevel = (element: HTMLElement) => {
   const hasChild = element.children.length > 0;
   const currentLevel = hasChild ? maxChildLevel + 1 : maxChildLevel;
 
-  const classesToCheck: ConstituentType[] = ['token', 'phrase', 'clause'];
+  const classesToCheck: ConstituentType[] = [
+    'token',
+    'phrase',
+    'clause',
+    'token-group',
+  ];
 
   classesToCheck.forEach((className) => {
     if (element.classList.contains(className)) {
-      element.dataset[`${className}Lv`] = `${currentLevel}`;
+      element.dataset[kebabToCamel(`${className}-lv`)] = `${currentLevel}`;
     }
   });
 

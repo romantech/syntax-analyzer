@@ -12,14 +12,17 @@ import {
   isAbbrTooltipVisibleAtom,
 } from '@/store/controlPanelStore';
 import { useConstituentHover } from '@/hooks';
+import classnames from 'classnames';
 
 interface ConstituentProps {
   constituent: TConstituent;
+  isTokenGroup: boolean;
 }
 
 export default function Constituent({
   children,
   constituent,
+  isTokenGroup,
 }: PropsWithChildren<ConstituentProps>) {
   const { dark, light } = CONSTITUENT_COLORS[constituent.type];
   const colorValue = useColorModeValue(light, dark);
@@ -43,7 +46,9 @@ export default function Constituent({
         color={colorValue}
         data-constituent={constituent.abbreviation}
         data-constituent-id={constituent.id}
-        className={`constituent ${constituent.type}`}
+        className={classnames('constituent', constituent.type, {
+          'token-group': isTokenGroup && constituent.type === 'token',
+        })}
         {...handlers}
       >
         {children}

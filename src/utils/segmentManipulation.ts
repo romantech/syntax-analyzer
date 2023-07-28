@@ -16,6 +16,109 @@ const generateSegment = (
   children,
 });
 
+const isSegmentMatchingRange = (
+  segment: Segment,
+  begin: number,
+  end: number,
+) => {
+  return segment.begin === begin && segment.end === end;
+};
+
+const isSegmentLargerThanRange = (
+  segment: Segment,
+  begin: number,
+  end: number,
+) => {
+  return segment.begin <= begin && segment.end >= end;
+};
+
+const isSegmentSmallerThanRange = (
+  segment: Segment,
+  begin: number,
+  end: number,
+) => {
+  return segment.begin >= begin && segment.end <= end;
+};
+
+const checkPhraseOrClause = (constituent: Constituent) => {
+  return constituent.type !== 'token';
+};
+
+const crossClauseChecker = (
+  segments: Segment[],
+  begin: number,
+  end: number,
+) => {
+  return segments.some((segment) => {
+    const biggerThan = isSegmentLargerThanRange(segment, begin, end);
+    const smallThan = isSegmentSmallerThanRange(segment, begin, end);
+    return biggerThan || smallThan;
+  });
+};
+
+const moveSegment = (
+  segments: Segment[],
+  begin: number,
+  end: number,
+): Segment[] => {
+  // flatMap 메서드는 1뎁스까지 배열을 펼치고, 빈 배열을 반환하면 결과에 포함하지 않음
+  return segments.flatMap((segment) => {
+    if (isSegmentSmallerThanRange(segment, begin, end)) {
+      return [segment];
+    } else {
+      return moveSegment(segment.children, begin, end);
+    }
+  });
+};
+
+export const addConstituent = (
+  segment: Segment,
+  begin: number,
+  end: number,
+  constituent: Constituent,
+) => {
+  const clonedSegment: Segment = structuredClone(segment);
+
+  // 자식 세그먼트가 없을 때
+  if (clonedSegment.children.length === 0) {
+    const newSegment = generateSegment(begin, end, [constituent]);
+    clonedSegment.children.push(newSegment);
+    return clonedSegment;
+  }
+
+  // begin-end 범위가 정확히 일치한다면 현재 세그먼트에 추가
+  if (isSegmentMatchingRange(clonedSegment, begin, end)) {
+    clonedSegment.constituents.push(constituent);
+    return clonedSegment;
+  }
+
+  // begin-end 범위가 현재 세그먼트보다 작다면, 현재 세그먼트에 속하므로 재귀적으로 탐색
+  if (isSegmentLargerThanRange(clonedSegment, begin, end)) {
+    for (let i = 0; i < clonedSegment.children.length; i++) {
+      if (isSegmentLargerThanRange(clonedSegment.children[i], begin, end)) {
+        clonedSegment.children[i] = addConstituent(
+          clonedSegment.children[i],
+          begin,
+          end,
+          constituent,
+        );
+        return clonedSegment;
+      }
+    }
+  }
+
+  // begin-end 범위가 현재 세그먼트보다 크면, begin-end 범위의 세그먼트를 만든 후 현재 세그먼트를 포함하도록 자식으로 추가
+  const left = generateSegment(begin, end, [constituent]);
+  const right = generateSegment(end, clonedSegment.children.at(-1)!.end);
+
+  left.children = moveSegment(clonedSegment.children, left.begin, left.end);
+  right.children = moveSegment(clonedSegment.children, right.begin, right.end);
+
+  clonedSegment.children = [left, right];
+
+  return clonedSegment;
+};
+
 /**
  * 입력받은 constituent.id를 찾아 삭제하는 함수
  * 현재 레벨의 세그먼트에서 찾지 못하면,
@@ -110,4 +213,15 @@ export const fillSegment = (
   }
 
   return updatedSegment;
+};
+
+export const removeEmptySegment = (segment: Segment): Segment => {
+  segment.children = segment.children
+    .map(removeEmptySegment) // DFS
+    .filter(({ constituents, children }) => {
+      // 자식 혹은 문법 요소가 1개라도 있으면 비어있지 않은 세그먼트로 간주
+      return constituents.length || children.length;
+    });
+
+  return segment;
 };

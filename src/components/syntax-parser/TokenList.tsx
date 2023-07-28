@@ -12,7 +12,12 @@ export default function TokenList({ sentence }: TokensProps) {
     const spaceAfter = isNextTokenPunctuation ? 0 : 1;
     const spaceBefore = isCurrentTokenPunctuation ? 0 : 1;
     return (
-      <Token token={token} key={i} padding={[0, spaceAfter, 0, spaceBefore]} />
+      <Token
+        token={token}
+        key={i}
+        padding={[0, spaceAfter, 0, spaceBefore]}
+        index={i}
+      />
     );
   });
 }

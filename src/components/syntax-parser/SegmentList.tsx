@@ -29,7 +29,7 @@ export default function SegmentList({ segment, tokenElements }: SegmentsProps) {
   }
 
   return (
-    <Segment segment={segment}>
+    <Segment segment={segment} isTokenGroup={Math.abs(begin - end) > 1}>
       {childrenWithSegment.map((token) => token)}
     </Segment>
   );

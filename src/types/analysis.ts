@@ -1,4 +1,4 @@
-export type ConstituentType = 'clause' | 'phrase' | 'token';
+export type ConstituentType = 'clause' | 'phrase' | 'token' | 'token-group';
 
 type ConstituentDataSetKey = 'constituent' | 'constituentId';
 export type ConstituentDataSet = { [key in ConstituentDataSetKey]?: string };
@@ -25,4 +25,10 @@ export type Analysis = {
   id: string; // A random string of 21 bytes
   sentence: string[]; // Tokenized sentence
   rootSegment: Segment; // The array contains only a single root segment
+};
+
+type UpdateSegmentType = 'add' | 'delete';
+export type UpdateSegmentPayload = {
+  segment: Segment;
+  type: UpdateSegmentType;
 };
