@@ -32,7 +32,7 @@ export default function useSentenceHandlers() {
         constituent,
       );
       const filledSegment = fillSegment(updatedSegment, currentSegment.end);
-      updateSegment({ segment: filledSegment, type: 'add' });
+      updateSegment(filledSegment);
     }
   };
 
@@ -44,7 +44,7 @@ export default function useSentenceHandlers() {
       const updatedSegment = removeConstituent(currentSegment, constituentId);
       const cleanedSegment = removeEmptySegment(updatedSegment);
       const filledSegment = fillSegment(cleanedSegment, currentSegment.end);
-      updateSegment({ segment: filledSegment, type: 'delete' });
+      updateSegment(filledSegment);
     }
   };
 

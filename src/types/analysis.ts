@@ -26,9 +26,3 @@ export type Analysis = {
   sentence: string[]; // Tokenized sentence
   rootSegment: Segment; // The array contains only a single root segment
 };
-
-type UpdateSegmentType = 'add' | 'delete';
-export type UpdateSegmentPayload = {
-  segment: Segment;
-  type: UpdateSegmentType;
-};

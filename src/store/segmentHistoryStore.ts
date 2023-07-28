@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { Segment, UpdateSegmentPayload } from '@/types/analysis';
+import { Segment } from '@/types/analysis';
 import { atomWithDefault, atomWithReset } from 'jotai/utils';
 import { currentAnalysisAtom } from '@/store/analysisStore';
 import { Nullable } from '@/types/common';
@@ -31,17 +31,10 @@ export const currentSegmentAtom = atom<Nullable<Segment>>((get) => {
 
 export const updateSegmentHistoryAndIndexAtom = atom(
   (get) => get(currentSegmentAtom),
-  (get, set, { segment, type }: UpdateSegmentPayload) => {
-    set(segmentHistoryAtom, (prev) => [...prev, segment]);
+  (get, set, updatedSegment: Segment) => {
+    set(segmentHistoryAtom, (prev) => [...prev, updatedSegment]);
     const currentHistory = get(segmentHistoryAtom);
-
-    switch (type) {
-      case 'delete':
-        set(segmentHistoryIndexAtom, get(segmentHistoryIndexAtom) + 1);
-        break;
-      case 'add':
-        set(segmentHistoryIndexAtom, currentHistory.length - 1);
-    }
+    set(segmentHistoryIndexAtom, currentHistory.length - 1);
   },
 );
 

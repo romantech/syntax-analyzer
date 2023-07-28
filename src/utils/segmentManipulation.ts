@@ -92,7 +92,7 @@ export const addConstituent = (
     return clonedSegment;
   }
 
-  // begin-end 범위가 현재 세그먼트보다 작다면, 현재 세그먼트에 속하므로 재귀적으로 탐색
+  // begin-end 범위가 현재 세그먼트보다 작다면, 현재 세그먼트에 속하므로 재귀적으로 자식 탐색
   if (isSegmentLargerThanRange(clonedSegment, begin, end)) {
     for (let i = 0; i < clonedSegment.children.length; i++) {
       if (isSegmentLargerThanRange(clonedSegment.children[i], begin, end)) {
@@ -107,7 +107,8 @@ export const addConstituent = (
     }
   }
 
-  // begin-end 범위가 현재 세그먼트보다 크면, begin-end 범위의 세그먼트를 만든 후 현재 세그먼트를 포함하도록 자식으로 추가
+  // begin-end 범위가 현재 세그먼트보다 크면,
+  // begin-end 범위의 세그먼트를 만든 후 자식으로 추가
   const left = generateSegment(begin, end, [constituent]);
   const right = generateSegment(end, clonedSegment.children.at(-1)!.end);
 
