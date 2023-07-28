@@ -15,7 +15,7 @@ import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
 import { BsGithub } from 'react-icons/bs';
 import { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
-import { TAB_LIST } from '@/constants/tabList.ts';
+import { TAB_LIST } from '@/constants/tabList';
 import { useTabIndex } from '@/hooks';
 
 export default function Header() {

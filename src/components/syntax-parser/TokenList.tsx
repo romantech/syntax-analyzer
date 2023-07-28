@@ -1,5 +1,5 @@
 import { isPunctuation } from '@/utils/common.ts';
-import Token from '@/components/Token';
+import { Token } from '@/components/syntax-parser';
 
 interface TokensProps {
   sentence: string[];

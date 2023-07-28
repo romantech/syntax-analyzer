@@ -5,35 +5,15 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionProps,
-  Button,
   Heading,
   HStack,
   Text,
-  Tooltip,
   WrapItem,
 } from '@chakra-ui/react';
-import {
-  CONSTITUENT_CATEGORIES,
-  ConstituentTranslations,
-} from '@/constants/constituents';
-import { useAtom, useAtomValue } from 'jotai';
-import {
-  selectedTagActionAtom,
-  tagInfoModeAtom,
-} from '@/store/controlPanelStore';
-import { ConstituentWithoutId } from '@/types/analysis';
+import { CONSTITUENT_CATEGORIES } from '@/constants/constituents';
+import { TagButton } from './tag-list';
 
 export default function TagList({ ...accordionProps }: AccordionProps) {
-  const isTagInfoMode = useAtomValue(tagInfoModeAtom);
-  const [selectedTag, setSelectedTag] = useAtom(selectedTagActionAtom);
-  const onTagClick = (tag: ConstituentWithoutId) => {
-    if (selectedTag?.elementId === tag.elementId) {
-      setSelectedTag(null);
-      return;
-    }
-    setSelectedTag(tag);
-  };
-
   return (
     <Accordion allowToggle {...accordionProps}>
       {CONSTITUENT_CATEGORIES.map((category) => (
@@ -50,25 +30,9 @@ export default function TagList({ ...accordionProps }: AccordionProps) {
 
           <AccordionPanel display="flex" flexWrap="wrap" gap={2}>
             {category.constituents.map((constituent) => {
-              const { ko, desc } = ConstituentTranslations[constituent.label];
-              const isSelected =
-                selectedTag?.elementId === constituent.elementId;
               return (
                 <WrapItem key={constituent.label}>
-                  <Tooltip
-                    label={desc}
-                    isDisabled={!isTagInfoMode}
-                    openDelay={200}
-                  >
-                    <Button
-                      textTransform="capitalize"
-                      size="sm"
-                      onClick={() => onTagClick(constituent)}
-                      colorScheme={isSelected ? 'blue' : 'gray'}
-                    >
-                      {ko}
-                    </Button>
-                  </Tooltip>
+                  <TagButton constituent={constituent} />
                 </WrapItem>
               );
             })}

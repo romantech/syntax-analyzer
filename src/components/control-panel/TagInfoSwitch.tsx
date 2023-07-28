@@ -1,12 +1,12 @@
 import { FormLabel, HStack, StackProps, Switch } from '@chakra-ui/react';
-import { useAtom } from 'jotai/';
-import { tagInfoModeAtom } from '@/store/controlPanelStore.ts';
+import { useAtom } from 'jotai';
+import { tagInfoModeAtom } from '@/store/controlPanelStore';
 
-const TagInfoSwitch = ({
+export default function TagInfoSwitch({
   w = 'full',
   justify = 'space-between',
   ...stackProps
-}: StackProps) => {
+}: StackProps) {
   const [isTagInfoMode, setTagInfoMode] = useAtom(tagInfoModeAtom);
   return (
     <HStack {...stackProps} w={w} justify={justify}>
@@ -17,6 +17,4 @@ const TagInfoSwitch = ({
       />
     </HStack>
   );
-};
-
-export default TagInfoSwitch;
+}

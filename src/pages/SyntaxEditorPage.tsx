@@ -1,8 +1,8 @@
-import { SyntaxParser, TagList, TagNotice } from '@/components';
+import { ControlPanel, SyntaxParser, TagList } from '@/components';
 import { Box, Flex, Stack } from '@chakra-ui/react';
-import ControlPanel from '@/components/controlPanel/ControlPanel.tsx';
 import { Provider } from 'jotai';
 import { DevTools } from 'jotai-devtools';
+import { TagNotice } from '@/components/tag-list';
 
 const SyntaxEditor = () => {
   return (

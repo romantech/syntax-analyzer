@@ -15,7 +15,7 @@ import {
   RedoButton,
   TagInfoSwitch,
   UndoButton,
-} from './components';
+} from '@/components/control-panel';
 
 export default function ControlPanel() {
   const [mounted, setIsMounted] = useBoolean();

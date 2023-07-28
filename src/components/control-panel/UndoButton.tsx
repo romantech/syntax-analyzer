@@ -2,11 +2,11 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import {
   segmentHistoryIndexAtom,
   undoRedoAbilityAtom,
-} from '@/store/segmentHistoryStore.ts';
+} from '@/store/segmentHistoryStore';
 import { IconButton } from '@chakra-ui/react';
 import { ImUndo } from 'react-icons/im';
 
-const UndoButton = () => {
+export default function UndoButton() {
   const { canUndo } = useAtomValue(undoRedoAbilityAtom);
   const setSegmentHistoryIndex = useSetAtom(segmentHistoryIndexAtom);
   return (
@@ -18,6 +18,4 @@ const UndoButton = () => {
       onClick={() => setSegmentHistoryIndex((prev) => prev - 1)}
     />
   );
-};
-
-export default UndoButton;
+}

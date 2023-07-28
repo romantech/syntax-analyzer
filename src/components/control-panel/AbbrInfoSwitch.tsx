@@ -1,12 +1,12 @@
 import { FormLabel, HStack, StackProps, Switch } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
-import { abbrInfoModeAtom } from '@/store/controlPanelStore.ts';
+import { abbrInfoModeAtom } from '@/store/controlPanelStore';
 
-const AbbrInfoSwitch = ({
+export default function AbbrInfoSwitch({
   w = 'full',
   justify = 'space-between',
   ...stackProps
-}: StackProps) => {
+}: StackProps) {
   const [isAbbrInfoMode, setIsAbbrInfoMode] = useAtom(abbrInfoModeAtom);
   return (
     <HStack {...stackProps} w={w} justify={justify}>
@@ -17,6 +17,4 @@ const AbbrInfoSwitch = ({
       />
     </HStack>
   );
-};
-
-export default AbbrInfoSwitch;
+}

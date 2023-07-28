@@ -1,13 +1,13 @@
 import React, { ReactNode } from 'react';
-import { Segment as TSegment } from '@/types/analysis.ts';
-import Segment from './Segment';
+import { Segment as TSegment } from '@/types/analysis';
+import { Segment } from '@/components/syntax-parser';
 
 interface SegmentsProps {
   segment: TSegment;
   tokenElements: ReactNode[];
 }
 
-export default function Segments({ segment, tokenElements }: SegmentsProps) {
+export default function SegmentList({ segment, tokenElements }: SegmentsProps) {
   const childrenWithSegment: ReactNode[] = [];
   const { begin, end } = segment;
 
@@ -16,7 +16,7 @@ export default function Segments({ segment, tokenElements }: SegmentsProps) {
 
     if (childSegment) {
       childrenWithSegment.push(
-        <Segments
+        <SegmentList
           segment={childSegment}
           tokenElements={tokenElements}
           key={childSegment.id}

@@ -1,9 +1,9 @@
 import { useAtom } from 'jotai';
-import { toggleDeleteModeActionAtom } from '@/store/controlPanelStore.ts';
+import { toggleDeleteModeActionAtom } from '@/store/controlPanelStore';
 import { IconButton } from '@chakra-ui/react';
 import { BsFillEraserFill } from 'react-icons/bs';
 
-const DeleteButton = () => {
+export default function DeleteButton() {
   const [isDeleteMode, toggleDeleteMode] = useAtom(toggleDeleteModeActionAtom);
   return (
     <IconButton
@@ -14,6 +14,4 @@ const DeleteButton = () => {
       onClick={toggleDeleteMode}
     />
   );
-};
-
-export default DeleteButton;
+}

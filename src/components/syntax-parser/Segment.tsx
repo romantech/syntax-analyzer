@@ -1,6 +1,6 @@
 import React, { Fragment, PropsWithChildren } from 'react';
-import { Segment as TSegment } from '@/types/analysis.ts';
-import Constituent from '@/components/Constituent';
+import { Segment as TSegment } from '@/types/analysis';
+import { Constituent } from '@/components/syntax-parser';
 
 interface SegmentProps {
   segment: TSegment;

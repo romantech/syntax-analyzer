@@ -1,16 +1,16 @@
-import { Constituent as TConstituent } from '@/types/analysis.ts';
+import { Constituent as TConstituent } from '@/types/analysis';
 import { PropsWithChildren } from 'react';
 import { Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import {
   CONSTITUENT_COLORS,
   ConstituentTranslations,
-} from '@/constants/constituents.ts';
-import { NumberTuple } from '@/types/common.ts';
+} from '@/constants/constituents';
+import { NumberTuple } from '@/types/common';
 import { useAtomValue } from 'jotai';
 import {
   hoveredConstituentAtom,
   isAbbrTooltipVisibleAtom,
-} from '@/store/controlPanelStore.ts';
+} from '@/store/controlPanelStore';
 import { useConstituentHover } from '@/hooks';
 
 interface ConstituentProps {
