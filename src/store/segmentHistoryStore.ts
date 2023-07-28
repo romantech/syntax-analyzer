@@ -3,6 +3,7 @@ import { Segment, UpdateSegmentPayload } from '@/types/analysis';
 import { atomWithDefault, atomWithReset } from 'jotai/utils';
 import { currentAnalysisAtom } from '@/store/analysisStore';
 import { Nullable } from '@/types/common';
+import { deleteModeAtom, selectedTagAtom } from './controlPanelStore';
 
 /**
  * useResetAtom 혹은 RESET 심볼을 이용해 초기값으로 되돌릴 수 있음
@@ -49,7 +50,19 @@ export const undoRedoAbilityAtom = atom((get) => {
   const history = get(segmentHistoryAtom);
 
   return {
-    canUndo: index > 0,
-    canRedo: index < history.length - 1,
+    undo: index > 0,
+    redo: index < history.length - 1,
   };
 });
+
+export const undoRedoActionAtom = atom(
+  (get) => get(undoRedoAbilityAtom),
+  (get, set, type: 'undo' | 'redo') => {
+    set(segmentHistoryIndexAtom, (prev) => {
+      if (type === 'undo') return prev - 1;
+      return prev + 1;
+    });
+    set(deleteModeAtom, false);
+    set(selectedTagAtom, null);
+  },
+);

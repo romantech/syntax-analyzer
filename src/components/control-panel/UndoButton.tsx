@@ -1,21 +1,17 @@
-import { useAtomValue, useSetAtom } from 'jotai';
-import {
-  segmentHistoryIndexAtom,
-  undoRedoAbilityAtom,
-} from '@/store/segmentHistoryStore';
+import { undoRedoActionAtom } from '@/store/segmentHistoryStore';
 import { IconButton } from '@chakra-ui/react';
 import { ImUndo } from 'react-icons/im';
+import { useAtom } from 'jotai';
 
 export default function UndoButton() {
-  const { canUndo } = useAtomValue(undoRedoAbilityAtom);
-  const setSegmentHistoryIndex = useSetAtom(segmentHistoryIndexAtom);
+  const [actionable, action] = useAtom(undoRedoActionAtom);
   return (
     <IconButton
       variant="solid"
       aria-label="Undo the last action"
       icon={<ImUndo />}
-      isDisabled={!canUndo}
-      onClick={() => setSegmentHistoryIndex((prev) => prev - 1)}
+      isDisabled={!actionable.undo}
+      onClick={() => action('undo')}
     />
   );
 }
