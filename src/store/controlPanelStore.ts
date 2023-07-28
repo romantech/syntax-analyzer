@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { atomWithDefault, atomWithStorage } from 'jotai/utils';
+import { atomWithStorage } from 'jotai/utils';
 import { ConstituentWithoutId } from '@/types/analysis';
 import { hasAddedTagAtom } from '@/store/segmentHistoryStore.ts';
 
@@ -12,9 +12,7 @@ export const abbrInfoModeAtom = atomWithStorage('abbrInfoMode', false);
 
 export const deleteModeAtom = atom(false);
 
-export const isDisableDeleteButtonAtom = atomWithDefault(
-  (get) => !get(hasAddedTagAtom),
-);
+export const isDisableDeleteButtonAtom = atom((get) => !get(hasAddedTagAtom));
 
 export const toggleDeleteModeActionAtom = atom(
   (get) => get(deleteModeAtom),
@@ -27,10 +25,10 @@ export const toggleDeleteModeActionAtom = atom(
 
 export const selectedTagActionAtom = atom(
   (get) => get(selectedTagAtom),
-  (get, set, value: ConstituentWithoutId | null) => {
+  (get, set, constituent: ConstituentWithoutId | null) => {
     const isDeleteMode = get(deleteModeAtom);
     if (isDeleteMode) set(deleteModeAtom, false);
-    set(selectedTagAtom, value);
+    set(selectedTagAtom, constituent);
   },
 );
 
