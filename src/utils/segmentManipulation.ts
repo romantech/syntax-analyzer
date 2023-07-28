@@ -84,12 +84,12 @@ export const fillSegment = (
     );
   }
 
-  // filledChild 배열의 마지막 segment.end 값이 totalRangeEnd보다 작다면
-  // 즉, 전체 범위 내에서 아직 채우지 않은 공간이 있다면
-  // 해당 구간을 채우는 새로운 segment를 생성하고 filledChild 배열에 추가
   const endOfLastFilledSegment =
     filledChild.length > 0 ? filledChild[filledChild.length - 1].end : 0;
 
+  // filledChild 배열의 마지막 segment.end 값이 totalRangeEnd 보다 작다면
+  // 즉, 전체 범위 내에서 아직 채우지 않은 공간이 있다면
+  // 해당 구간을 채우는 새로운 세그먼트를 생성하고 filledChild 배열에 추가
   if (endOfLastFilledSegment < totalRangeEnd) {
     addNewSegmentToChild(filledChild, endOfLastFilledSegment, totalRangeEnd);
   }
