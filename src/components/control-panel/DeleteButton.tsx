@@ -1,10 +1,15 @@
-import { useAtom } from 'jotai';
-import { toggleDeleteModeActionAtom } from '@/store/controlPanelStore';
+import { useAtom, useAtomValue } from 'jotai';
+import {
+  isDisableDeleteButtonAtom,
+  toggleDeleteModeActionAtom,
+} from '@/store/controlPanelStore';
 import { IconButton } from '@chakra-ui/react';
 import { BsFillEraserFill } from 'react-icons/bs';
 
 export default function DeleteButton() {
   const [isDeleteMode, toggleDeleteMode] = useAtom(toggleDeleteModeActionAtom);
+  const isDisabled = useAtomValue(isDisableDeleteButtonAtom);
+
   return (
     <IconButton
       variant="solid"
@@ -12,6 +17,7 @@ export default function DeleteButton() {
       aria-label="Delete Tag"
       icon={<BsFillEraserFill />}
       onClick={toggleDeleteMode}
+      isDisabled={isDisabled}
     />
   );
 }

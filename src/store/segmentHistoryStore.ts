@@ -29,12 +29,18 @@ export const currentSegmentAtom = atom<Nullable<Segment>>((get) => {
   return history[index] ?? null;
 });
 
+export const hasAddedTagAtom = atomWithDefault((get) => {
+  const currentSegment = get(currentSegmentAtom);
+  return Boolean(currentSegment?.children.length);
+});
+
 export const updateSegmentHistoryAndIndexAtom = atom(
   (get) => get(currentSegmentAtom),
   (get, set, updatedSegment: Segment) => {
     set(segmentHistoryAtom, (prev) => [...prev, updatedSegment]);
     const currentHistory = get(segmentHistoryAtom);
     set(segmentHistoryIndexAtom, currentHistory.length - 1);
+    if (!get(hasAddedTagAtom)) set(deleteModeAtom, false);
   },
 );
 

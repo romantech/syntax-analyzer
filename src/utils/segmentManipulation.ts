@@ -29,7 +29,10 @@ const isSegmentLargerThanRange = (
   begin: number,
   end: number,
 ) => {
-  return segment.begin <= begin && segment.end >= end;
+  return (
+    (segment.begin < begin && segment.end >= end) ||
+    (segment.begin <= begin && segment.end > end)
+  );
 };
 
 const isSegmentSmallerThanRange = (
@@ -37,7 +40,10 @@ const isSegmentSmallerThanRange = (
   begin: number,
   end: number,
 ) => {
-  return segment.begin >= begin && segment.end <= end;
+  return (
+    (segment.begin > begin && segment.end <= end) ||
+    (segment.begin >= begin && segment.end < end)
+  );
 };
 
 const checkPhraseOrClause = (constituent: Constituent) => {
