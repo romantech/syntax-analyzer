@@ -4,7 +4,7 @@ import {
   isAbbrTooltipVisibleAtom,
 } from '@/store/controlPanelStore.ts';
 import { DOMAttributes, MouseEvent } from 'react';
-import { getNearestConstituent } from '@/utils/constituent.ts';
+import { getNearestElementByClass } from '@/utils/constituent';
 
 type ConstituentMouseEventType = 'onMouseOver' | 'onMouseLeave';
 type UseConstituentHoverReturnType = Pick<
@@ -18,7 +18,7 @@ export default function useConstituentHover(): UseConstituentHoverReturnType {
 
   const onMouseOver = (e: MouseEvent) => {
     if (!isAbbrTooltipVisible) return;
-    const element = getNearestConstituent(e.target as HTMLElement);
+    const element = getNearestElementByClass(e.target as HTMLElement);
     if (element) {
       setHoveredConstituent(Number(element.dataset.constituentId));
     }

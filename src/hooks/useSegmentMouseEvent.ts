@@ -4,7 +4,7 @@ import { useColorMode } from '@chakra-ui/react';
 import { DELETE_MODE_COLOR } from '@/constants/constituents.ts';
 import { deleteModeAtom } from '@/store/controlPanelStore.ts';
 import { useAtomValue } from 'jotai';
-import { getNearestConstituent } from '@/utils/constituent.ts';
+import { getNearestElementByClass } from '@/utils/constituent.ts';
 
 export default function useSegmentMouseEvent() {
   const hoverRef = useRef<HTMLElement | null>(null);
@@ -35,7 +35,7 @@ export default function useSegmentMouseEvent() {
 
     if (target !== hoverRef.current) {
       restoreOriginalColor();
-      swapColor(getNearestConstituent(target));
+      swapColor(getNearestElementByClass(target));
     }
   };
 

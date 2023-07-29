@@ -118,11 +118,6 @@ export const addConstituent = (
   end: number,
   constituent: Constituent,
 ): Segment => {
-  if (segment.children.length && constituent.type !== 'token') {
-    const isValid = isValidRange(segment.children, begin, end);
-    if (!isValid) return segment;
-  }
-
   const clonedSegment: Segment = cloneSegment(segment);
 
   // Case 1: begin-end 범위가 현재 세그먼트 범위와 일치할 때

@@ -18,15 +18,15 @@ export default function useSentenceHandlers() {
   const onMouseUp = () => {
     /** 태그 리스트에서 태그를 선택했을 때만 실행 */
     if (selectedTag && currentSegment) {
-      const { begin, end } = getBeginEndIdxFromSelection();
+      const { begin, end, isValid } = getBeginEndIdxFromSelection();
+      if (!isValid) return;
       const updatedSegment = addConstituent(
         currentSegment,
         begin,
         end,
         generateConstituent(selectedTag, begin, end),
       );
-
-      if (updatedSegment !== currentSegment) updateSegment(updatedSegment);
+      updateSegment(updatedSegment);
     }
   };
 
