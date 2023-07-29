@@ -165,7 +165,7 @@ export const addConstituent = (
   const lastChildEnd = clonedSegment.children.at(-1)!.end;
 
   /**
-   * begin(0) === firstChlidBegin(0) 참이면 case 4-1 이므로 end 값을 leftEnd 로 설정
+   * begin(0) === firstChildBegin(0) 참이면 case 4-1 이므로 end 값을 leftEnd 로 설정
    * begin(2) !== firstChildBegin(0) 참이면 case 4-2 이므로 begin 값을 leftEnd 로 설정
    * */
   const leftEnd = begin === firstChildBegin ? end : begin;
@@ -182,7 +182,7 @@ export const addConstituent = (
     left.end,
   );
 
-  // left.begin === begin && left.end === end 이면 case 4-1 이므로 middle은 null
+  // left.begin === begin && left.end === end 이면 case 4-1 이므로 middle 생성 안함
   if (!isSegmentMatchingRange(left, begin, end)) {
     // begin-end 세그먼트
     middle = generateSegment(begin, end);
