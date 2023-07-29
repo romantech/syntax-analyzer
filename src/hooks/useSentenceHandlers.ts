@@ -25,7 +25,8 @@ export default function useSentenceHandlers() {
         end,
         generateConstituent(selectedTag, begin, end),
       );
-      updateSegment(updatedSegment);
+
+      if (updatedSegment !== currentSegment) updateSegment(updatedSegment);
     }
   };
 

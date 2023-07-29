@@ -1,7 +1,6 @@
 import { Nullable } from '@/types/common';
 import { ConstituentType, ConstituentWithoutId } from '@/types/analysis';
-
-import { generateNumberID } from '@/utils/identifier.ts.ts';
+import { generateNumberID } from '@/utils/identifier';
 
 export const getNearestConstituent = (elementParam: Nullable<HTMLElement>) => {
   let element = elementParam;

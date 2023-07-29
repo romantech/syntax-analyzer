@@ -1,6 +1,6 @@
 import { Constituent, Segment } from '@/types/analysis';
 import { Nullable } from '@/types/common';
-import { generateNumberID } from '@/utils/identifier.ts.ts';
+import { generateNumberID } from '@/utils/identifier';
 
 export const cloneSegment = (segment: Segment) => structuredClone(segment);
 
@@ -25,33 +25,54 @@ const isSegmentMatchingRange = (
   return segment.begin === begin && segment.end === end;
 };
 
-const isSegmentLargerThanRange = (
-  segment: Segment,
+const isRangeWithinSegment = (segment: Segment, begin: number, end: number) =>
+  segment.begin <= begin && segment.end >= end;
+
+const isSegmentWithinRange = (segment: Segment, begin: number, end: number) =>
+  segment.begin >= begin && segment.end <= end;
+
+const filterInRangeSegments = (
+  segments: Segment[],
   begin: number,
   end: number,
 ) => {
-  return (
-    (segment.begin < begin && segment.end >= end) ||
-    (segment.begin <= begin && segment.end > end)
-  );
+  return segments.filter((segment) => {
+    return (
+      isRangeWithinSegment(segment, begin, end) ||
+      isSegmentWithinRange(segment, begin, end)
+    );
+  });
 };
 
-const isSegmentSmallerThanRange = (
-  segment: Segment,
+const hasMatchingRange = (
+  childSegments: Segment[],
   begin: number,
   end: number,
-) => {
-  return (
-    (segment.begin > begin && segment.end <= end) ||
-    (segment.begin >= begin && segment.end < end)
-  );
+): boolean => {
+  return childSegments.some((child) => {
+    if (isSegmentMatchingRange(child, begin, end)) return true;
+    if (child.children.length)
+      return hasMatchingRange(child.children, begin, end);
+    return false;
+  });
 };
 
-const crossClauseChecker = (segment: Segment[], begin: number, end: number) => {
-  return segment.some((segment) => {
-    const biggerThan = isSegmentLargerThanRange(segment, begin, end);
-    const smallThan = isSegmentSmallerThanRange(segment, begin, end);
-    return biggerThan || smallThan;
+const isValidRange = (
+  childSegments: Segment[],
+  begin: number,
+  end: number,
+): boolean => {
+  if (!childSegments.length) return false;
+
+  return childSegments.every((child) => {
+    const isLargerThanRange = isRangeWithinSegment(child, begin, end);
+    const isSmallerThanRange = isSegmentWithinRange(child, begin, end);
+    const isMatchingRange = isLargerThanRange || isSmallerThanRange;
+
+    if (child.children.length && isMatchingRange) {
+      return isValidRange(child.children, begin, end);
+    }
+    return isMatchingRange;
   });
 };
 
@@ -66,7 +87,7 @@ const filterSegmentSmallerThanRange = (
 ): Segment[] => {
   // flatMap 메서드는 1뎁스까지 배열을 펼치고, 빈 배열을 반환하면 결과에 포함하지 않음
   return childrenSegments.flatMap((segment) => {
-    if (isSegmentSmallerThanRange(segment, begin, end)) {
+    if (isSegmentWithinRange(segment, begin, end)) {
       return [segment];
     } else {
       return filterSegmentSmallerThanRange(segment.children, begin, end);
@@ -114,6 +135,14 @@ const generateAndConfigureSegment = (
   return segment;
 };
 
+const rangeValidator = (segment: Segment, begin: number, end: number) => {
+  const isMatching = hasMatchingRange(segment.children, begin, end);
+  if (isMatching) return true;
+
+  const filtered = filterInRangeSegments(segment.children, begin, end);
+  return isValidRange(filtered, begin, end);
+};
+
 /**
  * - 주어진 범위(begin/end)에 해당하는 세그먼트에 새로운 Constituent 를 추가하는 함수
  * - 아래 4가지 케이스를 고려하여 Constituent 를 추가함
@@ -134,6 +163,11 @@ export const addConstituent = (
   end: number,
   constituent: Constituent,
 ): Segment => {
+  if (segment.children.length && constituent.type !== 'token') {
+    const isValid = rangeValidator(segment, begin, end);
+    if (!isValid) return segment;
+  }
+
   const clonedSegment: Segment = cloneSegment(segment);
 
   // Case 1: begin-end 범위가 현재 세그먼트 범위와 일치할 때
@@ -143,9 +177,9 @@ export const addConstituent = (
   }
 
   // Case 2: begin-end 범위가 현재 세그먼트 범위보다 작을 때
-  if (isSegmentLargerThanRange(clonedSegment, begin, end)) {
+  if (isRangeWithinSegment(clonedSegment, begin, end)) {
     const index = clonedSegment.children.findIndex((child) =>
-      isSegmentLargerThanRange(child, begin, end),
+      isRangeWithinSegment(child, begin, end),
     );
 
     if (index !== -1) {

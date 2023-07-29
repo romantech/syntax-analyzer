@@ -1,7 +1,7 @@
 import { Analysis } from '@/types/analysis.ts';
 import { tokenizer } from '@/utils/string.ts';
 import { nanoid } from 'nanoid';
-import { generateNumberID } from '@/utils/identifier.ts.ts';
+import { generateNumberID } from '@/utils/identifier.ts';
 
 const sentences = [
   'I am a boy who likes to play tennis which is fun.',
