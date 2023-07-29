@@ -31,48 +31,11 @@ const isRangeWithinSegment = (segment: Segment, begin: number, end: number) =>
 const isSegmentWithinRange = (segment: Segment, begin: number, end: number) =>
   segment.begin >= begin && segment.end <= end;
 
-const filterSegmentsByRangeOverlap = (
-  segments: Segment[],
-  begin: number,
-  end: number,
-) => {
-  return segments.filter((segment) => {
-    return (
-      isRangeWithinSegment(segment, begin, end) ||
-      isSegmentWithinRange(segment, begin, end)
-    );
-  });
-};
-
-const hasMatchingRange = (
-  childSegments: Segment[],
-  begin: number,
-  end: number,
-): boolean => {
+const isValidRange = (childSegments: Segment[], begin: number, end: number) => {
   return childSegments.some((child) => {
-    if (isSegmentMatchingRange(child, begin, end)) return true;
-    if (child.children.length)
-      return hasMatchingRange(child.children, begin, end);
-    return false;
-  });
-};
-
-const isValidRange = (
-  childSegments: Segment[],
-  begin: number,
-  end: number,
-): boolean => {
-  if (!childSegments.length) return false;
-
-  return childSegments.every((child) => {
     const isLargerThanRange = isRangeWithinSegment(child, begin, end);
     const isSmallerThanRange = isSegmentWithinRange(child, begin, end);
-    const isMatchingRange = isLargerThanRange || isSmallerThanRange;
-
-    if (child.children.length && isMatchingRange) {
-      return isValidRange(child.children, begin, end);
-    }
-    return isMatchingRange;
+    return isLargerThanRange || isSmallerThanRange;
   });
 };
 
@@ -135,14 +98,6 @@ const generateAndConfigureSegment = (
   return segment;
 };
 
-const validateSegmentRange = (segment: Segment, begin: number, end: number) => {
-  const isMatching = hasMatchingRange(segment.children, begin, end);
-  if (isMatching) return true;
-
-  const filtered = filterSegmentsByRangeOverlap(segment.children, begin, end);
-  return isValidRange(filtered, begin, end);
-};
-
 /**
  * - 주어진 범위(begin/end)에 해당하는 세그먼트에 새로운 Constituent 를 추가하는 함수
  * - 아래 4가지 케이스를 고려하여 Constituent 를 추가함
@@ -164,7 +119,7 @@ export const addConstituent = (
   constituent: Constituent,
 ): Segment => {
   if (segment.children.length && constituent.type !== 'token') {
-    const isValid = validateSegmentRange(segment, begin, end);
+    const isValid = isValidRange(segment.children, begin, end);
     if (!isValid) return segment;
   }
 
