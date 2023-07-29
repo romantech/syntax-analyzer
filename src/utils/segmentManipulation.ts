@@ -60,8 +60,8 @@ const crossClauseChecker = (segment: Segment[], begin: number, end: number) => {
 };
 
 /**
- * begin/end 범위 보다 작은 세그먼트를 필터링해서 반환하는 함수
- * 세그먼트의 자식까지 모두 검사하며, flatMap 메서드를 사용해서 1차원 배열로 반환
+ * - begin/end 범위 보다 작은 세그먼트를 필터링해서 반환하는 함수
+ * - 세그먼트의 자식까지 모두 검사하며, flatMap 메서드를 사용해서 1차원 배열로 반환
  * */
 const filterSegmentSmallerThanRange = (
   childrenSegments: Segment[],
@@ -79,11 +79,11 @@ const filterSegmentSmallerThanRange = (
 };
 
 /**
- * begin/end 범위와 일치하는 세그먼트에 있는 문장 성분을 'pluck' 하는 함수
- * 범위에 해당하는 세그먼트를 찾으면, 해당 세그먼트의 문장 성분을 추출하고,
- * 추출한 문장 성분은 원래 세그먼트에서 제거됨.
- * 이 과정을 반복하며 추출한 문장 성분들을 배열로 반환함
- * 참고로 'pluck' 단어는 얻어내고 제거한다는 두 가지 의미를 모두 포함하고 있음
+ * - begin/end 범위와 일치하는 세그먼트에 있는 문장 성분을 'pluck' 하는 함수
+ * - 범위에 해당하는 세그먼트를 찾으면, 해당 세그먼트의 문장 성분을 추출하고,
+ * - 추출한 문장 성분은 원래 세그먼트에서 제거됨.
+ * - 이 과정을 반복하며 추출한 문장 성분들을 배열로 반환함
+ * - 참고로 'pluck' 단어는 얻어내고 제거한다는 두 가지 의미를 모두 포함하고 있음
  * */
 const pluckConstituentsInRange = (
   childrenSegments: Segment[],
@@ -118,12 +118,26 @@ const generateAndConfigureSegment = (
   return segment;
 };
 
+/**
+ * - 주어진 범위(begin/end)에 해당하는 세그먼트에 새로운 Constituent 를 추가하는 함수
+ * - 아래 4가지 케이스를 고려하여 Constituent 를 추가함
+ * 1. begin-end 범위가 현재 세그먼트 범위와 일치할 때: 해당 세그먼트에 추가
+ * 2. begin-end 범위가 현재 세그먼트 범위보다 작을 때 : 자식 세그먼트 중 해당 범위를 포함하는 세그먼트를 찾아서 추가
+ * 3. 자식 세그먼트가 없을 때: 새로운 세그먼트를 생성하고, 해당 세그먼트에 추가
+ * 4. begin-end 범위를 포함하는 자식 세그먼트가 없을 때 : 자식 세그먼트를 결합하여 새로운 세그먼트를 생성하고, 해당 세그먼트에 추가
+ *
+ *  @param {Segment} segment - Constituent 추가할 대상 세그먼트
+ *  @param {number} begin - 범위의 시작 값
+ *  @param {number} end - 범위의 종료 값
+ *  @param {Constituent} constituent - 추가할 Constituent
+ *  @returns {Segment} Constituent 추가된 후의 세그먼트
+ */
 export const addConstituent = (
   segment: Segment,
   begin: number,
   end: number,
   constituent: Constituent,
-) => {
+): Segment => {
   const clonedSegment: Segment = cloneSegment(segment);
 
   // Case 1: begin-end 범위가 현재 세그먼트 범위와 일치할 때
@@ -156,12 +170,9 @@ export const addConstituent = (
     return clonedSegment;
   }
 
-  // Case 4: begin-end 범위를 포함하는 자식 세그먼트가 없을 때
-  let left: Nullable<Segment> = null;
-  let middle: Nullable<Segment> = null;
-  let right: Nullable<Segment> = null;
-
   /**
+   * <Case 4: begin-end 범위를 포함하는 자식 세그먼트가 없을 때>
+   *
    * <Case 4-1: left/middle 세그먼트로 재구성>
    * 자식 세그먼트 중 begin 혹은 end 와 일치해서 이를 조합하면 begin-end 범위를 포함할 수 있을 때
    * e.g. begin 0, end 7일 때, 자식 세그먼트가 [(0), 2], [2, (7)] 이라면 [(0), (7)]로 조합하여 포함 가능
@@ -175,11 +186,13 @@ export const addConstituent = (
    * 추가 세그먼트 [begin ,end] : [2, 7]
    * 재구성 세그먼트 [[left], [middle], [right]] : [[0, 2], [2, 7], [7, 13]]
    *
-   *
-   * 세그먼트를 재구성한 후 아래 작업 수행
+   * <세그먼트를 재구성한 후 아래 작업 수행>
    * 1. left/middle/right 범위와 일치하는 문장 성분을 찾아서 추출(pluck)
    * 2. left/middle/right 범위에 속하는 세그먼트를 찾아서 자식으로 이동
    * */
+  let left: Nullable<Segment> = null;
+  let middle: Nullable<Segment> = null;
+  let right: Nullable<Segment> = null;
 
   const firstChildBegin = clonedSegment.children.at(0)!.begin;
   const lastChildEnd = clonedSegment.children.at(-1)!.end;
@@ -188,7 +201,6 @@ export const addConstituent = (
    * begin(2) !== firstChildBegin(0) 참이면 case 4-2 이므로 begin 값을 leftEnd 로 설정
    * */
   const leftEnd = begin === firstChildBegin ? end : begin;
-  // begin-end 왼쪽 세그먼트
   left = generateAndConfigureSegment(
     clonedSegment.children,
     firstChildBegin,
@@ -197,11 +209,8 @@ export const addConstituent = (
 
   // left.begin === begin && left.end === end 참이면 case 4-1 이므로 middle 생성 안함
   if (!isSegmentMatchingRange(left, begin, end)) {
-    // begin-end 세그먼트
     middle = generateAndConfigureSegment(clonedSegment.children, begin, end);
   }
-
-  // begin-end 오른쪽 세그먼트
 
   right = generateAndConfigureSegment(
     clonedSegment.children,
@@ -226,9 +235,9 @@ export const addConstituent = (
 };
 
 /**
- * 입력받은 constituent.id를 찾아 삭제하는 함수
- * 현재 레벨의 세그먼트에서 찾지 못하면,
- * 다음 레벨을 탐색하는 너비 우선 탐색 방식 사용
+ * - 입력받은 constituent.id를 찾아 삭제하는 함수
+ * - 현재 레벨의 세그먼트에서 찾지 못하면,
+ * - 다음 레벨을 탐색하는 너비 우선 탐색 방식 사용
  * */
 export const removeConstituent = (segment: Segment, id: Constituent['id']) => {
   const clonedSegment = cloneSegment(segment);
@@ -268,10 +277,10 @@ const addNewSegmentToChild = (child: Segment[], begin: number, end: number) => {
 };
 
 /**
- * 트리 구조의 세그먼트를 깊이 우선 방식으로 탐색하고,
- * 빈 구간이 있으면 새로운 세그먼트를 생성하여 추가하는 함수
- * e.g. 부모 세그먼트 begin 0, end 4 / 자식 세그먼트 begin 1, end 2
- * [[1, 2]] -> [[0, 1], [1, 2], [2, 4]]
+ * - 트리 구조의 세그먼트를 깊이 우선 방식으로 탐색하고,
+ * - 빈 구간이 있으면 새로운 세그먼트를 생성하여 추가하는 함수
+ * - e.g. 부모 세그먼트 begin 0, end 4 / 자식 세그먼트 begin 1, end 2
+ * - [[1, 2]] -> [[0, 1], [1, 2], [2, 4]]
  * */
 export const fillSegment = (
   existingSegment: Segment,
