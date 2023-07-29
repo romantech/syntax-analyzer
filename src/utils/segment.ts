@@ -31,7 +31,7 @@ const isRangeWithinSegment = (segment: Segment, begin: number, end: number) =>
 const isSegmentWithinRange = (segment: Segment, begin: number, end: number) =>
   segment.begin >= begin && segment.end <= end;
 
-const filterInRangeSegments = (
+const filterSegmentsByRangeOverlap = (
   segments: Segment[],
   begin: number,
   end: number,
@@ -80,17 +80,17 @@ const isValidRange = (
  * - begin/end 범위 보다 작은 세그먼트를 필터링해서 반환하는 함수
  * - 세그먼트의 자식까지 모두 검사하며, flatMap 메서드를 사용해서 1차원 배열로 반환
  * */
-const filterSegmentSmallerThanRange = (
-  childrenSegments: Segment[],
+const filterSegmentsWithinRange = (
+  childSegments: Segment[],
   begin: number,
   end: number,
 ): Segment[] => {
   // flatMap 메서드는 1뎁스까지 배열을 펼치고, 빈 배열을 반환하면 결과에 포함하지 않음
-  return childrenSegments.flatMap((segment) => {
+  return childSegments.flatMap((segment) => {
     if (isSegmentWithinRange(segment, begin, end)) {
       return [segment];
     } else {
-      return filterSegmentSmallerThanRange(segment.children, begin, end);
+      return filterSegmentsWithinRange(segment.children, begin, end);
     }
   });
 };
@@ -103,11 +103,11 @@ const filterSegmentSmallerThanRange = (
  * - 참고로 'pluck' 단어는 얻어내고 제거한다는 두 가지 의미를 모두 포함하고 있음
  * */
 const pluckConstituentsInRange = (
-  childrenSegments: Segment[],
+  childSegments: Segment[],
   begin: number,
   end: number,
 ): Constituent[] => {
-  return childrenSegments.flatMap((child) => {
+  return childSegments.flatMap((child) => {
     if (isSegmentMatchingRange(child, begin, end)) {
       const cloned = [...child.constituents];
       child.constituents = [];
@@ -117,29 +117,29 @@ const pluckConstituentsInRange = (
 };
 
 const generateAndConfigureSegment = (
-  childrenSegments: Segment[],
+  childSegments: Segment[],
   begin: number,
   end: number,
 ): Segment => {
   const segment = generateSegment(begin, end);
   segment.constituents = pluckConstituentsInRange(
-    childrenSegments,
+    childSegments,
     segment.begin,
     segment.end,
   );
-  segment.children = filterSegmentSmallerThanRange(
-    childrenSegments,
+  segment.children = filterSegmentsWithinRange(
+    childSegments,
     segment.begin,
     segment.end,
   );
   return segment;
 };
 
-const rangeValidator = (segment: Segment, begin: number, end: number) => {
+const validateSegmentRange = (segment: Segment, begin: number, end: number) => {
   const isMatching = hasMatchingRange(segment.children, begin, end);
   if (isMatching) return true;
 
-  const filtered = filterInRangeSegments(segment.children, begin, end);
+  const filtered = filterSegmentsByRangeOverlap(segment.children, begin, end);
   return isValidRange(filtered, begin, end);
 };
 
@@ -164,7 +164,7 @@ export const addConstituent = (
   constituent: Constituent,
 ): Segment => {
   if (segment.children.length && constituent.type !== 'token') {
-    const isValid = rangeValidator(segment, begin, end);
+    const isValid = validateSegmentRange(segment, begin, end);
     if (!isValid) return segment;
   }
 
