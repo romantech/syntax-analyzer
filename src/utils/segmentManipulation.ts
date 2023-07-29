@@ -1,5 +1,6 @@
 import { Constituent, Segment } from '@/types/analysis';
 import { generateNumberID } from '@/utils/common.ts';
+import { Nullable } from '@/types/common.ts';
 
 export const cloneSegment = (segment: Segment) => structuredClone(segment);
 
@@ -29,7 +30,10 @@ const isSegmentLargerThanRange = (
   begin: number,
   end: number,
 ) => {
-  return segment.begin <= begin && segment.end >= end;
+  return (
+    (segment.begin < begin && segment.end >= end) ||
+    (segment.begin <= begin && segment.end > end)
+  );
 };
 
 const isSegmentSmallerThanRange = (
@@ -37,37 +41,61 @@ const isSegmentSmallerThanRange = (
   begin: number,
   end: number,
 ) => {
-  return segment.begin >= begin && segment.end <= end;
+  return (
+    (segment.begin > begin && segment.end <= end) ||
+    (segment.begin >= begin && segment.end < end)
+  );
 };
 
 const checkPhraseOrClause = (constituent: Constituent) => {
   return constituent.type !== 'token';
 };
 
-const crossClauseChecker = (
-  segments: Segment[],
-  begin: number,
-  end: number,
-) => {
-  return segments.some((segment) => {
+const crossClauseChecker = (segment: Segment[], begin: number, end: number) => {
+  return segment.some((segment) => {
     const biggerThan = isSegmentLargerThanRange(segment, begin, end);
     const smallThan = isSegmentSmallerThanRange(segment, begin, end);
     return biggerThan || smallThan;
   });
 };
 
-const moveSegment = (
-  segments: Segment[],
+/**
+ * begin/end 범위 보다 작은 세그먼트를 필터링해서 반환하는 함수
+ * 세그먼트의 자식까지 모두 검사하며, flatMap 메서드를 사용해서 1차원 배열로 반환
+ * */
+const filterSegmentSmallerThanRange = (
+  target: Segment[],
   begin: number,
   end: number,
 ): Segment[] => {
   // flatMap 메서드는 1뎁스까지 배열을 펼치고, 빈 배열을 반환하면 결과에 포함하지 않음
-  return segments.flatMap((segment) => {
+  return target.flatMap((segment) => {
     if (isSegmentSmallerThanRange(segment, begin, end)) {
       return [segment];
     } else {
-      return moveSegment(segment.children, begin, end);
+      return filterSegmentSmallerThanRange(segment.children, begin, end);
     }
+  });
+};
+
+/**
+ * begin/end 범위와 일치하는 세그먼트에 있는 문장 성분을 'pluck' 하는 함수
+ * 범위에 해당하는 세그먼트를 찾으면, 해당 세그먼트의 문장 성분을 추출하고,
+ * 추출한 문장 성분은 원래 세그먼트에서 제거됨.
+ * 이 과정을 반복하며 추출한 문장 성분들을 배열로 반환함
+ * 참고로 'pluck' 단어는 얻어내고 제거한다는 두 가지 의미를 모두 포함하고 있음
+ * */
+const pluckConstituentsInRange = (
+  target: Segment[],
+  begin: number,
+  end: number,
+): Constituent[] => {
+  return target.flatMap((child) => {
+    if (isSegmentMatchingRange(child, begin, end)) {
+      const cloned = [...child.constituents];
+      child.constituents = [];
+      return cloned;
+    } else return pluckConstituentsInRange(child.children, begin, end);
   });
 };
 
@@ -79,13 +107,13 @@ export const addConstituent = (
 ) => {
   const clonedSegment: Segment = cloneSegment(segment);
 
-  // begin-end 범위가 정확히 일치한다면 현재 세그먼트에 추가
+  // Case 1: begin/end 범위가 현재 세그먼트 범위와 일치할 때
   if (isSegmentMatchingRange(clonedSegment, begin, end)) {
     clonedSegment.constituents.push(constituent);
     return clonedSegment;
   }
 
-  // begin-end 범위가 현재 세그먼트보다 작다면, 현재 세그먼트에 속하므로 재귀적으로 자식 탐색
+  // Case 2: begin/end 범위가 현재 세그먼트 범위보다 작을 때
   if (isSegmentLargerThanRange(clonedSegment, begin, end)) {
     const index = clonedSegment.children.findIndex((child) =>
       isSegmentLargerThanRange(child, begin, end),
@@ -102,22 +130,99 @@ export const addConstituent = (
     }
   }
 
-  // 자식 세그먼트가 없을 때
+  // Case 3: 자식 세그먼트가 없을 때
   if (clonedSegment.children.length === 0) {
     const newSegment = generateSegment(begin, end, [constituent]);
     clonedSegment.children.push(newSegment);
     return clonedSegment;
   }
 
-  // begin-end 범위가 현재 세그먼트보다 크면,
-  // begin-end 범위의 세그먼트를 만든 후 자식으로 추가
-  const left = generateSegment(begin, end, [constituent]);
-  const right = generateSegment(end, clonedSegment.children.at(-1)!.end);
+  // Case 4: begin/end 범위가 현재 세그먼트 범위보다 클 때
+  let left: Nullable<Segment> = null;
+  let middle: Nullable<Segment> = null;
+  let right: Nullable<Segment> = null;
 
-  left.children = moveSegment(clonedSegment.children, left.begin, left.end);
-  right.children = moveSegment(clonedSegment.children, right.begin, right.end);
+  /**
+   * <Case 4-1: left/middle 세그먼트로 재구성>
+   * 추가하려는 begin/end 범위와 일치하는 세그먼트가 있을 때
+   * 현재 세그먼트 [begin, end] : [[0, 2], [2, 7], [7, 13]]
+   * 추가하려는 세그먼트 [begin ,end] : [0, 7]
+   * 재구성한 세그먼트 [[left], [right]] : [[0, 7], [7, 13]]
+   *
+   * <Case 4-2: left/middle/right 세그먼트로 재구성>
+   * 추가하려는 begin/end 범위와 일치하는 세그먼트가 없을 때
+   * 현재 세그먼트 [begin, end] : [[0, 3], [3, 6], [6, 13]]
+   * 추가하려는 세그먼트 [begin ,end] : [2, 7]
+   * 재구성한 세그먼트 [[left], [middle], [right]] : [[0, 2], [2, 7], [7, 13]]
+   *
+   *
+   * 세그먼트를 재구성한 후 아래 작업 수행
+   * 1. left/middle/right 범위와 일치하는 문장 성분을 찾아서 추출(pluck)
+   * 2. left/middle/right 범위에 속하는 세그먼트를 찾아서 자식으로 이동
+   * */
 
-  clonedSegment.children = [left, right];
+  const firstChildBegin = clonedSegment.children.at(0)!.begin;
+  const lastChildEnd = clonedSegment.children.at(-1)!.end;
+
+  /**
+   * begin(0) === firstChlidBegin(0) 참이면 case 4-1 이므로 end 값을 leftEnd 로 설정
+   * begin(2) !== firstChildBegin(0) 참이면 case 4-2 이므로 begin 값을 leftEnd 로 설정
+   * */
+  const leftEnd = begin === firstChildBegin ? end : begin;
+  // begin-end 왼쪽 세그먼트
+  left = generateSegment(firstChildBegin, leftEnd);
+  left.constituents = pluckConstituentsInRange(
+    clonedSegment.children,
+    left.begin,
+    left.end,
+  );
+  left.children = filterSegmentSmallerThanRange(
+    clonedSegment.children,
+    left.begin,
+    left.end,
+  );
+
+  // left.begin === begin && left.end === end 이면 case 4-1 이므로 middle은 null
+  if (!isSegmentMatchingRange(left, begin, end)) {
+    // begin-end 세그먼트
+    middle = generateSegment(begin, end);
+    middle.constituents = pluckConstituentsInRange(
+      clonedSegment.children,
+      middle.begin,
+      middle.end,
+    );
+    middle.children = filterSegmentSmallerThanRange(
+      clonedSegment.children,
+      middle.begin,
+      middle.end,
+    );
+  }
+
+  // begin-end 오른쪽 세그먼트
+  right = generateSegment(end, lastChildEnd);
+  right.constituents = pluckConstituentsInRange(
+    clonedSegment.children,
+    right.begin,
+    right.end,
+  );
+  right.children = filterSegmentSmallerThanRange(
+    clonedSegment.children,
+    right.begin,
+    right.end,
+  );
+
+  /**
+   * 타입 가드는 런타임시 특정 타입이 보장되는지 확인할 때 사용
+   * 즉, filter 함수 결과의 요소는 Segment 타입만 남긴다는 것을 TS 컴파일러에게 알려줌 */
+  clonedSegment.children = [left, middle, right].filter(
+    (segment): segment is Segment => Boolean(segment),
+  );
+
+  clonedSegment.children.forEach((child) => {
+    if (isSegmentMatchingRange(child, begin, end)) {
+      child.constituents.push(constituent);
+    }
+  });
 
   return clonedSegment;
 };
