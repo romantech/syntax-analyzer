@@ -1,10 +1,10 @@
 import { useAtomValue, useSetAtom } from 'jotai';
-import { getNearestConstituent } from '@/utils/common.ts';
 import {
   hoveredConstituentAtom,
   isAbbrTooltipVisibleAtom,
 } from '@/store/controlPanelStore.ts';
 import { DOMAttributes, MouseEvent } from 'react';
+import { getNearestConstituent } from '@/utils/constituent.ts';
 
 type ConstituentMouseEventType = 'onMouseOver' | 'onMouseLeave';
 type UseConstituentHoverReturnType = Pick<

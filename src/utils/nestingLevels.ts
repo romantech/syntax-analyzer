@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
 import { ConstituentType } from '@/types/analysis.ts';
-import { kebabToCamel } from '@/utils/common.ts';
+import { kebabToCamel } from '@/utils/string.ts';
 
 const assignCalculatedLevel = (element: HTMLElement) => {
   let maxChildLevel = 0;

@@ -1,14 +1,4 @@
 import { NonWordCharPattern, PunctuationPattern } from '@/constants/regex';
-import { customAlphabet } from 'nanoid';
-
-export const getNearestConstituent = (elementParam: HTMLElement | null) => {
-  let element = elementParam;
-  while (element) {
-    if (element.dataset.constituent) return element;
-    element = element.parentElement;
-  }
-  return null;
-};
 
 export const isPunctuation = (token?: string) =>
   Boolean(token?.match(PunctuationPattern));
@@ -17,9 +7,6 @@ export const isPunctuation = (token?: string) =>
 export const tokenizer = (text: string) => {
   return text.replace(NonWordCharPattern, ' $1 ').split(/\s+/).filter(Boolean);
 };
-
-const nanoId = customAlphabet('123456789', 10);
-export const generateNumberID = () => Number(nanoId());
 
 export const kebabToCamel = (str: string) => {
   /**

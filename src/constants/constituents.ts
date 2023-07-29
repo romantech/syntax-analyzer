@@ -16,6 +16,10 @@ export const CONSTITUENT_COLORS: ConstituentColors = {
     dark: 'red.200',
     light: 'red.400',
   },
+  'token-group': {
+    dark: 'blue.200',
+    light: 'blue.400',
+  },
   phrase: {
     dark: 'purple.200',
     light: 'purple.400',

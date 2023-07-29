@@ -1,6 +1,6 @@
 import { Constituent, Segment } from '@/types/analysis';
-import { generateNumberID } from '@/utils/common';
 import { Nullable } from '@/types/common';
+import { generateNumberID } from '@/utils/identifier.ts.ts';
 
 export const cloneSegment = (segment: Segment) => structuredClone(segment);
 
@@ -45,10 +45,6 @@ const isSegmentSmallerThanRange = (
     (segment.begin > begin && segment.end <= end) ||
     (segment.begin >= begin && segment.end < end)
   );
-};
-
-const checkPhraseOrClause = (constituent: Constituent) => {
-  return constituent.type !== 'token';
 };
 
 const crossClauseChecker = (segment: Segment[], begin: number, end: number) => {

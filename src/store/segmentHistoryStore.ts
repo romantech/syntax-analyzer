@@ -4,7 +4,7 @@ import { atomWithDefault, atomWithReset } from 'jotai/utils';
 import { currentAnalysisAtom } from '@/store/analysisStore';
 import { Nullable } from '@/types/common';
 import { deleteModeAtom, selectedTagAtom } from './controlPanelStore';
-import { fillSegment, removeEmptySegment } from '@/utils/segmentManipulation';
+import { fillSegment, removeEmptySegment } from '@/utils/segment.ts';
 
 /**
  * useResetAtom 혹은 RESET 심볼을 이용해 초기값으로 되돌릴 수 있음
