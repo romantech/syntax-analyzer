@@ -64,12 +64,12 @@ const crossClauseChecker = (segment: Segment[], begin: number, end: number) => {
  * 세그먼트의 자식까지 모두 검사하며, flatMap 메서드를 사용해서 1차원 배열로 반환
  * */
 const filterSegmentSmallerThanRange = (
-  target: Segment[],
+  childrenSegments: Segment[],
   begin: number,
   end: number,
 ): Segment[] => {
   // flatMap 메서드는 1뎁스까지 배열을 펼치고, 빈 배열을 반환하면 결과에 포함하지 않음
-  return target.flatMap((segment) => {
+  return childrenSegments.flatMap((segment) => {
     if (isSegmentSmallerThanRange(segment, begin, end)) {
       return [segment];
     } else {
@@ -86,17 +86,36 @@ const filterSegmentSmallerThanRange = (
  * 참고로 'pluck' 단어는 얻어내고 제거한다는 두 가지 의미를 모두 포함하고 있음
  * */
 const pluckConstituentsInRange = (
-  target: Segment[],
+  childrenSegments: Segment[],
   begin: number,
   end: number,
 ): Constituent[] => {
-  return target.flatMap((child) => {
+  return childrenSegments.flatMap((child) => {
     if (isSegmentMatchingRange(child, begin, end)) {
       const cloned = [...child.constituents];
       child.constituents = [];
       return cloned;
     } else return pluckConstituentsInRange(child.children, begin, end);
   });
+};
+
+const generateAndConfigureSegment = (
+  childrenSegments: Segment[],
+  begin: number,
+  end: number,
+): Segment => {
+  const segment = generateSegment(begin, end);
+  segment.constituents = pluckConstituentsInRange(
+    childrenSegments,
+    segment.begin,
+    segment.end,
+  );
+  segment.children = filterSegmentSmallerThanRange(
+    childrenSegments,
+    segment.begin,
+    segment.end,
+  );
+  return segment;
 };
 
 export const addConstituent = (
@@ -145,7 +164,7 @@ export const addConstituent = (
   /**
    * <Case 4-1: left/middle 세그먼트로 재구성>
    * 자식 세그먼트 중 begin 혹은 end 와 일치해서 이를 조합하면 begin-end 범위를 포함할 수 있을 때
-   * e.g. begin 0, end 7일 때, 자식 세그먼트가 [(0), 2], [2, (7)] 이라면 [(0), (7)]로 조합 가능
+   * e.g. begin 0, end 7일 때, 자식 세그먼트가 [(0), 2], [2, (7)] 이라면 [(0), (7)]로 조합하여 포함 가능
    * 자식 세그먼트 [begin, end] : [[0, 2], [2, 7], [7, 13]]
    * 추가 세그먼트 [begin ,end] : [0, 7]
    * 재구성 세그먼트 [[left], [right]] : [[0, 7], [7, 13]]
@@ -164,52 +183,30 @@ export const addConstituent = (
 
   const firstChildBegin = clonedSegment.children.at(0)!.begin;
   const lastChildEnd = clonedSegment.children.at(-1)!.end;
-
   /**
    * begin(0) === firstChildBegin(0) 참이면 case 4-1 이므로 end 값을 leftEnd 로 설정
    * begin(2) !== firstChildBegin(0) 참이면 case 4-2 이므로 begin 값을 leftEnd 로 설정
    * */
   const leftEnd = begin === firstChildBegin ? end : begin;
   // begin-end 왼쪽 세그먼트
-  left = generateSegment(firstChildBegin, leftEnd);
-  left.constituents = pluckConstituentsInRange(
+  left = generateAndConfigureSegment(
     clonedSegment.children,
-    left.begin,
-    left.end,
-  );
-  left.children = filterSegmentSmallerThanRange(
-    clonedSegment.children,
-    left.begin,
-    left.end,
+    firstChildBegin,
+    leftEnd,
   );
 
   // left.begin === begin && left.end === end 참이면 case 4-1 이므로 middle 생성 안함
   if (!isSegmentMatchingRange(left, begin, end)) {
     // begin-end 세그먼트
-    middle = generateSegment(begin, end);
-    middle.constituents = pluckConstituentsInRange(
-      clonedSegment.children,
-      middle.begin,
-      middle.end,
-    );
-    middle.children = filterSegmentSmallerThanRange(
-      clonedSegment.children,
-      middle.begin,
-      middle.end,
-    );
+    middle = generateAndConfigureSegment(clonedSegment.children, begin, end);
   }
 
   // begin-end 오른쪽 세그먼트
-  right = generateSegment(end, lastChildEnd);
-  right.constituents = pluckConstituentsInRange(
+
+  right = generateAndConfigureSegment(
     clonedSegment.children,
-    right.begin,
-    right.end,
-  );
-  right.children = filterSegmentSmallerThanRange(
-    clonedSegment.children,
-    right.begin,
-    right.end,
+    end,
+    lastChildEnd,
   );
 
   /**
