@@ -1,6 +1,6 @@
 import { Constituent, Segment } from '@/types/analysis';
-import { generateNumberID } from '@/utils/common.ts';
-import { Nullable } from '@/types/common.ts';
+import { generateNumberID } from '@/utils/common';
+import { Nullable } from '@/types/common';
 
 export const cloneSegment = (segment: Segment) => structuredClone(segment);
 
@@ -107,13 +107,13 @@ export const addConstituent = (
 ) => {
   const clonedSegment: Segment = cloneSegment(segment);
 
-  // Case 1: begin/end 범위가 현재 세그먼트 범위와 일치할 때
+  // Case 1: begin-end 범위가 현재 세그먼트 범위와 일치할 때
   if (isSegmentMatchingRange(clonedSegment, begin, end)) {
     clonedSegment.constituents.push(constituent);
     return clonedSegment;
   }
 
-  // Case 2: begin/end 범위가 현재 세그먼트 범위보다 작을 때
+  // Case 2: begin-end 범위가 현재 세그먼트 범위보다 작을 때
   if (isSegmentLargerThanRange(clonedSegment, begin, end)) {
     const index = clonedSegment.children.findIndex((child) =>
       isSegmentLargerThanRange(child, begin, end),
@@ -130,30 +130,31 @@ export const addConstituent = (
     }
   }
 
-  // Case 3: 자식 세그먼트가 없을 때
+  // Case 3: 자식 세그먼트가 1개도 없을 때
   if (clonedSegment.children.length === 0) {
     const newSegment = generateSegment(begin, end, [constituent]);
     clonedSegment.children.push(newSegment);
     return clonedSegment;
   }
 
-  // Case 4: begin/end 범위가 현재 세그먼트 범위보다 클 때
+  // Case 4: begin-end 범위를 포함하는 자식 세그먼트가 없을 때
   let left: Nullable<Segment> = null;
   let middle: Nullable<Segment> = null;
   let right: Nullable<Segment> = null;
 
   /**
    * <Case 4-1: left/middle 세그먼트로 재구성>
-   * 추가하려는 begin/end 범위와 일치하는 세그먼트가 있을 때
-   * 현재 세그먼트 [begin, end] : [[0, 2], [2, 7], [7, 13]]
-   * 추가하려는 세그먼트 [begin ,end] : [0, 7]
-   * 재구성한 세그먼트 [[left], [right]] : [[0, 7], [7, 13]]
+   * 자식 세그먼트 중 begin 혹은 end 와 일치해서 이를 조합하면 begin-end 범위를 포함할 수 있을 때
+   * e.g. begin 0, end 7일 때, 자식 세그먼트가 [(0), 2], [2, (7)] 이라면 [(0), (7)]로 조합 가능
+   * 자식 세그먼트 [begin, end] : [[0, 2], [2, 7], [7, 13]]
+   * 추가 세그먼트 [begin ,end] : [0, 7]
+   * 재구성 세그먼트 [[left], [right]] : [[0, 7], [7, 13]]
    *
    * <Case 4-2: left/middle/right 세그먼트로 재구성>
-   * 추가하려는 begin/end 범위와 일치하는 세그먼트가 없을 때
-   * 현재 세그먼트 [begin, end] : [[0, 3], [3, 6], [6, 13]]
-   * 추가하려는 세그먼트 [begin ,end] : [2, 7]
-   * 재구성한 세그먼트 [[left], [middle], [right]] : [[0, 2], [2, 7], [7, 13]]
+   * 자식 세그먼트 중 begin 혹은 end 와 일치하는 세그먼트가 하나도 없을 때 -> 조합 불가
+   * 자식 세그먼트 [begin, end] : [[0, 3], [3, 6], [6, 13]]
+   * 추가 세그먼트 [begin ,end] : [2, 7]
+   * 재구성 세그먼트 [[left], [middle], [right]] : [[0, 2], [2, 7], [7, 13]]
    *
    *
    * 세그먼트를 재구성한 후 아래 작업 수행
@@ -182,7 +183,7 @@ export const addConstituent = (
     left.end,
   );
 
-  // left.begin === begin && left.end === end 이면 case 4-1 이므로 middle 생성 안함
+  // left.begin === begin && left.end === end 참이면 case 4-1 이므로 middle 생성 안함
   if (!isSegmentMatchingRange(left, begin, end)) {
     // begin-end 세그먼트
     middle = generateSegment(begin, end);
