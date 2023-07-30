@@ -32,7 +32,7 @@ export default function ControlPanel() {
   }, [setIsMounted]);
 
   return (
-    <Skeleton maxH={175} w="20%" fitContent isLoaded={mounted} borderRadius={6}>
+    <Skeleton h={175} w="20%" fitContent isLoaded={mounted} borderRadius={6}>
       <Card h="full" p={4} variant="outline">
         <VStack align="stretch" h="full" justify="space-between">
           <VStack>

@@ -28,7 +28,12 @@ export default function TagList({ ...accordionProps }: AccordionProps) {
             <AccordionIcon />
           </AccordionButton>
 
-          <AccordionPanel display="flex" flexWrap="wrap" gap={2}>
+          <AccordionPanel
+            display="flex"
+            flexWrap="wrap"
+            gap={2}
+            maxW="container.lg"
+          >
             {category.constituents.map((constituent) => {
               return (
                 <WrapItem key={constituent.label}>
