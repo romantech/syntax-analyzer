@@ -1,9 +1,8 @@
-import { ControlPanel, SyntaxParser, TagList } from '@/components';
+import { AddSentence, ControlPanel, SyntaxParser, TagList } from '@/components';
 import { Box, Flex, Stack } from '@chakra-ui/react';
 import { Provider } from 'jotai';
 import { DevTools } from 'jotai-devtools';
 import { TagNotice } from '@/components/tag-list';
-import AddSentenceInput from '@/components/AddSentenceInput';
 import { useAtomValue } from 'jotai';
 import { hasAnalysisDataAtom } from '@/store/analysisStore';
 
@@ -20,7 +19,7 @@ const SyntaxEditor = () => {
       </Stack>
       <Box>
         {hasData && <SyntaxParser />}
-        {!hasData && <AddSentenceInput />}
+        {!hasData && <AddSentence />}
       </Box>
     </Flex>
   );

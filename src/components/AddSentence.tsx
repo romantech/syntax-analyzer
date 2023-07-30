@@ -1,5 +1,4 @@
 import {
-  AlertDialog,
   Box,
   Button,
   FormControl,
@@ -8,26 +7,21 @@ import {
   HStack,
   Input,
   useDisclosure,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogCloseButton,
-  AlertDialogOverlay,
-  AlertDialogBody,
 } from '@chakra-ui/react';
 import { Fragment, useRef, useState } from 'react';
 import { ValidationError } from 'yup';
 import { addSentenceSchema } from '@/constants/scheme';
 import { addAnalysisAtom } from '@/store/analysisStore';
 import { useSetAtom } from 'jotai';
+import { ConfirmModal } from '@/components/common';
 
-export default function AddSentenceInput() {
+export default function AddSentence() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isError, setIsError] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const errorMessage = useRef('');
-  const cancelRef = useRef(null);
+
   const addAnalysis = useSetAtom(addAnalysisAtom);
 
   const onSubmit = async () => {
@@ -72,32 +66,13 @@ export default function AddSentenceInput() {
           <Button onClick={onSubmit}>추가</Button>
         </HStack>
       </FormControl>
-      <AlertDialog
+      <ConfirmModal
         isOpen={isOpen}
         onClose={onClose}
-        leastDestructiveRef={cancelRef}
-        isCentered
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              영어 문장 추가
-            </AlertDialogHeader>
-            <AlertDialogCloseButton />
-            <AlertDialogBody>
-              입력한 영어 문장을 추가 하시겠습니까?
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                취소
-              </Button>
-              <Button colorScheme="blue" onClick={onConfirm} ml={3}>
-                확인
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+        onConfirm={onConfirm}
+        headerText="영어 문장 추가"
+        bodyText="입력한 영어 문장을 추가 하시겠습니까?"
+      />
     </Fragment>
   );
 }
