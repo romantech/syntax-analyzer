@@ -5,7 +5,7 @@ import {
   tagInfoModeAtom,
 } from '@/store/controlPanelStore';
 import { ConstituentWithoutId } from '@/types/analysis';
-import { ConstituentTranslations } from '@/constants/constituents';
+import { CONSTITUENT_TRANSLATIONS } from '@/constants/constituents';
 
 interface TagButtonProps {
   constituent: ConstituentWithoutId;
@@ -23,7 +23,7 @@ export default function TagButton({ constituent }: TagButtonProps) {
     setSelectedTag(tag);
   };
 
-  const { ko, desc } = ConstituentTranslations[constituent.label];
+  const { ko, desc } = CONSTITUENT_TRANSLATIONS[constituent.label];
   const isSelected = selectedTag?.elementId === constituent.elementId;
   return (
     <Tooltip label={desc} isDisabled={!isTagInfoMode} openDelay={200}>

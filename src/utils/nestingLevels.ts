@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
-import { ConstituentType } from '@/types/analysis';
 import { kebabToCamel } from '@/utils/string';
+import { ConstituentType } from '@/types/analysis';
 
 const assignCalculatedLevel = (element: HTMLElement) => {
   let maxChildLevel = 0;
@@ -30,11 +30,11 @@ const assignCalculatedLevel = (element: HTMLElement) => {
 };
 
 export const calculateNestingLevel = (ref: RefObject<HTMLElement>) => {
-  const spans = ref.current?.children;
-  if (!spans) return;
+  const childElements = ref.current?.children;
+  if (!childElements) return;
 
-  Array.from(spans).forEach((span) => {
+  Array.from(childElements).forEach((span) => {
     const spanElement = span as HTMLElement;
-    if (spanElement.dataset.constituent) assignCalculatedLevel(spanElement);
+    if (spanElement.dataset.constituentId) assignCalculatedLevel(spanElement);
   });
 };

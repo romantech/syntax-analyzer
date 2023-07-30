@@ -10,6 +10,8 @@ import { useAtomValue } from 'jotai';
 import { invalidRangeIndexAtom } from '@/store/analysisStore';
 import React from 'react';
 
+import { CONSTITUENT_DATA_ATTRS } from '@/constants/constituents';
+
 interface TokenProps {
   token: string;
   padding: number[];
@@ -18,6 +20,7 @@ interface TokenProps {
 
 export default function Token({ token, padding, index }: TokenProps) {
   const invalidIndex = useAtomValue(invalidRangeIndexAtom);
+  const dataAttrs = { [CONSTITUENT_DATA_ATTRS.TOKEN_INDEX]: index };
   return (
     <Popover isOpen={invalidIndex === index} isLazy>
       <PopoverAnchor>
@@ -26,7 +29,7 @@ export default function Token({ token, padding, index }: TokenProps) {
           as="span"
           p={padding}
           zIndex={1}
-          data-token-index={index}
+          {...dataAttrs}
         >
           {token}
         </Text>

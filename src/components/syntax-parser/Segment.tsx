@@ -4,13 +4,13 @@ import { Constituent } from '@/components/syntax-parser';
 
 interface SegmentProps {
   segment: TSegment;
-  isTokenGroup: boolean;
+  isMultipleWords: boolean;
 }
 
 export default function Segment({
   segment,
   children,
-  isTokenGroup,
+  isMultipleWords,
 }: PropsWithChildren<SegmentProps>) {
   if (!segment.constituents.length) return <Fragment>{children}</Fragment>;
 
@@ -19,7 +19,7 @@ export default function Segment({
       <Constituent
         key={constituent.id}
         constituent={constituent}
-        isTokenGroup={isTokenGroup}
+        isTokenGroup={isMultipleWords && constituent.type === 'token'}
       >
         {tokens}
       </Constituent>

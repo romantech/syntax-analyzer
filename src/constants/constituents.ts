@@ -3,32 +3,21 @@ import {
   ConstituentType,
   ConstituentWithoutId,
 } from '@/types/analysis';
-import { ColorMode, ConstituentColors } from '@/types/common';
 
-export const DELETE_MODE_COLOR = (mode: ColorMode) => {
-  return mode === 'dark'
-    ? 'var(--chakra-colors-gray-500)'
-    : 'var(--chakra-colors-gray-300)';
-};
+export const CONSTITUENT_DATA_ATTRS = {
+  TOKEN_INDEX: 'data-token-index',
+  CONSTITUENT_ABBR: 'data-constituent-abbr',
+  CONSTITUENT_LABEL: 'data-constituent-label',
+  CONSTITUENT_ID: 'data-constituent-id',
+} as const;
 
-export const CONSTITUENT_COLORS: ConstituentColors = {
-  token: {
-    dark: 'red.200',
-    light: 'red.400',
-  },
-  'token-group': {
-    dark: 'blue.200',
-    light: 'blue.400',
-  },
-  phrase: {
-    dark: 'purple.200',
-    light: 'purple.400',
-  },
-  clause: {
-    dark: 'teal.200',
-    light: 'teal.400',
-  },
-};
+export const CONSTITUENT_CLASSES = {
+  CONSTITUENT: 'constituent',
+  TOKEN_GROUP: 'token-group',
+  CLAUSE: 'clause',
+  PHRASE: 'phrase',
+  TOKEN: 'token',
+} as const;
 
 export const CONSTITUENTS: ConstituentWithoutId[] = [
   { elementId: 1, label: 'subject', abbreviation: 's', type: 'token' },
@@ -185,7 +174,7 @@ export const CONSTITUENTS: ConstituentWithoutId[] = [
 
 type EnglishLabels = Extract<Constituent, { label: string }>['label'];
 
-export const ConstituentTranslations: Record<
+export const CONSTITUENT_TRANSLATIONS: Record<
   EnglishLabels,
   { ko: string; desc: string }
 > = {
@@ -303,9 +292,9 @@ export const ConstituentTranslations: Record<
 };
 
 type ConstituentGroup = { [key in ConstituentType]: ConstituentWithoutId[] };
-const groupedConstituentsByType = CONSTITUENTS.reduce((group, cons) => {
-  if (!group[cons.type]) group[cons.type] = [];
-  group[cons.type].push(cons);
+const groupedConstituentsByType = CONSTITUENTS.reduce((group, constituent) => {
+  if (!group[constituent.type]) group[constituent.type] = [];
+  group[constituent.type].push(constituent);
   return group;
 }, {} as ConstituentGroup);
 

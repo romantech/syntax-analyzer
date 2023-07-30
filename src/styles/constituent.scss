@@ -79,7 +79,7 @@ html[data-theme='dark'] {
 
     font-size: 1rem;
     font-style: italic;
-    content: attr(data-constituent);
+    content: attr(data-constituent-abbr);
 
     text-overflow: ellipsis;
     overflow: hidden;

@@ -2,8 +2,9 @@ import { Constituent as TConstituent } from '@/types/analysis';
 import { PropsWithChildren } from 'react';
 import { Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import {
-  CONSTITUENT_COLORS,
-  ConstituentTranslations,
+  CONSTITUENT_CLASSES,
+  CONSTITUENT_DATA_ATTRS,
+  CONSTITUENT_TRANSLATIONS,
 } from '@/constants/constituents';
 import { NumberTuple } from '@/types/common';
 import { useAtomValue } from 'jotai';
@@ -13,6 +14,7 @@ import {
 } from '@/store/controlPanelStore';
 import { useConstituentHover } from '@/hooks';
 import classnames from 'classnames';
+import { CONSTITUENT_COLORS } from '@/constants/colors';
 
 interface ConstituentProps {
   constituent: TConstituent;
@@ -26,13 +28,20 @@ export default function Constituent({
 }: PropsWithChildren<ConstituentProps>) {
   const { dark, light } = CONSTITUENT_COLORS[constituent.type];
   const colorValue = useColorModeValue(light, dark);
+
   const isAbbrTooltipVisible = useAtomValue(isAbbrTooltipVisibleAtom);
   const hoveredConstituent = useAtomValue(hoveredConstituentAtom);
   const handlers = useConstituentHover();
 
   const offset: NumberTuple = constituent.type !== 'token' ? [0, -10] : [0, 5];
-  const koLabel = ConstituentTranslations[constituent.label]?.ko;
+  const koLabel = CONSTITUENT_TRANSLATIONS[constituent.label]?.ko;
   const isCurrentHovered = hoveredConstituent === constituent.id;
+
+  const dataAttrs = {
+    [CONSTITUENT_DATA_ATTRS.CONSTITUENT_ID]: constituent.id,
+    [CONSTITUENT_DATA_ATTRS.CONSTITUENT_LABEL]: constituent.label,
+    [CONSTITUENT_DATA_ATTRS.CONSTITUENT_ABBR]: constituent.abbreviation,
+  };
 
   return (
     <Tooltip
@@ -44,11 +53,13 @@ export default function Constituent({
       <Text
         as="span"
         color={colorValue}
-        data-constituent={constituent.abbreviation}
-        data-constituent-id={constituent.id}
-        className={classnames('constituent', constituent.type, {
-          'token-group': isTokenGroup && constituent.type === 'token',
+        className={classnames(CONSTITUENT_CLASSES.CONSTITUENT, {
+          [CONSTITUENT_CLASSES.TOKEN_GROUP]: isTokenGroup,
+          [CONSTITUENT_CLASSES.PHRASE]: constituent.type === 'phrase',
+          [CONSTITUENT_CLASSES.CLAUSE]: constituent.type === 'clause',
+          [CONSTITUENT_CLASSES.TOKEN]: constituent.type === 'token',
         })}
+        {...dataAttrs}
         {...handlers}
       >
         {children}

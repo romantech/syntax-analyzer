@@ -1,11 +1,14 @@
-import { NonWordCharPattern, PunctuationPattern } from '@/constants/regex';
+import { NON_WORD_CHAR_PATTERN, PUNCTUATION_PATTERN } from '@/constants/regex';
 
 export const isPunctuation = (token?: string) =>
-  Boolean(token?.match(PunctuationPattern));
+  Boolean(token?.match(PUNCTUATION_PATTERN));
 
 /** split(/\s+/) : 1개 이상의 연속된 공백을 기준으로 분리 */
 export const tokenizer = (text: string) => {
-  return text.replace(NonWordCharPattern, ' $1 ').split(/\s+/).filter(Boolean);
+  return text
+    .replace(NON_WORD_CHAR_PATTERN, ' $1 ')
+    .split(/\s+/)
+    .filter(Boolean);
 };
 
 export const kebabToCamel = (str: string) => {

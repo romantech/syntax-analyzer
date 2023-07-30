@@ -1,0 +1,1 @@
+export const INVALID_POPUP_DELAY = 1500;

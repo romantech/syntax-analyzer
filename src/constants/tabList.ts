@@ -1,4 +1,4 @@
-import { SITE_URLS } from '@/constants/siteUrls.ts';
+import { SITE_URLS } from '@/constants/siteUrls';
 
 export const TAB_LIST = [
   {

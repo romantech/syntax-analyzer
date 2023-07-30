@@ -1,10 +1,10 @@
 import { MouseEvent, useRef, useState } from 'react';
 import { ConstituentDataSet } from '@/types/analysis';
 import { useColorMode } from '@chakra-ui/react';
-import { DELETE_MODE_COLOR } from '@/constants/constituents';
 import { deleteModeAtom } from '@/store/controlPanelStore';
 import { useAtomValue } from 'jotai';
 import { getNearestElementByClass } from '@/utils/selection';
+import { DELETE_MODE_HOVER_COLOR_SCHEME } from '@/constants/colors';
 
 export default function useSegmentMouseEvent() {
   const hoverRef = useRef<HTMLElement | null>(null);
@@ -23,7 +23,7 @@ export default function useSegmentMouseEvent() {
     if (!element) return;
 
     hoverRef.current = element;
-    hoverRef.current.style.color = DELETE_MODE_COLOR(colorMode);
+    hoverRef.current.style.color = DELETE_MODE_HOVER_COLOR_SCHEME(colorMode);
 
     const { constituent, constituentId } = hoverRef.current.dataset;
     setTargetInfo({ constituent, constituentId });

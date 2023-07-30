@@ -3,6 +3,7 @@ import { Analysis } from '@/types/analysis';
 import { Nullable } from '@/types/common';
 import { sampleData } from '@/constants/sample';
 import { atom } from 'jotai';
+import { INVALID_POPUP_DELAY } from '@/constants/config';
 
 // Analysis
 export const analysisListAtom = atomWithStorage<Analysis[]>('analysisList', [
@@ -31,6 +32,6 @@ export const setAndClearInvalidRangeIndexAtom = atom(
   null,
   (_, set, invalidIndex: number) => {
     set(invalidRangeIndexAtom, invalidIndex);
-    setTimeout(() => set(invalidRangeIndexAtom, null), 1500);
+    setTimeout(() => set(invalidRangeIndexAtom, null), INVALID_POPUP_DELAY);
   },
 );
