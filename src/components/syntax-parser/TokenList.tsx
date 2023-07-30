@@ -15,7 +15,8 @@ export default function TokenList({ sentence }: TokensProps) {
       <Token
         token={token}
         key={i}
-        padding={[0, spaceAfter, 0, spaceBefore]}
+        paddingRight={spaceAfter}
+        paddingLeft={spaceBefore}
         index={i}
       />
     );
