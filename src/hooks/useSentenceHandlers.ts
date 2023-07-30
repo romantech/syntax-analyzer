@@ -1,15 +1,17 @@
 import { useSegmentMouseEvent } from '@/hooks/index';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { deleteModeAtom, selectedTagAtom } from '@/store/controlPanelStore';
 import { addConstituent, removeConstituent } from '@/utils/segment';
 import { updateSegmentHistoryAndIndexAtom } from '@/store/segmentHistoryStore';
 import { getBeginEndIdxFromSelection } from '@/utils/selection';
 import { generateConstituent } from '@/utils/constituent';
+import { setAndClearInvalidRangeIndexAtom } from '@/store/analysisStore';
 
 export default function useSentenceHandlers() {
   const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
   const isDeleteMode = useAtomValue(deleteModeAtom);
   const selectedTag = useAtomValue(selectedTagAtom);
+  const setAndClearInvalidIndex = useSetAtom(setAndClearInvalidRangeIndexAtom);
   const [currentSegment, updateSegment] = useAtom(
     updateSegmentHistoryAndIndexAtom,
   );
@@ -19,12 +21,13 @@ export default function useSentenceHandlers() {
     /** 태그 리스트에서 태그를 선택했을 때만 실행 */
     if (selectedTag && currentSegment) {
       const { begin, end } = getBeginEndIdxFromSelection();
-
+      const onInvalid = () => setAndClearInvalidIndex(end - 1);
       const updatedSegment = addConstituent(
         currentSegment,
         begin,
         end,
         generateConstituent(selectedTag, begin, end),
+        onInvalid,
       );
       if (currentSegment !== updatedSegment) updateSegment(updatedSegment);
     }

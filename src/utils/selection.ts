@@ -13,7 +13,7 @@ export const getNearestElementByClass = (
 };
 
 export const getBeginEndIdxFromSelection = (
-  checkAttr: string = 'data-token-index',
+  tokenIndexAttr: string = 'data-token-index',
 ) => {
   let begin = 0;
   let end = 0;
@@ -25,8 +25,8 @@ export const getBeginEndIdxFromSelection = (
   const startNode = range.startContainer.parentNode as HTMLElement;
   const endNode = range.endContainer.parentNode as HTMLElement;
 
-  const startIndex = startNode.getAttribute(checkAttr);
-  const endIndex = endNode.getAttribute(checkAttr);
+  const startIndex = startNode.getAttribute(tokenIndexAttr);
+  const endIndex = endNode.getAttribute(tokenIndexAttr);
 
   begin = startIndex ? parseInt(startIndex, 10) : 0;
   end = endIndex ? parseInt(endIndex, 10) + 1 : 0;

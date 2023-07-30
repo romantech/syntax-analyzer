@@ -1,5 +1,5 @@
 import { Constituent, Segment } from '@/types/analysis';
-import { Nullable } from '@/types/common';
+import { Nullable, VoidFunc } from '@/types/common';
 import { generateNumberID } from '@/utils/identifier';
 
 export const cloneSegment = (segment: Segment) => structuredClone(segment);
@@ -110,6 +110,7 @@ const generateAndConfigureSegment = (
  *  @param {number} begin - 범위의 시작 값
  *  @param {number} end - 범위의 종료 값
  *  @param {Constituent} constituent - 추가할 Constituent
+ *  @param {VoidFunc} [onInvalid] - 범위가 유효하지 않을 때 호출할 함수
  *  @returns {Segment} Constituent 추가된 후의 세그먼트
  */
 export const addConstituent = (
@@ -117,10 +118,14 @@ export const addConstituent = (
   begin: number,
   end: number,
   constituent: Constituent,
+  onInvalid?: VoidFunc,
 ): Segment => {
   if (segment.children.length && constituent.type !== 'token') {
     const isValid = isValidRange(segment.children, begin, end);
-    if (!isValid) return segment;
+    if (!isValid) {
+      onInvalid?.();
+      return segment;
+    }
   }
 
   const clonedSegment: Segment = cloneSegment(segment);
@@ -143,6 +148,7 @@ export const addConstituent = (
         begin,
         end,
         constituent,
+        onInvalid,
       );
       return clonedSegment;
     }

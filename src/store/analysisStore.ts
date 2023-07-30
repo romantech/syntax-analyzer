@@ -25,3 +25,12 @@ export const currentSentenceAtom = atom<Nullable<string[]>>((get) => {
   if (!currentAnalysis) return null;
   return currentAnalysis.sentence;
 });
+
+export const invalidRangeIndexAtom = atom<Nullable<number>>(null);
+export const setAndClearInvalidRangeIndexAtom = atom(
+  null,
+  (_, set, invalidIndex: number) => {
+    set(invalidRangeIndexAtom, invalidIndex);
+    setTimeout(() => set(invalidRangeIndexAtom, null), 1500);
+  },
+);
