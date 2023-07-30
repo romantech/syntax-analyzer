@@ -1,18 +1,19 @@
 import { atomWithStorage } from 'jotai/utils';
 import { Analysis } from '@/types/analysis';
 import { Nullable } from '@/types/common';
-import { sampleData } from '@/constants/sample';
 import { atom } from 'jotai';
 import { INVALID_POPUP_DELAY } from '@/constants/config';
+import { sampleDataList } from '@/constants/sample';
 
 // Analysis
-export const analysisListAtom = atomWithStorage<Analysis[]>('analysisList', [
-  sampleData, // TODO 임시 데이터 삭제
-]);
+export const analysisListAtom = atomWithStorage<Analysis[]>(
+  'analysisList',
+  sampleDataList,
+);
 
 export const currentAnalysisIndexAtom = atomWithStorage<number>(
   'currentAnalysisIndexAtom',
-  0,
+  2,
 );
 
 export const currentAnalysisAtom = atom<Nullable<Analysis>>((get) => {

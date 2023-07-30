@@ -18,13 +18,13 @@ import { CONSTITUENT_COLORS } from '@/constants/colors';
 
 interface ConstituentProps {
   constituent: TConstituent;
-  isTokenGroup: boolean;
+  isMultipleTokenRange: boolean;
 }
 
 export default function Constituent({
   children,
   constituent,
-  isTokenGroup,
+  isMultipleTokenRange,
 }: PropsWithChildren<ConstituentProps>) {
   const { dark, light } = CONSTITUENT_COLORS[constituent.type];
   const colorValue = useColorModeValue(light, dark);
@@ -33,7 +33,7 @@ export default function Constituent({
   const hoveredConstituent = useAtomValue(hoveredConstituentAtom);
   const handlers = useConstituentHover();
 
-  const offset: NumberTuple = constituent.type !== 'token' ? [0, -10] : [0, 5];
+  const offset: NumberTuple = isMultipleTokenRange ? [0, -10] : [0, 5];
   const koLabel = CONSTITUENT_TRANSLATIONS[constituent.label]?.ko;
   const isCurrentHovered = hoveredConstituent === constituent.id;
 
@@ -54,10 +54,8 @@ export default function Constituent({
         as="span"
         color={colorValue}
         className={classnames(CONSTITUENT_CLASSES.CONSTITUENT, {
-          [CONSTITUENT_CLASSES.TOKEN_GROUP]: isTokenGroup,
-          [CONSTITUENT_CLASSES.PHRASE]: constituent.type === 'phrase',
-          [CONSTITUENT_CLASSES.CLAUSE]: constituent.type === 'clause',
-          [CONSTITUENT_CLASSES.TOKEN]: constituent.type === 'token',
+          [CONSTITUENT_CLASSES.TOKEN_GROUP]: isMultipleTokenRange,
+          [CONSTITUENT_CLASSES.TOKEN]: !isMultipleTokenRange,
         })}
         {...dataAttrs}
         {...handlers}

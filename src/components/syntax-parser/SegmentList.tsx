@@ -29,7 +29,7 @@ export default function SegmentList({ segment, tokenElements }: SegmentsProps) {
   }
 
   return (
-    <Segment segment={segment} isMultipleWords={Math.abs(begin - end) > 1}>
+    <Segment segment={segment}>
       {childrenWithSegment.map((token) => token)}
     </Segment>
   );

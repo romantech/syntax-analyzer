@@ -16,8 +16,6 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 @for $i from 1 through $max-styling-count {
   $offset: $constituent-height * ($i - $constituent-initial-pos-factor);
 
-  .constituent.clause[data-clause-lv='#{$i}'],
-  .constituent.phrase[data-phrase-lv='#{$i}'],
   .constituent.token-group[data-token-group-lv='#{$i}'] {
     margin: 0 $constituent-margin;
     padding: 0 $constituent-margin $offset;

@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
 import { kebabToCamel } from '@/utils/string';
-import { ConstituentType } from '@/types/analysis';
+import { CONSTITUENT_CLASSES } from '@/constants/constituents';
 
 const assignCalculatedLevel = (element: HTMLElement) => {
   let maxChildLevel = 0;
@@ -13,11 +13,9 @@ const assignCalculatedLevel = (element: HTMLElement) => {
   const hasChild = element.children.length > 0;
   const currentLevel = hasChild ? maxChildLevel + 1 : maxChildLevel;
 
-  const classesToCheck: ConstituentType[] = [
-    'token',
-    'phrase',
-    'clause',
-    'token-group',
+  const classesToCheck = [
+    CONSTITUENT_CLASSES.TOKEN,
+    CONSTITUENT_CLASSES.TOKEN_GROUP,
   ];
 
   classesToCheck.forEach((className) => {
