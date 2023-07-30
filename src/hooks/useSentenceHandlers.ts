@@ -21,7 +21,11 @@ export default function useSentenceHandlers() {
     /** 태그 리스트에서 태그를 선택했을 때만 실행 */
     if (selectedTag && currentSegment) {
       const { begin, end } = getBeginEndIdxFromSelection();
-      const onInvalid = () => setAndClearInvalidIndex(end - 1);
+      const onInvalid = () => {
+        setAndClearInvalidIndex(end - 1);
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+      };
       const updatedSegment = addConstituent(
         currentSegment,
         begin,
