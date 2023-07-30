@@ -3,17 +3,17 @@ import { Analysis } from '@/types/analysis';
 import { Nullable } from '@/types/common';
 import { atom } from 'jotai';
 import { INVALID_POPUP_DELAY } from '@/constants/config';
-import { sampleDataList } from '@/constants/sample';
 
 // Analysis
-export const analysisListAtom = atomWithStorage<Analysis[]>(
-  'analysisList',
-  sampleDataList,
-);
+export const analysisListAtom = atomWithStorage<Analysis[]>('analysisList', []);
 
 export const currentAnalysisIndexAtom = atomWithStorage<number>(
   'currentAnalysisIndexAtom',
-  2,
+  0,
+);
+
+export const hasAnalysisDataAtom = atom(
+  (get) => get(analysisListAtom).length > 0,
 );
 
 export const currentAnalysisAtom = atom<Nullable<Analysis>>((get) => {

@@ -3,8 +3,12 @@ import { Box, Flex, Stack } from '@chakra-ui/react';
 import { Provider } from 'jotai';
 import { DevTools } from 'jotai-devtools';
 import { TagNotice } from '@/components/tag-list';
+import AddSentenceInput from '@/components/AddSentenceInput';
+import { useAtomValue } from 'jotai';
+import { hasAnalysisDataAtom } from '@/store/analysisStore';
 
 const SyntaxEditor = () => {
+  const hasData = useAtomValue(hasAnalysisDataAtom);
   return (
     <Flex direction="column" minH="full" overflowX="auto" py={2} gap={8}>
       <Stack>
@@ -15,7 +19,8 @@ const SyntaxEditor = () => {
         </Flex>
       </Stack>
       <Box>
-        <SyntaxParser />
+        {hasData && <SyntaxParser />}
+        {!hasData && <AddSentenceInput />}
       </Box>
     </Flex>
   );
