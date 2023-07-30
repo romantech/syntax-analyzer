@@ -1,8 +1,8 @@
+import { ABBREVIATIONS } from '@/constants/abbreviations';
 import {
-  ENGLISH_INPUT_PATTERN,
+  ABBREVIATIONS_PATTERNS,
   NON_WORD_CHAR_PATTERN,
   PUNCTUATION_PATTERN,
-  THREE_WORDS_PATTERN,
 } from '@/constants/regex';
 
 export const isPunctuation = (token?: string) =>
@@ -25,10 +25,9 @@ export const kebabToCamel = (str: string) => {
   return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 };
 
-export const isValidEnglishInput = (input: string) => {
-  return !!input.match(ENGLISH_INPUT_PATTERN);
-};
-
-export const hasAtLeastThreeWords = (input: string) => {
-  return !!input.match(THREE_WORDS_PATTERN);
+export const expandAbbreviations = (sentence: string) => {
+  return sentence.replace(
+    ABBREVIATIONS_PATTERNS,
+    (match) => ABBREVIATIONS[match],
+  );
 };
