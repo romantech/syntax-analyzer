@@ -33,7 +33,7 @@ export default function Constituent({
   const hoveredConstituent = useAtomValue(hoveredConstituentAtom);
   const handlers = useConstituentHover();
 
-  const offset: NumberTuple = isMultipleTokenRange ? [0, -10] : [0, 5];
+  const tooltipOffset: NumberTuple = isMultipleTokenRange ? [0, -10] : [0, 5];
   const koLabel = CONSTITUENT_TRANSLATIONS[constituent.label]?.ko;
   const isCurrentHovered = hoveredConstituent === constituent.id;
 
@@ -47,7 +47,7 @@ export default function Constituent({
     <Tooltip
       label={koLabel ?? constituent.label}
       textTransform="capitalize"
-      offset={offset}
+      offset={tooltipOffset}
       isOpen={isAbbrTooltipVisible && isCurrentHovered}
     >
       <Text
