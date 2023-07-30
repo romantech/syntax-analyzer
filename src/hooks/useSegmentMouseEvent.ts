@@ -1,10 +1,10 @@
 import { MouseEvent, useRef, useState } from 'react';
-import { ConstituentDataSet } from '@/types/analysis.ts';
+import { ConstituentDataSet } from '@/types/analysis';
 import { useColorMode } from '@chakra-ui/react';
-import { DELETE_MODE_COLOR } from '@/constants/constituents.ts';
-import { deleteModeAtom } from '@/store/controlPanelStore.ts';
+import { DELETE_MODE_COLOR } from '@/constants/constituents';
+import { deleteModeAtom } from '@/store/controlPanelStore';
 import { useAtomValue } from 'jotai';
-import { getNearestElementByClass } from '@/utils/constituent.ts';
+import { getNearestElementByClass } from '@/utils/selection';
 
 export default function useSegmentMouseEvent() {
   const hoverRef = useRef<HTMLElement | null>(null);

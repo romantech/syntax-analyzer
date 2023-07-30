@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { ConstituentWithoutId } from '@/types/analysis';
-import { hasAddedTagAtom } from '@/store/segmentHistoryStore.ts';
+import { hasAddedTagAtom } from '@/store/segmentHistoryStore';
 
 export const selectedTagAtom = atom<ConstituentWithoutId | null>(null);
 export const hoveredConstituentAtom = atom<number | null>(null);

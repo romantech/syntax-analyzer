@@ -4,8 +4,8 @@ import {
   selectedTagActionAtom,
   tagInfoModeAtom,
 } from '@/store/controlPanelStore';
-import { ConstituentWithoutId } from '@/types/analysis.ts';
-import { ConstituentTranslations } from '@/constants/constituents.ts';
+import { ConstituentWithoutId } from '@/types/analysis';
+import { ConstituentTranslations } from '@/constants/constituents';
 
 interface TagButtonProps {
   constituent: ConstituentWithoutId;

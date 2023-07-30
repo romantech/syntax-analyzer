@@ -1,10 +1,10 @@
 import { useSegmentMouseEvent } from '@/hooks/index';
 import { useAtom, useAtomValue } from 'jotai';
 import { deleteModeAtom, selectedTagAtom } from '@/store/controlPanelStore';
-import { addConstituent, removeConstituent } from '@/utils/segment.ts';
+import { addConstituent, removeConstituent } from '@/utils/segment';
 import { updateSegmentHistoryAndIndexAtom } from '@/store/segmentHistoryStore';
-import { getBeginEndIdxFromSelection } from '@/utils/selection.ts';
-import { generateConstituent } from '@/utils/constituent.ts';
+import { getBeginEndIdxFromSelection } from '@/utils/selection';
+import { generateConstituent } from '@/utils/constituent';
 
 export default function useSentenceHandlers() {
   const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
@@ -18,15 +18,15 @@ export default function useSentenceHandlers() {
   const onMouseUp = () => {
     /** 태그 리스트에서 태그를 선택했을 때만 실행 */
     if (selectedTag && currentSegment) {
-      const { begin, end, isValid } = getBeginEndIdxFromSelection();
-      if (!isValid) return;
+      const { begin, end } = getBeginEndIdxFromSelection();
+
       const updatedSegment = addConstituent(
         currentSegment,
         begin,
         end,
         generateConstituent(selectedTag, begin, end),
       );
-      updateSegment(updatedSegment);
+      if (currentSegment !== updatedSegment) updateSegment(updatedSegment);
     }
   };
 

@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { TAB_LIST } from '@/constants/tabList.ts';
+import { TAB_LIST } from '@/constants/tabList';
 
 export default function useTabIndex() {
   const { pathname } = useLocation();

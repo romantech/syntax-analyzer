@@ -1,4 +1,4 @@
-import { ConstituentType } from '@/types/analysis.ts';
+import { ConstituentType } from '@/types/analysis';
 
 export type ColorMode = 'dark' | 'light';
 export type ConstituentColors = {

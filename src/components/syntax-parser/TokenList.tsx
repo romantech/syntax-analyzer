@@ -1,4 +1,4 @@
-import { isPunctuation } from '@/utils/string.ts';
+import { isPunctuation } from '@/utils/string';
 import { Token } from '@/components/syntax-parser';
 
 interface TokensProps {

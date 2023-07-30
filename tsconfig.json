@@ -8,7 +8,12 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    /*
+     *.ts, *.tsx 등 확장자가 붙은 파일을 import 할 수 있도록 할지 여부
+     noEmit 옵션이 true 일때만 사용할 수 있는 옵션
+     true로 설정하면 import 할 때 항상 확장자가 붙어서(*.ts 등) 비활성화
+     */
+    "allowImportingTsExtensions": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
@@ -19,8 +24,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      /** alias 사용시 폴더명에 대문자 있으면 오류 발생하므로 주의 */
-      "@/*": ["src/*"]
+      "@/*": ["src/*"] // alias 사용시 폴더명에 대문자 있으면 오류 발생하므로 주의
     }
   },
   "include": ["src"],

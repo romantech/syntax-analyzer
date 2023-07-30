@@ -1,18 +1,5 @@
-import { Nullable } from '@/types/common';
 import { ConstituentType, ConstituentWithoutId } from '@/types/analysis';
 import { generateNumberID } from '@/utils/identifier';
-
-export const getNearestElementByClass = (
-  elementParam: Nullable<HTMLElement>,
-  className: string = 'constituent',
-) => {
-  let element = elementParam;
-  while (element) {
-    if (element.classList.contains(className)) return element;
-    element = element.parentElement;
-  }
-  return null;
-};
 
 export const transformConstituentType = (
   type: ConstituentType,

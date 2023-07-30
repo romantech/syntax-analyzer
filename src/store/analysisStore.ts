@@ -1,7 +1,7 @@
 import { atomWithStorage } from 'jotai/utils';
 import { Analysis } from '@/types/analysis';
 import { Nullable } from '@/types/common';
-import { sampleData } from '@/constants/sample.ts';
+import { sampleData } from '@/constants/sample';
 import { atom } from 'jotai';
 
 // Analysis

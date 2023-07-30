@@ -1,16 +1,15 @@
-import { getNearestElementByClass } from '@/utils/constituent';
-import { ConstituentType } from '@/types/analysis';
+import { Nullable } from '@/types/common';
 
-const checkValidityByClass = (
-  startNode: HTMLElement,
-  endNode: HTMLElement,
-  className: ConstituentType,
+export const getNearestElementByClass = (
+  elementParam: Nullable<HTMLElement>,
+  className: string = 'constituent',
 ) => {
-  const startElement = getNearestElementByClass(startNode, className);
-  const endElement = getNearestElementByClass(endNode, className);
-  return (
-    startElement?.dataset.constituentId === endElement?.dataset.constituentId
-  );
+  let element = elementParam;
+  while (element) {
+    if (element.classList.contains(className)) return element;
+    element = element.parentElement;
+  }
+  return null;
 };
 
 export const getBeginEndIdxFromSelection = (
@@ -26,16 +25,11 @@ export const getBeginEndIdxFromSelection = (
   const startNode = range.startContainer.parentNode as HTMLElement;
   const endNode = range.endContainer.parentNode as HTMLElement;
 
-  const classesToCheck: ConstituentType[] = ['clause', 'phrase', 'token-group'];
-  const isValid = classesToCheck.every((className) =>
-    checkValidityByClass(startNode, endNode, className),
-  );
-
   const startIndex = startNode.getAttribute(checkAttr);
   const endIndex = endNode.getAttribute(checkAttr);
 
   begin = startIndex ? parseInt(startIndex, 10) : 0;
   end = endIndex ? parseInt(endIndex, 10) + 1 : 0;
 
-  return { begin, end, isValid };
+  return { begin, end };
 };
