@@ -2,13 +2,23 @@ import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { ConstituentWithoutId } from '@/types/analysis';
 import { hasAddedTagAtom } from '@/store/segmentHistoryStore';
+import {
+  DEFAULT_ABBR_INFO_MODE,
+  DEFAULT_TAG_INFO_MODE,
+} from '@/constants/config';
 
 export const selectedTagAtom = atom<ConstituentWithoutId | null>(null);
 export const hoveredConstituentAtom = atom<number | null>(null);
 
 /** 로컬 스토리지에서 키 값을 먼저 찾고 없다면 두번째 인자에 명시한 초기값으로 설정 */
-export const tagInfoModeAtom = atomWithStorage('tagInfoMode', true);
-export const abbrInfoModeAtom = atomWithStorage('abbrInfoMode', false);
+export const tagInfoModeAtom = atomWithStorage(
+  'tagInfoMode',
+  DEFAULT_TAG_INFO_MODE,
+);
+export const abbrInfoModeAtom = atomWithStorage(
+  'abbrInfoMode',
+  DEFAULT_ABBR_INFO_MODE,
+);
 
 export const deleteModeAtom = atom(false);
 
