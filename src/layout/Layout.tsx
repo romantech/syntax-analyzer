@@ -7,7 +7,7 @@ export default function Layout({ children }: PropsWithChildren) {
     <Container maxW="8xl">
       <Flex direction="column" h="100vh">
         <Header />
-        <Box flex="1">{children}</Box>
+        <Box flexGrow={1}>{children}</Box>
       </Flex>
     </Container>
   );

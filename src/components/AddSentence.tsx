@@ -52,7 +52,7 @@ export default function AddSentence() {
 
   return (
     <Fragment>
-      <FormControl isInvalid={isError} maxW="container.sm">
+      <FormControl isInvalid={isError}>
         <HStack align="start">
           <Box flexGrow={1}>
             <InputGroup size="lg">
