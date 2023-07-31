@@ -49,7 +49,7 @@ export default function SentenceList() {
     if (selected.current) {
       setCurrentAnalysisIndex(selected.current);
       onClose();
-      navigate(SITE_URLS.syntaxEditor.edit);
+      navigate(SITE_URLS.SYNTAX_EDITOR.TAGGING);
     }
   };
 

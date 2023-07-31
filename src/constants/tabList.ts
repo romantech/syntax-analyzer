@@ -9,13 +9,13 @@ export const NAV_TABS = [
   },
   {
     label: 'syntax analyzer',
-    path: SITE_URLS.syntaxAnalyzer.root,
-    matchPath: `${SITE_URLS.syntaxAnalyzer.root}/*`,
+    path: SITE_URLS.SYNTAX_ANALYZER.ROOT,
+    matchPath: `${SITE_URLS.SYNTAX_ANALYZER.ROOT}/*`,
   },
   {
     label: 'syntax editor',
-    path: SITE_URLS.syntaxEditor.root,
-    matchPath: `${SITE_URLS.syntaxEditor.root}/*`,
+    path: SITE_URLS.SYNTAX_EDITOR.ROOT,
+    matchPath: `${SITE_URLS.SYNTAX_EDITOR.ROOT}/*`,
   },
 ] as const;
 

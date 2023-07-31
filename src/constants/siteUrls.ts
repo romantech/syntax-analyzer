@@ -1,10 +1,10 @@
 export const SITE_URLS = {
-  root: '/',
-  syntaxAnalyzer: {
-    root: '/syntax-analyzer',
+  ROOT: '/',
+  SYNTAX_ANALYZER: {
+    ROOT: '/syntax-analyzer',
   },
-  syntaxEditor: {
-    root: '/syntax-editor',
-    edit: '/syntax-editor/edit',
+  SYNTAX_EDITOR: {
+    ROOT: '/syntax-editor',
+    TAGGING: '/syntax-editor/tagging',
   },
 } as const;

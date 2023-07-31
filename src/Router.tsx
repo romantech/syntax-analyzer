@@ -12,27 +12,27 @@ import { SentenceManager, SyntaxEditor } from './pages/syntax-editor';
 
 const router = createBrowserRouter([
   {
-    path: SITE_URLS.root,
+    path: SITE_URLS.ROOT,
     element: <App />,
     children: [
       {
-        path: SITE_URLS.root,
+        path: SITE_URLS.ROOT,
         element: <HomePage />,
       },
       {
-        path: SITE_URLS.syntaxAnalyzer.root,
+        path: SITE_URLS.SYNTAX_ANALYZER.ROOT,
         element: <SyntaxAnalyzerPage />,
       },
       {
-        path: SITE_URLS.syntaxEditor.root,
+        path: SITE_URLS.SYNTAX_EDITOR.ROOT,
         element: <SyntaxEditorPage />,
         children: [
           {
-            path: SITE_URLS.syntaxEditor.root,
+            path: SITE_URLS.SYNTAX_EDITOR.ROOT,
             element: <SentenceManager />,
           },
           {
-            path: SITE_URLS.syntaxEditor.edit,
+            path: SITE_URLS.SYNTAX_EDITOR.TAGGING,
             element: <SyntaxEditor />,
           },
         ],
