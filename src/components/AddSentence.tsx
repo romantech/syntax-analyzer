@@ -6,14 +6,17 @@ import {
   FormHelperText,
   HStack,
   Input,
+  InputGroup,
+  InputLeftElement,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useRef, useState } from 'react';
 import { ValidationError } from 'yup';
 import { addSentenceSchema } from '@/constants/scheme';
 import { addUserAnalysisActionAtom } from '@/store/analysisStore';
 import { useSetAtom } from 'jotai';
 import { ConfirmModal } from '@/components/common';
+import { PiTextTBold } from 'react-icons/pi';
 
 export default function AddSentence() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,19 +55,26 @@ export default function AddSentence() {
       <FormControl isInvalid={isError} maxW="container.sm">
         <HStack align="start">
           <Box flexGrow={1}>
-            <Input
-              ref={inputRef}
-              placeholder="90자 미만의 영어 문장을 입력해주세요"
-              maxLength={90}
-              onFocus={() => setIsError(false)}
-            />
+            <InputGroup size="lg">
+              <InputLeftElement pointerEvents="none">
+                <PiTextTBold />
+              </InputLeftElement>
+              <Input
+                ref={inputRef}
+                placeholder="90자 미만의 영어 문장을 입력해주세요"
+                maxLength={90}
+                onFocus={() => setIsError(false)}
+              />
+            </InputGroup>
             {isError ? (
               <FormErrorMessage>{errorMessage.current}</FormErrorMessage>
             ) : (
               <FormHelperText>{`축약 표현은 자동으로 풀어집니다 e.g. I'll -> I will`}</FormHelperText>
             )}
           </Box>
-          <Button onClick={onSubmit}>추가</Button>
+          <Button size="lg" onClick={onSubmit}>
+            추가
+          </Button>
         </HStack>
       </FormControl>
       <ConfirmModal
