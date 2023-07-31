@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { RouterProvider } from 'react-router-dom';
 import router from '@/Router';
-import theme from '@/theme.ts';
+import theme from '@/theme';
 import { DevTools } from 'jotai-devtools';
 
 const rootElement = document.getElementById('root');
