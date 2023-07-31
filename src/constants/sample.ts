@@ -2,7 +2,7 @@ import { Analysis } from '@/types/analysis';
 
 const sampleAnalysis1: Analysis = {
   id: 'b74c41fa7ed342e6',
-  createdAt: new Date('2023-05-08').toISOString(),
+  createdAt: new Date(2023, 4, 7, 8, 8, 8).toISOString(),
   sentence: [
     'I',
     'am',
@@ -211,7 +211,7 @@ const sampleAnalysis1: Analysis = {
 };
 const sampleAnalysis2: Analysis = {
   id: '8eb249f3d8e1',
-  createdAt: new Date('2023-05-09').toISOString(),
+  createdAt: new Date(2023, 4, 8, 8, 8, 8).toISOString(),
   sentence: [
     'Many',
     'organizations',
@@ -394,7 +394,7 @@ const sampleAnalysis2: Analysis = {
 };
 const sampleAnalysis3: Analysis = {
   id: '93dbbe3e49f1',
-  createdAt: new Date('2023-05-10').toISOString(),
+  createdAt: new Date(2023, 4, 9, 8, 8, 8).toISOString(),
   sentence: [
     'Experts',
     'have',

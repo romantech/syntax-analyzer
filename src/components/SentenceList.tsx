@@ -13,6 +13,7 @@ import {
   Tabs,
   Text,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
@@ -28,6 +29,7 @@ import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { SENTENCE_TABS } from '@/constants/tabList';
 import DeleteAnalysisButton from '@/components/common/DeleteAnalysisButton';
 import { TbMoodEmpty } from 'react-icons/tb';
+import { getFormattedKoDate } from '@/utils/dates';
 
 export default function SentenceList() {
   const selected = useRef<CurrentAnalysisIndex>();
@@ -65,27 +67,36 @@ export default function SentenceList() {
                   <CardBody p={2.5}>
                     <Stack divider={<StackDivider />}>
                       {!combinedAnalysisList[from].length && (
-                        <Text display="flex" alignItems="center" gap={2}>
+                        <Text
+                          display="flex"
+                          alignItems="center"
+                          gap={2}
+                          p={1.5}
+                        >
                           아직 추가한 문장이 없어요
                           <Icon as={TbMoodEmpty} />
                         </Text>
                       )}
                       {combinedAnalysisList[from].map((analysis, i) => (
-                        <HStack key={analysis.id} justify="space-between">
+                        <VStack key={analysis.id} align="start" gap={0} p={1.5}>
+                          <HStack w="full" justify="space-between">
+                            <Text as="span" fontSize="xs" color="gray.500">
+                              {getFormattedKoDate(analysis.createdAt)}
+                            </Text>
+                            <DeleteAnalysisButton
+                              onConfirm={() => removeUserAnalysis(analysis.id)}
+                              hidden={from === 'sample'}
+                            />
+                          </HStack>
                           <Text
                             noOfLines={1}
                             cursor="pointer"
                             _hover={{ color: 'blue.300' }}
                             onClick={() => onSentenceClick(from, i)}
-                            p={1.5}
                           >
                             {tokenJoiner(analysis.sentence)}
                           </Text>
-                          <DeleteAnalysisButton
-                            onConfirm={() => removeUserAnalysis(analysis.id)}
-                            hidden={from === 'sample'}
-                          />
-                        </HStack>
+                        </VStack>
                       ))}
                     </Stack>
                   </CardBody>
