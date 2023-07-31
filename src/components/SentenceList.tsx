@@ -22,12 +22,11 @@ import {
   removeUserAnalysisActionAtom,
 } from '@/store/analysisStore';
 import { tokenJoiner } from '@/utils/string';
-import { ConfirmModal } from '@/components/common';
+import { ConfirmModal, DeleteIconButton } from '@/components/common';
 import React, { Fragment, useRef } from 'react';
 import { AnalysisFromType, CurrentAnalysisIndex } from '@/types/analysis';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { SENTENCE_TABS } from '@/constants/tabList';
-import DeleteAnalysisButton from '@/components/common/DeleteAnalysisButton';
 import { TbMoodEmpty } from 'react-icons/tb';
 import { getFormattedKoDate } from '@/utils/dates';
 import { useNavigate } from 'react-router-dom';
@@ -92,9 +91,10 @@ export default function SentenceList() {
                             >
                               {getFormattedKoDate(analysis.createdAt)}
                             </Text>
-                            <DeleteAnalysisButton
+                            <DeleteIconButton
                               onConfirm={() => removeUserAnalysis(analysis.id)}
                               hidden={from === 'sample'}
+                              popoverHeader="선택한 문장을 삭제하시겠습니까?"
                             />
                           </HStack>
                           <Text

@@ -15,15 +15,17 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { CgClose } from 'react-icons/cg';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { VoidFunc } from '@/types/common';
 
 interface DeleteAnalysisButtonProps extends CenterProps {
   onConfirm: VoidFunc;
+  popoverHeader?: ReactNode;
 }
 
-export default function DeleteAnalysisButton({
+export default function DeleteIconButton({
   onConfirm,
+  popoverHeader = '삭제하시겠습니까?',
   ...buttonProps
 }: DeleteAnalysisButtonProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -49,8 +51,8 @@ export default function DeleteAnalysisButton({
       <Portal>
         <PopoverContent w="fit-content">
           <PopoverArrow />
-          <PopoverHeader border="0" py={4}>
-            선택한 문장을 삭제하시겠습니까?
+          <PopoverHeader border="0" p={4}>
+            {popoverHeader}
           </PopoverHeader>
           <PopoverFooter display="flex" justifyContent="flex-end">
             <ButtonGroup size="sm" variant="outline">
