@@ -33,6 +33,15 @@ export const addUserAnalysisActionAtom = atom(
   },
 );
 
+export const removeUserAnalysisActionAtom = atom(
+  null,
+  (get, set, sentenceId: string) => {
+    set(userAnalysisListAtom, (prev) =>
+      prev.filter((analysis) => analysis.id !== sentenceId),
+    );
+  },
+);
+
 export const currentAnalysisAtom = atom<Nullable<Analysis>>((get) => {
   const current = get(currentAnalysisIndexAtom);
   if (!current) return null;
