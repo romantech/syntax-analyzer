@@ -39,6 +39,7 @@ export default function DeleteAnalysisButton({
           as="button"
           rounded="full"
           p={1}
+          fontSize="xs"
           onClick={onOpen}
           {...buttonProps}
         >

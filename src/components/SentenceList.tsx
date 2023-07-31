@@ -63,7 +63,7 @@ export default function SentenceList() {
           <TabPanels pt={4}>
             {SENTENCE_TABS.map(({ from, label }) => (
               <TabPanel p={0} key={label}>
-                <Card variant="outline" maxH={380} overflowY="auto">
+                <Card variant="outline" maxH={460} overflowY="auto">
                   <CardBody p={2.5}>
                     <Stack divider={<StackDivider />}>
                       {!combinedAnalysisList[from].length && (
@@ -80,7 +80,12 @@ export default function SentenceList() {
                       {combinedAnalysisList[from].map((analysis, i) => (
                         <VStack key={analysis.id} align="start" gap={0} p={1.5}>
                           <HStack w="full" justify="space-between">
-                            <Text as="span" fontSize="xs" color="gray.500">
+                            <Text
+                              as="span"
+                              fontSize="xs"
+                              color="gray.500"
+                              h={5}
+                            >
                               {getFormattedKoDate(analysis.createdAt)}
                             </Text>
                             <DeleteAnalysisButton

@@ -12,6 +12,7 @@ import { currentAnalysisIndexAtom } from '@/store/analysisStore';
 import { Fragment } from 'react';
 import { Notice } from '@/components/common';
 import { useIsMounted } from '@/hooks';
+import { nanoid } from 'nanoid';
 
 const SyntaxEditor = () => {
   return (
