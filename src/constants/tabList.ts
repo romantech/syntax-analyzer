@@ -19,8 +19,8 @@ export const NAV_TABS = [
   },
 ] as const;
 
-type TabType = { label: string; from: AnalysisFromType };
-export const SENTENCE_TABS: TabType[] = [
+type SentenceTab = { label: string; from: AnalysisFromType };
+export const SENTENCE_TABS: SentenceTab[] = [
   { label: '추가한 문장', from: 'user' },
   { label: '샘플 문장', from: 'sample' },
 ];

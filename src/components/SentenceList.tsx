@@ -12,6 +12,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  TextProps,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
@@ -28,9 +29,18 @@ import { AnalysisFromType, CurrentAnalysisIndex } from '@/types/analysis';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { SENTENCE_TABS } from '@/constants/tabList';
 import { TbMoodEmpty } from 'react-icons/tb';
-import { getFormattedKoDate } from '@/utils/dates';
 import { useNavigate } from 'react-router-dom';
 import { SITE_URLS } from '@/constants/siteUrls';
+import DateChip from './common/DateChip';
+
+const SentenceNotAdded = ({ ...textProps }: TextProps) => {
+  return (
+    <Text display="flex" alignItems="center" {...textProps}>
+      아직 추가한 문장이 없어요
+      <Icon as={TbMoodEmpty} />
+    </Text>
+  );
+};
 
 export default function SentenceList() {
   const selected = useRef<CurrentAnalysisIndex>();
@@ -64,54 +74,47 @@ export default function SentenceList() {
           </TabList>
 
           <TabPanels pt={4}>
-            {SENTENCE_TABS.map(({ from, label }) => (
-              <TabPanel p={0} key={label}>
-                <Card variant="outline" maxH={460} overflowY="auto">
-                  <CardBody p={2.5}>
-                    <Stack divider={<StackDivider />}>
-                      {!combinedAnalysisList[from].length && (
-                        <Text
-                          display="flex"
-                          alignItems="center"
-                          gap={2}
-                          p={1.5}
-                        >
-                          아직 추가한 문장이 없어요
-                          <Icon as={TbMoodEmpty} />
-                        </Text>
-                      )}
-                      {combinedAnalysisList[from].map((analysis, i) => (
-                        <VStack key={analysis.id} align="start" gap={0} p={1.5}>
-                          <HStack w="full" justify="space-between">
-                            <Text
-                              as="span"
-                              fontSize="xs"
-                              color="gray.500"
-                              h={5}
-                            >
-                              {getFormattedKoDate(analysis.createdAt)}
-                            </Text>
-                            <DeleteIconButton
-                              onConfirm={() => removeUserAnalysis(analysis.id)}
-                              hidden={from === 'sample'}
-                              popoverHeader="선택한 문장을 삭제하시겠습니까?"
-                            />
-                          </HStack>
-                          <Text
-                            noOfLines={1}
-                            cursor="pointer"
-                            _hover={{ color: 'blue.300' }}
-                            onClick={() => onSentenceClick(from, i)}
+            {SENTENCE_TABS.map(({ from, label }) => {
+              const isEmpty = !combinedAnalysisList[from].length;
+              return (
+                <TabPanel p={0} key={label}>
+                  <Card variant="outline" maxH={460} overflowY="auto">
+                    <CardBody p={2.5}>
+                      <Stack divider={<StackDivider />}>
+                        {isEmpty && <SentenceNotAdded gap={2} p={1.5} />}
+                        {combinedAnalysisList[from].map((analysis, i) => (
+                          <VStack
+                            key={analysis.id}
+                            align="start"
+                            gap={0}
+                            p={1.5}
                           >
-                            {tokenJoiner(analysis.sentence)}
-                          </Text>
-                        </VStack>
-                      ))}
-                    </Stack>
-                  </CardBody>
-                </Card>
-              </TabPanel>
-            ))}
+                            <HStack w="full" justify="space-between">
+                              <DateChip date={analysis.createdAt} h={5} />
+                              <DeleteIconButton
+                                onConfirm={() =>
+                                  removeUserAnalysis(analysis.id)
+                                }
+                                hidden={from === 'sample'}
+                                popoverHeader="선택한 문장을 삭제하시겠습니까?"
+                              />
+                            </HStack>
+                            <Text
+                              noOfLines={1}
+                              cursor="pointer"
+                              _hover={{ color: 'blue.300' }}
+                              onClick={() => onSentenceClick(from, i)}
+                            >
+                              {tokenJoiner(analysis.sentence)}
+                            </Text>
+                          </VStack>
+                        ))}
+                      </Stack>
+                    </CardBody>
+                  </Card>
+                </TabPanel>
+              );
+            })}
           </TabPanels>
         </Tabs>
       </Box>
