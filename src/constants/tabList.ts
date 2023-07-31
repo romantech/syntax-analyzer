@@ -5,14 +5,17 @@ export const NAV_TABS = [
   {
     label: 'home',
     path: '/',
+    matchPath: '/',
   },
   {
     label: 'syntax analyzer',
-    path: SITE_URLS.syntaxAnalyzer,
+    path: SITE_URLS.syntaxAnalyzer.root,
+    matchPath: `${SITE_URLS.syntaxAnalyzer.root}/*`,
   },
   {
     label: 'syntax editor',
-    path: SITE_URLS.syntaxEditor,
+    path: SITE_URLS.syntaxEditor.root,
+    matchPath: `${SITE_URLS.syntaxEditor.root}/*`,
   },
 ] as const;
 

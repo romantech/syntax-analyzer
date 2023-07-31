@@ -30,10 +30,13 @@ import { SENTENCE_TABS } from '@/constants/tabList';
 import DeleteAnalysisButton from '@/components/common/DeleteAnalysisButton';
 import { TbMoodEmpty } from 'react-icons/tb';
 import { getFormattedKoDate } from '@/utils/dates';
+import { useNavigate } from 'react-router-dom';
+import { SITE_URLS } from '@/constants/siteUrls';
 
 export default function SentenceList() {
   const selected = useRef<CurrentAnalysisIndex>();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   const combinedAnalysisList = useAtomValue(combinedAnalysisListAtom);
   const setCurrentAnalysisIndex = useSetAtom(currentAnalysisIndexAtom);
@@ -47,6 +50,7 @@ export default function SentenceList() {
     if (selected.current) {
       setCurrentAnalysisIndex(selected.current);
       onClose();
+      navigate(SITE_URLS.syntaxEditor.edit);
     }
   };
 

@@ -8,6 +8,7 @@ import {
   SyntaxEditorPage,
 } from '@/pages';
 import { SITE_URLS } from '@/constants/siteUrls';
+import { SentenceManager, SyntaxEditor } from './pages/syntax-editor';
 
 const router = createBrowserRouter([
   {
@@ -19,12 +20,22 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: SITE_URLS.syntaxAnalyzer,
+        path: SITE_URLS.syntaxAnalyzer.root,
         element: <SyntaxAnalyzerPage />,
       },
       {
-        path: SITE_URLS.syntaxEditor,
+        path: SITE_URLS.syntaxEditor.root,
         element: <SyntaxEditorPage />,
+        children: [
+          {
+            path: SITE_URLS.syntaxEditor.root,
+            element: <SentenceManager />,
+          },
+          {
+            path: SITE_URLS.syntaxEditor.edit,
+            element: <SyntaxEditor />,
+          },
+        ],
       },
       {
         path: '*',
