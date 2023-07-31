@@ -11,7 +11,7 @@ import {
 import { Fragment, useRef, useState } from 'react';
 import { ValidationError } from 'yup';
 import { addSentenceSchema } from '@/constants/scheme';
-import { addAnalysisAtom } from '@/store/analysisStore';
+import { addUserAnalysisActionAtom } from '@/store/analysisStore';
 import { useSetAtom } from 'jotai';
 import { ConfirmModal } from '@/components/common';
 
@@ -22,7 +22,7 @@ export default function AddSentence() {
   const inputRef = useRef<HTMLInputElement>(null);
   const errorMessage = useRef('');
 
-  const addAnalysis = useSetAtom(addAnalysisAtom);
+  const addAnalysis = useSetAtom(addUserAnalysisActionAtom);
 
   const onSubmit = async () => {
     const input = inputRef.current;
@@ -43,19 +43,20 @@ export default function AddSentence() {
     const input = inputRef.current;
     if (!input) return;
     addAnalysis(input.value.trim());
+    input.value = '';
+    onClose();
   };
 
   return (
     <Fragment>
-      <FormControl isInvalid={isError}>
+      <FormControl isInvalid={isError} maxW="container.sm">
         <HStack align="start">
-          <Box>
+          <Box flexGrow={1}>
             <Input
               ref={inputRef}
               placeholder="90자 미만의 영어 문장을 입력해주세요"
               maxLength={90}
               onFocus={() => setIsError(false)}
-              minW={500}
             />
             {isError ? (
               <FormErrorMessage>{errorMessage.current}</FormErrorMessage>

@@ -10,6 +10,7 @@ export const generateAnalysis = (sentence: string): Analysis => {
   return {
     id: nanoid(),
     sentence: tokenizedSentence,
+    createdAt: new Date().toISOString(),
     rootSegment: {
       id: generateNumberID(),
       begin: 0,

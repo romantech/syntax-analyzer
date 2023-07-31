@@ -1,7 +1,8 @@
 import { Analysis } from '@/types/analysis';
 
-const sampleData1: Analysis = {
+const sampleAnalysis1: Analysis = {
   id: 'b74c41fa7ed342e6',
+  createdAt: new Date('2023-05-08').toISOString(),
   sentence: [
     'I',
     'am',
@@ -208,8 +209,9 @@ const sampleData1: Analysis = {
     ],
   },
 };
-const sampleData2: Analysis = {
+const sampleAnalysis2: Analysis = {
   id: '8eb249f3d8e1',
+  createdAt: new Date('2023-05-09').toISOString(),
   sentence: [
     'Many',
     'organizations',
@@ -390,8 +392,9 @@ const sampleData2: Analysis = {
     ],
   },
 };
-const sampleData3: Analysis = {
+const sampleAnalysis3: Analysis = {
   id: '93dbbe3e49f1',
+  createdAt: new Date('2023-05-10').toISOString(),
   sentence: [
     'Experts',
     'have',
@@ -566,8 +569,8 @@ const sampleData3: Analysis = {
   },
 };
 
-export const sampleDataList: Analysis[] = [
-  sampleData1,
-  sampleData2,
-  sampleData3,
+export const sampleAnalysisList: Analysis[] = [
+  sampleAnalysis1,
+  sampleAnalysis2,
+  sampleAnalysis3,
 ];

@@ -1,13 +1,18 @@
-import { AddSentence, ControlPanel, SyntaxParser, TagList } from '@/components';
-import { Box, Flex, Stack } from '@chakra-ui/react';
-import { Provider } from 'jotai';
+import {
+  AddSentence,
+  ControlPanel,
+  SentenceList,
+  SyntaxParser,
+  TagList,
+} from '@/components';
+import { Box, Flex, HStack, Stack, VStack } from '@chakra-ui/react';
+import { Provider, useAtomValue } from 'jotai';
 import { DevTools } from 'jotai-devtools';
+import { currentAnalysisIndexAtom } from '@/store/analysisStore';
 import { TagNotice } from '@/components/tag-list';
-import { useAtomValue } from 'jotai';
-import { hasAnalysisDataAtom } from '@/store/analysisStore';
+import { Fragment } from 'react';
 
 const SyntaxEditor = () => {
-  const hasData = useAtomValue(hasAnalysisDataAtom);
   return (
     <Flex direction="column" minH="full" overflowX="auto" py={2} gap={8}>
       <Stack>
@@ -17,11 +22,29 @@ const SyntaxEditor = () => {
           <ControlPanel />
         </Flex>
       </Stack>
-      <Box>
-        {hasData && <SyntaxParser />}
-        {!hasData && <AddSentence />}
+      <Box w="70%">
+        <SyntaxParser />
       </Box>
     </Flex>
+  );
+};
+
+const SelectSentence = () => {
+  return (
+    <HStack mt="10%" gap={8} align="start" justify="center">
+      <AddSentence />
+      <SentenceList />
+    </HStack>
+  );
+};
+
+const Switcher = () => {
+  const currentAnalysisIndex = useAtomValue(currentAnalysisIndexAtom);
+  return (
+    <Fragment>
+      {currentAnalysisIndex && <SyntaxEditor />}
+      {!currentAnalysisIndex && <SelectSentence />}
+    </Fragment>
   );
 };
 
@@ -29,7 +52,7 @@ export default function SyntaxEditorPage() {
   return (
     <Provider>
       <DevTools theme="dark" />
-      <SyntaxEditor />
+      <Switcher />
     </Provider>
   );
 }

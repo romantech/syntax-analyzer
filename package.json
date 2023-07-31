@@ -12,6 +12,7 @@
   "dependencies": {
     "@chakra-ui/react": "^2.8.0",
     "@emotion/styled": "^11.11.0",
+    "date-fns": "^2.30.0",
     "framer-motion": "^10.13.0",
     "jotai": "^2.2.2",
     "nanoid": "^4.0.2",

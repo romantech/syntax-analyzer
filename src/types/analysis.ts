@@ -23,6 +23,14 @@ export type Segment = {
 
 export type Analysis = {
   id: string; // A random string of 21 bytes
+  createdAt: string; // ISO 8601 format
   sentence: string[]; // Tokenized sentence
   rootSegment: Segment; // The array contains only a single root segment
+};
+
+export type AnalysisFromType = 'user' | 'sample';
+
+export type CurrentAnalysisIndex = {
+  from: AnalysisFromType;
+  index: number;
 };

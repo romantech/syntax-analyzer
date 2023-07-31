@@ -16,6 +16,13 @@ export const tokenizer = (text: string) => {
     .filter(Boolean);
 };
 
+export const tokenJoiner = (tokens: ReturnType<typeof tokenizer>) => {
+  return tokens.reduce((prev, cur) => {
+    if (cur.match(NON_WORD_CHAR_PATTERN)) return prev + cur;
+    else return prev + ' ' + cur;
+  }, '');
+};
+
 export const kebabToCamel = (str: string) => {
   /**
    * -([a-z]) : -로 시작하고 소문자로 끝나는 문자열
