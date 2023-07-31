@@ -5,12 +5,13 @@ import {
   SyntaxParser,
   TagList,
 } from '@/components';
-import { Box, Flex, HStack, Stack, VStack } from '@chakra-ui/react';
+import { Box, Flex, HStack, SlideFade, Stack, VStack } from '@chakra-ui/react';
 import { Provider, useAtomValue } from 'jotai';
 import { DevTools } from 'jotai-devtools';
 import { currentAnalysisIndexAtom } from '@/store/analysisStore';
 import { Fragment } from 'react';
 import { Notice } from '@/components/common';
+import { useIsMounted } from '@/hooks';
 
 const SyntaxEditor = () => {
   return (
@@ -30,19 +31,23 @@ const SyntaxEditor = () => {
 };
 
 const SelectSentence = () => {
+  const isMounted = useIsMounted();
+
   return (
-    <HStack mt="7vh" gap={8} align="start" justify="center">
-      <VStack flexGrow={1} maxW={650}>
-        <Notice
-          size="sm"
-          borderRadius="md"
-          p={1}
-          text="문장을 직접 추가하거나 선택한 후 편집할 수 있어요"
-        />
-        <AddSentence />
-      </VStack>
-      <SentenceList />
-    </HStack>
+    <SlideFade in={isMounted} offsetY={15}>
+      <HStack mt="7vh" gap={8} align="start" justify="center">
+        <VStack flexGrow={1} maxW={650}>
+          <Notice
+            size="sm"
+            borderRadius="md"
+            p={1}
+            text="문장을 직접 추가하거나 선택한 후 편집할 수 있어요"
+          />
+          <AddSentence />
+        </VStack>
+        <SentenceList />
+      </HStack>
+    </SlideFade>
   );
 };
 
