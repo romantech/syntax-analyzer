@@ -8,12 +8,12 @@ import {
   AlertDialogOverlay,
   Button,
 } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 
 interface ConfirmModalProps {
   onConfirm: () => void;
-  headerText: string;
-  bodyText: string;
+  headerContent: ReactNode;
+  bodyContent: ReactNode;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -22,8 +22,8 @@ export default function ConfirmModal({
   onConfirm,
   isOpen,
   onClose,
-  headerText,
-  bodyText,
+  headerContent,
+  bodyContent,
 }: ConfirmModalProps) {
   const cancelRef = useRef(null);
   return (
@@ -36,10 +36,10 @@ export default function ConfirmModal({
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            {headerText}
+            {headerContent}
           </AlertDialogHeader>
           <AlertDialogCloseButton />
-          <AlertDialogBody>{bodyText}</AlertDialogBody>
+          <AlertDialogBody>{bodyContent}</AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
               취소

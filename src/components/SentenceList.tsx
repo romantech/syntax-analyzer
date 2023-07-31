@@ -99,8 +99,8 @@ export default function SentenceList() {
         isOpen={isOpen}
         onClose={onClose}
         onConfirm={onSelectSentenceConfirm}
-        headerText="영어 문장 선택"
-        bodyText="선택한 문장을 편집하시겠습니까?"
+        headerContent="영어 문장 선택"
+        bodyContent="선택한 문장을 편집하시겠습니까?"
       />
     </Fragment>
   );

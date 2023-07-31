@@ -81,8 +81,8 @@ export default function AddSentence() {
         isOpen={isOpen}
         onClose={onClose}
         onConfirm={onConfirm}
-        headerText="영어 문장 추가"
-        bodyText="입력한 영어 문장을 추가 하시겠습니까?"
+        headerContent="영어 문장 추가"
+        bodyContent="입력한 영어 문장을 추가 하시겠습니까?"
       />
     </Fragment>
   );

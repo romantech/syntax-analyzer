@@ -1,8 +1,8 @@
 import {
-  Box,
-  BoxProps,
   Button,
   ButtonGroup,
+  Center,
+  CenterProps,
   Icon,
   Popover,
   PopoverArrow,
@@ -18,31 +18,32 @@ import { CgClose } from 'react-icons/cg';
 import React from 'react';
 import { VoidFunc } from '@/types/common';
 
-interface DeleteAnalysisButtonProps extends BoxProps {
+interface DeleteAnalysisButtonProps extends CenterProps {
   onConfirm: VoidFunc;
 }
 
 export default function DeleteAnalysisButton({
   onConfirm,
-  ...boxProps
+  ...buttonProps
 }: DeleteAnalysisButtonProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const iconHoverColor = useColorModeValue('gray.800', 'gray.200');
   return (
     <Popover isOpen={isOpen} onClose={onClose}>
       <PopoverTrigger>
-        <Box
-          fontSize="sm"
-          rounded="full"
-          color="gray.400"
-          _hover={{ color: iconHoverColor }}
-          p={1}
+        <Center
+          color={useColorModeValue('gray.300', 'gray.500')}
+          _hover={{
+            color: useColorModeValue('gray.500', 'gray.400'),
+            bg: useColorModeValue('gray.100', 'gray.700'),
+          }}
           as="button"
+          rounded="full"
+          p={1}
           onClick={onOpen}
-          {...boxProps}
+          {...buttonProps}
         >
           <Icon as={CgClose} />
-        </Box>
+        </Center>
       </PopoverTrigger>
       <Portal>
         <PopoverContent w="fit-content">
@@ -51,9 +52,9 @@ export default function DeleteAnalysisButton({
             선택한 문장을 삭제하시겠습니까?
           </PopoverHeader>
           <PopoverFooter display="flex" justifyContent="flex-end">
-            <ButtonGroup size="sm">
+            <ButtonGroup size="sm" variant="outline">
               <Button onClick={onClose}>취소</Button>
-              <Button onClick={() => onConfirm()}>확인</Button>
+              <Button onClick={() => onConfirm()}>삭제</Button>
             </ButtonGroup>
           </PopoverFooter>
         </PopoverContent>
