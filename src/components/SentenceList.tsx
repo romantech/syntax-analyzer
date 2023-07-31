@@ -3,6 +3,7 @@ import {
   Card,
   CardBody,
   HStack,
+  Icon,
   Stack,
   StackDivider,
   Tab,
@@ -26,6 +27,7 @@ import { AnalysisFromType, CurrentAnalysisIndex } from '@/types/analysis';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { SENTENCE_TABS } from '@/constants/tabList';
 import DeleteAnalysisButton from '@/components/common/DeleteAnalysisButton';
+import { TbMoodEmpty } from 'react-icons/tb';
 
 export default function SentenceList() {
   const selected = useRef<CurrentAnalysisIndex>();
@@ -48,13 +50,7 @@ export default function SentenceList() {
 
   return (
     <Fragment>
-      <Box
-        borderRadius="lg"
-        borderWidth={1}
-        flexGrow={1}
-        maxW="container.md"
-        p={4}
-      >
+      <Box borderRadius="lg" borderWidth={1} w="full" maxW="container.md" p={4}>
         <Tabs defaultIndex={DEFAULT_SENTENCE_LIST_TAB}>
           <TabList>
             {SENTENCE_TABS.map(({ label }) => (
@@ -65,9 +61,15 @@ export default function SentenceList() {
           <TabPanels pt={4}>
             {SENTENCE_TABS.map(({ from, label }) => (
               <TabPanel p={0} key={label}>
-                <Card variant="outline" maxH={320} overflowY="auto">
+                <Card variant="outline" maxH={380} overflowY="auto">
                   <CardBody p={2.5}>
                     <Stack divider={<StackDivider />}>
+                      {!combinedAnalysisList[from].length && (
+                        <Text display="flex" alignItems="center" gap={2}>
+                          아직 추가한 문장이 없어요
+                          <Icon as={TbMoodEmpty} />
+                        </Text>
+                      )}
                       {combinedAnalysisList[from].map((analysis, i) => (
                         <HStack key={analysis.id} justify="space-between">
                           <Text

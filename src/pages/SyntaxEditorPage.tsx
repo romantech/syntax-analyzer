@@ -31,7 +31,7 @@ const SyntaxEditor = () => {
 
 const SelectSentence = () => {
   return (
-    <HStack mt="10vh" gap={8} align="start" justify="center">
+    <HStack mt="7vh" gap={8} align="start" justify="center">
       <VStack flexGrow={1} maxW={650}>
         <Notice
           size="sm"
