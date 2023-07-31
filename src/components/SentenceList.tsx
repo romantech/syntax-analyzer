@@ -21,12 +21,14 @@ import { tokenJoiner } from '@/utils/string';
 import { ConfirmModal } from '@/components/common';
 import { Fragment, useRef } from 'react';
 import { AnalysisFromType, CurrentAnalysisIndex } from '@/types/analysis';
+import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
+import { SENTENCE_TABS } from '@/constants/tabList';
 
 export default function SentenceList() {
   const selected = useRef<CurrentAnalysisIndex>();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { user, sample } = useAtomValue(combinedAnalysisListAtom);
+  const analysisList = useAtomValue(combinedAnalysisListAtom);
   const setCurrentAnalysisIndex = useSetAtom(currentAnalysisIndexAtom);
 
   const onSentenceClick = (from: AnalysisFromType, index: number) => {
@@ -47,53 +49,36 @@ export default function SentenceList() {
         maxW="container.md"
         p={4}
       >
-        <Tabs>
+        <Tabs defaultIndex={DEFAULT_SENTENCE_LIST_TAB}>
           <TabList>
-            <Tab>추가한 문장</Tab>
-            <Tab>샘플 문장</Tab>
+            {SENTENCE_TABS.map(({ label }) => (
+              <Tab key={label}>{label}</Tab>
+            ))}
           </TabList>
 
           <TabPanels pt={4}>
-            <TabPanel p={0}>
-              <Card variant="outline" maxH={320} overflowY="auto">
-                <CardBody p={2.5}>
-                  <Stack divider={<StackDivider />}>
-                    {user.map((analysis, i) => (
-                      <Text
-                        key={analysis.id}
-                        noOfLines={1}
-                        cursor="pointer"
-                        _hover={{ color: 'blue.300' }}
-                        onClick={() => onSentenceClick('user', i)}
-                        p={1.5}
-                      >
-                        {tokenJoiner(analysis.sentence)}
-                      </Text>
-                    ))}
-                  </Stack>
-                </CardBody>
-              </Card>
-            </TabPanel>
-            <TabPanel p={0}>
-              <Card variant="outline">
-                <CardBody p={2.5}>
-                  <Stack divider={<StackDivider />}>
-                    {sample.map((analysis, i) => (
-                      <Text
-                        key={analysis.id}
-                        noOfLines={1}
-                        cursor="pointer"
-                        onClick={() => onSentenceClick('sample', i)}
-                        _hover={{ color: 'blue.300' }}
-                        p={1.5}
-                      >
-                        {tokenJoiner(analysis.sentence)}
-                      </Text>
-                    ))}
-                  </Stack>
-                </CardBody>
-              </Card>
-            </TabPanel>
+            {SENTENCE_TABS.map(({ from, label }) => (
+              <TabPanel p={0} key={label}>
+                <Card variant="outline" maxH={320} overflowY="auto">
+                  <CardBody p={2.5}>
+                    <Stack divider={<StackDivider />}>
+                      {analysisList[from].map((analysis, i) => (
+                        <Text
+                          key={analysis.id}
+                          noOfLines={1}
+                          cursor="pointer"
+                          _hover={{ color: 'blue.300' }}
+                          onClick={() => onSentenceClick(from, i)}
+                          p={1.5}
+                        >
+                          {tokenJoiner(analysis.sentence)}
+                        </Text>
+                      ))}
+                    </Stack>
+                  </CardBody>
+                </Card>
+              </TabPanel>
+            ))}
           </TabPanels>
         </Tabs>
       </Box>

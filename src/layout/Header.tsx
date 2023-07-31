@@ -15,7 +15,7 @@ import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
 import { BsGithub } from 'react-icons/bs';
 import { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
-import { TAB_LIST } from '@/constants/tabList';
+import { NAV_TABS } from '@/constants/tabList';
 import { useTabIndex } from '@/hooks';
 
 export default function Header() {
@@ -35,7 +35,7 @@ export default function Header() {
           <Box ml={6}>
             <Tabs variant="soft-rounded" defaultIndex={tabIndex}>
               <TabList>
-                {TAB_LIST.map((tab) => (
+                {NAV_TABS.map((tab) => (
                   <NavLink to={tab.path} key={tab.label}>
                     <Tab textTransform="capitalize">{tab.label}</Tab>
                   </NavLink>
