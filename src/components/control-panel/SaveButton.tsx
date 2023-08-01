@@ -17,10 +17,13 @@ export default function SaveButton() {
       setIsLoading(false);
       toast({
         title: '저장 성공',
-        position: 'top',
         status: 'success',
         duration: 5000,
         isClosable: true,
+        containerStyle: {
+          position: 'relative',
+          bottom: 5,
+        },
       });
     }, 1000);
   };

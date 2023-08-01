@@ -91,16 +91,15 @@ export const isTouchedAtom = atom((get) => {
 export const saveSegmentAtom = atom(null, (get, set) => {
   const currentAnalysis = get(currentAnalysisAtom);
   const currentHistorySegment = get(currentHistorySegmentAtom);
+  if (!currentAnalysis || !currentHistorySegment) return;
 
-  if (currentAnalysis && currentHistorySegment) {
-    const { id, source } = currentAnalysis;
-    const list = { user: userAnalysisListAtom, sample: sampleAnalysisListAtom };
-    set(list[source], (prev) => {
-      return prev.map((analysis) =>
-        analysis.id === id
-          ? { ...analysis, rootSegment: currentHistorySegment }
-          : analysis,
-      );
-    });
-  }
+  const { id, source } = currentAnalysis;
+  const list = { user: userAnalysisListAtom, sample: sampleAnalysisListAtom };
+  set(list[source], (prev) => {
+    return prev.map((analysis) =>
+      analysis.id === id
+        ? { ...analysis, rootSegment: currentHistorySegment }
+        : analysis,
+    );
+  });
 });
