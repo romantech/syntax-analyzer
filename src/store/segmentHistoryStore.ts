@@ -1,7 +1,11 @@
 import { atom } from 'jotai';
 import { Segment } from '@/types/analysis';
-import { atomWithDefault, atomWithReset } from 'jotai/utils';
-import { currentAnalysisAtom } from '@/store/analysisStore';
+import { atomWithDefault, atomWithReset, RESET } from 'jotai/utils';
+import {
+  currentAnalysisAtom,
+  sampleAnalysisListAtom,
+  userAnalysisListAtom,
+} from '@/store/analysisStore';
 import { Nullable } from '@/types/common';
 import { deleteModeAtom, selectedTagAtom } from './controlPanelStore';
 import { fillSegment, removeEmptySegment } from '@/utils/segment';
@@ -22,6 +26,11 @@ export const segmentHistoryIndexAtom = atomWithReset(0);
 export const segmentHistoryAtom = atomWithDefault<Segment[]>((get) => {
   const currentAnalysis = get(currentAnalysisAtom);
   return currentAnalysis ? [currentAnalysis.rootSegment] : [];
+});
+
+export const resetSegmentHistoryAtom = atom(null, (get, set) => {
+  set(segmentHistoryAtom, RESET);
+  set(segmentHistoryIndexAtom, RESET);
 });
 
 export const currentHistorySegmentAtom = atom<Nullable<Segment>>((get) => {
@@ -47,7 +56,7 @@ export const updateSegmentHistoryAndIndexAtom = atom(
       return newHistory;
     });
 
-    if (!get(hasAddedTagAtom)) set(deleteModeAtom, false);
+    if (!get(hasAddedTagAtom)) set(deleteModeAtom, RESET);
   },
 );
 
@@ -68,7 +77,30 @@ export const undoRedoActionAtom = atom(
       if (type === 'undo') return prev - 1;
       return prev + 1;
     });
-    set(deleteModeAtom, false);
-    set(selectedTagAtom, null);
+    set(deleteModeAtom, RESET);
+    set(selectedTagAtom, RESET);
   },
 );
+
+export const isTouchedAtom = atom((get) => {
+  const currentAnalysis = get(currentAnalysisAtom)?.rootSegment;
+  const currentHistorySegment = get(currentHistorySegmentAtom);
+  return currentAnalysis !== currentHistorySegment;
+});
+
+export const saveSegmentAtom = atom(null, (get, set) => {
+  const currentAnalysis = get(currentAnalysisAtom);
+  const currentHistorySegment = get(currentHistorySegmentAtom);
+
+  if (currentAnalysis && currentHistorySegment) {
+    const { id, source } = currentAnalysis;
+    const list = { user: userAnalysisListAtom, sample: sampleAnalysisListAtom };
+    set(list[source], (prev) => {
+      return prev.map((analysis) =>
+        analysis.id === id
+          ? { ...analysis, rootSegment: currentHistorySegment }
+          : analysis,
+      );
+    });
+  }
+});

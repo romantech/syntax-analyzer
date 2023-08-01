@@ -5,6 +5,7 @@ import {
 } from '@/store/controlPanelStore';
 import { DOMAttributes, MouseEvent } from 'react';
 import { getNearestElementByClass } from '@/utils/selection';
+import { RESET } from 'jotai/utils';
 
 type ConstituentMouseEventType = 'onMouseOver' | 'onMouseLeave';
 type UseConstituentHoverReturnType = Pick<
@@ -24,7 +25,7 @@ export default function useConstituentHover(): UseConstituentHoverReturnType {
     }
   };
 
-  const onMouseLeave = () => setHoveredConstituent(null);
+  const onMouseLeave = () => setHoveredConstituent(RESET);
 
   return { onMouseOver, onMouseLeave };
 }

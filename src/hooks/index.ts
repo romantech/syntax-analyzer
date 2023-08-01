@@ -7,3 +7,4 @@ export { default as useIsMounted } from './useIsMounted';
 export { default as useSyntaxParserAnalysis } from './useSyntaxParserAnalysis';
 export { default as useSetCurrentAnalysisFromUrl } from './useSetCurrentAnalysisFromUrl';
 export { default as useTransitionLoading } from './useTransitionLoading';
+export { default as useInitializeSyntaxEditor } from './useInitializeSyntaxEditor';

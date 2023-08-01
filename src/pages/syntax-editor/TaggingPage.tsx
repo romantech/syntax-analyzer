@@ -1,8 +1,12 @@
 import { ControlPanel, Notice, SyntaxParser, TagList } from '@/components';
 import { Box, Flex, Stack } from '@chakra-ui/react';
-import { useSetCurrentAnalysisFromUrl } from '@/hooks';
+import {
+  useInitializeSyntaxEditor,
+  useSetCurrentAnalysisFromUrl,
+} from '@/hooks';
 
 export default function TaggingPage() {
+  useInitializeSyntaxEditor();
   useSetCurrentAnalysisFromUrl();
 
   return (
