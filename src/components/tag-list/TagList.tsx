@@ -11,7 +11,7 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import { CONSTITUENT_CATEGORIES } from '@/constants/constituents';
-import { TagButton } from './tag-list';
+import TagButton from './TagButton';
 
 export default function TagList({ ...accordionProps }: AccordionProps) {
   return (

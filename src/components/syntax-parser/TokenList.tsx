@@ -1,5 +1,5 @@
 import { isPunctuation } from '@/utils/string';
-import { Token } from '@/components/syntax-parser';
+import Token from './Token';
 
 interface TokensProps {
   sentence: string[];

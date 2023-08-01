@@ -7,14 +7,13 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { IoSaveSharp } from 'react-icons/io5';
-import {
-  AbbrInfoSwitch,
-  DeleteButton,
-  RedoButton,
-  TagInfoSwitch,
-  UndoButton,
-} from '@/components/control-panel';
+
 import { useIsMounted } from '@/hooks';
+import TagInfoSwitch from './TagInfoSwitch';
+import AbbrInfoSwitch from './AbbrInfoSwitch';
+import DeleteButton from './DeleteButton';
+import UndoButton from './UndoButton';
+import RedoButton from './RedoButton';
 
 /**
  * atomWithStorage를 사용했을 때. Jotai는 초기값을 로컬 스토리지 값을 기준으로함

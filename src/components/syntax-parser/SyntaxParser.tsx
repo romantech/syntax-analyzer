@@ -2,10 +2,13 @@ import { SlideFade } from '@chakra-ui/react';
 import { useRef } from 'react';
 import '@/styles/constituent.scss';
 import { useCalculateNestingLevel } from '@/hooks';
-import { SegmentList, Sentence, TokenList } from '@/components/syntax-parser';
+
 import { useAtomValue } from 'jotai';
 import { currentSegmentAtom } from '@/store/segmentHistoryStore';
 import { currentSentenceAtom } from '@/store/analysisStore';
+import TokenList from './TokenList';
+import Sentence from './Sentence';
+import SegmentList from './SegmentList';
 
 export default function SyntaxParser() {
   const sentenceRef = useRef<HTMLParagraphElement>(null);

@@ -1,6 +1,5 @@
+import { ControlPanel, Notice, SyntaxParser, TagList } from '@/components';
 import { Box, Flex, Stack } from '@chakra-ui/react';
-import { Notice } from '@/components/common';
-import { ControlPanel, SyntaxParser, TagList } from '@/components';
 
 export default function TaggingPage() {
   return (

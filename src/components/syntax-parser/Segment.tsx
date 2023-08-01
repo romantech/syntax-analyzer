@@ -1,7 +1,7 @@
 import React, { Fragment, PropsWithChildren } from 'react';
 import { Segment as TSegment } from '@/types/analysis';
-import { Constituent } from '@/components/syntax-parser';
 import { isMultipleTokensInRange } from '@/utils/constituent';
+import Constituent from './Constituent';
 
 interface SegmentProps {
   segment: TSegment;

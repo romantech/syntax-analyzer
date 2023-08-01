@@ -2,8 +2,6 @@ import {
   Box,
   Card,
   CardBody,
-  HStack,
-  Icon,
   Stack,
   StackDivider,
   Tab,
@@ -11,10 +9,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
-  TextProps,
   useDisclosure,
-  VStack,
 } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
@@ -22,24 +17,15 @@ import {
   currentAnalysisIndexAtom,
   removeUserAnalysisActionAtom,
 } from '@/store/analysisStore';
-import { tokenJoiner } from '@/utils/string';
-import { ConfirmModal, DateChip, DeleteIconButton } from '@/components/common';
+import { ConfirmModal } from '@/components/common';
 import React, { Fragment, useRef } from 'react';
 import { CurrentAnalysisInfo } from '@/types/analysis';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { SENTENCE_TABS } from '@/constants/tabList';
-import { TbMoodEmpty } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 import { getSyntaxTaggingPath } from '@/constants/siteUrls';
-
-const SentenceNotAdded = ({ ...textProps }: TextProps) => {
-  return (
-    <Text display="flex" alignItems="center" {...textProps}>
-      아직 추가한 문장이 없어요
-      <Icon as={TbMoodEmpty} />
-    </Text>
-  );
-};
+import FallbackSentence from './FallbackSentence';
+import DeletableSentence from './DeletableSentence';
 
 export default function SentenceList() {
   const selected = useRef<CurrentAnalysisInfo>();
@@ -50,7 +36,7 @@ export default function SentenceList() {
   const setCurrentAnalysisIndex = useSetAtom(currentAnalysisIndexAtom);
   const removeUserAnalysis = useSetAtom(removeUserAnalysisActionAtom);
 
-  const onClick = (analysisInfo: CurrentAnalysisInfo) => {
+  const onSentenceClick = (analysisInfo: CurrentAnalysisInfo) => {
     onOpen();
     selected.current = analysisInfo;
   };
@@ -81,28 +67,21 @@ export default function SentenceList() {
                   <Card variant="outline" maxH={460} overflowY="auto">
                     <CardBody p={2.5}>
                       <Stack divider={<StackDivider />}>
-                        {isEmpty && <SentenceNotAdded gap={2} p={1.5} />}
+                        {isEmpty && <FallbackSentence gap={2} p={1.5} />}
                         {combinedAnalysisList[source].map(
-                          ({ id, createdAt, sentence }, index) => (
-                            <VStack key={id} align="start" gap={0} p={1.5}>
-                              <HStack w="full" justify="space-between">
-                                <DateChip date={createdAt} h={5} />
-                                <DeleteIconButton
-                                  onConfirm={() => removeUserAnalysis(id)}
-                                  hidden={source === 'sample'}
-                                  popoverHeader="선택한 문장을 삭제하시겠습니까?"
-                                />
-                              </HStack>
-                              <Text
-                                noOfLines={1}
-                                cursor="pointer"
-                                _hover={{ color: 'blue.300' }}
-                                onClick={() => onClick({ source, index, id })}
-                              >
-                                {tokenJoiner(sentence)}
-                              </Text>
-                            </VStack>
-                          ),
+                          ({ id, createdAt, sentence }, index) => {
+                            const analysisInfo = { index, source, id };
+                            return (
+                              <DeletableSentence
+                                key={id}
+                                createdAt={createdAt}
+                                sentence={sentence}
+                                hideDeleteButton={source === 'sample'}
+                                onClick={() => onSentenceClick(analysisInfo)}
+                                onDelete={() => removeUserAnalysis(id)}
+                              />
+                            );
+                          },
                         )}
                       </Stack>
                     </CardBody>

@@ -1,7 +1,6 @@
+import { AddSentence, Notice, SentenceList } from '@/components';
 import { useIsMounted } from '@/hooks';
 import { HStack, SlideFade, VStack } from '@chakra-ui/react';
-import { Notice } from '@/components/common';
-import { AddSentence, SentenceList } from '@/components';
 
 export default function SentenceManagerPage() {
   const isMounted = useIsMounted();
