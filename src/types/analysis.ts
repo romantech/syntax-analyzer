@@ -30,8 +30,10 @@ export type Analysis = {
 
 export type AnalysisSourceType = 'user' | 'sample';
 
-export type CurrentAnalysisInfo = {
+export type AnalysisInfo = {
   source: AnalysisSourceType;
   index: number;
   id: string;
 };
+
+export type CombinedAnalysisList = { [key in AnalysisSourceType]: Analysis[] };

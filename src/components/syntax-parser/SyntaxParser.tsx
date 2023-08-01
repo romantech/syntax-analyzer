@@ -1,23 +1,18 @@
-import { SlideFade } from '@chakra-ui/react';
+import { SlideFade, Text } from '@chakra-ui/react';
 import { useRef } from 'react';
 import '@/styles/constituent.scss';
 import { useCalculateNestingLevel } from '@/hooks';
-
-import { useAtomValue } from 'jotai';
-import { currentSegmentAtom } from '@/store/segmentHistoryStore';
-import { currentSentenceAtom } from '@/store/analysisStore';
 import TokenList from './TokenList';
 import Sentence from './Sentence';
 import SegmentList from './SegmentList';
+import useSyntaxParserAnalysis from '../../hooks/useSyntaxParserAnalysis';
 
 export default function SyntaxParser() {
   const sentenceRef = useRef<HTMLParagraphElement>(null);
   const isNestingLevelCalculated = useCalculateNestingLevel(sentenceRef);
 
-  const segment = useAtomValue(currentSegmentAtom);
-  const sentence = useAtomValue(currentSentenceAtom);
-  const hasAnalysisData = segment && sentence;
-  if (!hasAnalysisData) return null;
+  const { segment, sentence } = useSyntaxParserAnalysis();
+  if (!segment || !sentence) return <Text>선택한 문장이 없어요</Text>;
 
   return (
     <SlideFade in={isNestingLevelCalculated} offsetY={100}>

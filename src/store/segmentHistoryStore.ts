@@ -24,19 +24,19 @@ export const segmentHistoryAtom = atomWithDefault<Segment[]>((get) => {
   return currentAnalysis ? [currentAnalysis.rootSegment] : [];
 });
 
-export const currentSegmentAtom = atom<Nullable<Segment>>((get) => {
+export const currentHistorySegmentAtom = atom<Nullable<Segment>>((get) => {
   const history = get(segmentHistoryAtom);
   const index = get(segmentHistoryIndexAtom);
   return history[index] ?? null;
 });
 
 export const hasAddedTagAtom = atom((get) => {
-  const currentSegment = get(currentSegmentAtom);
+  const currentSegment = get(currentHistorySegmentAtom);
   return Boolean(currentSegment?.children.length);
 });
 
 export const updateSegmentHistoryAndIndexAtom = atom(
-  (get) => get(currentSegmentAtom),
+  (get) => get(currentHistorySegmentAtom),
   (get, set, updatedSegment: Segment) => {
     const cleanedSegment = removeEmptySegment(updatedSegment);
     const filledSegment = fillSegment(cleanedSegment, updatedSegment.end);

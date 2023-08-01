@@ -14,12 +14,12 @@ import {
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   combinedAnalysisListAtom,
-  currentAnalysisIndexAtom,
   removeUserAnalysisActionAtom,
+  setCurrentAnalysisAtom,
 } from '@/store/analysisStore';
 import { ConfirmModal } from '@/components/common';
 import React, { Fragment, useRef } from 'react';
-import { CurrentAnalysisInfo } from '@/types/analysis';
+import { AnalysisInfo } from '@/types/analysis';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { SENTENCE_TABS } from '@/constants/tabList';
 import { useNavigate } from 'react-router-dom';
@@ -28,22 +28,22 @@ import FallbackSentence from './FallbackSentence';
 import DeletableSentence from './DeletableSentence';
 
 export default function SentenceList() {
-  const selected = useRef<CurrentAnalysisInfo>();
+  const selected = useRef<AnalysisInfo>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
   const combinedAnalysisList = useAtomValue(combinedAnalysisListAtom);
-  const setCurrentAnalysisIndex = useSetAtom(currentAnalysisIndexAtom);
+  const setCurrentAnalysis = useSetAtom(setCurrentAnalysisAtom);
   const removeUserAnalysis = useSetAtom(removeUserAnalysisActionAtom);
 
-  const onSentenceClick = (analysisInfo: CurrentAnalysisInfo) => {
+  const onSentenceClick = (analysisInfo: AnalysisInfo) => {
     onOpen();
     selected.current = analysisInfo;
   };
 
   const onSelectSentenceConfirm = () => {
     if (selected.current) {
-      setCurrentAnalysisIndex(selected.current);
+      setCurrentAnalysis(selected.current);
       onClose();
       navigate(getSyntaxTaggingPath(selected.current.id));
     }
