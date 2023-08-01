@@ -21,7 +21,7 @@ export const sampleAnalysisListAtom = atomWithStorage<Analysis[]>(
   sampleAnalysisList,
 );
 
-export const combinedAnalysisListAtom = atomWithDefault<CombinedAnalysisList>(
+export const analysisListBySourceAtom = atomWithDefault<CombinedAnalysisList>(
   (get) => ({
     user: get(userAnalysisListAtom),
     sample: get(sampleAnalysisListAtom),
@@ -29,7 +29,7 @@ export const combinedAnalysisListAtom = atomWithDefault<CombinedAnalysisList>(
 );
 
 export const combinedAnalysisMapAtom = atomWithDefault((get) => {
-  const combinedList = get(combinedAnalysisListAtom);
+  const combinedList = get(analysisListBySourceAtom);
   const map: CombinedAnalysisMap = {};
 
   Object.values(combinedList)

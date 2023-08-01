@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
-  combinedAnalysisListAtom,
+  analysisListBySourceAtom,
   currentAnalysisAtom,
   removeUserAnalysisActionAtom,
 } from '@/store/analysisStore';
@@ -33,7 +33,7 @@ export default function SentenceList() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
-  const combinedAnalysisList = useAtomValue(combinedAnalysisListAtom);
+  const combinedAnalysisList = useAtomValue(analysisListBySourceAtom);
   const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
   const removeUserAnalysis = useSetAtom(removeUserAnalysisActionAtom);
 
