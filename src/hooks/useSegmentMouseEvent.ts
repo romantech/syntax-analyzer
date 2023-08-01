@@ -25,8 +25,8 @@ export default function useSegmentMouseEvent() {
     hoverRef.current = element;
     hoverRef.current.style.color = DELETE_MODE_HOVER_COLOR_SCHEME(colorMode);
 
-    const { constituent, constituentId } = hoverRef.current.dataset;
-    setTargetInfo({ constituent, constituentId });
+    const { constituentLabel, constituentId } = hoverRef.current.dataset;
+    setTargetInfo({ constituentLabel, constituentId });
   };
 
   const onMouseOver = (event: MouseEvent<HTMLElement>) => {

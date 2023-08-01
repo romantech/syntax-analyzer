@@ -1,6 +1,10 @@
 export type ConstituentType = 'clause' | 'phrase' | 'token' | 'token-group';
 
-type ConstituentDataSetKey = 'constituent' | 'constituentId';
+type ConstituentDataSetKey =
+  | 'constituentLabel'
+  | 'constituentId'
+  | 'constituentAbbr'
+  | 'tokenIndex';
 export type ConstituentDataSet = { [key in ConstituentDataSetKey]?: string };
 
 export type Constituent = {
