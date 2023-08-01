@@ -45,8 +45,8 @@ export const currentAnalysisAtom = atom<Nullable<Analysis>>(null);
 
 export const addUserAnalysisActionAtom = atom(
   null,
-  (get, set, sentence: string) => {
-    const analysis = generateAnalysis(sentence);
+  (get, set, { sentence, source }) => {
+    const analysis = generateAnalysis(sentence, source);
     set(userAnalysisListAtom, (prev) => [analysis, ...prev]);
   },
 );

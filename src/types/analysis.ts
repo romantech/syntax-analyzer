@@ -12,6 +12,7 @@ export type Constituent = {
   comment?: string; // Optional comment
 };
 export type ConstituentWithoutId = Omit<Constituent, 'id'>;
+export type AnalysisSourceType = 'user' | 'sample';
 
 export type Segment = {
   id: number; // A random 9-digit number
@@ -23,11 +24,11 @@ export type Segment = {
 
 export type Analysis = {
   id: string; // A random string of 21 bytes
+  source: AnalysisSourceType; // Source of the sentence
   createdAt: string; // ISO 8601 format
   sentence: string[]; // Tokenized sentence
   rootSegment: Segment; // The array contains only a single root segment
 };
 
-export type AnalysisSourceType = 'user' | 'sample';
 export type CombinedAnalysisList = { [key in AnalysisSourceType]: Analysis[] };
 export type CombinedAnalysisMap = { [id: string]: Analysis };

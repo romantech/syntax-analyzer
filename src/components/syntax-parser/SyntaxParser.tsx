@@ -1,19 +1,31 @@
-import { SlideFade } from '@chakra-ui/react';
-import { useRef } from 'react';
-import '@/styles/constituent.scss';
+import { startTransition, useEffect, useRef, useState } from 'react';
 import { useCalculateNestingLevel, useSyntaxParserAnalysis } from '@/hooks';
-import TokenList from './TokenList';
-import Sentence from './Sentence';
-import SegmentList from './SegmentList';
-import { TextPlaceholder } from '@/components';
+import { SlideFade, Spinner } from '@chakra-ui/react';
+import TokenList from '@/components/syntax-parser/TokenList';
+import Sentence from '@/components/syntax-parser/Sentence';
+import SegmentList from '@/components/syntax-parser/SegmentList';
 import { TbMoodEmpty } from 'react-icons/tb';
+import { TextPlaceholder } from '@/components';
+import '@/styles/constituent.scss';
 
 export default function SyntaxParser() {
   const sentenceRef = useRef<HTMLParagraphElement>(null);
-  const isNestingLevelCalculated = useCalculateNestingLevel(sentenceRef);
   const { segment, sentence } = useSyntaxParserAnalysis();
+  const noData = !segment || !sentence;
 
-  if (!segment || !sentence) {
+  const [isLoading, setIsLoading] = useState(true);
+  const isNestingLevelCalculated = useCalculateNestingLevel({
+    targetRef: sentenceRef,
+    trigger: isLoading,
+  });
+
+  useEffect(() => {
+    startTransition(() => setIsLoading(false));
+  }, [noData]);
+
+  if (isLoading) return <Spinner size="md" thickness="3px" color="blue.300" />;
+
+  if (noData) {
     return (
       <TextPlaceholder
         fontSize="3xl"

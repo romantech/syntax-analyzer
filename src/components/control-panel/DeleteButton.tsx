@@ -8,7 +8,7 @@ import { BsFillEraserFill } from 'react-icons/bs';
 
 export default function DeleteButton() {
   const [isDeleteMode, toggleDeleteMode] = useAtom(toggleDeleteModeActionAtom);
-  const isDisabled = useAtomValue(isDisableDeleteButtonAtom);
+  const isDisableDeleteButton = useAtomValue(isDisableDeleteButtonAtom);
 
   return (
     <IconButton
@@ -17,7 +17,7 @@ export default function DeleteButton() {
       aria-label="Delete Tag"
       icon={<BsFillEraserFill />}
       onClick={toggleDeleteMode}
-      isDisabled={isDisabled}
+      isDisabled={isDisableDeleteButton}
     />
   );
 }

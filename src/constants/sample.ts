@@ -2,6 +2,7 @@ import { Analysis } from '@/types/analysis';
 
 const sampleAnalysis1: Analysis = {
   id: 'YW6AX-AOZb2-xYXt05xkn',
+  source: 'sample',
   createdAt: '2023-05-10T23:08:08.000Z',
   sentence: [
     'Global',
@@ -133,6 +134,7 @@ const sampleAnalysis1: Analysis = {
 };
 const sampleAnalysis2: Analysis = {
   id: 'FoG2oo3NGMpb9daQcYtOn',
+  source: 'sample',
   createdAt: '2023-05-09T23:08:08.000Z',
   sentence: [
     'After',
@@ -185,14 +187,14 @@ const sampleAnalysis2: Analysis = {
             ],
             children: [],
           },
-          {
-            id: 453912874,
-            begin: 4,
-            end: 5,
-            constituents: [],
-            children: [],
-          },
         ],
+      },
+      {
+        id: 3512349612,
+        begin: 4,
+        end: 5,
+        constituents: [],
+        children: [],
       },
       {
         id: 238492678,
@@ -246,34 +248,35 @@ const sampleAnalysis2: Analysis = {
             children: [],
           },
           {
-            id: 198493218,
+            id: 3829912938,
             begin: 11,
             end: 13,
             constituents: [
               {
-                id: 892743923,
                 elementId: 9,
                 label: 'complement',
                 abbreviation: 'c',
-                type: 'token',
+                type: 'token-group',
+                id: 3125563656,
               },
             ],
             children: [],
           },
-          {
-            id: 913829476,
-            begin: 13,
-            end: 14,
-            constituents: [],
-            children: [],
-          },
         ],
+      },
+      {
+        id: 2123884184,
+        begin: 13,
+        end: 14,
+        constituents: [],
+        children: [],
       },
     ],
   },
 };
 const sampleAnalysis3: Analysis = {
   id: 'poAWpn8l7laknHPG7VLXz',
+  source: 'sample',
   createdAt: '2023-05-08T23:08:08.000Z',
   sentence: [
     'Experts',
@@ -450,6 +453,7 @@ const sampleAnalysis3: Analysis = {
 };
 const sampleAnalysis4: Analysis = {
   id: '5ykRceJ5NZwvTT5H2SXTU',
+  source: 'sample',
   createdAt: '2023-05-07T23:08:08.000Z',
   sentence: [
     'Many',
@@ -633,6 +637,7 @@ const sampleAnalysis4: Analysis = {
 };
 const sampleAnalysis5: Analysis = {
   id: 'rEo6EErtakVY5qYZNFdUA',
+  source: 'sample',
   createdAt: '2023-05-06T23:08:08.000Z',
   sentence: [
     'I',

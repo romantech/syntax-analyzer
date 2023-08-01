@@ -42,7 +42,7 @@ export default function AddSentence() {
   const onConfirm = () => {
     const input = inputRef.current;
     if (!input) return;
-    addAnalysis(input.value.trim());
+    addAnalysis({ sentence: input.value.trim(), source: 'user' });
     input.value = '';
     onClose();
   };

@@ -79,7 +79,9 @@ export default function SentenceList() {
                           createdAt={analysis.createdAt}
                           sentence={analysis.sentence}
                           hideDeleteButton={source === 'sample'}
-                          onClick={() => onSentenceClick(analysis)}
+                          onClick={() =>
+                            onSentenceClick({ ...analysis, source })
+                          }
                           onDelete={() => removeUserAnalysis(analysis.id)}
                         />
                       ))}

@@ -4,13 +4,17 @@ import {
   combinedAnalysisMapAtom,
   currentAnalysisAtom,
 } from '@/store/analysisStore';
+import { useEffect } from 'react';
 
 export default function useSetCurrentAnalysisFromUrl() {
   const { id } = useParams();
   const combinedAnalysisMap = useAtomValue(combinedAnalysisMapAtom);
   const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
-  if (!id) return;
 
-  const foundAnalysis = combinedAnalysisMap[id];
-  if (foundAnalysis) setCurrentAnalysis(foundAnalysis);
+  useEffect(() => {
+    if (id) {
+      const foundAnalysis = combinedAnalysisMap[id];
+      if (foundAnalysis) setCurrentAnalysis(foundAnalysis);
+    }
+  }, [id, combinedAnalysisMap, setCurrentAnalysis]);
 }

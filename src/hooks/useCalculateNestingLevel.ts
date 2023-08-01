@@ -4,9 +4,15 @@ import { calculateNestingLevel } from '@/utils/nestingLevels';
 import { useAtomValue } from 'jotai';
 import { segmentHistoryIndexAtom } from '@/store/segmentHistoryStore';
 
-export default function useCalculateNestingLevel(
-  targetRef: RefObject<HTMLElement>,
-) {
+interface UseCalculateNestedLevelProps {
+  targetRef: RefObject<HTMLElement>;
+  trigger?: unknown;
+}
+
+export default function useCalculateNestingLevel({
+  targetRef,
+  trigger,
+}: UseCalculateNestedLevelProps) {
   const [isNestingLevelCalculated, setNestingLevelCalculated] = useBoolean();
   const segmentHistoryIndex = useAtomValue(segmentHistoryIndexAtom);
 
@@ -15,7 +21,7 @@ export default function useCalculateNestingLevel(
       calculateNestingLevel(targetRef);
       setNestingLevelCalculated.on();
     }
-  }, [setNestingLevelCalculated, targetRef, segmentHistoryIndex]);
+  }, [targetRef, trigger, segmentHistoryIndex, setNestingLevelCalculated]);
 
   return isNestingLevelCalculated;
 }
