@@ -82,7 +82,7 @@ export const undoRedoActionAtom = atom(
   },
 );
 
-export const isTouchedAtom = atom((get) => {
+export const isSegmentTouchedAtom = atom((get) => {
   const currentAnalysis = get(currentAnalysisAtom)?.rootSegment;
   const currentHistorySegment = get(currentHistorySegmentAtom);
   return currentAnalysis !== currentHistorySegment;

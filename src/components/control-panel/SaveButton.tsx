@@ -1,11 +1,14 @@
 import { IoSaveSharp } from 'react-icons/io5';
 import { IconButton, useToast } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { isTouchedAtom, saveSegmentAtom } from '@/store/segmentHistoryStore';
+import {
+  isSegmentTouchedAtom,
+  saveSegmentAtom,
+} from '@/store/segmentHistoryStore';
 import { useState } from 'react';
 
 export default function SaveButton() {
-  const isTouched = useAtomValue(isTouchedAtom);
+  const isTouched = useAtomValue(isSegmentTouchedAtom);
   const [isLoading, setIsLoading] = useState(false);
   const saveSegment = useSetAtom(saveSegmentAtom);
   const toast = useToast();
