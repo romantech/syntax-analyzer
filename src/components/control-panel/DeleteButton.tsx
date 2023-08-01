@@ -3,7 +3,7 @@ import {
   isDisableDeleteButtonAtom,
   toggleDeleteModeActionAtom,
 } from '@/store/controlPanelStore';
-import { IconButton } from '@chakra-ui/react';
+import { IconButton, Tooltip } from '@chakra-ui/react';
 import { BsFillEraserFill } from 'react-icons/bs';
 
 export default function DeleteButton() {
@@ -11,13 +11,15 @@ export default function DeleteButton() {
   const isDisableDeleteButton = useAtomValue(isDisableDeleteButtonAtom);
 
   return (
-    <IconButton
-      variant="solid"
-      colorScheme={isDeleteMode ? 'blue' : 'gray'}
-      aria-label="Delete Tag"
-      icon={<BsFillEraserFill />}
-      onClick={toggleDeleteMode}
-      isDisabled={isDisableDeleteButton}
-    />
+    <Tooltip label="태그 삭제" openDelay={200}>
+      <IconButton
+        variant="solid"
+        colorScheme={isDeleteMode ? 'blue' : 'gray'}
+        aria-label="Delete Tag"
+        icon={<BsFillEraserFill />}
+        onClick={toggleDeleteMode}
+        isDisabled={isDisableDeleteButton}
+      />
+    </Tooltip>
   );
 }

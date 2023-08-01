@@ -1,5 +1,5 @@
 import { IoSaveSharp } from 'react-icons/io5';
-import { IconButton, useToast } from '@chakra-ui/react';
+import { IconButton, Tooltip, useToast } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   isSegmentTouchedAtom,
@@ -32,13 +32,15 @@ export default function SaveButton() {
   };
 
   return (
-    <IconButton
-      variant="solid"
-      aria-label="Save your tagging result"
-      icon={<IoSaveSharp />}
-      onClick={onClick}
-      isDisabled={!isTouched}
-      isLoading={isLoading}
-    />
+    <Tooltip label="태깅 저장" openDelay={200}>
+      <IconButton
+        variant="solid"
+        aria-label="Save your tagging result"
+        icon={<IoSaveSharp />}
+        onClick={onClick}
+        isDisabled={!isTouched}
+        isLoading={isLoading}
+      />
+    </Tooltip>
   );
 }
