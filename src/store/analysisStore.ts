@@ -60,12 +60,6 @@ export const removeUserAnalysisActionAtom = atom(
   },
 );
 
-export const currentSentenceAtom = atom<Nullable<string[]>>((get) => {
-  const currentAnalysis = get(currentAnalysisAtom);
-  if (!currentAnalysis) return null;
-  return currentAnalysis.sentence;
-});
-
 export const invalidRangeIndexAtom = atom<Nullable<number>>(null);
 export const setAndClearInvalidRangeIndexAtom = atom(
   null,

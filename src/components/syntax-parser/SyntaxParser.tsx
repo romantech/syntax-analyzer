@@ -27,13 +27,6 @@ export default function SyntaxParser() {
 
   return (
     <SlideFade in={isNestingLevelCalculated} offsetY={100}>
-      <TextPlaceholder
-        fontSize="3xl"
-        fontWeight="bold"
-        pl={4}
-        text="선택한 문장이 없어요"
-        endIcon={TbMoodEmpty}
-      />
       <Sentence ref={sentenceRef}>
         <SegmentList
           segment={segment}

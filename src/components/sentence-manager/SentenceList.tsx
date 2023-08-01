@@ -61,36 +61,33 @@ export default function SentenceList() {
           </TabList>
 
           <TabPanels pt={4}>
-            {SENTENCE_TABS.map(({ source, label }) => {
-              const isEmpty = !combinedAnalysisList[source].length;
-              return (
-                <TabPanel p={0} key={label}>
-                  <Card variant="outline" maxH={460} overflowY="auto">
-                    <CardBody p={2.5}>
-                      <Stack divider={<StackDivider />}>
+            {SENTENCE_TABS.map(({ source, label }) => (
+              <TabPanel p={0} key={label}>
+                <Card variant="outline" maxH={460} overflowY="auto">
+                  <CardBody p={2.5}>
+                    <Stack divider={<StackDivider />}>
+                      {!combinedAnalysisList[source].length && (
                         <TextPlaceholder
                           p={1.5}
                           text="아직 추가한 문장이 없어요"
-                          hidden={!isEmpty}
                           endIcon={TbMoodEmpty}
                         />
-
-                        {combinedAnalysisList[source].map((analysis) => (
-                          <DeletableSentence
-                            key={analysis.id}
-                            createdAt={analysis.createdAt}
-                            sentence={analysis.sentence}
-                            hideDeleteButton={source === 'sample'}
-                            onClick={() => onSentenceClick(analysis)}
-                            onDelete={() => removeUserAnalysis(analysis.id)}
-                          />
-                        ))}
-                      </Stack>
-                    </CardBody>
-                  </Card>
-                </TabPanel>
-              );
-            })}
+                      )}
+                      {combinedAnalysisList[source].map((analysis) => (
+                        <DeletableSentence
+                          key={analysis.id}
+                          createdAt={analysis.createdAt}
+                          sentence={analysis.sentence}
+                          hideDeleteButton={source === 'sample'}
+                          onClick={() => onSentenceClick(analysis)}
+                          onDelete={() => removeUserAnalysis(analysis.id)}
+                        />
+                      ))}
+                    </Stack>
+                  </CardBody>
+                </Card>
+              </TabPanel>
+            ))}
           </TabPanels>
         </Tabs>
       </Box>
