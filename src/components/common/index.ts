@@ -3,3 +3,4 @@ export { default as Notice } from './Notice';
 export { default as DeleteIconButton } from './DeleteIconButton';
 export { default as Loading } from './Loading';
 export { default as DateChip } from './DateChip';
+export { default as TextPlaceholder } from './TextPlaceholder';

@@ -24,8 +24,9 @@ import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { SENTENCE_TABS } from '@/constants/tabList';
 import { useNavigate } from 'react-router-dom';
 import { getSyntaxTaggingPath } from '@/constants/siteUrls';
-import FallbackSentence from './FallbackSentence';
 import DeletableSentence from './DeletableSentence';
+import { TextPlaceholder } from '@/components';
+import { TbMoodEmpty } from 'react-icons/tb';
 
 export default function SentenceList() {
   const selectedAnalysis = useRef<Analysis>();
@@ -67,7 +68,13 @@ export default function SentenceList() {
                   <Card variant="outline" maxH={460} overflowY="auto">
                     <CardBody p={2.5}>
                       <Stack divider={<StackDivider />}>
-                        {isEmpty && <FallbackSentence gap={2} p={1.5} />}
+                        <TextPlaceholder
+                          p={1.5}
+                          text="아직 추가한 문장이 없어요"
+                          hidden={!isEmpty}
+                          endIcon={TbMoodEmpty}
+                        />
+
                         {combinedAnalysisList[source].map((analysis) => (
                           <DeletableSentence
                             key={analysis.id}
