@@ -5,3 +5,4 @@ export { default as useConstituentHover } from './useConstituentHover';
 export { default as useSentenceHandlers } from './useSentenceHandlers';
 export { default as useIsMounted } from './useIsMounted';
 export { default as useSyntaxParserAnalysis } from './useSyntaxParserAnalysis';
+export { default as useSetCurrentAnalysisFromUrl } from './useSetCurrentAnalysisFromUrl';

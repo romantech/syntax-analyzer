@@ -14,12 +14,12 @@ import {
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   combinedAnalysisListAtom,
+  currentAnalysisAtom,
   removeUserAnalysisActionAtom,
-  setCurrentAnalysisAtom,
 } from '@/store/analysisStore';
 import { ConfirmModal } from '@/components/common';
 import React, { Fragment, useRef } from 'react';
-import { AnalysisInfo } from '@/types/analysis';
+import { Analysis } from '@/types/analysis';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { SENTENCE_TABS } from '@/constants/tabList';
 import { useNavigate } from 'react-router-dom';
@@ -28,24 +28,24 @@ import FallbackSentence from './FallbackSentence';
 import DeletableSentence from './DeletableSentence';
 
 export default function SentenceList() {
-  const selected = useRef<AnalysisInfo>();
+  const selectedAnalysis = useRef<Analysis>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
   const combinedAnalysisList = useAtomValue(combinedAnalysisListAtom);
-  const setCurrentAnalysis = useSetAtom(setCurrentAnalysisAtom);
+  const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
   const removeUserAnalysis = useSetAtom(removeUserAnalysisActionAtom);
 
-  const onSentenceClick = (analysisInfo: AnalysisInfo) => {
+  const onSentenceClick = (analysis: Analysis) => {
     onOpen();
-    selected.current = analysisInfo;
+    selectedAnalysis.current = analysis;
   };
 
   const onSelectSentenceConfirm = () => {
-    if (selected.current) {
-      setCurrentAnalysis(selected.current);
+    if (selectedAnalysis.current) {
+      setCurrentAnalysis(selectedAnalysis.current);
       onClose();
-      navigate(getSyntaxTaggingPath(selected.current.id));
+      navigate(getSyntaxTaggingPath(selectedAnalysis.current.id));
     }
   };
 
@@ -68,21 +68,16 @@ export default function SentenceList() {
                     <CardBody p={2.5}>
                       <Stack divider={<StackDivider />}>
                         {isEmpty && <FallbackSentence gap={2} p={1.5} />}
-                        {combinedAnalysisList[source].map(
-                          ({ id, createdAt, sentence }, index) => {
-                            const analysisInfo = { index, source, id };
-                            return (
-                              <DeletableSentence
-                                key={id}
-                                createdAt={createdAt}
-                                sentence={sentence}
-                                hideDeleteButton={source === 'sample'}
-                                onClick={() => onSentenceClick(analysisInfo)}
-                                onDelete={() => removeUserAnalysis(id)}
-                              />
-                            );
-                          },
-                        )}
+                        {combinedAnalysisList[source].map((analysis) => (
+                          <DeletableSentence
+                            key={analysis.id}
+                            createdAt={analysis.createdAt}
+                            sentence={analysis.sentence}
+                            hideDeleteButton={source === 'sample'}
+                            onClick={() => onSentenceClick(analysis)}
+                            onDelete={() => removeUserAnalysis(analysis.id)}
+                          />
+                        ))}
                       </Stack>
                     </CardBody>
                   </Card>

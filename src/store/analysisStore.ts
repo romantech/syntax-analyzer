@@ -1,5 +1,9 @@
 import { atomWithDefault, atomWithStorage } from 'jotai/utils';
-import { Analysis, AnalysisInfo, CombinedAnalysisList } from '@/types/analysis';
+import {
+  Analysis,
+  CombinedAnalysisList,
+  CombinedAnalysisMap,
+} from '@/types/analysis';
 import { Nullable } from '@/types/common';
 import { atom } from 'jotai';
 import { INVALID_POPUP_DELAY } from '@/constants/config';
@@ -24,15 +28,20 @@ export const combinedAnalysisListAtom = atomWithDefault<CombinedAnalysisList>(
   }),
 );
 
-export const currentAnalysisAtom = atom<Nullable<Analysis>>(null);
+export const combinedAnalysisMapAtom = atomWithDefault((get) => {
+  const combinedList = get(combinedAnalysisListAtom);
+  const map: CombinedAnalysisMap = {};
 
-export const setCurrentAnalysisAtom = atom(
-  null,
-  (get, set, analysisInfo: AnalysisInfo) => {
-    const { source, index } = analysisInfo;
-    set(currentAnalysisAtom, get(combinedAnalysisListAtom)[source][index]);
-  },
-);
+  Object.values(combinedList)
+    .flat()
+    .forEach((analysis) => {
+      map[analysis.id] = analysis;
+    });
+
+  return map;
+});
+
+export const currentAnalysisAtom = atom<Nullable<Analysis>>(null);
 
 export const addUserAnalysisActionAtom = atom(
   null,

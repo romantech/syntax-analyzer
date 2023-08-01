@@ -1,7 +1,10 @@
 import { ControlPanel, Notice, SyntaxParser, TagList } from '@/components';
 import { Box, Flex, Stack } from '@chakra-ui/react';
+import { useSetCurrentAnalysisFromUrl } from '@/hooks';
 
 export default function TaggingPage() {
+  useSetCurrentAnalysisFromUrl();
+
   return (
     <Flex direction="column" minH="full" overflowX="auto" py={2} gap={8}>
       <Stack>
