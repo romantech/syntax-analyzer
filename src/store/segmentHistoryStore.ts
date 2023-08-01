@@ -96,10 +96,9 @@ export const saveSegmentAtom = atom(null, (get, set) => {
   const { id, source } = currentAnalysis;
   const list = { user: userAnalysisListAtom, sample: sampleAnalysisListAtom };
   set(list[source], (prev) => {
-    return prev.map((analysis) =>
-      analysis.id === id
-        ? { ...analysis, rootSegment: currentHistorySegment }
-        : analysis,
-    );
+    const idx = prev.findIndex((analysis) => analysis.id === id);
+    if (idx === -1) return prev;
+    prev[idx] = { ...prev[idx], rootSegment: currentHistorySegment };
+    return [...prev];
   });
 });
