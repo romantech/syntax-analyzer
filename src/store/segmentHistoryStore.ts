@@ -88,7 +88,7 @@ export const isSegmentTouchedAtom = atom((get) => {
   return currentAnalysis !== currentHistorySegment;
 });
 
-export const saveSegmentAtom = atom(null, (get, set) => {
+export const saveHistorySegmentAtom = atom(null, (get, set) => {
   const currentAnalysis = get(currentAnalysisAtom);
   const currentHistorySegment = get(currentHistorySegmentAtom);
   if (!currentAnalysis || !currentHistorySegment) return;

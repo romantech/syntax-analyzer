@@ -3,32 +3,33 @@ import { IconButton, Tooltip, useToast } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   isSegmentTouchedAtom,
-  saveSegmentAtom,
+  saveHistorySegmentAtom,
 } from '@/store/segmentHistoryStore';
 import { useState } from 'react';
+import {
+  SAVE_SEGMENT_DELAY,
+  SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
+} from '@/constants/config';
 
 export default function SaveButton() {
   const isTouched = useAtomValue(isSegmentTouchedAtom);
   const [isLoading, setIsLoading] = useState(false);
-  const saveSegment = useSetAtom(saveSegmentAtom);
+  const saveHistorySegment = useSetAtom(saveHistorySegmentAtom);
   const toast = useToast();
 
   const onClick = () => {
     setIsLoading(true);
-    saveSegment();
+    saveHistorySegment();
     setTimeout(() => {
       setIsLoading(false);
       toast({
         title: '저장 성공',
         status: 'success',
-        duration: 5000,
+        duration: SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
         isClosable: true,
-        containerStyle: {
-          position: 'relative',
-          bottom: 5,
-        },
+        containerStyle: { position: 'relative', bottom: 5 },
       });
-    }, 1000);
+    }, SAVE_SEGMENT_DELAY);
   };
 
   return (
