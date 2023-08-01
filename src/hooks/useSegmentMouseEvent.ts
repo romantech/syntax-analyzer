@@ -16,6 +16,7 @@ export default function useSegmentMouseEvent() {
     if (hoverRef.current && isDeleteMode) {
       hoverRef.current.style.removeProperty('color');
       hoverRef.current = null;
+      setTargetInfo(null);
     }
   };
 
