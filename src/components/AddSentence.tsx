@@ -19,12 +19,10 @@ import { ConfirmModal } from '@/components/common';
 import { PiTextTBold } from 'react-icons/pi';
 
 export default function AddSentence() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isError, setIsError] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const errorMessage = useRef('');
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const addAnalysis = useSetAtom(addUserAnalysisActionAtom);
 
   const onSubmit = async () => {
@@ -36,8 +34,7 @@ export default function AddSentence() {
       onOpen();
     } catch (err) {
       if (err instanceof ValidationError) {
-        errorMessage.current = err.errors[0];
-        setIsError(true);
+        setErrorMessage(err.errors[0]);
       }
     }
   };
@@ -49,6 +46,8 @@ export default function AddSentence() {
     input.value = '';
     onClose();
   };
+
+  const isError = Boolean(errorMessage);
 
   return (
     <Fragment>
@@ -63,14 +62,15 @@ export default function AddSentence() {
                 ref={inputRef}
                 placeholder="90자 미만의 영어 문장을 입력해주세요"
                 maxLength={90}
-                onFocus={() => setIsError(false)}
+                onFocus={() => setErrorMessage('')}
               />
             </InputGroup>
-            {isError ? (
-              <FormErrorMessage>{errorMessage.current}</FormErrorMessage>
-            ) : (
-              <FormHelperText>{`축약 표현은 자동으로 풀어집니다 e.g. I'll -> I will`}</FormHelperText>
-            )}
+            <FormErrorMessage hidden={!isError}>
+              {errorMessage}
+            </FormErrorMessage>
+            <FormHelperText
+              hidden={isError}
+            >{`축약 표현은 자동으로 풀어집니다 (I'll → I will)`}</FormHelperText>
           </Box>
           <Button size="lg" onClick={onSubmit}>
             추가
