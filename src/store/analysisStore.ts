@@ -1,5 +1,5 @@
 import { atomWithDefault, atomWithStorage } from 'jotai/utils';
-import { Analysis, CurrentAnalysisIndex } from '@/types/analysis';
+import { Analysis, CurrentAnalysisInfo } from '@/types/analysis';
 import { Nullable } from '@/types/common';
 import { atom } from 'jotai';
 import { INVALID_POPUP_DELAY } from '@/constants/config';
@@ -23,7 +23,7 @@ export const combinedAnalysisListAtom = atomWithDefault((get) => ({
 }));
 
 export const currentAnalysisIndexAtom =
-  atom<Nullable<CurrentAnalysisIndex>>(null);
+  atom<Nullable<CurrentAnalysisInfo>>(null);
 
 export const addUserAnalysisActionAtom = atom(
   null,
@@ -45,9 +45,9 @@ export const removeUserAnalysisActionAtom = atom(
 export const currentAnalysisAtom = atom<Nullable<Analysis>>((get) => {
   const current = get(currentAnalysisIndexAtom);
   if (!current) return null;
-  const { from, index } = current;
+  const { source, index } = current;
   const analysisList = get(combinedAnalysisListAtom);
-  return analysisList[from][index];
+  return analysisList[source][index];
 });
 
 export const currentSentenceAtom = atom<Nullable<string[]>>((get) => {

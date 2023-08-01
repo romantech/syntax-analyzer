@@ -28,9 +28,10 @@ export type Analysis = {
   rootSegment: Segment; // The array contains only a single root segment
 };
 
-export type AnalysisFromType = 'user' | 'sample';
+export type AnalysisSourceType = 'user' | 'sample';
 
-export type CurrentAnalysisIndex = {
-  from: AnalysisFromType;
+export type CurrentAnalysisInfo = {
+  source: AnalysisSourceType;
   index: number;
+  id: string;
 };

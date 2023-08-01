@@ -5,6 +5,10 @@ export const SITE_URLS = {
   },
   SYNTAX_EDITOR: {
     ROOT: '/syntax-editor',
-    TAGGING: '/syntax-editor/tagging',
+    SENTENCE: '/syntax-editor/sentence',
+    TAGGING: '/syntax-editor/sentence/:id',
   },
 } as const;
+
+export const getSyntaxTaggingPath = (id: string) =>
+  `${SITE_URLS.SYNTAX_EDITOR.SENTENCE}/${id}`;

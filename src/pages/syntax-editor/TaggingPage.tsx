@@ -2,7 +2,7 @@ import { Box, Flex, Stack } from '@chakra-ui/react';
 import { Notice } from '@/components/common';
 import { ControlPanel, SyntaxParser, TagList } from '@/components';
 
-export default function SyntaxEditor() {
+export default function TaggingPage() {
   return (
     <Flex direction="column" minH="full" overflowX="auto" py={2} gap={8}>
       <Stack>

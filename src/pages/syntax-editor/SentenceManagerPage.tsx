@@ -3,7 +3,7 @@ import { HStack, SlideFade, VStack } from '@chakra-ui/react';
 import { Notice } from '@/components/common';
 import { AddSentence, SentenceList } from '@/components';
 
-export default function SentenceManager() {
+export default function SentenceManagerPage() {
   const isMounted = useIsMounted();
 
   return (

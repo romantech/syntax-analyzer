@@ -1,5 +1,5 @@
 import { SITE_URLS } from '@/constants/siteUrls';
-import { AnalysisFromType } from '@/types/analysis';
+import { AnalysisSourceType } from '@/types/analysis';
 
 export const NAV_TABS = [
   {
@@ -19,8 +19,8 @@ export const NAV_TABS = [
   },
 ] as const;
 
-type SentenceTab = { label: string; from: AnalysisFromType };
+type SentenceTab = { label: string; source: AnalysisSourceType };
 export const SENTENCE_TABS: SentenceTab[] = [
-  { label: '추가한 문장', from: 'user' },
-  { label: '샘플 문장', from: 'sample' },
+  { label: '추가한 문장', source: 'user' },
+  { label: '샘플 문장', source: 'sample' },
 ];
