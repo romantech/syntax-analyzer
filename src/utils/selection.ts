@@ -37,3 +37,8 @@ export const getBeginEndIdxFromSelection = (
 
   return { begin, end };
 };
+
+export const clearSelection = () => {
+  const selection = window.getSelection();
+  selection?.removeAllRanges();
+};

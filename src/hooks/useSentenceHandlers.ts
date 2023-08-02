@@ -3,7 +3,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { deleteModeAtom, selectedTagAtom } from '@/store/controlPanelStore';
 import { addConstituent, removeConstituent } from '@/utils/segment';
 import { updateSegmentHistoryAndIndexAtom } from '@/store/segmentHistoryStore';
-import { getBeginEndIdxFromSelection } from '@/utils/selection';
+import { clearSelection, getBeginEndIdxFromSelection } from '@/utils/selection';
 import { generateConstituent } from '@/utils/constituent';
 import { setAndClearInvalidRangeIndexAtom } from '@/store/analysisStore';
 
@@ -23,8 +23,7 @@ export default function useSentenceHandlers() {
       const { begin, end } = getBeginEndIdxFromSelection();
       const onInvalid = () => {
         setAndClearInvalidIndex(end - 1);
-        const selection = window.getSelection();
-        selection?.removeAllRanges();
+        clearSelection();
       };
       const updatedSegment = addConstituent(
         currentSegment,

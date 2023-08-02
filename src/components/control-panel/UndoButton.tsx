@@ -2,9 +2,15 @@ import { undoRedoActionAtom } from '@/store/segmentHistoryStore';
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { ImUndo } from 'react-icons/im';
 import { useAtom } from 'jotai';
+import { clearSelection } from '@/utils/selection';
 
 export default function UndoButton() {
   const [actionable, action] = useAtom(undoRedoActionAtom);
+  const onClick = () => {
+    action('undo');
+    clearSelection();
+  };
+
   return (
     <Tooltip label="실행 취소" openDelay={200}>
       <IconButton
@@ -12,7 +18,7 @@ export default function UndoButton() {
         aria-label="Undo the last action"
         icon={<ImUndo />}
         isDisabled={!actionable.undo}
-        onClick={() => action('undo')}
+        onClick={onClick}
       />
     </Tooltip>
   );
