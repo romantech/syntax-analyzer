@@ -28,7 +28,7 @@ export const segmentHistoryAtom = atomWithDefault<Segment[]>((get) => {
   return currentAnalysis ? [currentAnalysis.rootSegment] : [];
 });
 
-export const resetSegmentHistoryAtom = atom(null, (get, set) => {
+export const resetSegmentHistoryAtom = atom(null, (_, set) => {
   set(segmentHistoryAtom, RESET);
   set(segmentHistoryIndexAtom, RESET);
 });

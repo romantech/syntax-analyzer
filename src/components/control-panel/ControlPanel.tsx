@@ -6,7 +6,8 @@ import AbbrInfoSwitch from './AbbrInfoSwitch';
 import DeleteButton from './DeleteButton';
 import UndoButton from './UndoButton';
 import RedoButton from './RedoButton';
-import SaveButton from '@/components/control-panel/SaveButton';
+import SaveButton from './SaveButton';
+import ResetButton from './ResetButton';
 
 /**
  * atomWithStorage를 사용했을 때. Jotai는 초기값을 로컬 스토리지 값을 기준으로함
@@ -33,8 +34,10 @@ export default function ControlPanel() {
             sx={{
               '::-webkit-scrollbar': { display: 'none' },
             }}
+            justify="space-between"
           >
             <DeleteButton />
+            <ResetButton />
             <UndoButton />
             <RedoButton />
             <SaveButton />

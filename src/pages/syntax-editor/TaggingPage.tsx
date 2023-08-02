@@ -6,7 +6,7 @@ import {
 } from '@/hooks';
 
 export default function TaggingPage() {
-  useInitializeSyntaxEditor();
+  useInitializeSyntaxEditor({ autoReset: true });
   useSetCurrentAnalysisFromUrl();
 
   return (

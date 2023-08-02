@@ -1,14 +1,25 @@
 import { useResetAtom } from 'jotai/utils';
 import { resetSegmentHistoryAtom } from '@/store/segmentHistoryStore';
 import { resetControlPanelAtom } from '@/store/controlPanelStore';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
-export default function useInitializeSyntaxEditor() {
+interface UseInitializeSyntaxEditorProps {
+  autoReset?: boolean;
+}
+
+export default function useInitializeSyntaxEditor({
+  autoReset = false,
+}: UseInitializeSyntaxEditorProps = {}) {
   const resetSegmentHistory = useResetAtom(resetSegmentHistoryAtom);
   const resetControlPanel = useResetAtom(resetControlPanelAtom);
 
+  const initializer = useCallback(() => {
+    [resetSegmentHistory, resetControlPanel].forEach((reset) => reset());
+  }, [resetControlPanel, resetSegmentHistory]);
+
   useEffect(() => {
-    resetSegmentHistory();
-    resetControlPanel();
-  });
+    if (autoReset) initializer();
+  }, [autoReset, initializer]);
+
+  return initializer;
 }
