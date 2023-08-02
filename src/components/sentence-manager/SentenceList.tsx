@@ -1,5 +1,4 @@
 import {
-  Box,
   Card,
   CardBody,
   Stack,
@@ -65,49 +64,47 @@ export default function SentenceList({
 
   return (
     <Fragment>
-      <Box borderRadius="lg" borderWidth={1} w="full" maxW="container.md" p={4}>
-        <Tabs
-          defaultIndex={DEFAULT_SENTENCE_LIST_TAB}
-          index={tabIndex}
-          onChange={onTabChange}
-        >
-          <TabList>
-            {SENTENCE_TABS.map(({ label }) => (
-              <Tab key={label}>{label}</Tab>
-            ))}
-          </TabList>
+      <Tabs
+        defaultIndex={DEFAULT_SENTENCE_LIST_TAB}
+        index={tabIndex}
+        onChange={onTabChange}
+      >
+        <TabList>
+          {SENTENCE_TABS.map(({ label }) => (
+            <Tab key={label}>{label}</Tab>
+          ))}
+        </TabList>
 
-          <TabPanels pt={4}>
-            {SENTENCE_TABS.map(({ source, label }) => (
-              <TabPanel p={0} key={label}>
-                <Card variant="outline" maxH={460} overflowY="auto">
-                  <CardBody p={2.5}>
-                    <Stack divider={<StackDivider />}>
-                      {!combinedAnalysisList[source].length && (
-                        <TextPlaceholder
-                          p={1.5}
-                          text="아직 추가한 문장이 없어요"
-                          endIcon={TbMoodEmpty}
-                        />
-                      )}
-                      {combinedAnalysisList[source].map((analysis, index) => (
-                        <DeletableSentence
-                          key={analysis.id}
-                          createdAt={analysis.createdAt}
-                          sentence={analysis.sentence}
-                          hideDeleteButton={source === 'sample'}
-                          onClick={() => onSentenceClick({ analysis, index })}
-                          onDelete={() => removeUserAnalysis(analysis.id)}
-                        />
-                      ))}
-                    </Stack>
-                  </CardBody>
-                </Card>
-              </TabPanel>
-            ))}
-          </TabPanels>
-        </Tabs>
-      </Box>
+        <TabPanels pt={4}>
+          {SENTENCE_TABS.map(({ source, label }) => (
+            <TabPanel p={0} key={label}>
+              <Card variant="outline" maxH={460} overflowY="auto">
+                <CardBody p={2.5}>
+                  <Stack divider={<StackDivider />}>
+                    {!combinedAnalysisList[source].length && (
+                      <TextPlaceholder
+                        p={1.5}
+                        text="아직 추가한 문장이 없어요"
+                        endIcon={TbMoodEmpty}
+                      />
+                    )}
+                    {combinedAnalysisList[source].map((analysis, index) => (
+                      <DeletableSentence
+                        key={analysis.id}
+                        createdAt={analysis.createdAt}
+                        sentence={analysis.sentence}
+                        hideDeleteButton={source === 'sample'}
+                        onClick={() => onSentenceClick({ analysis, index })}
+                        onDelete={() => removeUserAnalysis(analysis.id)}
+                      />
+                    ))}
+                  </Stack>
+                </CardBody>
+              </Card>
+            </TabPanel>
+          ))}
+        </TabPanels>
+      </Tabs>
       <ConfirmModal
         isOpen={isOpen}
         onClose={onClose}

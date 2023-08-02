@@ -24,7 +24,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
   ) {
     return (
       <Box flexGrow={1}>
-        <InputGroup size="lg">
+        <InputGroup>
           <InputLeftElement pointerEvents="none">
             <PiTextTBold />
           </InputLeftElement>
@@ -36,7 +36,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
           />
         </InputGroup>
         <FormErrorMessage>{errorMessage}</FormErrorMessage>
-        <FormHelperText>{helperMessage}</FormHelperText>
+        <FormHelperText color="gray.500">{helperMessage}</FormHelperText>
       </Box>
     );
   },
