@@ -10,73 +10,66 @@ import {
   InputLeftElement,
   useDisclosure,
 } from '@chakra-ui/react';
-import React, { Fragment, useRef, useState } from 'react';
-import { ValidationError } from 'yup';
+import React, { Fragment } from 'react';
 import { addSentenceSchema } from '@/constants/scheme';
 import { addUserAnalysisActionAtom } from '@/store/analysisStore';
 import { useSetAtom } from 'jotai';
 import { ConfirmModal } from '@/components/common';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { PiTextTBold } from 'react-icons/pi';
+import { useForm } from 'react-hook-form';
+import { DevTool } from '@hookform/devtools';
+
+const DEFAULT_VALUE = { sentence: '' };
 
 export default function AddSentence() {
-  const [errorMessage, setErrorMessage] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const {
+    register,
+    control,
+    handleSubmit,
+    getValues,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<typeof DEFAULT_VALUE>({
+    resolver: yupResolver(addSentenceSchema),
+    defaultValues: DEFAULT_VALUE,
+  });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const addAnalysis = useSetAtom(addUserAnalysisActionAtom);
 
-  const onSubmit = async () => {
-    const input = inputRef.current;
-    if (!input) return;
-
-    try {
-      await addSentenceSchema.validate(input.value.trim());
-      onOpen();
-    } catch (err) {
-      if (err instanceof ValidationError) {
-        setErrorMessage(err.errors[0]);
-      }
-    }
-  };
-
   const onConfirm = () => {
-    const input = inputRef.current;
-    if (!input) return;
-    addAnalysis({ sentence: input.value.trim(), source: 'user' });
-    input.value = '';
+    addAnalysis({ sentence: getValues('sentence'), source: 'user' });
+    reset();
     onClose();
   };
 
-  const isError = Boolean(errorMessage);
-
   return (
     <Fragment>
-      <FormControl isInvalid={isError}>
-        <HStack align="start">
-          <Box flexGrow={1}>
-            <InputGroup size="lg">
-              <InputLeftElement pointerEvents="none">
-                <PiTextTBold />
-              </InputLeftElement>
-              <Input
-                ref={inputRef}
-                placeholder="90자 미만의 영어 문장을 입력해주세요"
-                maxLength={90}
-                onFocus={() => setErrorMessage('')}
-              />
-            </InputGroup>
-            <FormErrorMessage hidden={!isError}>
-              {errorMessage}
-            </FormErrorMessage>
-            <FormHelperText
-              hidden={isError}
-            >{`축약 표현은 자동으로 풀어집니다 (I'll → I will)`}</FormHelperText>
-          </Box>
-          <Button size="lg" onClick={onSubmit}>
-            추가
-          </Button>
-        </HStack>
-      </FormControl>
+      <form onSubmit={handleSubmit(onOpen)} style={{ width: '100%' }}>
+        <FormControl isInvalid={!!errors.sentence}>
+          <HStack align="start">
+            <Box flexGrow={1}>
+              <InputGroup size="lg">
+                <InputLeftElement pointerEvents="none">
+                  <PiTextTBold />
+                </InputLeftElement>
+                <Input
+                  {...register('sentence')}
+                  placeholder="90자 미만의 영어 문장을 입력해주세요"
+                  maxLength={90}
+                />
+              </InputGroup>
+              <FormErrorMessage>{errors.sentence?.message}</FormErrorMessage>
+              <FormHelperText>{`축약 표현은 자동으로 풀어집니다 (I'll → I will)`}</FormHelperText>
+            </Box>
+            <Button size="lg" type="submit" isLoading={isSubmitting}>
+              추가
+            </Button>
+          </HStack>
+        </FormControl>
+      </form>
+      <DevTool control={control} />
       <ConfirmModal
         isOpen={isOpen}
         onClose={onClose}
