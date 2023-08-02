@@ -32,7 +32,16 @@ type AnalysisInfo = {
   index: number;
   analysis: Analysis;
 };
-export default function SentenceList() {
+
+interface SentenceListProps {
+  tabIndex?: number;
+  onTabChange?: (index: number) => void;
+}
+
+export default function SentenceList({
+  tabIndex,
+  onTabChange,
+}: SentenceListProps) {
   const selectedAnalysis = useRef<AnalysisInfo>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
@@ -57,7 +66,11 @@ export default function SentenceList() {
   return (
     <Fragment>
       <Box borderRadius="lg" borderWidth={1} w="full" maxW="container.md" p={4}>
-        <Tabs defaultIndex={DEFAULT_SENTENCE_LIST_TAB}>
+        <Tabs
+          defaultIndex={DEFAULT_SENTENCE_LIST_TAB}
+          index={tabIndex}
+          onChange={onTabChange}
+        >
           <TabList>
             {SENTENCE_TABS.map(({ label }) => (
               <Tab key={label}>{label}</Tab>

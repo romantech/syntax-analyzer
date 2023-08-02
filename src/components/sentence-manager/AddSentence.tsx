@@ -19,10 +19,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { PiTextTBold } from 'react-icons/pi';
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
+import { VoidFunc } from '@/types/common';
 
 const DEFAULT_VALUE = { sentence: '' };
 
-export default function AddSentence() {
+interface AddSentenceProps {
+  onConfirmEffect?: VoidFunc;
+}
+
+export default function AddSentence({ onConfirmEffect }: AddSentenceProps) {
   const {
     register,
     control,
@@ -42,6 +47,7 @@ export default function AddSentence() {
     addAnalysis({ sentence: getValues('sentence'), source: 'user' });
     reset();
     onClose();
+    onConfirmEffect?.();
   };
 
   return (

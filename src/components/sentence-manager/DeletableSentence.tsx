@@ -1,7 +1,9 @@
-import { HStack, StackProps, Text, VStack } from '@chakra-ui/react';
+import { Badge, Box, HStack, StackProps, Text, VStack } from '@chakra-ui/react';
 import { DateChip, DeleteIconButton } from '@/components/common';
 import { tokenJoiner } from '@/utils/string';
 import React from 'react';
+import { isLessThanAgo } from '@/utils/dates';
+import { NEW_BADGE_DISPLAY_DURATION } from '@/constants/config';
 
 interface DeletableSentenceProps extends StackProps {
   onClick: () => void;
@@ -22,7 +24,14 @@ export default function DeletableSentence({
   return (
     <VStack align="start" gap={0} p={1.5} {...stackProps}>
       <HStack w="full" justify="space-between">
-        <DateChip date={createdAt} h={5} />
+        <HStack gap={2.5}>
+          <DateChip date={createdAt} h={5} />
+          {isLessThanAgo(createdAt, NEW_BADGE_DISPLAY_DURATION) && (
+            <Badge fontSize="8px" colorScheme="green">
+              New
+            </Badge>
+          )}
+        </HStack>
         <DeleteIconButton
           onConfirm={onDelete}
           hidden={hideDeleteButton}

@@ -6,3 +6,11 @@ export const getFormattedKoDate = (isoString: string) => {
   if (!isValid(date)) throw new Error(`Invalid ISO string: ${isoString}`);
   return format(date, 'PPP(eee) p', { locale: ko });
 };
+
+export const isLessThanAgo = (targetDate: string, offsetInSeconds: number) => {
+  const currentTime = Date.now();
+  const targetTime = parseISO(targetDate).getTime();
+  const differenceInSeconds = (currentTime - targetTime) / 1000;
+
+  return differenceInSeconds <= offsetInSeconds;
+};
