@@ -1,20 +1,21 @@
 import { useParams } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
-  combinedAnalysisMapAtom,
+  analysisListBySourceAtom,
   currentAnalysisAtom,
 } from '@/store/analysisStore';
 import { useEffect } from 'react';
+import { AnalysisParams } from '@/types/analysis';
 
 export default function useSetCurrentAnalysisFromUrl() {
-  const { id } = useParams();
-  const combinedAnalysisMap = useAtomValue(combinedAnalysisMapAtom);
+  const { source, index } = useParams<AnalysisParams>();
+  const analysisListBySource = useAtomValue(analysisListBySourceAtom);
   const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
 
   useEffect(() => {
-    if (id) {
-      const foundAnalysis = combinedAnalysisMap[id];
-      if (foundAnalysis) setCurrentAnalysis(foundAnalysis);
+    if (source && index) {
+      const currentAnalysis = analysisListBySource[source][+index];
+      if (currentAnalysis) setCurrentAnalysis(currentAnalysis);
     }
-  }, [id, combinedAnalysisMap, setCurrentAnalysis]);
+  }, [analysisListBySource, setCurrentAnalysis, source, index]);
 }

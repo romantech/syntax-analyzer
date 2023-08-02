@@ -10,16 +10,23 @@ import {
   SAVE_SEGMENT_DELAY,
   SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
 } from '@/constants/config';
+import { useParams } from 'react-router-dom';
+import { AnalysisParams } from '@/types/analysis';
 
 export default function SaveButton() {
-  const isTouched = useAtomValue(isSegmentTouchedAtom);
-  const [isLoading, setIsLoading] = useState(false);
-  const saveHistorySegment = useSetAtom(saveHistorySegmentAtom);
   const toast = useToast();
+  const { source, index } = useParams<AnalysisParams>();
+
+  const isTouched = useAtomValue(isSegmentTouchedAtom);
+  const saveHistorySegment = useSetAtom(saveHistorySegmentAtom);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const onClick = () => {
+    if (!source || !index) return;
+
     setIsLoading(true);
-    saveHistorySegment();
+    saveHistorySegment({ source, index });
     setTimeout(() => {
       setIsLoading(false);
       toast({

@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { Segment } from '@/types/analysis';
+import { AnalysisParams, Segment } from '@/types/analysis';
 import { atomWithDefault, atomWithReset, RESET } from 'jotai/utils';
 import {
   currentAnalysisAtom,
@@ -88,17 +88,20 @@ export const isSegmentTouchedAtom = atom((get) => {
   return currentAnalysis !== currentHistorySegment;
 });
 
-export const saveHistorySegmentAtom = atom(null, (get, set) => {
-  const currentAnalysis = get(currentAnalysisAtom);
-  const currentHistorySegment = get(currentHistorySegmentAtom);
-  if (!currentAnalysis || !currentHistorySegment) return;
+export const saveHistorySegmentAtom = atom(
+  null,
+  (get, set, { source, index }: AnalysisParams) => {
+    const currentHistorySegment = get(currentHistorySegmentAtom);
+    if (!currentHistorySegment) return;
 
-  const { id, source } = currentAnalysis;
-  const list = { user: userAnalysisListAtom, sample: sampleAnalysisListAtom };
-  set(list[source], (prev) => {
-    const idx = prev.findIndex((analysis) => analysis.id === id);
-    if (idx === -1) return prev;
-    prev[idx] = { ...prev[idx], rootSegment: currentHistorySegment };
-    return [...prev];
-  });
-});
+    const analysisList = {
+      user: userAnalysisListAtom,
+      sample: sampleAnalysisListAtom,
+    };
+    set(analysisList[source], (prev) => {
+      const i = parseInt(index, 10);
+      prev[i] = { ...prev[i], rootSegment: currentHistorySegment };
+      return [...prev];
+    });
+  },
+);

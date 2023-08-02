@@ -36,3 +36,8 @@ export type Analysis = {
 
 export type CombinedAnalysisList = { [key in AnalysisSourceType]: Analysis[] };
 export type CombinedAnalysisMap = { [id: string]: Analysis };
+
+export type AnalysisParams = {
+  source: AnalysisSourceType;
+  index: string;
+};

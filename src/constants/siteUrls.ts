@@ -1,3 +1,5 @@
+import { AnalysisSourceType } from '@/types/analysis';
+
 export const SITE_URLS = {
   ROOT: '/',
   SYNTAX_ANALYZER: {
@@ -6,9 +8,15 @@ export const SITE_URLS = {
   SYNTAX_EDITOR: {
     ROOT: '/syntax-editor',
     SENTENCE: '/syntax-editor/sentence',
-    TAGGING: '/syntax-editor/sentence/:id',
+    TAGGING: '/syntax-editor/sentence/:source/:index',
   },
 } as const;
 
-export const getSyntaxTaggingPath = (id: string) =>
-  `${SITE_URLS.SYNTAX_EDITOR.SENTENCE}/${id}`;
+export const getSyntaxTaggingPath = (
+  source: AnalysisSourceType,
+  index: number,
+) =>
+  SITE_URLS.SYNTAX_EDITOR.TAGGING.replace(':source', source).replace(
+    ':index',
+    index.toString(),
+  );

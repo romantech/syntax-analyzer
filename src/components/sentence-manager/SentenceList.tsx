@@ -28,8 +28,12 @@ import DeletableSentence from './DeletableSentence';
 import { TextPlaceholder } from '@/components';
 import { TbMoodEmpty } from 'react-icons/tb';
 
+type AnalysisInfo = {
+  index: number;
+  analysis: Analysis;
+};
 export default function SentenceList() {
-  const selectedAnalysis = useRef<Analysis>();
+  const selectedAnalysis = useRef<AnalysisInfo>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
@@ -37,17 +41,17 @@ export default function SentenceList() {
   const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
   const removeUserAnalysis = useSetAtom(removeUserAnalysisActionAtom);
 
-  const onSentenceClick = (analysis: Analysis) => {
+  const onSentenceClick = (analysisInfo: AnalysisInfo) => {
     onOpen();
-    selectedAnalysis.current = analysis;
+    selectedAnalysis.current = analysisInfo;
   };
 
   const onSelectSentenceConfirm = () => {
-    if (selectedAnalysis.current) {
-      setCurrentAnalysis(selectedAnalysis.current);
-      onClose();
-      navigate(getSyntaxTaggingPath(selectedAnalysis.current.id));
-    }
+    if (!selectedAnalysis.current) return;
+
+    const { analysis, index } = selectedAnalysis.current;
+    setCurrentAnalysis(analysis);
+    navigate(getSyntaxTaggingPath(analysis.source, index));
   };
 
   return (
@@ -73,15 +77,13 @@ export default function SentenceList() {
                           endIcon={TbMoodEmpty}
                         />
                       )}
-                      {combinedAnalysisList[source].map((analysis) => (
+                      {combinedAnalysisList[source].map((analysis, index) => (
                         <DeletableSentence
                           key={analysis.id}
                           createdAt={analysis.createdAt}
                           sentence={analysis.sentence}
                           hideDeleteButton={source === 'sample'}
-                          onClick={() =>
-                            onSentenceClick({ ...analysis, source })
-                          }
+                          onClick={() => onSentenceClick({ analysis, index })}
                           onDelete={() => removeUserAnalysis(analysis.id)}
                         />
                       ))}
