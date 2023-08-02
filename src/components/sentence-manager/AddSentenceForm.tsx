@@ -1,25 +1,14 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Button, FormControl, HStack, useDisclosure } from '@chakra-ui/react';
 import React, { Fragment } from 'react';
 import { addSentenceSchema } from '@/constants/scheme';
 import { addUserAnalysisActionAtom } from '@/store/analysisStore';
 import { useSetAtom } from 'jotai';
 import { ConfirmModal } from '@/components/common';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { PiTextTBold } from 'react-icons/pi';
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { VoidFunc } from '@/types/common';
+import SentenceInput from './SentenceInput';
 
 const DEFAULT_VALUE = { sentence: '' };
 
@@ -27,7 +16,7 @@ interface AddSentenceProps {
   onConfirmEffect?: VoidFunc;
 }
 
-export default function AddSentence({ onConfirmEffect }: AddSentenceProps) {
+export default function AddSentenceForm({ onConfirmEffect }: AddSentenceProps) {
   const {
     register,
     control,
@@ -55,20 +44,10 @@ export default function AddSentence({ onConfirmEffect }: AddSentenceProps) {
       <form onSubmit={handleSubmit(onOpen)} style={{ width: '100%' }}>
         <FormControl isInvalid={!!errors.sentence}>
           <HStack align="start">
-            <Box flexGrow={1}>
-              <InputGroup size="lg">
-                <InputLeftElement pointerEvents="none">
-                  <PiTextTBold />
-                </InputLeftElement>
-                <Input
-                  {...register('sentence')}
-                  placeholder="90자 미만의 영어 문장을 입력해주세요"
-                  maxLength={90}
-                />
-              </InputGroup>
-              <FormErrorMessage>{errors.sentence?.message}</FormErrorMessage>
-              <FormHelperText>{`축약 표현은 자동으로 풀어집니다 (I'll → I will)`}</FormHelperText>
-            </Box>
+            <SentenceInput
+              {...register('sentence')}
+              errorMessage={errors.sentence?.message}
+            />
             <Button size="lg" type="submit" isLoading={isSubmitting}>
               추가
             </Button>

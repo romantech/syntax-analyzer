@@ -1,4 +1,4 @@
-import { AddSentence, Notice, SentenceList } from '@/components';
+import { AddSentenceForm, Notice, SentenceList } from '@/components';
 import { useIsMounted } from '@/hooks';
 import { HStack, SlideFade, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -18,7 +18,7 @@ export default function SentenceManagerPage() {
             p={1}
             text="문장을 직접 추가하거나 선택한 후 편집할 수 있어요"
           />
-          <AddSentence onConfirmEffect={() => setTabIndex(0)} />
+          <AddSentenceForm onConfirmEffect={() => setTabIndex(0)} />
         </VStack>
         <SentenceList tabIndex={tabIndex} onTabChange={(i) => setTabIndex(i)} />
       </HStack>
