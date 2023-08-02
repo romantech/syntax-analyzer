@@ -33,7 +33,7 @@ export default function Header() {
             </Heading>
           </Box>
           <Box ml={6}>
-            <Tabs variant="soft-rounded" defaultIndex={tabIndex}>
+            <Tabs variant="soft-rounded" index={tabIndex}>
               <TabList>
                 {NAV_TABS.map((tab) => (
                   <NavLink to={tab.path} key={tab.label}>

@@ -13,6 +13,7 @@ const router = createBrowserRouter([
   {
     path: SITE_URLS.ROOT,
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: SITE_URLS.ROOT,
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: SITE_URLS.SYNTAX_EDITOR.ROOT,
-            element: <Navigate to={SITE_URLS.SYNTAX_EDITOR.SENTENCE} replace />,
+            element: <SentenceManagerPage />,
           },
           {
             path: SITE_URLS.SYNTAX_EDITOR.SENTENCE,
@@ -38,11 +39,11 @@ const router = createBrowserRouter([
             path: SITE_URLS.SYNTAX_EDITOR.TAGGING,
             element: <TaggingPage />,
           },
+          {
+            path: '*',
+            element: <Navigate to={SITE_URLS.SYNTAX_EDITOR.SENTENCE} replace />,
+          },
         ],
-      },
-      {
-        path: '*',
-        element: <ErrorPage />,
       },
     ],
   },
