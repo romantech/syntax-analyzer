@@ -41,3 +41,6 @@ export type AnalysisParams = {
   source: AnalysisSourceType;
   index: string;
 };
+
+export type AnalysisModel = '3.5' | '4';
+export type AnalysisFormValues = { model: AnalysisModel; sentence: string };

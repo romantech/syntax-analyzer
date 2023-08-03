@@ -1,14 +1,19 @@
-import { Button, FormControl, HStack, useDisclosure } from '@chakra-ui/react';
-import React, { Fragment } from 'react';
+import {
+  Box,
+  Button,
+  FormControl,
+  HStack,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { addSentenceSchema } from '@/constants/scheme';
 import { addUserAnalysisActionAtom } from '@/store/analysisStore';
 import { useSetAtom } from 'jotai';
-import { ConfirmModal } from '@/components/common';
+import { ConfirmModal } from 'src/components/common';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { VoidFunc } from '@/types/common';
-import SentenceInput from './SentenceInput';
+import { SentenceInput } from '@/components';
 
 const DEFAULT_VALUE = { sentence: '' };
 
@@ -40,20 +45,18 @@ export default function AddSentenceForm({ onConfirmEffect }: AddSentenceProps) {
   };
 
   return (
-    <Fragment>
-      <form onSubmit={handleSubmit(onOpen)} style={{ width: '100%' }}>
-        <FormControl isInvalid={!!errors.sentence}>
-          <HStack align="start">
-            <SentenceInput
-              {...register('sentence')}
-              errorMessage={errors.sentence?.message}
-            />
-            <Button type="submit" isLoading={isSubmitting}>
-              추가
-            </Button>
-          </HStack>
-        </FormControl>
-      </form>
+    <Box as="form" onSubmit={handleSubmit(onOpen)} w="full">
+      <FormControl isInvalid={!!errors.sentence}>
+        <HStack align="start">
+          <SentenceInput
+            {...register('sentence')}
+            errorMessage={errors.sentence?.message}
+          />
+          <Button type="submit" isLoading={isSubmitting}>
+            추가
+          </Button>
+        </HStack>
+      </FormControl>
       <DevTool control={control} />
       <ConfirmModal
         isOpen={isOpen}
@@ -62,6 +65,6 @@ export default function AddSentenceForm({ onConfirmEffect }: AddSentenceProps) {
         headerContent="영어 문장 추가"
         bodyContent="입력한 영어 문장을 추가 하시겠습니까?"
       />
-    </Fragment>
+    </Box>
   );
 }

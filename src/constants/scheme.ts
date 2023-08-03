@@ -1,6 +1,6 @@
 import { ENGLISH_INPUT_PATTERN, THREE_WORDS_PATTERN } from '@/constants/regex';
 import * as yup from 'yup';
-import { Model } from '@/pages/SyntaxAnalyzerPage';
+import { AnalysisModel } from '@/types/analysis';
 
 const sentenceSchema = yup
   .string()
@@ -14,6 +14,6 @@ export const addSentenceSchema = yup.object({
 });
 
 export const analyzeSentenceSchema = yup.object({
-  model: yup.mixed<Model>().oneOf(['3.5', '4']).required(),
+  model: yup.mixed<AnalysisModel>().oneOf(['3.5', '4']).required(),
   sentence: sentenceSchema.required(),
 });

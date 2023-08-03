@@ -8,7 +8,7 @@ import {
   InputProps,
 } from '@chakra-ui/react';
 import { PiTextTBold } from 'react-icons/pi';
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 
 const DEFAULT_HELPER_MESSAGE = `축약 표현은 자동으로 풀어집니다 (I'll → I will)`;
 

@@ -16,7 +16,7 @@ import {
   currentAnalysisAtom,
   removeUserAnalysisActionAtom,
 } from '@/store/analysisStore';
-import { ConfirmModal } from '@/components/common';
+import { ConfirmModal } from 'src/components/common';
 import React, { Fragment, useRef } from 'react';
 import { Analysis } from '@/types/analysis';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
