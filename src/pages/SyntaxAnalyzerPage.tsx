@@ -25,7 +25,7 @@ import { DevTool } from '@hookform/devtools';
 export type Model = '3.5' | '4';
 type AnalyzeSentenceFormValues = { model: Model; sentence: string };
 const DEFAULT_VALUES: AnalyzeSentenceFormValues = {
-  model: '3.5',
+  model: '4',
   sentence: '',
 };
 

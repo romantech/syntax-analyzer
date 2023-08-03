@@ -3,13 +3,8 @@ import { Layout } from '@/layout';
 import { Loading } from '@/components';
 
 function App() {
-  const navigation = useNavigation();
-  return (
-    <Layout>
-      {navigation.state === 'loading' && <Loading />}
-      <Outlet />
-    </Layout>
-  );
+  const isLoading = useNavigation().state === 'loading';
+  return <Layout>{isLoading ? <Loading /> : <Outlet />}</Layout>;
 }
 
 export default App;
