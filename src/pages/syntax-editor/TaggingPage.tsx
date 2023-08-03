@@ -10,10 +10,10 @@ export default function TaggingPage() {
   useSetCurrentAnalysisFromUrl();
 
   return (
-    <Flex direction="column" minH="full" overflowX="auto" gap={8}>
+    <Stack minH="full" overflowX="auto" gap={8}>
       <Stack mt={5}>
         <Notice text="태그를 선택한 후 단어를 드래그 혹은 클릭 해주세요" />
-        <Flex minW="full" gap={6}>
+        <Flex gap={6}>
           <TagList flexGrow={1} />
           <ControlPanel />
         </Flex>
@@ -21,6 +21,6 @@ export default function TaggingPage() {
       <Box w="70%">
         <SyntaxParser />
       </Box>
-    </Flex>
+    </Stack>
   );
 }

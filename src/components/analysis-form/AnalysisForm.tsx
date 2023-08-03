@@ -15,7 +15,7 @@ import {
 import { DevTool } from '@hookform/devtools';
 import { AnalysisFormValues } from '@/types/analysis';
 import { SentenceInput } from '@/components';
-import FieldWithHeading from '@/components/analysis-form/FieldWithHeading';
+import FieldWithHeading from './FieldWithHeading';
 
 const DEFAULT_VALUES: AnalysisFormValues = {
   model: '4',
