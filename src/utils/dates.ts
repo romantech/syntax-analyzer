@@ -14,7 +14,7 @@ export const isLessThanAgo = (
 ) => {
   const currentTime = Date.now();
   const targetTime = parseISO(targetDate).getTime();
-  const differenceInSeconds = (currentTime - targetTime) / 1000;
+  const diffInSeconds = (currentTime - targetTime) / 1000;
 
-  return differenceInSeconds <= offsetInSeconds;
+  return diffInSeconds <= offsetInSeconds;
 };
