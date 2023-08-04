@@ -7,3 +7,4 @@ export const SAVE_SEGMENT_DELAY = 1000;
 export const SAVE_SEGMENT_SUCCESS_TOAST_DURATION = 5000;
 export const NEW_BADGE_DISPLAY_DURATION = 60 * 5; // seconds
 export const REMAINING_COUNT_STALE_TIME = 1000 * 60;
+export const MAX_ANALYSIS_COUNT = 12;

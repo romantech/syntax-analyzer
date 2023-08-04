@@ -5,36 +5,80 @@ import {
   CircularProgressLabel,
   Divider,
   HStack,
+  Skeleton,
+  SkeletonCircle,
+  Stack,
   StackProps,
   Text,
 } from '@chakra-ui/react';
-import { useAtomValue } from 'jotai/index';
-import { fingerprintAtom } from '@/store/userStore';
 import { useRemainingCountQuery } from '@/queries';
+import { MAX_ANALYSIS_COUNT } from '@/constants/config';
+import { fingerprintAtom } from '@/store/userStore';
+import { useAtomValue } from 'jotai';
+import { PropsWithChildren } from 'react';
+
+const AnalysisCounterBox = ({
+  children,
+  ...stackProps
+}: PropsWithChildren<StackProps>) => {
+  return (
+    <HStack borderWidth={1} borderRadius="2xl" p={4} w="full" {...stackProps}>
+      {children}
+    </HStack>
+  );
+};
+
+const AnalysisCounterSkeleton = () => {
+  return (
+    <AnalysisCounterBox>
+      <SkeletonCircle w={10} h={10} />
+      <Stack>
+        <Skeleton h={5} w={200} />
+        <Skeleton h={5} w={400} />
+      </Stack>
+    </AnalysisCounterBox>
+  );
+};
+
+const remainingCountInPercent = (count?: number) => {
+  if (!count) return 0;
+  return Math.round((100 / MAX_ANALYSIS_COUNT) * count);
+};
 
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
   const fingerprint = useAtomValue(fingerprintAtom);
-  const { data: count, isLoading } = useRemainingCountQuery(
+
+  const { data: count } = useRemainingCountQuery(
     { fingerprint },
-    { enabled: !!fingerprint, select: ({ count }) => count },
+    {
+      enabled: Boolean(fingerprint),
+      select: ({ count }) => count,
+      suspense: true,
+    },
   );
 
-  const remainingText = `남은 분석 횟수 ${count}/12회`;
+  const countTitle = `남은 분석 횟수 ${count}회`;
+  const limitDesc = `하루 최대 ${MAX_ANALYSIS_COUNT}회까지 분석할 수 있어요 (Model 4는 요청당 3회씩 차감)`;
 
   return (
-    <HStack borderWidth={1} borderRadius="2xl" p={4} w="full" {...stackProps}>
-      <CircularProgress size="40px" value={40} color="green.400">
-        <CircularProgressLabel fontSize={13}>4회</CircularProgressLabel>
+    <AnalysisCounterBox {...stackProps}>
+      <CircularProgress
+        size="40px"
+        value={remainingCountInPercent(count)}
+        color="green.400"
+      >
+        <CircularProgressLabel fontSize="xs">{count}</CircularProgressLabel>
       </CircularProgress>
+
       <Center height="40px" px={1}>
         <Divider orientation="vertical" />
       </Center>
       <Box>
-        <Text fontWeight="bold">{remainingText}</Text>
-        <Text>
-          하루 최대 12회까지 분석할 수 있어요(Model 4는 1번에 3회씩 차감)
-        </Text>
+        <Text fontWeight="bold">{countTitle}</Text>
+        <Text>{limitDesc}</Text>
       </Box>
-    </HStack>
+    </AnalysisCounterBox>
   );
 }
+
+AnalysisCounter.Skeleton = AnalysisCounterSkeleton;
