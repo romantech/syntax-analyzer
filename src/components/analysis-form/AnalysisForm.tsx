@@ -16,6 +16,7 @@ import { DevTool } from '@hookform/devtools';
 import { AnalysisFormValues } from '@/types/analysis';
 import { SentenceInput } from '@/components';
 import FieldWithHeading from './FieldWithHeading';
+import { useRemainingCount } from '@/hooks';
 
 const DEFAULT_VALUES: AnalysisFormValues = {
   model: '4',
@@ -32,6 +33,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     defaultValues: DEFAULT_VALUES,
     resolver: yupResolver(analyzeSentenceSchema),
   });
+  const { data: count } = useRemainingCount();
 
   const onSubmit: SubmitHandler<AnalysisFormValues> = (data) => {};
 
@@ -71,7 +73,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
               {...register('sentence')}
               errorMessage={errors.sentence?.message}
             />
-            <Button type="submit" isLoading={isSubmitting}>
+            <Button type="submit" isLoading={isSubmitting} isDisabled={!count}>
               분석
             </Button>
           </HStack>

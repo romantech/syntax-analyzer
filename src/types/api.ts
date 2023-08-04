@@ -25,4 +25,4 @@ export type MutationOptions<TData, TVariables> = UseMutationOptions<
 >;
 
 export type RemainingCountResponse = { count: number };
-export type RemainingCountParam = { fingerprint?: string };
+export type RemainingCountParam = { fingerprint: string };

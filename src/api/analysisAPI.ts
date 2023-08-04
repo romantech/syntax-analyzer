@@ -11,10 +11,10 @@ export const getRemainingCount = async <
   T = RemainingCountResponse,
   K = RemainingCountParam,
 >(
-  fingerprint?: K,
+  params: K,
 ) => {
   const { data } = await analysisInstance.get<T>('analysis/remaining', {
-    params: { fingerprint },
+    params,
   });
   return data;
 };

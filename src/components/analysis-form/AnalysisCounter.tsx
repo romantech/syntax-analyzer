@@ -11,11 +11,9 @@ import {
   StackProps,
   Text,
 } from '@chakra-ui/react';
-import { useRemainingCountQuery } from '@/queries';
 import { MAX_ANALYSIS_COUNT } from '@/constants/config';
-import { fingerprintAtom } from '@/store/userStore';
-import { useAtomValue } from 'jotai';
 import { PropsWithChildren } from 'react';
+import { useRemainingCount } from '@/hooks';
 
 const AnalysisCounterBox = ({
   children,
@@ -46,16 +44,7 @@ const remainingCountInPercent = (count?: number) => {
 };
 
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
-  const fingerprint = useAtomValue(fingerprintAtom);
-
-  const { data: count } = useRemainingCountQuery(
-    { fingerprint },
-    {
-      enabled: Boolean(fingerprint),
-      select: ({ count }) => count,
-      suspense: true,
-    },
-  );
+  const { data: count } = useRemainingCount();
 
   const countTitle = `남은 분석 횟수 ${count}회`;
   const limitDesc = `하루 최대 ${MAX_ANALYSIS_COUNT}회까지 분석할 수 있어요 (Model 4는 요청당 3회씩 차감)`;
