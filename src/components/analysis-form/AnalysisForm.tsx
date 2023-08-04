@@ -4,10 +4,12 @@ import { analyzeSentenceSchema } from '@/constants/scheme';
 import {
   Badge,
   Button,
+  ButtonProps,
   FormControl,
   HStack,
   Radio,
   RadioGroup,
+  Skeleton,
   Stack,
   StackProps,
   Text,
@@ -17,10 +19,21 @@ import { AnalysisFormValues } from '@/types/analysis';
 import { SentenceInput } from '@/components';
 import FieldWithHeading from './FieldWithHeading';
 import { useRemainingCount } from '@/hooks';
+import { Suspense } from 'react';
 
 const DEFAULT_VALUES: AnalysisFormValues = {
   model: '4',
   sentence: '',
+};
+
+const SubmitButton = ({ ...buttonProps }: ButtonProps) => {
+  const { data: count } = useRemainingCount();
+
+  return (
+    <Button type="submit" disabled={!count} {...buttonProps}>
+      분석
+    </Button>
+  );
 };
 
 export default function AnalysisForm({ ...stackProps }: StackProps) {
@@ -33,7 +46,6 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     defaultValues: DEFAULT_VALUES,
     resolver: yupResolver(analyzeSentenceSchema),
   });
-  const { data: count } = useRemainingCount();
 
   const onSubmit: SubmitHandler<AnalysisFormValues> = (data) => {};
 
@@ -73,9 +85,9 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
               {...register('sentence')}
               errorMessage={errors.sentence?.message}
             />
-            <Button type="submit" isLoading={isSubmitting} isDisabled={!count}>
-              분석
-            </Button>
+            <Suspense fallback={<Skeleton w="60px" h={10} borderRadius="md" />}>
+              <SubmitButton isLoading={isSubmitting} />
+            </Suspense>
           </HStack>
         </FieldWithHeading>
       </FormControl>

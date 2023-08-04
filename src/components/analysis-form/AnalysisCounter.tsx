@@ -31,8 +31,8 @@ const AnalysisCounterSkeleton = () => {
     <AnalysisCounterBox>
       <SkeletonCircle w={10} h={10} />
       <Stack>
-        <Skeleton h={5} w={200} />
-        <Skeleton h={5} w={400} />
+        <Skeleton h={5} w={200} borderRadius="md" />
+        <Skeleton h={5} w={400} borderRadius="md" />
       </Stack>
     </AnalysisCounterBox>
   );

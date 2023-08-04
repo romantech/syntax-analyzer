@@ -8,9 +8,7 @@ export default function SyntaxAnalyzerPage() {
       <Suspense fallback={<AnalysisCounter.Skeleton />}>
         <AnalysisCounter />
       </Suspense>
-      <Suspense>
-        <AnalysisForm />
-      </Suspense>
+      <AnalysisForm />
     </Stack>
   );
 }
