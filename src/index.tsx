@@ -5,15 +5,22 @@ import { RouterProvider } from 'react-router-dom';
 import router from '@/Router';
 import theme from '@/theme';
 import { DevTools } from 'jotai-devtools';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const rootElement = document.getElementById('root');
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(rootElement!).render(
   <React.StrictMode>
     <DevTools theme="dark" />
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </ChakraProvider>
   </React.StrictMode>,
 );

@@ -1,13 +1,17 @@
 import { format, isValid, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { ISODateString } from '@/types/common';
 
-export const getFormattedKoDate = (isoString: string) => {
+export const getFormattedKoDate = (isoString: ISODateString) => {
   const date = parseISO(isoString);
   if (!isValid(date)) throw new Error(`Invalid ISO string: ${isoString}`);
   return format(date, 'PPP(eee) p', { locale: ko });
 };
 
-export const isLessThanAgo = (targetDate: string, offsetInSeconds: number) => {
+export const isLessThanAgo = (
+  targetDate: ISODateString,
+  offsetInSeconds: number,
+) => {
   const currentTime = Date.now();
   const targetTime = parseISO(targetDate).getTime();
   const differenceInSeconds = (currentTime - targetTime) / 1000;
