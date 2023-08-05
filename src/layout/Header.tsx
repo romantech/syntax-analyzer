@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Divider,
   Flex,
@@ -27,22 +26,24 @@ export default function Header() {
     <Fragment>
       <Flex as="nav" align="center" py={4}>
         <Flex align="center">
-          <Box>
-            <Heading size="md" textTransform="uppercase" fontWeight="extrabold">
-              syntax analyzer
-            </Heading>
-          </Box>
-          <Box ml={6}>
-            <Tabs variant="soft-rounded" index={tabIndex}>
-              <TabList>
-                {NAV_TABS.map((tab) => (
-                  <NavLink to={tab.path} key={tab.label}>
-                    <Tab textTransform="capitalize">{tab.label}</Tab>
-                  </NavLink>
-                ))}
-              </TabList>
-            </Tabs>
-          </Box>
+          <Heading size="md" textTransform="uppercase" fontWeight="extrabold">
+            syntax analyzer
+          </Heading>
+          <Tabs variant="soft-rounded" index={tabIndex} ml={6}>
+            <TabList>
+              {NAV_TABS.map((tab) => (
+                <Tab
+                  as={NavLink}
+                  key={tab.label}
+                  to={tab.path}
+                  textTransform="capitalize"
+                  _focus={{ boxShadow: 'none' }}
+                >
+                  {tab.label}
+                </Tab>
+              ))}
+            </TabList>
+          </Tabs>
         </Flex>
         <Spacer />
         <Flex align="center">
@@ -50,11 +51,16 @@ export default function Header() {
             variant="ghost"
             as="a"
             target="_blank"
-            href="https://github.com/romantech/syntax-analyzer-front"
+            aria-label="Github repository"
+            href="https://github.com/romantech/syntax-analyzer"
           >
             <Icon as={BsGithub} boxSize="1.2rem" />
           </Button>
-          <Button onClick={toggleColorMode} variant="ghost">
+          <Button
+            onClick={toggleColorMode}
+            variant="ghost"
+            aria-label="Toggle color mode"
+          >
             <Icon as={ToggleIcon} boxSize="1.2rem" />
           </Button>
         </Flex>

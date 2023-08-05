@@ -8,8 +8,8 @@ import { AxiosError } from 'axios';
 import { getRemainingCount } from '@/api/analysisAPI';
 import { factoryQueryKeyGenerator } from '@/utils/identifier';
 
-export const remainingCountBaseKey = ['remaining'];
-const keyGenerator = factoryQueryKeyGenerator(remainingCountBaseKey);
+export const REMAINING_COUNT_BASE_KEY = ['remaining'];
+const keyGenerator = factoryQueryKeyGenerator(REMAINING_COUNT_BASE_KEY);
 const remainingCountQueryKey = (param: string) => keyGenerator([param]);
 
 export default function useRemainingCountQuery<

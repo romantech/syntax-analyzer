@@ -7,13 +7,13 @@ import theme from '@/theme';
 import { DevTools } from 'jotai-devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { remainingCountBaseKey } from '@/queries/useRemainingCountQuery';
+import { REMAINING_COUNT_BASE_KEY } from '@/queries/useRemainingCountQuery';
 import { REMAINING_COUNT_STALE_TIME } from '@/constants/config';
 
 const rootElement = document.getElementById('root');
 
 const queryClient = new QueryClient();
-queryClient.setQueryDefaults(remainingCountBaseKey, {
+queryClient.setQueryDefaults(REMAINING_COUNT_BASE_KEY, {
   staleTime: REMAINING_COUNT_STALE_TIME,
 });
 
