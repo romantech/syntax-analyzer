@@ -14,6 +14,9 @@ export const addSentenceSchema = yup.object({
 });
 
 export const analyzeSentenceSchema = yup.object({
-  model: yup.mixed<AnalysisModel>().oneOf(['3.5', '4']).required(),
+  model: yup
+    .mixed<AnalysisModel>()
+    .oneOf(['gpt-3.5-turbo', 'gpt-4'])
+    .required(),
   sentence: sentenceSchema.required(),
 });

@@ -10,6 +10,7 @@ import {
   Radio,
   RadioGroup,
   Skeleton,
+  Spinner,
   Stack,
   StackProps,
   Text,
@@ -20,9 +21,13 @@ import { SentenceInput } from '@/components';
 import FieldWithHeading from './FieldWithHeading';
 import { useRemainingCount } from '@/hooks';
 import { Suspense } from 'react';
+import { useCreateAnalysisMutation } from '@/queries';
+import { expandAbbreviations, tokenizer } from '@/utils/string';
+import { useAtomValue } from 'jotai';
+import { fingerprintAtom } from '@/store/userStore';
 
 const DEFAULT_VALUES: AnalysisFormValues = {
-  model: '4',
+  model: 'gpt-3.5-turbo',
   sentence: '',
 };
 
@@ -47,7 +52,21 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     resolver: yupResolver(analyzeSentenceSchema),
   });
 
-  const onSubmit: SubmitHandler<AnalysisFormValues> = (data) => {};
+  const { mutate, isLoading } = useCreateAnalysisMutation();
+  const fingerprint = useAtomValue(fingerprintAtom);
+
+  const onSubmit: SubmitHandler<AnalysisFormValues> = ({ sentence, model }) => {
+    const payload = {
+      model,
+      sentence: tokenizer(expandAbbreviations(sentence)),
+      fingerprint,
+    };
+    mutate(payload, {
+      onSuccess: (res) => {
+        console.log(res);
+      },
+    });
+  };
 
   return (
     <Stack as="form" onSubmit={handleSubmit(onSubmit)} gap={10} {...stackProps}>
@@ -59,7 +78,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
             <FieldWithHeading headingText="ai 모델 선택">
               <Stack>
                 <HStack align="center">
-                  <Radio value="4">Model 4</Radio>
+                  <Radio value="gpt-4">Model 4</Radio>
                   <Badge fontSize={10} variant="outline" colorScheme="green">
                     recommended
                   </Badge>
@@ -69,7 +88,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
                 </Text>
               </Stack>
               <Stack>
-                <Radio value="3.5">Model 3.5</Radio>
+                <Radio value="gpt-3.5-turbo">Model 3.5</Radio>
                 <Text ml={6} fontSize={14} color="gray.500" mt={-1}>
                   분석 속도는 빠르지만 정확도는 낮아요
                 </Text>
@@ -92,6 +111,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
         </FieldWithHeading>
       </FormControl>
       <DevTool control={control} />
+      {isLoading && <Spinner />}
     </Stack>
   );
 }

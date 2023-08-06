@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { RemainingCountParam, RemainingCountResponse } from '@/types/api';
+import { Analysis, CreateAnalysisPayload } from '@/types/analysis';
 
 const baseURL = import.meta.env.DEV
   ? import.meta.env.VITE_API_BASE_URL_DEV
@@ -16,5 +17,12 @@ export const getRemainingCount = async <
   const { data } = await analysisInstance.get<T>('analysis/remaining', {
     params,
   });
+  return data;
+};
+
+export const createAnalysis = async <T = Analysis, K = CreateAnalysisPayload>(
+  payload: K,
+) => {
+  const { data } = await analysisInstance.post<T>('analysis', payload);
   return data;
 };
