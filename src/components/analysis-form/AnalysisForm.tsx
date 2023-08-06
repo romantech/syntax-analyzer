@@ -22,12 +22,12 @@ import { useRemainingCount } from '@/hooks';
 import { Suspense } from 'react';
 import { useCreateAnalysisMutation } from '@/queries';
 import { expandAbbreviations, tokenizer } from '@/utils/string';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { fingerprintAtom } from '@/store/userStore';
 import { useNavigate } from 'react-router-dom';
 import {
-  addCompleteAnalysisActionAtom,
   currentAnalysisAtom,
+  userAnalysisListAtom,
 } from '@/store/analysisStore';
 import { getSyntaxTaggingPath } from '@/constants/siteUrls';
 import { useQueryClient } from 'react-query';
@@ -64,8 +64,8 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
   const navigate = useNavigate();
   const { mutate, isLoading } = useCreateAnalysisMutation();
   const fingerprint = useAtomValue(fingerprintAtom);
-  const addAnalysis = useSetAtom(addCompleteAnalysisActionAtom);
   const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
+  const [userAnalysisList, setUserAnalysisList] = useAtom(userAnalysisListAtom);
 
   const onSubmit: SubmitHandler<AnalysisFormValues> = ({ sentence, model }) => {
     const payload = {
@@ -75,7 +75,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     };
     mutate(payload, {
       onSuccess: (analysis) => {
-        addAnalysis(analysis);
+        setUserAnalysisList([analysis, ...userAnalysisList]);
         setCurrentAnalysis(analysis);
         queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);
         navigate(getSyntaxTaggingPath('user', 0));

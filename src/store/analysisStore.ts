@@ -11,14 +11,11 @@ import { generateAnalysis } from '@/utils/analysis';
 import { sampleAnalysisList } from '@/constants/sample';
 
 export const userAnalysisListAtom = atomWithStorage<Analysis[]>(
-  'userAnalysisListAtom',
+  'userAnalysisList',
   [],
 );
 
-export const sampleAnalysisListAtom = atomWithStorage<Analysis[]>(
-  'sampleAnalysisListAtom',
-  sampleAnalysisList,
-);
+export const sampleAnalysisListAtom = atom<Analysis[]>(sampleAnalysisList);
 
 export const analysisListBySourceAtom = atomWithDefault<CombinedAnalysisList>(
   (get) => ({
@@ -34,13 +31,6 @@ export const addUserAnalysisActionAtom = atom(
   (_, set, payload: { sentence: string; source: AnalysisSourceType }) => {
     const { sentence, source } = payload;
     const analysis = generateAnalysis(sentence, source);
-    set(userAnalysisListAtom, (prev) => [analysis, ...prev]);
-  },
-);
-
-export const addCompleteAnalysisActionAtom = atom(
-  null,
-  (_, set, analysis: Analysis) => {
     set(userAnalysisListAtom, (prev) => [analysis, ...prev]);
   },
 );
