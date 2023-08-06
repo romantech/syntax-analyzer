@@ -42,7 +42,7 @@ const SubmitButton = ({ ...buttonProps }: ButtonProps) => {
   const { data: count } = useRemainingCount();
 
   return (
-    <Button type="submit" disabled={!count} {...buttonProps}>
+    <Button type="submit" isDisabled={!count} {...buttonProps}>
       분석
     </Button>
   );
