@@ -4,7 +4,6 @@ import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { RouterProvider } from 'react-router-dom';
 import router from '@/Router';
 import theme from '@/theme';
-import { DevTools } from 'jotai-devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { REMAINING_COUNT_BASE_KEY } from '@/queries/useRemainingCountQuery';
@@ -19,7 +18,6 @@ queryClient.setQueryDefaults(REMAINING_COUNT_BASE_KEY, {
 
 ReactDOM.createRoot(rootElement!).render(
   <React.StrictMode>
-    <DevTools theme="dark" />
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <QueryClientProvider client={queryClient}>

@@ -10,7 +10,6 @@ import {
   Radio,
   RadioGroup,
   Skeleton,
-  Spinner,
   Stack,
   StackProps,
   Text,
@@ -23,8 +22,16 @@ import { useRemainingCount } from '@/hooks';
 import { Suspense } from 'react';
 import { useCreateAnalysisMutation } from '@/queries';
 import { expandAbbreviations, tokenizer } from '@/utils/string';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { fingerprintAtom } from '@/store/userStore';
+import { useNavigate } from 'react-router-dom';
+import {
+  addCompleteAnalysisActionAtom,
+  currentAnalysisAtom,
+} from '@/store/analysisStore';
+import { getSyntaxTaggingPath } from '@/constants/siteUrls';
+import { useQueryClient } from 'react-query';
+import { REMAINING_COUNT_BASE_KEY } from '@/queries/useRemainingCountQuery';
 
 const DEFAULT_VALUES: AnalysisFormValues = {
   model: 'gpt-3.5-turbo',
@@ -46,14 +53,19 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     register,
     control,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<AnalysisFormValues>({
     defaultValues: DEFAULT_VALUES,
     resolver: yupResolver(analyzeSentenceSchema),
   });
 
+  const queryClient = useQueryClient();
+
+  const navigate = useNavigate();
   const { mutate, isLoading } = useCreateAnalysisMutation();
   const fingerprint = useAtomValue(fingerprintAtom);
+  const addAnalysis = useSetAtom(addCompleteAnalysisActionAtom);
+  const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
 
   const onSubmit: SubmitHandler<AnalysisFormValues> = ({ sentence, model }) => {
     const payload = {
@@ -62,8 +74,11 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
       fingerprint,
     };
     mutate(payload, {
-      onSuccess: (res) => {
-        console.log(res);
+      onSuccess: (analysis) => {
+        addAnalysis(analysis);
+        setCurrentAnalysis(analysis);
+        queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);
+        navigate(getSyntaxTaggingPath('user', 0));
       },
     });
   };
@@ -103,15 +118,15 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
             <SentenceInput
               {...register('sentence')}
               errorMessage={errors.sentence?.message}
+              isDisabled={isLoading}
             />
             <Suspense fallback={<Skeleton w="60px" h={10} borderRadius="md" />}>
-              <SubmitButton isLoading={isSubmitting} />
+              <SubmitButton isLoading={isLoading} />
             </Suspense>
           </HStack>
         </FieldWithHeading>
       </FormControl>
       <DevTool control={control} />
-      {isLoading && <Spinner />}
     </Stack>
   );
 }

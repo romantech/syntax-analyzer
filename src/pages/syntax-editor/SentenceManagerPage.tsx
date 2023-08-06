@@ -19,13 +19,7 @@ export default function SentenceManagerPage() {
         />
         <AddSentenceForm onConfirmEffect={() => setTabIndex(0)} />
       </Stack>
-      <Box
-        borderRadius="lg"
-        borderWidth={1}
-        flexGrow={1}
-        maxW="container.md"
-        p={4}
-      >
+      <Box borderRadius="lg" borderWidth={1} w="full" maxW="container.md" p={4}>
         <ScaleFade in={isMounted}>
           <SentenceList
             tabIndex={tabIndex}

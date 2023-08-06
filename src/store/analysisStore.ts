@@ -1,12 +1,15 @@
 import { atomWithDefault, atomWithStorage } from 'jotai/utils';
-import { Analysis, CombinedAnalysisList } from '@/types/analysis';
+import {
+  Analysis,
+  AnalysisSourceType,
+  CombinedAnalysisList,
+} from '@/types/analysis';
 import { Nullable } from '@/types/common';
 import { atom } from 'jotai';
 import { INVALID_POPUP_DELAY } from '@/constants/config';
 import { generateAnalysis } from '@/utils/analysis';
 import { sampleAnalysisList } from '@/constants/sample';
 
-// Analysis
 export const userAnalysisListAtom = atomWithStorage<Analysis[]>(
   'userAnalysisListAtom',
   [],
@@ -28,15 +31,23 @@ export const currentAnalysisAtom = atom<Nullable<Analysis>>(null);
 
 export const addUserAnalysisActionAtom = atom(
   null,
-  (get, set, { sentence, source }) => {
+  (_, set, payload: { sentence: string; source: AnalysisSourceType }) => {
+    const { sentence, source } = payload;
     const analysis = generateAnalysis(sentence, source);
+    set(userAnalysisListAtom, (prev) => [analysis, ...prev]);
+  },
+);
+
+export const addCompleteAnalysisActionAtom = atom(
+  null,
+  (_, set, analysis: Analysis) => {
     set(userAnalysisListAtom, (prev) => [analysis, ...prev]);
   },
 );
 
 export const removeUserAnalysisActionAtom = atom(
   null,
-  (get, set, sentenceId: string) => {
+  (_, set, sentenceId: string) => {
     set(userAnalysisListAtom, (prev) =>
       prev.filter((analysis) => analysis.id !== sentenceId),
     );

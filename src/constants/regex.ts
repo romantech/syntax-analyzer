@@ -12,6 +12,7 @@ export const PUNCTUATION_PATTERN = /([.,!?])/g;
  * \b\w+\b : 마지막 단어
  * */
 export const THREE_WORDS_PATTERN = /(\b\w+\b[,\s]+){2,}\b\w+\b/;
+export const TWO_WORDS_PATTERN = /(\b\w+\b[,\s]+)\b\w+\b/;
 export const ENGLISH_INPUT_PATTERN =
   /^[a-zA-Z0-9 .,!?'":;\-()\/@#$%^&*_+=|<>{}\[\]~`]*$/;
 
