@@ -54,7 +54,11 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
   const { mutate, isLoading } = useCreateAnalysisMutation({
     onMutate: () => onClose(),
     onSuccess: (analysis) => {
-      const addIdAnalysis = { ...analysis, id: nanoid() };
+      const addIdAnalysis = {
+        ...analysis,
+        id: nanoid(),
+        createdAt: new Date().toISOString(),
+      };
       setUserAnalysisList([addIdAnalysis, ...userAnalysisList]);
       setCurrentAnalysis(addIdAnalysis);
       queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);

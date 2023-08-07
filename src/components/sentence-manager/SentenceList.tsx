@@ -16,7 +16,7 @@ import {
   currentAnalysisAtom,
   removeUserAnalysisActionAtom,
 } from '@/store/analysisStore';
-import { ConfirmModal } from 'src/components/common';
+import { ConfirmModal, TextPlaceholder } from '@/components';
 import React, { Fragment, useRef } from 'react';
 import { Analysis } from '@/types/analysis';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
@@ -24,7 +24,6 @@ import { SENTENCE_TABS } from '@/constants/tabList';
 import { useNavigate } from 'react-router-dom';
 import { getSyntaxTaggingPath } from '@/constants/siteUrls';
 import DeletableSentence from './DeletableSentence';
-import { TextPlaceholder } from '@/components';
 import { TbMoodEmpty } from 'react-icons/tb';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
