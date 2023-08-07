@@ -11,7 +11,6 @@ import { useSetAtom } from 'jotai';
 import { ConfirmModal } from 'src/components/common';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { DevTool } from '@hookform/devtools';
 import { VoidFunc } from '@/types/common';
 import { SentenceInput } from '@/components';
 
@@ -24,7 +23,6 @@ interface AddSentenceProps {
 export default function AddSentenceForm({ onConfirmEffect }: AddSentenceProps) {
   const {
     register,
-    control,
     handleSubmit,
     getValues,
     reset,
@@ -57,7 +55,6 @@ export default function AddSentenceForm({ onConfirmEffect }: AddSentenceProps) {
           </Button>
         </HStack>
       </FormControl>
-      <DevTool control={control} />
       <ConfirmModal
         isOpen={isOpen}
         onClose={onClose}

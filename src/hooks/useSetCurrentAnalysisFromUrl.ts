@@ -5,10 +5,10 @@ import {
   currentAnalysisAtom,
 } from '@/store/analysisStore';
 import { useEffect } from 'react';
-import { AnalysisParams } from '@/types/analysis';
+import { AnalysisPathParams } from '@/types/analysis';
 
 export default function useSetCurrentAnalysisFromUrl() {
-  const { source, index } = useParams<AnalysisParams>();
+  const { source, index } = useParams<AnalysisPathParams>();
   const analysisListBySource = useAtomValue(analysisListBySourceAtom);
   const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
 

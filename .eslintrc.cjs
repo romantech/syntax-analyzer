@@ -7,9 +7,10 @@ module.exports = {
   },
   extends: [
     'plugin:react/jsx-runtime',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
     'eslint:recommended',
-    'plugin:react-hooks/recommended',
     'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],

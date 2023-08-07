@@ -1,4 +1,4 @@
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { analyzeSentenceSchema } from '@/constants/scheme';
 import {
@@ -13,10 +13,10 @@ import {
   Stack,
   StackProps,
   Text,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { DevTool } from '@hookform/devtools';
 import { AnalysisFormValues } from '@/types/analysis';
-import { SentenceInput } from '@/components';
+import { ConfirmModal, SentenceInput } from '@/components';
 import FieldWithHeading from './FieldWithHeading';
 import { useRemainingCount } from '@/hooks';
 import { Suspense } from 'react';
@@ -30,8 +30,9 @@ import {
   userAnalysisListAtom,
 } from '@/store/analysisStore';
 import { getSyntaxTaggingPath } from '@/constants/siteUrls';
-import { useQueryClient } from 'react-query';
 import { REMAINING_COUNT_BASE_KEY } from '@/queries/useRemainingCountQuery';
+import { useQueryClient } from '@tanstack/react-query';
+import { nanoid } from 'nanoid';
 
 const DEFAULT_VALUES: AnalysisFormValues = {
   model: 'gpt-3.5-turbo',
@@ -49,42 +50,45 @@ const SubmitButton = ({ ...buttonProps }: ButtonProps) => {
 };
 
 export default function AnalysisForm({ ...stackProps }: StackProps) {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     register,
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<AnalysisFormValues>({
     defaultValues: DEFAULT_VALUES,
     resolver: yupResolver(analyzeSentenceSchema),
   });
 
-  const queryClient = useQueryClient();
+  const { mutate, isLoading } = useCreateAnalysisMutation({
+    onMutate: () => onClose(),
+    onSuccess: (analysis) => {
+      const addIdAnalysis = { ...analysis, id: nanoid() };
+      setUserAnalysisList([addIdAnalysis, ...userAnalysisList]);
+      setCurrentAnalysis(addIdAnalysis);
+      queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);
+      navigate(getSyntaxTaggingPath('user', 0));
+    },
+  });
 
-  const navigate = useNavigate();
-  const { mutate, isLoading } = useCreateAnalysisMutation();
   const fingerprint = useAtomValue(fingerprintAtom);
   const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
   const [userAnalysisList, setUserAnalysisList] = useAtom(userAnalysisListAtom);
 
-  const onSubmit: SubmitHandler<AnalysisFormValues> = ({ sentence, model }) => {
-    const payload = {
-      model,
-      sentence: tokenizer(expandAbbreviations(sentence)),
-      fingerprint,
-    };
-    mutate(payload, {
-      onSuccess: (analysis) => {
-        setUserAnalysisList([analysis, ...userAnalysisList]);
-        setCurrentAnalysis(analysis);
-        queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);
-        navigate(getSyntaxTaggingPath('user', 0));
-      },
-    });
+  const onConfirm = () => {
+    const { model, sentence } = getValues();
+    const tokenized = tokenizer(expandAbbreviations(sentence));
+    const payload = { model, sentence: tokenized, fingerprint };
+    mutate(payload);
   };
 
   return (
-    <Stack as="form" onSubmit={handleSubmit(onSubmit)} gap={10} {...stackProps}>
+    <Stack as="form" onSubmit={handleSubmit(onOpen)} gap={10} {...stackProps}>
       <Controller
         name="model"
         control={control}
@@ -121,12 +125,18 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
               isDisabled={isLoading}
             />
             <Suspense fallback={<Skeleton w="60px" h={10} borderRadius="md" />}>
-              <SubmitButton isLoading={isLoading} />
+              <SubmitButton />
             </Suspense>
           </HStack>
         </FieldWithHeading>
       </FormControl>
-      <DevTool control={control} />
+      <ConfirmModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={onConfirm}
+        headerContent="문장 분석 요청"
+        bodyContent="입력한 영어 문장을 분석하시겠습니까?"
+      />
     </Stack>
   );
 }

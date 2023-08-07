@@ -11,11 +11,11 @@ import {
   SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
 } from '@/constants/config';
 import { useParams } from 'react-router-dom';
-import { AnalysisParams } from '@/types/analysis';
+import { AnalysisPathParams } from '@/types/analysis';
 
 export default function SaveButton() {
   const toast = useToast();
-  const { source, index } = useParams<AnalysisParams>();
+  const { source, index } = useParams<AnalysisPathParams>();
 
   const isTouched = useAtomValue(isSegmentTouchedAtom);
   const saveHistorySegment = useSetAtom(saveHistorySegmentAtom);

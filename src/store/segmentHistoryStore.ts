@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { AnalysisParams, Segment } from '@/types/analysis';
+import { AnalysisPathParams, Segment } from '@/types/analysis';
 import { atomWithDefault, atomWithReset, RESET } from 'jotai/utils';
 import {
   currentAnalysisAtom,
@@ -90,7 +90,7 @@ export const isSegmentTouchedAtom = atom((get) => {
 
 export const saveHistorySegmentAtom = atom(
   null,
-  (get, set, { source, index }: AnalysisParams) => {
+  (get, set, { source, index }: AnalysisPathParams) => {
     const currentHistorySegment = get(currentHistorySegmentAtom);
     if (!currentHistorySegment) return;
 

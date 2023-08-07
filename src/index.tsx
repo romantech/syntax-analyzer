@@ -4,10 +4,11 @@ import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { RouterProvider } from 'react-router-dom';
 import router from '@/Router';
 import theme from '@/theme';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
+
 import { REMAINING_COUNT_BASE_KEY } from '@/queries/useRemainingCountQuery';
 import { REMAINING_COUNT_STALE_TIME } from '@/constants/config';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const rootElement = document.getElementById('root');
 

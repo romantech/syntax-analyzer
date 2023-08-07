@@ -36,15 +36,10 @@ export type Analysis = {
 
 export type CombinedAnalysisList = { [key in AnalysisSourceType]: Analysis[] };
 
-export type AnalysisParams = {
+export type AnalysisPathParams = {
   source: AnalysisSourceType;
   index: string;
 };
 
 export type AnalysisModel = 'gpt-3.5-turbo' | 'gpt-4';
 export type AnalysisFormValues = { model: AnalysisModel; sentence: string };
-export type CreateAnalysisPayload = {
-  model: AnalysisModel;
-  sentence: string[];
-  fingerprint: string;
-};
