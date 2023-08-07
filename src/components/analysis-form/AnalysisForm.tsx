@@ -35,6 +35,23 @@ const getDefaultValue = (count: number): AnalysisFormValues => ({
   model: count > 2 ? 'gpt-4' : 'gpt-3.5-turbo',
 });
 
+const MODEL_RADIO_FIELDS = [
+  {
+    value: 'gpt-4',
+    label: 'Model 4',
+    desc: '분석 속도는 느리지만 정확도는 높아요',
+    count: 3,
+    recommend: true,
+  },
+  {
+    value: 'gpt-3.5-turbo',
+    label: 'Model 3.5',
+    desc: '분석 속도는 빠르지만 정확도는 낮아요',
+    count: 1,
+    recommend: false,
+  },
+];
+
 export default function AnalysisForm({ ...stackProps }: StackProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -89,27 +106,26 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
         render={({ field: { onChange, value } }) => (
           <RadioGroup onChange={onChange} value={value}>
             <FieldWithHeading headingText="ai 모델 선택">
-              <Stack>
-                <HStack align="center">
-                  <Radio value="gpt-4" isDisabled={count < 3}>
-                    Model 4
-                  </Radio>
-                  <Badge fontSize={10} variant="outline" colorScheme="green">
-                    recommended
-                  </Badge>
-                </HStack>
-                <Text ml={6} fontSize={14} color="gray.500" mt={-1}>
-                  분석 속도는 느리지만 정확도는 높아요
-                </Text>
-              </Stack>
-              <Stack>
-                <Radio value="gpt-3.5-turbo" isDisabled={!count}>
-                  Model 3.5
-                </Radio>
-                <Text ml={6} fontSize={14} color="gray.500" mt={-1}>
-                  분석 속도는 빠르지만 정확도는 낮아요
-                </Text>
-              </Stack>
+              {MODEL_RADIO_FIELDS.map((field) => (
+                <Stack key={field.value}>
+                  <HStack align="center">
+                    <Radio value={field.value} isDisabled={count < field.count}>
+                      {field.label}
+                    </Radio>
+                    <Badge
+                      fontSize={10}
+                      variant="outline"
+                      colorScheme="green"
+                      hidden={!field.recommend}
+                    >
+                      recommended
+                    </Badge>
+                  </HStack>
+                  <Text ml={6} fontSize={14} color="gray.500" mt={-1}>
+                    {field.desc}
+                  </Text>
+                </Stack>
+              ))}
             </FieldWithHeading>
           </RadioGroup>
         )}
