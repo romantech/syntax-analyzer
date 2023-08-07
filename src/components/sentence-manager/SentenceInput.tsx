@@ -28,7 +28,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
     },
     ref,
   ) {
-    const [parent] = useAutoAnimate({ duration: 100 });
+    const [parent] = useAutoAnimate({ duration: 180 });
     return (
       <Box flexGrow={1} ref={parent}>
         <InputGroup size={size}>

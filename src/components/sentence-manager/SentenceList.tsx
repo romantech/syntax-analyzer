@@ -82,7 +82,11 @@ export default function SentenceList({
             <TabPanel p={0} key={label}>
               <Card variant="outline" maxH={460} overflowY="auto">
                 <CardBody p={2.5}>
-                  <Stack divider={<StackDivider />} ref={parent}>
+                  <Stack
+                    divider={<StackDivider />}
+                    ref={parent}
+                    overflowY="hidden"
+                  >
                     {!combinedAnalysisList[source].length && (
                       <TextPlaceholder
                         p={1.5}
