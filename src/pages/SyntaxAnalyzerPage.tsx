@@ -1,16 +1,10 @@
+import { Box, CenterProps, Stack, StackProps } from '@chakra-ui/react';
 import {
-  Box,
-  Center,
-  CenterProps,
-  Heading,
-  Stack,
-  StackProps,
-  Text,
-} from '@chakra-ui/react';
-import { AnalysisCounter, AnalysisForm } from '@/components/analysis-form';
+  AnalysisCounter,
+  AnalysisForm,
+  RequestLoading,
+} from '@/components/analysis-form';
 import { Suspense } from 'react';
-import { Player } from '@lottiefiles/react-lottie-player';
-import loadingAnimation from '@/assets/lottie/loading.json';
 import { useIsMutating } from '@tanstack/react-query';
 import { CREATE_ANALYSIS_BASE_KEY } from '@/queries';
 
@@ -31,18 +25,7 @@ export default function SyntaxAnalyzerPage() {
           <AnalysisForm />
         </Suspense>
       </Stack>
-      <Center {...getLoadingTransitionStyles(isMutating)}>
-        <Player
-          src={loadingAnimation}
-          loop
-          autoplay
-          style={{ width: 350, height: 350 }}
-        />
-        <Stack>
-          <Heading>문장 분석중...</Heading>
-          <Text fontSize="2xl">최대 1분까지 소요될 수 있어요</Text>
-        </Stack>
-      </Center>
+      <RequestLoading {...getLoadingTransitionStyles(isMutating)} />
     </Box>
   );
 }

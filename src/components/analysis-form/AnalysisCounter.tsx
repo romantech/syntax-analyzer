@@ -16,22 +16,24 @@ import { PropsWithChildren } from 'react';
 import { useRemainingCountQuery } from '@/queries';
 
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
-  const { data } = useRemainingCountQuery({
+  const { data: count } = useRemainingCountQuery({
     suspense: true,
     select: ({ count }) => count,
   });
 
-  const countTitle = `남은 분석 횟수 ${data}회`;
+  const countTitle = `남은 분석 횟수 ${count}회`;
   const limitDesc = `하루 최대 ${MAX_ANALYSIS_COUNT}회까지 분석할 수 있어요 (Model 4는 요청당 3회씩 차감)`;
 
   return (
     <AnalysisCounterBox {...stackProps}>
       <CircularProgress
-        size="40px"
-        value={remainingCountInPercent(data)}
+        size="50px"
+        value={remainingCountInPercent(count)}
         color="green.400"
       >
-        <CircularProgressLabel fontSize="xs">{data}</CircularProgressLabel>
+        <CircularProgressLabel>
+          {remainingCountInPercent(count) + '%'}
+        </CircularProgressLabel>
       </CircularProgress>
 
       <Center height="40px" px={1}>
@@ -59,7 +61,7 @@ const AnalysisCounterBox = ({
 const AnalysisCounterSkeleton = () => {
   return (
     <AnalysisCounterBox>
-      <SkeletonCircle w={10} h={10} />
+      <SkeletonCircle w="50px" h="50px" />
       <Stack>
         <Skeleton h={5} w={200} borderRadius="md" />
         <Skeleton h={5} w={400} borderRadius="md" />
