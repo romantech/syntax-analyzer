@@ -38,6 +38,7 @@ export default function DeleteIconButton({
             color: useColorModeValue('gray.500', 'gray.400'),
             bg: useColorModeValue('gray.100', 'gray.700'),
           }}
+          transition="all 0.3s"
           as="button"
           rounded="full"
           p={1}
@@ -54,9 +55,11 @@ export default function DeleteIconButton({
           <PopoverHeader border="0" p={4}>
             {popoverHeader}
           </PopoverHeader>
-          <PopoverFooter display="flex" justifyContent="flex-end">
-            <ButtonGroup size="sm" variant="outline">
-              <Button onClick={onClose}>취소</Button>
+          <PopoverFooter display="flex" justifyContent="flex-end" border="0">
+            <ButtonGroup size="sm">
+              <Button onClick={onClose} colorScheme="blue">
+                취소
+              </Button>
               <Button onClick={() => onConfirm()}>삭제</Button>
             </ButtonGroup>
           </PopoverFooter>

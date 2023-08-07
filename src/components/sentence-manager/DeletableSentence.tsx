@@ -1,7 +1,6 @@
-import { Badge, Box, HStack, StackProps, Text, VStack } from '@chakra-ui/react';
-import { DateChip, DeleteIconButton } from 'src/components/common';
+import { Badge, HStack, StackProps, Text, VStack } from '@chakra-ui/react';
+import { DateChip, DeleteIconButton } from '@/components';
 import { tokenJoiner } from '@/utils/string';
-import React from 'react';
 import { isLessThanAgo } from '@/utils/dates';
 import { NEW_BADGE_DISPLAY_DURATION } from '@/constants/config';
 

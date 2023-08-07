@@ -17,7 +17,7 @@ import {
   removeUserAnalysisActionAtom,
 } from '@/store/analysisStore';
 import { ConfirmModal, TextPlaceholder } from '@/components';
-import React, { Fragment, useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { Analysis } from '@/types/analysis';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { SENTENCE_TABS } from '@/constants/tabList';
