@@ -29,7 +29,7 @@ export type Segment = {
 export type Analysis = {
   id: string; // A random string of 21 bytes
   source: AnalysisSourceType; // Source of the sentence
-  createdAt: string; // Timestamp representing the current time in ISO 8601 format
+  createdAt: string; // Timestamp in ISO 8601 format
   sentence: string[]; // Tokenized sentence
   rootSegment: Segment; // The array contains only a single root segment
 };

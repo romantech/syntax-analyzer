@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { PiTextTBold } from 'react-icons/pi';
 import { forwardRef } from 'react';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const DEFAULT_HELPER_MESSAGE = `축약 표현은 자동으로 풀어집니다 (I'll → I will)`;
 
@@ -22,8 +23,9 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
     { errorMessage, helperMessage = DEFAULT_HELPER_MESSAGE, ...inputProps },
     ref,
   ) {
+    const [parent] = useAutoAnimate({ duration: 100 });
     return (
-      <Box flexGrow={1}>
+      <Box flexGrow={1} ref={parent}>
         <InputGroup>
           <InputLeftElement pointerEvents="none">
             <PiTextTBold />
