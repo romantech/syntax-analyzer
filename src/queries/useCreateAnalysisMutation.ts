@@ -12,13 +12,15 @@ import { CreateAnalysisPayload } from '@/types/api';
  * */
 export const CREATE_ANALYSIS_BASE_KEY = ['analysis'];
 
-export default function useCreateAnalysisMutation<
+export const useCreateAnalysisMutation = <
   TData = Analysis,
   TVariables = CreateAnalysisPayload,
->(options?: UseMutationOptions<TData, AxiosError, TVariables>) {
+>(
+  options?: UseMutationOptions<TData, AxiosError, TVariables>,
+) => {
   return useMutation({
     mutationFn: createAnalysis,
     mutationKey: CREATE_ANALYSIS_BASE_KEY,
     ...options,
   });
-}
+};

@@ -11,8 +11,8 @@ import { AnalysisCounter, AnalysisForm } from '@/components/analysis-form';
 import { Suspense } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
 import loadingAnimation from '@/assets/lottie/loading.json';
-import { CREATE_ANALYSIS_BASE_KEY } from '@/queries/useCreateAnalysisMutation';
 import { useIsMutating } from '@tanstack/react-query';
+import { CREATE_ANALYSIS_BASE_KEY } from '@/queries';
 
 export default function SyntaxAnalyzerPage() {
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
@@ -30,11 +30,11 @@ export default function SyntaxAnalyzerPage() {
           src={loadingAnimation}
           loop
           autoplay
-          style={{ width: 400, height: 400 }}
+          style={{ width: 350, height: 350 }}
         />
-        <Stack minW="full">
-          <Heading>분석중...</Heading>
-          <Text>최대 1분까지 소요될 수 있어요</Text>
+        <Stack>
+          <Heading>문장 분석중...</Heading>
+          <Text fontSize="2xl">최대 1분까지 소요될 수 있어요</Text>
         </Stack>
       </Center>
     </Box>

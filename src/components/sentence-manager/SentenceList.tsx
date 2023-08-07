@@ -26,6 +26,7 @@ import { getSyntaxTaggingPath } from '@/constants/siteUrls';
 import DeletableSentence from './DeletableSentence';
 import { TextPlaceholder } from '@/components';
 import { TbMoodEmpty } from 'react-icons/tb';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 type AnalysisInfo = {
   index: number;
@@ -48,6 +49,8 @@ export default function SentenceList({
   const combinedAnalysisList = useAtomValue(analysisListBySourceAtom);
   const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
   const removeUserAnalysis = useSetAtom(removeUserAnalysisActionAtom);
+
+  const [parent] = useAutoAnimate();
 
   const onSentenceClick = (analysisInfo: AnalysisInfo) => {
     onOpen();
@@ -80,7 +83,7 @@ export default function SentenceList({
             <TabPanel p={0} key={label}>
               <Card variant="outline" maxH={460} overflowY="auto">
                 <CardBody p={2.5}>
-                  <Stack divider={<StackDivider />}>
+                  <Stack divider={<StackDivider />} ref={parent}>
                     {!combinedAnalysisList[source].length && (
                       <TextPlaceholder
                         p={1.5}
