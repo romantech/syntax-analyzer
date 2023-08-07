@@ -8,6 +8,7 @@ import {
   HStack,
   Radio,
   RadioGroup,
+  Skeleton,
   Stack,
   StackProps,
   Text,
@@ -160,3 +161,26 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     </Stack>
   );
 }
+
+const AnalysisFormSkeleton = () => {
+  return (
+    <Stack gap={10}>
+      <Stack gap={5} mb={2}>
+        <Skeleton w="full" maxW={180} h={10} borderRadius="md" mb={1} />
+        <Stack>
+          <Skeleton w="full" maxW={280} h={10} borderRadius="md" />
+          <Skeleton w="full" maxW={280} h={10} borderRadius="md" />
+        </Stack>
+      </Stack>
+      <Stack gap={5}>
+        <Skeleton w="full" maxW={180} h={10} borderRadius="md" mb={1} />
+        <HStack>
+          <Skeleton w="full" h={10} borderRadius="md" />
+          <Skeleton w="full" maxW={110} h={10} borderRadius="md" />
+        </HStack>
+      </Stack>
+    </Stack>
+  );
+};
+
+AnalysisForm.Skeleton = AnalysisFormSkeleton;

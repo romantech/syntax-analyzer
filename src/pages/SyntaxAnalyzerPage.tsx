@@ -21,7 +21,7 @@ export default function SyntaxAnalyzerPage() {
         <Suspense fallback={<AnalysisCounter.Skeleton />}>
           <AnalysisCounter />
         </Suspense>
-        <Suspense>
+        <Suspense fallback={<AnalysisForm.Skeleton />}>
           <AnalysisForm />
         </Suspense>
       </Stack>
