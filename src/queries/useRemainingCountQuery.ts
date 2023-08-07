@@ -1,14 +1,9 @@
-import { RemainingCountParam, RemainingCountResponse } from '@/types/api';
+import { RemainingCountResponse } from '@/types/api';
 import { getRemainingCount } from '@/api/analysisAPI';
-import { factoryQueryKeyGenerator } from '@/utils/identifier';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 export const REMAINING_COUNT_BASE_KEY = ['remaining'];
-const keyGenerator = factoryQueryKeyGenerator(REMAINING_COUNT_BASE_KEY);
-const remainingCountQueryKey = (param: RemainingCountParam) => {
-  return keyGenerator([param.fingerprint]);
-};
 
 /**
  * TQueryFnData: query 함수 리턴 타입
@@ -18,12 +13,9 @@ const remainingCountQueryKey = (param: RemainingCountParam) => {
 export default function useRemainingCountQuery<
   TQueryFnData = RemainingCountResponse,
   TData = TQueryFnData,
->(
-  params: RemainingCountParam,
-  options?: UseQueryOptions<TQueryFnData, AxiosError, TData>,
-) {
+>(options?: UseQueryOptions<TQueryFnData, AxiosError, TData>) {
   return useQuery({
-    queryKey: remainingCountQueryKey(params),
+    queryKey: REMAINING_COUNT_BASE_KEY,
     queryFn: getRemainingCount,
     ...options,
   });

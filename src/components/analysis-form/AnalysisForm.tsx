@@ -9,7 +9,6 @@ import {
   HStack,
   Radio,
   RadioGroup,
-  Skeleton,
   Stack,
   StackProps,
   Text,
@@ -18,12 +17,9 @@ import {
 import { AnalysisFormValues } from '@/types/analysis';
 import { ConfirmModal, SentenceInput } from '@/components';
 import FieldWithHeading from './FieldWithHeading';
-import { useRemainingCount } from '@/hooks';
-import { Suspense } from 'react';
-import { useCreateAnalysisMutation } from '@/queries';
+import { useCreateAnalysisMutation, useRemainingCountQuery } from '@/queries';
 import { expandAbbreviations, tokenizer } from '@/utils/string';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { fingerprintAtom } from '@/store/userStore';
+import { useAtom, useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import {
   currentAnalysisAtom,
@@ -37,16 +33,6 @@ import { nanoid } from 'nanoid';
 const DEFAULT_VALUES: AnalysisFormValues = {
   model: 'gpt-3.5-turbo',
   sentence: '',
-};
-
-const SubmitButton = ({ ...buttonProps }: ButtonProps) => {
-  const { data: count } = useRemainingCount();
-
-  return (
-    <Button type="submit" isDisabled={!count} {...buttonProps}>
-      분석
-    </Button>
-  );
 };
 
 export default function AnalysisForm({ ...stackProps }: StackProps) {
@@ -76,14 +62,13 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     },
   });
 
-  const fingerprint = useAtomValue(fingerprintAtom);
   const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
   const [userAnalysisList, setUserAnalysisList] = useAtom(userAnalysisListAtom);
 
   const onConfirm = () => {
     const { model, sentence } = getValues();
     const tokenized = tokenizer(expandAbbreviations(sentence));
-    const payload = { model, sentence: tokenized, fingerprint };
+    const payload = { model, sentence: tokenized };
     mutate(payload);
   };
 
@@ -124,9 +109,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
               errorMessage={errors.sentence?.message}
               isDisabled={isLoading}
             />
-            <Suspense fallback={<Skeleton w="60px" h={10} borderRadius="md" />}>
-              <SubmitButton />
-            </Suspense>
+            <SubmitButton />
           </HStack>
         </FieldWithHeading>
       </FormControl>
@@ -140,3 +123,13 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     </Stack>
   );
 }
+
+const SubmitButton = ({ ...buttonProps }: ButtonProps) => {
+  const { data } = useRemainingCountQuery({ select: ({ count }) => count });
+
+  return (
+    <Button type="submit" isDisabled={!data} {...buttonProps}>
+      분석
+    </Button>
+  );
+};

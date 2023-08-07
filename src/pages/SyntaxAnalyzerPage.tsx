@@ -14,6 +14,33 @@ import loadingAnimation from '@/assets/lottie/loading.json';
 import { CREATE_ANALYSIS_BASE_KEY } from '@/queries/useCreateAnalysisMutation';
 import { useIsMutating } from '@tanstack/react-query';
 
+export default function SyntaxAnalyzerPage() {
+  const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
+
+  return (
+    <Box position="relative" h="80%" overflow="hidden">
+      <Stack {...getStackStyles(isMutating)}>
+        <Suspense fallback={<AnalysisCounter.Skeleton />}>
+          <AnalysisCounter />
+        </Suspense>
+        <AnalysisForm />
+      </Stack>
+      <Center {...getCenterStyles(isMutating)}>
+        <Player
+          src={loadingAnimation}
+          loop
+          autoplay
+          style={{ width: 400, height: 400 }}
+        />
+        <Stack minW="full">
+          <Heading>분석중...</Heading>
+          <Text>최대 1분까지 소요될 수 있어요</Text>
+        </Stack>
+      </Center>
+    </Box>
+  );
+}
+
 const getStackStyles = (isMutating: number): StackProps => {
   return {
     maxW: 'container.md',
@@ -37,32 +64,3 @@ const getCenterStyles = (isMutating: number): CenterProps => {
     opacity: isMutating ? 1 : 0,
   };
 };
-
-export default function SyntaxAnalyzerPage() {
-  const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
-
-  return (
-    <Box position="relative" h="80%" overflow="hidden">
-      <Stack {...getStackStyles(isMutating)}>
-        <Suspense fallback={<AnalysisCounter.Skeleton />}>
-          <AnalysisCounter />
-        </Suspense>
-        <Suspense>
-          <AnalysisForm />
-        </Suspense>
-      </Stack>
-      <Center {...getCenterStyles(isMutating)}>
-        <Player
-          src={loadingAnimation}
-          loop
-          autoplay
-          style={{ width: 400, height: 400 }}
-        />
-        <Stack minW="full">
-          <Heading>분석중...</Heading>
-          <Text>최대 1분까지 소요될 수 있어요</Text>
-        </Stack>
-      </Center>
-    </Box>
-  );
-}
