@@ -20,13 +20,18 @@ interface SentenceInputProps extends InputProps {
 
 const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
   function SentenceInput(
-    { errorMessage, helperMessage = DEFAULT_HELPER_MESSAGE, ...inputProps },
+    {
+      errorMessage,
+      helperMessage = DEFAULT_HELPER_MESSAGE,
+      size = 'lg',
+      ...inputProps
+    },
     ref,
   ) {
     const [parent] = useAutoAnimate({ duration: 100 });
     return (
       <Box flexGrow={1} ref={parent}>
-        <InputGroup>
+        <InputGroup size={size}>
           <InputLeftElement pointerEvents="none">
             <PiTextTBold />
           </InputLeftElement>

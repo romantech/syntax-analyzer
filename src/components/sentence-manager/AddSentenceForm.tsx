@@ -50,7 +50,7 @@ export default function AddSentenceForm({ onConfirmEffect }: AddSentenceProps) {
             {...register('sentence')}
             errorMessage={errors.sentence?.message}
           />
-          <Button type="submit" isLoading={isSubmitting}>
+          <Button type="submit" isLoading={isSubmitting} size="lg">
             추가
           </Button>
         </HStack>

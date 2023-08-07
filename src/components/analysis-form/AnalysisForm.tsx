@@ -4,7 +4,6 @@ import { analyzeSentenceSchema } from '@/constants/scheme';
 import {
   Badge,
   Button,
-  ButtonProps,
   FormControl,
   HStack,
   Radio,
@@ -29,15 +28,21 @@ import { getSyntaxTaggingPath } from '@/constants/siteUrls';
 import { REMAINING_COUNT_BASE_KEY } from '@/queries/useRemainingCountQuery';
 import { useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
+import { GiMagicLamp } from 'react-icons/gi';
 
-const DEFAULT_VALUES: AnalysisFormValues = {
-  model: 'gpt-3.5-turbo',
+const getDefaultValue = (count: number): AnalysisFormValues => ({
   sentence: '',
-};
+  model: count > 2 ? 'gpt-4' : 'gpt-3.5-turbo',
+});
 
 export default function AnalysisForm({ ...stackProps }: StackProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const { data: count = 0 } = useRemainingCountQuery({
+    select: ({ count }) => count,
+    suspense: true,
+  });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -47,7 +52,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     getValues,
     formState: { errors },
   } = useForm<AnalysisFormValues>({
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: getDefaultValue(count),
     resolver: yupResolver(analyzeSentenceSchema),
   });
 
@@ -86,7 +91,9 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
             <FieldWithHeading headingText="ai 모델 선택">
               <Stack>
                 <HStack align="center">
-                  <Radio value="gpt-4">Model 4</Radio>
+                  <Radio value="gpt-4" isDisabled={count < 3}>
+                    Model 4
+                  </Radio>
                   <Badge fontSize={10} variant="outline" colorScheme="green">
                     recommended
                   </Badge>
@@ -96,7 +103,9 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
                 </Text>
               </Stack>
               <Stack>
-                <Radio value="gpt-3.5-turbo">Model 3.5</Radio>
+                <Radio value="gpt-3.5-turbo" isDisabled={!count}>
+                  Model 3.5
+                </Radio>
                 <Text ml={6} fontSize={14} color="gray.500" mt={-1}>
                   분석 속도는 빠르지만 정확도는 낮아요
                 </Text>
@@ -113,7 +122,15 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
               errorMessage={errors.sentence?.message}
               isDisabled={isLoading}
             />
-            <SubmitButton />
+            <Button
+              type="submit"
+              isDisabled={!count}
+              size="lg"
+              leftIcon={<GiMagicLamp fontSize="24px" />}
+              loadingText="분석중"
+            >
+              분석
+            </Button>
           </HStack>
         </FieldWithHeading>
       </FormControl>
@@ -127,13 +144,3 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     </Stack>
   );
 }
-
-const SubmitButton = ({ ...buttonProps }: ButtonProps) => {
-  const { data } = useRemainingCountQuery({ select: ({ count }) => count });
-
-  return (
-    <Button type="submit" isDisabled={!data} {...buttonProps}>
-      분석
-    </Button>
-  );
-};

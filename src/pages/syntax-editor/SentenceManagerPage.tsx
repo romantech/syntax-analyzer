@@ -9,8 +9,8 @@ export default function SentenceManagerPage() {
   const [tabIndex, setTabIndex] = useState(DEFAULT_SENTENCE_LIST_TAB);
 
   return (
-    <HStack mt={5} gap={8} align="start" justify="center">
-      <Stack flexGrow={1} maxW={650}>
+    <HStack pt={8} gap={8} align="start" justify="center">
+      <Stack w="full" maxW={650}>
         <Notice
           size="sm"
           borderRadius="md"
