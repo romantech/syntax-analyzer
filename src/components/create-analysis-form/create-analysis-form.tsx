@@ -53,7 +53,7 @@ const MODEL_RADIO_FIELDS = [
   },
 ];
 
-export default function AnalysisForm({ ...stackProps }: StackProps) {
+export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -183,4 +183,4 @@ const AnalysisFormSkeleton = () => {
   );
 };
 
-AnalysisForm.Skeleton = AnalysisFormSkeleton;
+CreateAnalysisForm.Skeleton = AnalysisFormSkeleton;
