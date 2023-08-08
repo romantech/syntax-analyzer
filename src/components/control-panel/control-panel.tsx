@@ -1,13 +1,13 @@
 import { Card, Divider, HStack, Skeleton, VStack } from '@chakra-ui/react';
 
 import { useIsMounted } from '@/hooks';
-import TagInfoSwitch from './TagInfoSwitch';
-import AbbrInfoSwitch from './AbbrInfoSwitch';
-import DeleteButton from './DeleteButton';
-import UndoButton from './UndoButton';
-import RedoButton from './RedoButton';
-import SaveButton from './SaveButton';
-import ResetButton from './ResetButton';
+import TagInfoSwitch from './tag-info-switch';
+import AbbrInfoSwitch from './abbr-info-switch';
+import DeleteButton from './delete-button';
+import UndoButton from './undo-button';
+import RedoButton from './redo-button';
+import SaveButton from './save-button';
+import ResetButton from './reset-button';
 
 /**
  * atomWithStorage를 사용했을 때. Jotai는 초기값을 로컬 스토리지 값을 기준으로함

@@ -11,7 +11,7 @@ import { useAtomValue } from 'jotai';
 import {
   hoveredConstituentAtom,
   isAbbrTooltipVisibleAtom,
-} from '@/store/controlPanelStore';
+} from '@/store/control-panel-store';
 import { useConstituentHover } from '@/hooks';
 import classnames from 'classnames';
 import { CONSTITUENT_COLORS } from '@/constants/colors';

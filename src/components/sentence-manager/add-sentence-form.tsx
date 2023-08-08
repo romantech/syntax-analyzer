@@ -6,7 +6,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { addSentenceSchema } from '@/constants/scheme';
-import { addUserAnalysisActionAtom } from '@/store/analysisStore';
+import { addUserAnalysisActionAtom } from '@/store/analysis-store';
 import { useSetAtom } from 'jotai';
 import { ConfirmModal } from 'src/components/common';
 import { yupResolver } from '@hookform/resolvers/yup';

@@ -8,7 +8,7 @@ import {
   TextProps,
 } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { invalidRangeIndexAtom } from '@/store/analysisStore';
+import { invalidRangeIndexAtom } from '@/store/analysis-store';
 import React from 'react';
 
 import { CONSTITUENT_DATA_ATTRS } from '@/constants/constituents';

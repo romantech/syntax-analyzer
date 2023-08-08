@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { AnalysisFormValues } from '@/types/analysis';
 import { ConfirmModal, SentenceInput } from '@/components';
-import FieldWithHeading from './FieldWithHeading';
+import FieldWithHeading from './field-with-heading';
 import { useCreateAnalysisMutation, useRemainingCountQuery } from '@/queries';
 import { expandAbbreviations, tokenizer } from '@/utils/string';
 import { useAtom, useSetAtom } from 'jotai';
@@ -24,9 +24,9 @@ import { useNavigate } from 'react-router-dom';
 import {
   currentAnalysisAtom,
   userAnalysisListAtom,
-} from '@/store/analysisStore';
+} from '@/store/analysis-store';
 import { getSyntaxTaggingPath } from '@/constants/siteUrls';
-import { REMAINING_COUNT_BASE_KEY } from '@/queries/useRemainingCountQuery';
+import { REMAINING_COUNT_BASE_KEY } from '@/queries/use-remaining-count-query';
 import { useQueryClient } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
 import { GiMagicLamp } from 'react-icons/gi';

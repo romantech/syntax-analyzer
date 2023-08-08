@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { RouterProvider } from 'react-router-dom';
-import router from '@/Router';
+import router from '@/router';
 import theme from '@/theme';
 
-import { REMAINING_COUNT_BASE_KEY } from '@/queries/useRemainingCountQuery';
+import { REMAINING_COUNT_BASE_KEY } from '@/queries/use-remaining-count-query';
 import { REMAINING_COUNT_STALE_TIME } from '@/constants/config';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';

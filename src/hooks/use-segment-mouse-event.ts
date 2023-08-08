@@ -1,7 +1,7 @@
 import { MouseEvent, useRef, useState } from 'react';
 import { ConstituentDataSet } from '@/types/analysis';
 import { useColorMode } from '@chakra-ui/react';
-import { deleteModeAtom } from '@/store/controlPanelStore';
+import { deleteModeAtom } from '@/store/control-panel-store';
 import { useAtomValue } from 'jotai';
 import { getNearestElementByClass } from '@/utils/selection';
 import { DELETE_MODE_HOVER_COLOR_SCHEME } from '@/constants/colors';

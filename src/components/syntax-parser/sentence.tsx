@@ -1,6 +1,6 @@
 import { forwardRef, PropsWithChildren } from 'react';
 import { useAtomValue } from 'jotai';
-import { deleteModeAtom } from '@/store/controlPanelStore';
+import { deleteModeAtom } from '@/store/control-panel-store';
 import { useSentenceHandlers } from '@/hooks';
 import { Text, useColorModeValue } from '@chakra-ui/react';
 

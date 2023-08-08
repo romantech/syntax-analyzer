@@ -1,1 +1,1 @@
-export { default as SyntaxParser } from './SyntaxParser';
+export { default as SyntaxParser } from './syntax-parser';

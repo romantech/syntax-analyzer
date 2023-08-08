@@ -4,7 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import {
   isSegmentTouchedAtom,
   saveHistorySegmentAtom,
-} from '@/store/segmentHistoryStore';
+} from '@/store/segment-history-store';
 import { useState } from 'react';
 import {
   SAVE_SEGMENT_DELAY,

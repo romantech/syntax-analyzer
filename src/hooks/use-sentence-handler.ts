@@ -1,13 +1,13 @@
 import { useSegmentMouseEvent } from '@/hooks/index';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { deleteModeAtom, selectedTagAtom } from '@/store/controlPanelStore';
+import { deleteModeAtom, selectedTagAtom } from '@/store/control-panel-store';
 import { addConstituent, removeConstituent } from '@/utils/segment';
-import { updateSegmentHistoryAndIndexAtom } from '@/store/segmentHistoryStore';
+import { updateSegmentHistoryAndIndexAtom } from '@/store/segment-history-store';
 import { clearSelection, getBeginEndIdxFromSelection } from '@/utils/selection';
 import { generateConstituent } from '@/utils/constituent';
-import { setAndClearInvalidRangeIndexAtom } from '@/store/analysisStore';
+import { setAndClearInvalidRangeIndexAtom } from '@/store/analysis-store';
 
-export default function useSentenceHandlers() {
+export default function useSentenceHandler() {
   const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
   const isDeleteMode = useAtomValue(deleteModeAtom);
   const selectedTag = useAtomValue(selectedTagAtom);

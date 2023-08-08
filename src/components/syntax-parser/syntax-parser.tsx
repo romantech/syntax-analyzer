@@ -5,9 +5,9 @@ import {
   useTransitionLoading,
 } from '@/hooks';
 import { SlideFade, Spinner } from '@chakra-ui/react';
-import TokenList from '@/components/syntax-parser/TokenList';
-import Sentence from '@/components/syntax-parser/Sentence';
-import SegmentList from '@/components/syntax-parser/SegmentList';
+import TokenList from '@/components/syntax-parser/token-list';
+import Sentence from '@/components/syntax-parser/sentence';
+import SegmentList from '@/components/syntax-parser/segment-list';
 import { TbMoodEmpty } from 'react-icons/tb';
 import { TextPlaceholder } from '@/components';
 import '@/styles/constituent.scss';

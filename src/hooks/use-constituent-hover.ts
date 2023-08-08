@@ -2,7 +2,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import {
   hoveredConstituentAtom,
   isAbbrTooltipVisibleAtom,
-} from '@/store/controlPanelStore';
+} from '@/store/control-panel-store';
 import { DOMAttributes, MouseEvent } from 'react';
 import { getNearestElementByClass } from '@/utils/selection';
 import { RESET } from 'jotai/utils';

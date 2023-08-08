@@ -1,6 +1,6 @@
 import { useResetAtom } from 'jotai/utils';
-import { resetSegmentHistoryAtom } from '@/store/segmentHistoryStore';
-import { resetControlPanelAtom } from '@/store/controlPanelStore';
+import { resetSegmentHistoryAtom } from '@/store/segment-history-store';
+import { resetControlPanelAtom } from '@/store/control-panel-store';
 import { useCallback, useEffect } from 'react';
 
 interface UseInitializeSyntaxEditorProps {

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Segment as TSegment } from '@/types/analysis';
-import Segment from './Segment';
+import Segment from './segment';
 
 interface SegmentsProps {
   segment: TSegment;

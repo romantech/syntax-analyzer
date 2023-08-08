@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import {
   analysisListBySourceAtom,
   currentAnalysisAtom,
-} from '@/store/analysisStore';
+} from '@/store/analysis-store';
 import { useEffect } from 'react';
 import { AnalysisPathParams } from '@/types/analysis';
 

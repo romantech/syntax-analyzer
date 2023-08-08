@@ -1,3 +1,3 @@
-export { default as AnalysisForm } from './AnalysisForm';
-export { default as AnalysisCounter } from './AnalysisCounter';
-export { default as RequestLoading } from './RequestLoading';
+export { default as AnalysisForm } from './analysis-form';
+export { default as AnalysisCounter } from './analysis-counter';
+export { default as RequestLoading } from './request-loading';

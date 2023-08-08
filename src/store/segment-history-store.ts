@@ -5,9 +5,9 @@ import {
   currentAnalysisAtom,
   sampleAnalysisListAtom,
   userAnalysisListAtom,
-} from '@/store/analysisStore';
+} from '@/store/analysis-store';
 import { Nullable } from '@/types/common';
-import { deleteModeAtom, selectedTagAtom } from './controlPanelStore';
+import { deleteModeAtom, selectedTagAtom } from './control-panel-store';
 import { fillSegment, removeEmptySegment } from '@/utils/segment';
 
 /**

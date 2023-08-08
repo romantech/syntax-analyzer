@@ -1,6 +1,6 @@
-export { default as ConfirmModal } from './ConfirmModal';
-export { default as Notice } from './Notice';
-export { default as DeleteIconButton } from './DeleteIconButton';
-export { default as Loading } from './Loading';
-export { default as DateChip } from './DateChip';
-export { default as TextPlaceholder } from './TextPlaceholder';
+export { default as ConfirmModal } from './confirm-modal';
+export { default as Notice } from './notice';
+export { default as DeleteIconButton } from './delete-icon-button';
+export { default as Loading } from './loading';
+export { default as DateChip } from './date-chip';
+export { default as TextPlaceholder } from './text-placeholder';

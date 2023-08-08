@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { atomWithReset, atomWithStorage, RESET } from 'jotai/utils';
 import { ConstituentWithoutId } from '@/types/analysis';
-import { hasAddedTagAtom } from '@/store/segmentHistoryStore';
+import { hasAddedTagAtom } from '@/store/segment-history-store';
 import {
   DEFAULT_ABBR_INFO_MODE,
   DEFAULT_TAG_INFO_MODE,

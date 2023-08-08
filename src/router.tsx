@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import React from 'react';
-import App from '@/App';
+import App from '@/app';
 import { ErrorPage, HomePage, SyntaxAnalyzerPage } from '@/pages';
 import { SITE_URLS } from '@/constants/siteUrls';
 import {

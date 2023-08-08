@@ -1,4 +1,4 @@
-import { undoRedoActionAtom } from '@/store/segmentHistoryStore';
+import { undoRedoActionAtom } from '@/store/segment-history-store';
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { ImUndo } from 'react-icons/im';
 import { useAtom } from 'jotai';

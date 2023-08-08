@@ -1,6 +1,6 @@
 import { FormLabel, HStack, StackProps, Switch } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
-import { abbrInfoModeAtom } from '@/store/controlPanelStore';
+import { abbrInfoModeAtom } from '@/store/control-panel-store';
 
 export default function AbbrInfoSwitch({
   w = 'full',
