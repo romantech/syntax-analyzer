@@ -1,5 +1,5 @@
 import { Analysis } from '@/types/analysis';
-import { createAnalysis } from '@/api/analysisAPI';
+import { createAnalysis } from '@/api/analysis-api';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { CreateAnalysisPayload } from '@/types/api';

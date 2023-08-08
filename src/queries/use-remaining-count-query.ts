@@ -1,5 +1,5 @@
 import { RemainingCountResponse } from '@/types/api';
-import { getRemainingCount } from '@/api/analysisAPI';
+import { getRemainingCount } from '@/api/analysis-api';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 

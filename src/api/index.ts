@@ -1,1 +1,1 @@
-export * as analysisAPI from './analysisAPI';
+export * as analysisAPI from './analysis-api';
