@@ -3,7 +3,7 @@ import {
   AnalysisCounter,
   AnalysisForm,
   RequestLoading,
-} from '@/components/analysis-form';
+} from 'src/components/create-analysis-form';
 import { Suspense } from 'react';
 import { useIsMutating } from '@tanstack/react-query';
 import { CREATE_ANALYSIS_BASE_KEY } from '@/queries';

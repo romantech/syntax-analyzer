@@ -11,9 +11,11 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 import { CONSTITUENT_CATEGORIES } from '@/constants/constituents';
-import TagButton from './tag-button';
+import SelectableTagButton from './selectable-tag-button';
 
-export default function TagList({ ...accordionProps }: AccordionProps) {
+export default function TagListAccordion({
+  ...accordionProps
+}: AccordionProps) {
   return (
     <Accordion allowToggle {...accordionProps}>
       {CONSTITUENT_CATEGORIES.map((category) => (
@@ -37,7 +39,7 @@ export default function TagList({ ...accordionProps }: AccordionProps) {
             {category.constituents.map((constituent) => {
               return (
                 <WrapItem key={constituent.label}>
-                  <TagButton constituent={constituent} />
+                  <SelectableTagButton constituent={constituent} />
                 </WrapItem>
               );
             })}

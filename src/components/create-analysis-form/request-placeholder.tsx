@@ -2,7 +2,7 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import loadingAnimation from '@/assets/lottie/loading.json';
 import { Center, CenterProps, Heading, Stack, Text } from '@chakra-ui/react';
 
-export default function RequestLoading(centerProps: CenterProps) {
+export default function RequestPlaceholder(centerProps: CenterProps) {
   return (
     <Center {...centerProps}>
       <Player

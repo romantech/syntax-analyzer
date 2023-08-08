@@ -11,7 +11,7 @@ interface TagButtonProps {
   constituent: ConstituentWithoutId;
 }
 
-export default function TagButton({ constituent }: TagButtonProps) {
+export default function SelectableTagButton({ constituent }: TagButtonProps) {
   const isTagInfoMode = useAtomValue(tagInfoModeAtom);
   const [selectedTag, setSelectedTag] = useAtom(selectedTagActionAtom);
 
