@@ -36,13 +36,11 @@ export default function TagListAccordion({
             gap={2}
             maxW="container.lg"
           >
-            {category.constituents.map((constituent) => {
-              return (
-                <WrapItem key={constituent.label}>
-                  <SelectableTagButton constituent={constituent} />
-                </WrapItem>
-              );
-            })}
+            {category.constituents.map((constituent) => (
+              <WrapItem key={constituent.label}>
+                <SelectableTagButton constituent={constituent} />
+              </WrapItem>
+            ))}
           </AccordionPanel>
         </AccordionItem>
       ))}
