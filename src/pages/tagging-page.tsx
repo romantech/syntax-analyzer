@@ -3,14 +3,14 @@ import {
   ControlPanel,
   SyntaxParser,
   TagListAccordion,
+  useAnalysisLoader,
   useInitializeSyntaxEditor,
-  useLoadAnalysisFromUrl,
 } from '@/features/syntax-editor';
 import { Notice } from '@/base';
 
 export default function TaggingPage() {
   useInitializeSyntaxEditor({ autoReset: true });
-  useLoadAnalysisFromUrl();
+  useAnalysisLoader();
 
   return (
     <Stack minH="full" overflowX="auto" gap={8} pt={8}>

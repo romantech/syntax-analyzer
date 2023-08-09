@@ -11,8 +11,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { nanoid } from 'nanoid';
 import { getSyntaxTaggingPath } from '@/routes';
-import { useAtom, useSetAtom } from 'jotai';
-import { currentAnalysisAtom, userAnalysisListAtom } from '@/store';
 import { expandAbbreviations, tokenizer } from '@/base';
 import { useDisclosure } from '@chakra-ui/react';
 import { TAnalysis } from '@/features/syntax-editor';
@@ -38,9 +36,6 @@ export default function useCreateAnalysisForm() {
     onOpen: openModal,
   } = useDisclosure();
 
-  const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
-  const [userAnalysisList, setUserAnalysisList] = useAtom(userAnalysisListAtom);
-
   const { data: remainingCount = 0 } = useRemainingCount({
     select: ({ count }) => count,
     suspense: true,
@@ -56,11 +51,10 @@ export default function useCreateAnalysisForm() {
     onSuccess: async (analysis) => {
       const updatedAnalysis = updateAnalysisMetaData(analysis);
 
-      setUserAnalysisList([updatedAnalysis, ...userAnalysisList]);
-      setCurrentAnalysis(updatedAnalysis);
-
       await queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);
-      navigate(getSyntaxTaggingPath('user', 0));
+      navigate(getSyntaxTaggingPath('user', 0), {
+        state: { analysis: updatedAnalysis },
+      });
     },
   });
 
