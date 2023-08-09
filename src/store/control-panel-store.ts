@@ -1,11 +1,11 @@
 import { atom } from 'jotai';
 import { atomWithReset, atomWithStorage, RESET } from 'jotai/utils';
-import { ConstituentWithoutId } from '@/types/analysis';
 import { hasAddedTagAtom } from '@/store/segment-history-store';
 import {
   DEFAULT_ABBR_INFO_MODE,
   DEFAULT_TAG_INFO_MODE,
 } from '@/constants/config';
+import { ConstituentWithoutId } from '@/features/syntax-editor';
 
 export const selectedTagAtom = atomWithReset<ConstituentWithoutId | null>(null);
 export const hoveredConstituentAtom = atomWithReset<number | null>(null);

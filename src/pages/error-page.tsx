@@ -1,6 +1,6 @@
 import { Heading, ScaleFade, Text, VStack } from '@chakra-ui/react';
 import { useIsMounted } from '@/hooks';
-import { Layout } from '@/layout';
+import { Layout } from '@/components';
 
 export default function ErrorPage() {
   const isMounted = useIsMounted();

@@ -1,12 +1,12 @@
 import { Box, CenterProps, Stack, StackProps } from '@chakra-ui/react';
 import {
   AnalysisCounter,
-  AnalysisForm,
-  RequestLoading,
-} from 'src/components/create-analysis-form';
+  CREATE_ANALYSIS_BASE_KEY,
+  CreateAnalysisForm,
+  RequestPlaceholder,
+} from '@/features/syntax-analyzer';
 import { Suspense } from 'react';
 import { useIsMutating } from '@tanstack/react-query';
-import { CREATE_ANALYSIS_BASE_KEY } from '@/queries';
 
 export default function SyntaxAnalyzerPage() {
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
@@ -21,11 +21,11 @@ export default function SyntaxAnalyzerPage() {
         <Suspense fallback={<AnalysisCounter.Skeleton />}>
           <AnalysisCounter />
         </Suspense>
-        <Suspense fallback={<AnalysisForm.Skeleton />}>
-          <AnalysisForm />
+        <Suspense fallback={<CreateAnalysisForm.Skeleton />}>
+          <CreateAnalysisForm />
         </Suspense>
       </Stack>
-      <RequestLoading {...getLoadingTransitionStyles(isMutating)} />
+      <RequestPlaceholder {...getLoadingTransitionStyles(isMutating)} />
     </Box>
   );
 }

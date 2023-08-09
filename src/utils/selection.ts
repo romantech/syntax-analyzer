@@ -1,12 +1,8 @@
-import { Nullable } from '@/types/common';
-import {
-  CONSTITUENT_CLASSES,
-  CONSTITUENT_DATA_ATTRS,
-} from '@/constants/constituents';
+import { Nullable } from '@/types';
 
 export const getNearestElementByClass = (
   elementParam: Nullable<HTMLElement>,
-  className: string = CONSTITUENT_CLASSES.CONSTITUENT,
+  className: string,
 ) => {
   let element = elementParam;
   while (element) {
@@ -16,9 +12,7 @@ export const getNearestElementByClass = (
   return null;
 };
 
-export const getBeginEndIdxFromSelection = (
-  tokenIndexAttr: string = CONSTITUENT_DATA_ATTRS.TOKEN_INDEX,
-) => {
+export const getBeginEndIdxFromSelection = (qualifiedName: string) => {
   let begin = 0;
   let end = 0;
 
@@ -29,8 +23,8 @@ export const getBeginEndIdxFromSelection = (
   const startNode = range.startContainer.parentNode as HTMLElement;
   const endNode = range.endContainer.parentNode as HTMLElement;
 
-  const startIndex = startNode.getAttribute(tokenIndexAttr);
-  const endIndex = endNode.getAttribute(tokenIndexAttr);
+  const startIndex = startNode.getAttribute(qualifiedName);
+  const endIndex = endNode.getAttribute(qualifiedName);
 
   begin = startIndex ? parseInt(startIndex, 10) : 0;
   end = endIndex ? parseInt(endIndex, 10) + 1 : 0;

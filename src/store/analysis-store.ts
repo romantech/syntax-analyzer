@@ -1,21 +1,21 @@
 import { atomWithDefault, atomWithStorage } from 'jotai/utils';
-import {
-  Analysis,
-  AnalysisSourceType,
-  CombinedAnalysisList,
-} from '@/types/analysis';
-import { Nullable } from '@/types/common';
+import { Nullable } from '@/types';
 import { atom } from 'jotai';
 import { INVALID_POPUP_DELAY } from '@/constants/config';
-import { generateAnalysis } from '@/utils/analysis';
-import { sampleAnalysisList } from '@/constants/sample';
+import {
+  AnalysisSource,
+  CombinedAnalysisList,
+  generateAnalysis,
+  sampleAnalysis,
+  TAnalysis,
+} from '@/features/syntax-editor';
 
-export const userAnalysisListAtom = atomWithStorage<Analysis[]>(
+export const userAnalysisListAtom = atomWithStorage<TAnalysis[]>(
   'userAnalysisList',
   [],
 );
 
-export const sampleAnalysisListAtom = atom<Analysis[]>(sampleAnalysisList);
+export const sampleAnalysisListAtom = atom<TAnalysis[]>(sampleAnalysis);
 
 export const analysisListBySourceAtom = atomWithDefault<CombinedAnalysisList>(
   (get) => ({
@@ -24,11 +24,11 @@ export const analysisListBySourceAtom = atomWithDefault<CombinedAnalysisList>(
   }),
 );
 
-export const currentAnalysisAtom = atom<Nullable<Analysis>>(null);
+export const currentAnalysisAtom = atom<Nullable<TAnalysis>>(null);
 
 export const addUserAnalysisActionAtom = atom(
   null,
-  (_, set, payload: { sentence: string; source: AnalysisSourceType }) => {
+  (_, set, payload: { sentence: string; source: AnalysisSource }) => {
     const { sentence, source } = payload;
     const analysis = generateAnalysis(sentence, source);
     set(userAnalysisListAtom, (prev) => [analysis, ...prev]);

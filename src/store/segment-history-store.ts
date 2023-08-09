@@ -1,14 +1,18 @@
 import { atom } from 'jotai';
-import { AnalysisPathParams, Segment } from '@/types/analysis';
 import { atomWithDefault, atomWithReset, RESET } from 'jotai/utils';
 import {
   currentAnalysisAtom,
   sampleAnalysisListAtom,
   userAnalysisListAtom,
 } from '@/store/analysis-store';
-import { Nullable } from '@/types/common';
+import { Nullable } from '@/types';
 import { deleteModeAtom, selectedTagAtom } from './control-panel-store';
-import { fillSegment, removeEmptySegment } from '@/utils/segment';
+import {
+  AnalysisPathParams,
+  fillSegment,
+  removeEmptySegment,
+  TSegment,
+} from '@/features/syntax-editor';
 
 /**
  * useResetAtom 혹은 RESET 심볼을 이용해 초기값으로 되돌릴 수 있음
@@ -23,7 +27,7 @@ export const segmentHistoryIndexAtom = atomWithReset(0);
  * @see https://jotai.org/docs/utilities/resettable#atomwithdefault
  * */
 
-export const segmentHistoryAtom = atomWithDefault<Segment[]>((get) => {
+export const segmentHistoryAtom = atomWithDefault<TSegment[]>((get) => {
   const currentAnalysis = get(currentAnalysisAtom);
   return currentAnalysis ? [currentAnalysis.rootSegment] : [];
 });
@@ -33,7 +37,7 @@ export const resetSegmentHistoryAtom = atom(null, (_, set) => {
   set(segmentHistoryIndexAtom, RESET);
 });
 
-export const currentHistorySegmentAtom = atom<Nullable<Segment>>((get) => {
+export const currentHistorySegmentAtom = atom<Nullable<TSegment>>((get) => {
   const history = get(segmentHistoryAtom);
   const index = get(segmentHistoryIndexAtom);
   return history[index] ?? null;
@@ -46,7 +50,7 @@ export const hasAddedTagAtom = atom((get) => {
 
 export const updateSegmentHistoryAndIndexAtom = atom(
   (get) => get(currentHistorySegmentAtom),
-  (get, set, updatedSegment: Segment) => {
+  (get, set, updatedSegment: TSegment) => {
     const cleanedSegment = removeEmptySegment(updatedSegment);
     const filledSegment = fillSegment(cleanedSegment, updatedSegment.end);
 

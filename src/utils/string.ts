@@ -1,9 +1,9 @@
-import { ABBREVIATIONS } from '@/constants/abbreviations';
 import {
+  ABBREVIATIONS,
   ABBREVIATIONS_PATTERNS,
   NON_WORD_CHAR_PATTERN,
   PUNCTUATION_PATTERN,
-} from '@/constants/regex';
+} from '@/constants';
 
 export const isPunctuation = (token?: string) =>
   Boolean(token?.match(PUNCTUATION_PATTERN));
