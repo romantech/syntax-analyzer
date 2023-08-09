@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import React from 'react';
 import App from '@/app';
-import { ErrorPage, HomePage } from '@/pages';
+import { Home, NotFound } from '@/features/misc';
 import { SITE_URLS } from './paths';
 import {
   SentenceManager,
@@ -14,11 +13,11 @@ export const router = createBrowserRouter([
   {
     path: SITE_URLS.ROOT,
     element: <App />,
-    errorElement: <ErrorPage />,
+    errorElement: <NotFound />,
     children: [
       {
         path: SITE_URLS.ROOT,
-        element: <HomePage />,
+        element: <Home />,
       },
       {
         path: SITE_URLS.SYNTAX_ANALYZER.ROOT,

@@ -1,7 +1,7 @@
 import { Heading, ScaleFade, Text, VStack } from '@chakra-ui/react';
 import { Layout, useIsMounted } from '@/base';
 
-export default function ErrorPage() {
+export default function NotFound() {
   const isMounted = useIsMounted();
 
   return (
