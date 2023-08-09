@@ -1,8 +1,10 @@
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { isSegmentTouchedAtom } from '@/store';
+import {
+  isSegmentTouchedAtom,
+  useInitializeSyntaxEditor,
+} from '@/features/syntax-editor';
 import { MdOutlineRestore } from 'react-icons/md';
-import { useInitializeSyntaxEditor } from '@/features/syntax-editor';
 
 export default function ResetButton() {
   const initializer = useInitializeSyntaxEditor();

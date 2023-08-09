@@ -1,5 +1,8 @@
 import { useAtomValue } from 'jotai';
-import { currentAnalysisAtom, currentHistorySegmentAtom } from '@/store';
+import {
+  currentAnalysisAtom,
+  currentHistorySegmentAtom,
+} from '@/features/syntax-editor';
 
 export default function useSyntaxParserAnalysis() {
   const sentence = useAtomValue(currentAnalysisAtom)?.sentence ?? null;

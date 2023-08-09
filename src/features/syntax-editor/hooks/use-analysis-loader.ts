@@ -2,15 +2,13 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   analysisListBySourceAtom,
+  AnalysisPathParams,
   currentAnalysisAtom,
   userAnalysisListAtom,
-} from '@/store';
+} from '@/features/syntax-editor';
 import { useCallback, useEffect, useRef } from 'react';
 
-import { AnalysisPathParams } from '@/features/syntax-editor';
-
 export default function useAnalysisLoader() {
-  console.log('effect');
   const { source, index } = useParams<AnalysisPathParams>();
   const location = useLocation();
   const isProcessed = useRef(false);

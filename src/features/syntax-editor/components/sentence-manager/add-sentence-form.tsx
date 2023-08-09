@@ -5,12 +5,14 @@ import {
   HStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { addUserAnalysisActionAtom } from '@/store';
+import {
+  addUserAnalysisActionAtom,
+  SentenceInput,
+} from '@/features/syntax-editor';
 import { useSetAtom } from 'jotai';
 import { ConfirmModal, VoidFunc } from '@/base';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { SentenceInput } from '@/features/syntax-editor';
 import { addSentenceFormSchema } from '@/features/syntax-analyzer';
 
 const DEFAULT_VALUE = { sentence: '' };

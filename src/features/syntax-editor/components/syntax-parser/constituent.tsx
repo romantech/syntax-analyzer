@@ -5,12 +5,13 @@ import {
   CONSTITUENT_COLORS,
   CONSTITUENT_DATA_ATTRS,
   CONSTITUENT_TRANSLATIONS,
+  hoveredConstituentAtom,
+  isAbbrTooltipVisibleAtom,
   type TConstituent,
   useConstituentHover,
 } from '@/features/syntax-editor';
 import { NumberTuple } from '@/base';
 import { useAtomValue } from 'jotai';
-import { hoveredConstituentAtom, isAbbrTooltipVisibleAtom } from '@/store';
 import classnames from 'classnames';
 
 interface ConstituentProps {

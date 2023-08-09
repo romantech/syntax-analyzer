@@ -1,15 +1,13 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
+  addConstituent,
+  CONSTITUENT_DATA_ATTRS,
   deleteModeAtom,
+  generateConstituent,
+  removeConstituent,
   selectedTagAtom,
   setAndClearInvalidRangeIndexAtom,
   updateSegmentHistoryAndIndexAtom,
-} from '@/store';
-import {
-  addConstituent,
-  CONSTITUENT_DATA_ATTRS,
-  generateConstituent,
-  removeConstituent,
   useSegmentMouseEvent,
 } from '@/features/syntax-editor';
 import { clearSelection, getBeginEndIdxFromSelection } from '@/base';

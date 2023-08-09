@@ -8,9 +8,10 @@ import {
   TextProps,
 } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { invalidRangeIndexAtom } from '@/store';
-
-import { CONSTITUENT_DATA_ATTRS } from '@/features/syntax-editor';
+import {
+  CONSTITUENT_DATA_ATTRS,
+  invalidRangeIndexAtom,
+} from '@/features/syntax-editor';
 
 interface TokenProps extends TextProps {
   token: string;

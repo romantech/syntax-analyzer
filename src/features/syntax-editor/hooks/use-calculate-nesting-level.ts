@@ -1,8 +1,10 @@
 import { useBoolean } from '@chakra-ui/react';
 import { RefObject, useEffect } from 'react';
-import { calculateNestingLevel } from '@/features/syntax-editor';
+import {
+  calculateNestingLevel,
+  segmentHistoryIndexAtom,
+} from '@/features/syntax-editor';
 import { useAtomValue } from 'jotai';
-import { segmentHistoryIndexAtom } from '@/store/segment-history-store';
 
 interface UseCalculateNestedLevelProps {
   targetRef: RefObject<HTMLElement>;

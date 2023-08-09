@@ -1,9 +1,10 @@
 import { Button, Tooltip } from '@chakra-ui/react';
 import { useAtom, useAtomValue } from 'jotai';
-import { selectedTagActionAtom, tagInfoModeAtom } from '@/store';
 import {
   CONSTITUENT_TRANSLATIONS,
   ConstituentWithoutId,
+  selectedTagActionAtom,
+  tagInfoModeAtom,
 } from '@/features/syntax-editor';
 
 interface TagButtonProps {

@@ -1,5 +1,8 @@
 import { useAtomValue, useSetAtom } from 'jotai';
-import { hoveredConstituentAtom, isAbbrTooltipVisibleAtom } from '@/store';
+import {
+  hoveredConstituentAtom,
+  isAbbrTooltipVisibleAtom,
+} from '@/features/syntax-editor';
 import { DOMAttributes, MouseEvent } from 'react';
 import { getNearestElementByClass } from '@/base';
 import { RESET } from 'jotai/utils';

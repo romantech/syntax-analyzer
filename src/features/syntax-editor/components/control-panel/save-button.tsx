@@ -2,17 +2,16 @@ import { IoSaveSharp } from 'react-icons/io5';
 import { IconButton, Tooltip, useToast } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
+  AnalysisPathParams,
   isSegmentTouchedAtom,
   saveHistorySegmentAtom,
-} from '@/store/segment-history-store';
+} from '@/features/syntax-editor';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-import { AnalysisPathParams } from '@/features/syntax-editor';
 import {
   SAVE_SEGMENT_DELAY,
   SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
-} from '@/features/syntax-editor/constants/settings';
+} from '@/features/syntax-editor/constants';
 
 export default function SaveButton() {
   const toast = useToast();

@@ -1,18 +1,16 @@
 import { atom } from 'jotai';
 import { atomWithDefault, atomWithReset, RESET } from 'jotai/utils';
 import {
-  currentAnalysisAtom,
-  sampleAnalysisListAtom,
-  userAnalysisListAtom,
-} from '@/store/analysis-store';
-import { Nullable } from '@/base';
-import { deleteModeAtom, selectedTagAtom } from './control-panel-store';
-import {
   AnalysisPathParams,
+  currentAnalysisAtom,
   fillSegment,
   removeEmptySegment,
+  sampleAnalysisListAtom,
   TSegment,
+  userAnalysisListAtom,
 } from '@/features/syntax-editor';
+import { Nullable } from '@/base';
+import { deleteModeAtom, selectedTagAtom } from './control-panel-store';
 
 /**
  * useResetAtom 혹은 RESET 심볼을 이용해 초기값으로 되돌릴 수 있음

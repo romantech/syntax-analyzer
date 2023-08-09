@@ -1,8 +1,7 @@
 import { forwardRef, PropsWithChildren } from 'react';
 import { useAtomValue } from 'jotai';
-import { deleteModeAtom } from '@/store';
+import { deleteModeAtom, useSentenceHandler } from '@/features/syntax-editor';
 import { Text, useColorModeValue } from '@chakra-ui/react';
-import { useSentenceHandler } from '@/features/syntax-editor';
 
 const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren>(
   ({ children }, ref) => {

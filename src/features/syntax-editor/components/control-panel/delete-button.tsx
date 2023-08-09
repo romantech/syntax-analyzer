@@ -2,7 +2,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import {
   isDisableDeleteButtonAtom,
   toggleDeleteModeActionAtom,
-} from '@/store/control-panel-store';
+} from '@/features/syntax-editor';
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { BsFillEraserFill } from 'react-icons/bs';
 

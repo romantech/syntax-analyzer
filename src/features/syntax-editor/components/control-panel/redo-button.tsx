@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { undoRedoActionAtom } from '@/store/segment-history-store';
+import { undoRedoActionAtom } from '@/features/syntax-editor';
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { ImRedo } from 'react-icons/im';
 import { clearSelection } from '@/base';
