@@ -10,7 +10,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { nanoid } from 'nanoid';
-import { getSyntaxTaggingPath } from '@/routes';
+import { getSyntaxEditorPath } from '@/routes';
 import { expandAbbreviations, tokenizer } from '@/base';
 import { useDisclosure } from '@chakra-ui/react';
 import { TAnalysis } from '@/features/syntax-editor';
@@ -52,7 +52,7 @@ export default function useCreateAnalysisForm() {
       const updatedAnalysis = updateAnalysisMetaData(analysis);
 
       await queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);
-      navigate(getSyntaxTaggingPath('user', 0), {
+      navigate(getSyntaxEditorPath('user', 0), {
         state: { analysis: updatedAnalysis },
       });
     },

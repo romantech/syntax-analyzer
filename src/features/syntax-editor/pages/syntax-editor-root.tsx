@@ -2,7 +2,7 @@ import { Provider } from 'jotai';
 import { Outlet } from 'react-router-dom';
 import { DevTools } from 'jotai-devtools';
 
-export default function SyntaxEditorPage() {
+export default function SyntaxEditorRoot() {
   return (
     <Provider>
       <DevTools theme="dark" />

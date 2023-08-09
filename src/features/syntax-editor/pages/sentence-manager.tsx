@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { Notice, useIsMounted } from '@/base';
 import { AddSentenceForm, SentenceList } from '@/features/syntax-editor';
 
-import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants/settings';
+import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants';
 
-export default function SentenceManagerPage() {
+export default function SentenceManager() {
   const isMounted = useIsMounted();
   const [tabIndex, setTabIndex] = useState(DEFAULT_SENTENCE_LIST_TAB);
 

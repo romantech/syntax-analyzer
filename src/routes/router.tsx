@@ -1,15 +1,14 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import React from 'react';
 import App from '@/app';
-import {
-  ErrorPage,
-  HomePage,
-  SentenceManagerPage,
-  SyntaxAnalyzerPage,
-  SyntaxEditorPage,
-  TaggingPage,
-} from '@/pages';
+import { ErrorPage, HomePage } from '@/pages';
 import { SITE_URLS } from './paths';
+import {
+  SentenceManager,
+  SyntaxEditor,
+  SyntaxEditorRoot,
+} from '@/features/syntax-editor';
+import { SyntaxAnalyzer } from '@/features/syntax-analyzer';
 
 export const router = createBrowserRouter([
   {
@@ -23,23 +22,23 @@ export const router = createBrowserRouter([
       },
       {
         path: SITE_URLS.SYNTAX_ANALYZER.ROOT,
-        element: <SyntaxAnalyzerPage />,
+        element: <SyntaxAnalyzer />,
       },
       {
         path: SITE_URLS.SYNTAX_EDITOR.ROOT,
-        element: <SyntaxEditorPage />,
+        element: <SyntaxEditorRoot />,
         children: [
           {
             path: SITE_URLS.SYNTAX_EDITOR.ROOT,
-            element: <SentenceManagerPage />,
+            element: <Navigate to={SITE_URLS.SYNTAX_EDITOR.SENTENCE} replace />,
           },
           {
             path: SITE_URLS.SYNTAX_EDITOR.SENTENCE,
-            element: <SentenceManagerPage />,
+            element: <SentenceManager />,
           },
           {
-            path: SITE_URLS.SYNTAX_EDITOR.TAGGING,
-            element: <TaggingPage />,
+            path: SITE_URLS.SYNTAX_EDITOR.EDIT,
+            element: <SyntaxEditor />,
           },
           {
             path: '*',

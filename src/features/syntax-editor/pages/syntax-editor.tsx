@@ -8,7 +8,7 @@ import {
 } from '@/features/syntax-editor';
 import { Notice } from '@/base';
 
-export default function TaggingPage() {
+export default function SyntaxEditor() {
   useInitializeSyntaxEditor({ autoReset: true });
   useAnalysisLoader();
 

@@ -28,7 +28,7 @@ import {
   TAnalysis,
 } from '@/features/syntax-editor';
 
-import { getSyntaxTaggingPath } from '@/routes';
+import { getSyntaxEditorPath } from '@/routes';
 
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants';
 
@@ -68,7 +68,7 @@ export default function SentenceList({
 
     const { analysis, index } = selectedAnalysis.current;
     setCurrentAnalysis(analysis);
-    navigate(getSyntaxTaggingPath(analysis.source, index));
+    navigate(getSyntaxEditorPath(analysis.source, index));
   };
 
   return (

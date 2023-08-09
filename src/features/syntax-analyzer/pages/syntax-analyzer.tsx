@@ -8,7 +8,7 @@ import {
 import { Suspense } from 'react';
 import { useIsMutating } from '@tanstack/react-query';
 
-export default function SyntaxAnalyzerPage() {
+export default function SyntaxAnalyzer() {
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
 
   return (
