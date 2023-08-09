@@ -1,5 +1,4 @@
-import { Nullable, VoidFunc } from '@/types';
-import { generateNumberID } from '@/utils';
+import { generateNumberID, Nullable, VoidFunc } from '@/base';
 import { TConstituent, TSegment } from '@/features/syntax-editor';
 
 export const cloneSegment = (segment: TSegment) => structuredClone(segment);

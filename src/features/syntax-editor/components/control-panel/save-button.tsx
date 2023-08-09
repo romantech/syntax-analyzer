@@ -6,13 +6,13 @@ import {
   saveHistorySegmentAtom,
 } from '@/store/segment-history-store';
 import { useState } from 'react';
-import {
-  SAVE_SEGMENT_DELAY,
-  SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
-} from '@/constants/config';
 import { useParams } from 'react-router-dom';
 
 import { AnalysisPathParams } from '@/features/syntax-editor';
+import {
+  SAVE_SEGMENT_DELAY,
+  SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
+} from '@/features/syntax-editor/constants/settings';
 
 export default function SaveButton() {
   const toast = useToast();

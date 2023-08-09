@@ -1,6 +1,6 @@
 import { format, isValid, parseISO } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { ISODateString } from '@/types';
+import { ISODateString } from '@/base/types';
 
 export const getFormattedKoDate = (isoString: ISODateString) => {
   const date = parseISO(isoString);

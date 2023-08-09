@@ -1,5 +1,5 @@
 import { Outlet, useNavigation } from 'react-router-dom';
-import { Layout, Loading } from '@/components';
+import { Layout, Loading } from '@/base';
 import { Provider } from 'jotai';
 import { DevTools } from 'jotai-devtools';
 

@@ -4,16 +4,13 @@ import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_COLORS,
   CONSTITUENT_DATA_ATTRS,
-  constituentTranslations,
+  CONSTITUENT_TRANSLATIONS,
   type TConstituent,
   useConstituentHover,
 } from '@/features/syntax-editor';
-import { NumberTuple } from '@/types';
+import { NumberTuple } from '@/base';
 import { useAtomValue } from 'jotai';
-import {
-  hoveredConstituentAtom,
-  isAbbrTooltipVisibleAtom,
-} from '@/store/control-panel-store';
+import { hoveredConstituentAtom, isAbbrTooltipVisibleAtom } from '@/store';
 import classnames from 'classnames';
 
 interface ConstituentProps {
@@ -34,7 +31,7 @@ export default function Constituent({
   const handlers = useConstituentHover();
 
   const tooltipOffset: NumberTuple = isMultipleTokenRange ? [0, -10] : [0, 5];
-  const koLabel = constituentTranslations[constituent.label]?.ko;
+  const koLabel = CONSTITUENT_TRANSLATIONS[constituent.label]?.ko;
   const isCurrentHovered = hoveredConstituent === constituent.id;
 
   const dataAttrs = {

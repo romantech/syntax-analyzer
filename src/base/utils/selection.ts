@@ -1,4 +1,4 @@
-import { Nullable } from '@/types';
+import { Nullable } from '@/base/types';
 
 export const getNearestElementByClass = (
   elementParam: Nullable<HTMLElement>,

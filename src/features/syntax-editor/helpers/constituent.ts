@@ -1,4 +1,4 @@
-import { generateNumberID } from '@/utils';
+import { generateNumberID } from '@/base';
 import {
   ConstituentType,
   ConstituentWithoutId,

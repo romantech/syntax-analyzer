@@ -1,21 +1,21 @@
 import { atomWithDefault, atomWithStorage } from 'jotai/utils';
-import { Nullable } from '@/types';
+import { Nullable } from '@/base';
 import { atom } from 'jotai';
-import { INVALID_POPUP_DELAY } from '@/constants/config';
 import {
   AnalysisSource,
   CombinedAnalysisList,
   generateAnalysis,
-  sampleAnalysis,
+  SAMPLE_ANALYSIS,
   TAnalysis,
 } from '@/features/syntax-editor';
+import { INVALID_POPUP_DELAY } from '@/features/syntax-editor/constants/settings';
 
 export const userAnalysisListAtom = atomWithStorage<TAnalysis[]>(
   'userAnalysisList',
   [],
 );
 
-export const sampleAnalysisListAtom = atom<TAnalysis[]>(sampleAnalysis);
+export const sampleAnalysisListAtom = atom<TAnalysis[]>(SAMPLE_ANALYSIS);
 
 export const analysisListBySourceAtom = atomWithDefault<CombinedAnalysisList>(
   (get) => ({

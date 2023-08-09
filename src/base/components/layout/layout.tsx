@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { Box, Container, Flex } from '@chakra-ui/react';
-import { Header } from '@/components';
+import { Header } from '@/base/components';
 
 export function Layout({ children }: PropsWithChildren) {
   return (

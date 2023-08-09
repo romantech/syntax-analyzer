@@ -1,4 +1,4 @@
-import { isPunctuation } from '@/utils';
+import { isPunctuation } from '@/base';
 import { Token } from '@/features/syntax-editor';
 
 interface TokensProps {

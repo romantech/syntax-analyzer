@@ -3,7 +3,7 @@ import {
   ABBREVIATIONS_PATTERNS,
   NON_WORD_CHAR_PATTERN,
   PUNCTUATION_PATTERN,
-} from '@/constants';
+} from '@/base/constants';
 
 export const isPunctuation = (token?: string) =>
   Boolean(token?.match(PUNCTUATION_PATTERN));

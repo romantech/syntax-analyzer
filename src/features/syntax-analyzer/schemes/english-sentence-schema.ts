@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { ENGLISH_INPUT_PATTERN, TWO_WORDS_PATTERN } from '@/constants';
+import { ENGLISH_INPUT_PATTERN, TWO_WORDS_PATTERN } from '@/base';
 
 export const englishSentenceSchema = yup
   .string()

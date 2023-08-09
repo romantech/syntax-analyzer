@@ -21,8 +21,8 @@ import {
   useCreateAnalysis,
   useRemainingCount,
 } from '@/features/syntax-analyzer';
-import { ConfirmModal } from '@/components';
-import { expandAbbreviations, tokenizer } from '@/utils/string';
+import { ConfirmModal } from 'src/base/components';
+import { expandAbbreviations, tokenizer } from '@/base/utils/string';
 import { useAtom, useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
 import {

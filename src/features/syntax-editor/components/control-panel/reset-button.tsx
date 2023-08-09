@@ -1,6 +1,6 @@
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { isSegmentTouchedAtom } from '@/store/segment-history-store';
+import { isSegmentTouchedAtom } from '@/store';
 import { MdOutlineRestore } from 'react-icons/md';
 import { useInitializeSyntaxEditor } from '@/features/syntax-editor';
 

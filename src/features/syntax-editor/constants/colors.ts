@@ -1,4 +1,4 @@
-import { ColorMode } from '@/types';
+import { ColorMode } from '@/base';
 import { ConstituentColors } from '@/features/syntax-editor';
 
 export const DELETE_MODE_HOVER_COLOR_SCHEME = (mode: ColorMode) => {

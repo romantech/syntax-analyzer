@@ -1,5 +1,5 @@
 import { RefObject } from 'react';
-import { kebabToCamel } from '@/utils';
+import { kebabToCamel } from '@/base';
 
 import { CONSTITUENT_CLASSES } from '@/features/syntax-editor';
 

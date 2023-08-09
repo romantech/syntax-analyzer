@@ -6,7 +6,7 @@ import {
   useInitializeSyntaxEditor,
   useLoadAnalysisFromUrl,
 } from '@/features/syntax-editor';
-import { Notice } from '@/components';
+import { Notice } from '@/base';
 
 export default function TaggingPage() {
   useInitializeSyntaxEditor({ autoReset: true });

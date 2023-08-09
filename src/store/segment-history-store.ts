@@ -5,7 +5,7 @@ import {
   sampleAnalysisListAtom,
   userAnalysisListAtom,
 } from '@/store/analysis-store';
-import { Nullable } from '@/types';
+import { Nullable } from '@/base';
 import { deleteModeAtom, selectedTagAtom } from './control-panel-store';
 import {
   AnalysisPathParams,

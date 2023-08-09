@@ -16,9 +16,8 @@ import {
   currentAnalysisAtom,
   removeUserAnalysisActionAtom,
 } from '@/store';
-import { ConfirmModal, TextPlaceholder } from '@/components';
+import { ConfirmModal, TextPlaceholder } from '@/base';
 import { Fragment, useRef } from 'react';
-import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
 import { useNavigate } from 'react-router-dom';
 
 import { TbMoodEmpty } from 'react-icons/tb';
@@ -30,6 +29,8 @@ import {
 } from '@/features/syntax-editor';
 
 import { getSyntaxTaggingPath } from '@/routes';
+
+import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants/settings';
 
 type AnalysisInfo = { index: number; analysis: TAnalysis };
 

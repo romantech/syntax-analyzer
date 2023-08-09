@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import { undoRedoActionAtom } from '@/store/segment-history-store';
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { ImRedo } from 'react-icons/im';
-import { clearSelection } from '@/utils';
+import { clearSelection } from '@/base';
 
 export default function RedoButton() {
   const [actionable, action] = useAtom(undoRedoActionAtom);

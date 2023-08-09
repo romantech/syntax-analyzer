@@ -9,8 +9,7 @@ import {
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
 import { TbMoodEmpty } from 'react-icons/tb';
-import { TextPlaceholder } from '@/components';
-import { useTransitionLoading } from '@/hooks';
+import { TextPlaceholder, useTransitionLoading } from '@/base';
 import '@/features/syntax-editor/styles/constituent.scss';
 
 /**

@@ -5,12 +5,11 @@ import {
   HStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { addUserAnalysisActionAtom } from '@/store/analysis-store';
+import { addUserAnalysisActionAtom } from '@/store';
 import { useSetAtom } from 'jotai';
-import { ConfirmModal } from '@/components';
+import { ConfirmModal, VoidFunc } from '@/base';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { VoidFunc } from '@/types';
 import { SentenceInput } from '@/features/syntax-editor';
 import { addSentenceFormSchema } from '@/features/syntax-analyzer';
 

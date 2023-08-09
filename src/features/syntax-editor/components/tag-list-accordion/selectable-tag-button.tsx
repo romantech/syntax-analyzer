@@ -2,7 +2,7 @@ import { Button, Tooltip } from '@chakra-ui/react';
 import { useAtom, useAtomValue } from 'jotai';
 import { selectedTagActionAtom, tagInfoModeAtom } from '@/store';
 import {
-  constituentTranslations,
+  CONSTITUENT_TRANSLATIONS,
   ConstituentWithoutId,
 } from '@/features/syntax-editor';
 
@@ -22,7 +22,7 @@ export default function SelectableTagButton({ constituent }: TagButtonProps) {
     setSelectedTag(tag);
   };
 
-  const { ko, desc } = constituentTranslations[constituent.label];
+  const { ko, desc } = CONSTITUENT_TRANSLATIONS[constituent.label];
   const isSelected = selectedTag?.elementId === constituent.elementId;
   return (
     <Tooltip label={desc} isDisabled={!isTagInfoMode} openDelay={200}>

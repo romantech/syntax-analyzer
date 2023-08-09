@@ -1,9 +1,9 @@
 import { Box, HStack, ScaleFade, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
-import { DEFAULT_SENTENCE_LIST_TAB } from '@/constants/config';
-import { useIsMounted } from '@/hooks';
-import { Notice } from '@/components';
+import { Notice, useIsMounted } from '@/base';
 import { AddSentenceForm, SentenceList } from '@/features/syntax-editor';
+
+import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants/settings';
 
 export default function SentenceManagerPage() {
   const isMounted = useIsMounted();

@@ -2,7 +2,7 @@ import { MouseEvent, useRef, useState } from 'react';
 import { useColorMode } from '@chakra-ui/react';
 import { deleteModeAtom } from '@/store';
 import { useAtomValue } from 'jotai';
-import { getNearestElementByClass } from '@/utils';
+import { getNearestElementByClass } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   ConstituentDataSet,

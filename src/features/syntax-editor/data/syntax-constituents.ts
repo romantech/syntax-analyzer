@@ -3,7 +3,7 @@ import {
   ConstituentWithoutId,
 } from '@/features/syntax-editor';
 
-export const syntaxConstituents: ConstituentWithoutId[] = [
+export const SYNTAX_CONSTITUENTS: ConstituentWithoutId[] = [
   { elementId: 1, label: 'subject', abbreviation: 's', type: 'token' },
   { elementId: 2, label: 'verb', abbreviation: 'v', type: 'token' },
   {
@@ -157,7 +157,7 @@ export const syntaxConstituents: ConstituentWithoutId[] = [
 ];
 
 type ConstituentGroup = { [key in ConstituentType]: ConstituentWithoutId[] };
-export const groupedConstituentsByType = syntaxConstituents.reduce(
+export const groupedConstituentsByType = SYNTAX_CONSTITUENTS.reduce(
   (group, constituent) => {
     if (!group[constituent.type]) group[constituent.type] = [];
     group[constituent.type].push(constituent);

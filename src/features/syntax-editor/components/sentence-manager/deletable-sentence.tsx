@@ -1,7 +1,7 @@
 import { Badge, HStack, StackProps, Text, VStack } from '@chakra-ui/react';
-import { DateChip, DeleteIconButton } from '@/components';
-import { isLessThanAgo, tokenJoiner } from '@/utils';
-import { NEW_BADGE_DISPLAY_DURATION } from '@/constants/config';
+import { DateChip, DeleteIconButton, isLessThanAgo, tokenJoiner } from '@/base';
+
+import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor/constants/settings';
 
 interface DeletableSentenceProps extends StackProps {
   onClick: () => void;

@@ -12,7 +12,7 @@ import {
   removeConstituent,
   useSegmentMouseEvent,
 } from '@/features/syntax-editor';
-import { clearSelection, getBeginEndIdxFromSelection } from '@/utils';
+import { clearSelection, getBeginEndIdxFromSelection } from '@/base';
 
 const { TOKEN_INDEX } = CONSTITUENT_DATA_ATTRS;
 

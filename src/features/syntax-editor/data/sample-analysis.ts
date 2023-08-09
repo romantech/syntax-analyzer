@@ -846,7 +846,7 @@ const sample5: TAnalysis = {
   },
 };
 
-export const sampleAnalysis: TAnalysis[] = [
+export const SAMPLE_ANALYSIS: TAnalysis[] = [
   sample1,
   sample2,
   sample3,

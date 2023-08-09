@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { CgClose } from 'react-icons/cg';
 import { ReactNode } from 'react';
-import { VoidFunc } from '@/types/common';
+import { VoidFunc } from '@/base/types/common';
 
 interface DeleteAnalysisButtonProps extends CenterProps {
   onConfirm: VoidFunc;
