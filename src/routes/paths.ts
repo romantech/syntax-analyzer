@@ -7,8 +7,7 @@ export const SITE_URLS = {
   },
   SYNTAX_EDITOR: {
     ROOT: '/syntax-editor',
-    SENTENCE: '/syntax-editor/sentence',
-    EDIT: '/syntax-editor/sentence/:source/:index',
+    EDIT: '/syntax-editor/:source/:index',
   },
 } as const;
 

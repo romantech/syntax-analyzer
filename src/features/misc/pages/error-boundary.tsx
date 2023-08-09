@@ -1,8 +1,18 @@
 import { Heading, ScaleFade, Text, VStack } from '@chakra-ui/react';
 import { Layout, useIsMounted } from '@/base';
+import { isRouteErrorResponse, useRouteError } from 'react-router-dom';
+import { useRef } from 'react';
 
-export default function NotFound() {
+export default function ErrorBoundary() {
+  const error = useRouteError() as Error;
+
   const isMounted = useIsMounted();
+  const errorMessage = useRef(error?.message || '404 | Page Not Found');
+
+  if (isRouteErrorResponse(error)) {
+    const { status, statusText } = error;
+    errorMessage.current = `${status} | ${statusText}`;
+  }
 
   return (
     <Layout>
@@ -14,7 +24,7 @@ export default function NotFound() {
         </ScaleFade>
         <ScaleFade initialScale={0.1} in={isMounted}>
           <Text fontSize="xl" textTransform="uppercase">
-            404 | page not found
+            {errorMessage.current}
           </Text>
         </ScaleFade>
       </VStack>

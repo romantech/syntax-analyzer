@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from '@/app';
-import { Home, NotFound } from '@/features/misc';
+import { ErrorBoundary, Home } from '@/features/misc';
 import { SITE_URLS } from './paths';
 import {
   SentenceManager,
@@ -13,10 +13,10 @@ export const router = createBrowserRouter([
   {
     path: SITE_URLS.ROOT,
     element: <App />,
-    errorElement: <NotFound />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
-        path: SITE_URLS.ROOT,
+        index: true,
         element: <Home />,
       },
       {
@@ -28,11 +28,7 @@ export const router = createBrowserRouter([
         element: <SyntaxEditorRoot />,
         children: [
           {
-            path: SITE_URLS.SYNTAX_EDITOR.ROOT,
-            element: <Navigate to={SITE_URLS.SYNTAX_EDITOR.SENTENCE} replace />,
-          },
-          {
-            path: SITE_URLS.SYNTAX_EDITOR.SENTENCE,
+            index: true,
             element: <SentenceManager />,
           },
           {
@@ -41,7 +37,7 @@ export const router = createBrowserRouter([
           },
           {
             path: '*',
-            element: <Navigate to={SITE_URLS.SYNTAX_EDITOR.SENTENCE} replace />,
+            element: <Navigate to="." replace />,
           },
         ],
       },
