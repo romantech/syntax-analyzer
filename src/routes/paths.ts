@@ -12,7 +12,6 @@ export const SITE_URLS = {
 } as const;
 
 export const getSyntaxEditorPath = (source: AnalysisSource, index: number) =>
-  SITE_URLS.SYNTAX_EDITOR.EDIT.replace(':source', source).replace(
-    ':index',
-    index.toString(),
-  );
+  SITE_URLS.SYNTAX_EDITOR.EDIT.replace(/:source|:index/g, (m) => {
+    return m === ':source' ? source : index.toString();
+  });
