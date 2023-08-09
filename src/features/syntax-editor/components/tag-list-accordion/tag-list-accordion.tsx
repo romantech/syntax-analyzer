@@ -10,7 +10,10 @@ import {
   Text,
   WrapItem,
 } from '@chakra-ui/react';
-import { SelectableTagButton } from '@/features/syntax-editor';
+import {
+  SelectableTagButton,
+  TAG_LIST_DEFAULT_INDEX,
+} from '@/features/syntax-editor';
 import { groupedConstituentsByType } from '@/features/syntax-editor/data';
 
 const CONSTITUENT_CATEGORIES = [
@@ -35,7 +38,11 @@ export default function TagListAccordion({
   ...accordionProps
 }: AccordionProps) {
   return (
-    <Accordion allowToggle {...accordionProps}>
+    <Accordion
+      defaultIndex={TAG_LIST_DEFAULT_INDEX}
+      allowToggle
+      {...accordionProps}
+    >
       {CONSTITUENT_CATEGORIES.map((category) => (
         <AccordionItem key={category.label}>
           <AccordionButton>
