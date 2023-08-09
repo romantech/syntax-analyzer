@@ -10,11 +10,16 @@ import {
   updateSegmentHistoryAndIndexAtom,
   useSegmentMouseEvent,
 } from '@/features/syntax-editor';
-import { clearSelection, getBeginEndIdxFromSelection } from '@/base';
+import {
+  clearSelection,
+  getBeginEndIdxFromSelection,
+  MouseEventHandlers,
+} from '@/base';
+import { MouseEvent } from 'react';
 
 const { TOKEN_INDEX } = CONSTITUENT_DATA_ATTRS;
 
-export default function useSentenceHandler() {
+export default function useSentenceHandler(): MouseEventHandlers {
   const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
 
   const isDeleteMode = useAtomValue(deleteModeAtom);
@@ -26,10 +31,12 @@ export default function useSentenceHandler() {
     updateSegmentHistoryAndIndexAtom,
   );
 
-  /** 추가 */
-  const onMouseUp = () => {
+  /** 문장 요소 추가 */
+  const onMouseUp = ({ detail }: MouseEvent<HTMLElement>) => {
+    /** 더블 클릭일 땐 실행 안함. detail 속성은 마우스 클릭 횟수 (더블클릭시 2) */
+    if (detail > 1) return;
     /** 태그 리스트에서 태그를 선택했을 때만 실행 */
-    if (selectedTag && currentSegment) {
+    if (selectedTag && currentSegment && detail === 1) {
       const { begin, end } = getBeginEndIdxFromSelection(TOKEN_INDEX);
       const onInvalid = () => {
         setAndClearInvalidIndex(end - 1);
@@ -46,7 +53,7 @@ export default function useSentenceHandler() {
     }
   };
 
-  /** 삭제 */
+  /** 문장 요소 삭제 */
   const onClick = () => {
     /** 삭제 모드이고, 드래그해서 선택한 토큰 정보가 있을 때만 실행 */
     if (isDeleteMode && targetInfo && currentSegment) {
@@ -56,5 +63,10 @@ export default function useSentenceHandler() {
     }
   };
 
-  return { onClick, onMouseOver, onMouseLeave, onMouseUp };
+  const onMouseDown = (e: MouseEvent<HTMLElement>) => {
+    /** 더블 클릭시 텍스트 전체 선택 방지 */
+    if (e.detail > 1) e.preventDefault();
+  };
+
+  return { onClick, onMouseOver, onMouseLeave, onMouseUp, onMouseDown };
 }
