@@ -1,5 +1,5 @@
 import { axios } from '@/lib';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { QueryClient, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 type RemainingCountResponse = { count: number };
@@ -26,4 +26,14 @@ export const useRemainingCount = <
     queryFn: getRemainingCount,
     ...options,
   });
+};
+
+/**
+ * React Router loader 사용시 활용
+ * @see https://reactrouter.com/en/main/guides/data-libs
+ * */
+export const analysisCountLoader = (queryClient: QueryClient) => {
+  return () => {
+    return queryClient.fetchQuery(REMAINING_COUNT_BASE_KEY, getRemainingCount);
+  };
 };

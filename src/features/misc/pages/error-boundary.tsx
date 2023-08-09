@@ -7,7 +7,7 @@ export default function ErrorBoundary() {
   const error = useRouteError() as Error;
 
   const isMounted = useIsMounted();
-  const errorMessage = useRef(error?.message || '404 | Page Not Found');
+  const errorMessage = useRef(error?.message || '404 | Not Found');
 
   if (isRouteErrorResponse(error)) {
     const { status, statusText } = error;
