@@ -1,5 +1,4 @@
-import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller } from 'react-hook-form';
 import {
   Badge,
   Button,
@@ -11,35 +10,14 @@ import {
   Stack,
   type StackProps,
   Text,
-  useDisclosure,
 } from '@chakra-ui/react';
 import {
-  type AnalysisFormValues,
-  createAnalysisFormSchema,
   FieldWithHeading,
-  REMAINING_COUNT_BASE_KEY,
-  useCreateAnalysis,
-  useRemainingCount,
+  useCreateAnalysisForm,
 } from '@/features/syntax-analyzer';
-import { ConfirmModal } from 'src/base/components';
-import { expandAbbreviations, tokenizer } from '@/base/utils/string';
-import { useAtom, useSetAtom } from 'jotai';
-import { useNavigate } from 'react-router-dom';
-import {
-  currentAnalysisAtom,
-  userAnalysisListAtom,
-} from '@/store/analysis-store';
-import { useQueryClient } from '@tanstack/react-query';
-import { nanoid } from 'nanoid';
+import { ConfirmModal } from '@/base';
 import { GiMagicLamp } from 'react-icons/gi';
 import { SentenceInput } from '@/features/syntax-editor';
-
-import { getSyntaxTaggingPath } from '@/routes';
-
-const getDefaultValue = (count: number): AnalysisFormValues => ({
-  sentence: '',
-  model: count > 2 ? 'gpt-4' : 'gpt-3.5-turbo',
-});
 
 const MODEL_RADIO_FIELDS = [
   {
@@ -59,53 +37,20 @@ const MODEL_RADIO_FIELDS = [
 ];
 
 export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const { data: count = 0 } = useRemainingCount({
-    select: ({ count }) => count,
-    suspense: true,
-  });
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    register,
     control,
-    handleSubmit,
-    getValues,
+    register,
+    remainingCount,
+    isLoading,
+    onSubmit,
+    isModalOpen,
+    onSubmitConfirm,
+    closeModal,
     formState: { errors },
-  } = useForm<AnalysisFormValues>({
-    defaultValues: getDefaultValue(count),
-    resolver: yupResolver(createAnalysisFormSchema),
-  });
-
-  const { mutate, isLoading } = useCreateAnalysis({
-    onMutate: () => onClose(),
-    onSuccess: (analysis) => {
-      const addIdAnalysis = {
-        ...analysis,
-        id: nanoid(),
-        createdAt: new Date().toISOString(),
-      };
-      setUserAnalysisList([addIdAnalysis, ...userAnalysisList]);
-      setCurrentAnalysis(addIdAnalysis);
-      queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);
-      navigate(getSyntaxTaggingPath('user', 0));
-    },
-  });
-
-  const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
-  const [userAnalysisList, setUserAnalysisList] = useAtom(userAnalysisListAtom);
-
-  const onConfirm = () => {
-    const { model, sentence } = getValues();
-    const tokenized = tokenizer(expandAbbreviations(sentence));
-    const payload = { model, sentence: tokenized };
-    mutate(payload);
-  };
+  } = useCreateAnalysisForm();
 
   return (
-    <Stack as="form" onSubmit={handleSubmit(onOpen)} gap={10} {...stackProps}>
+    <Stack as="form" onSubmit={onSubmit} gap={10} {...stackProps}>
       <Controller
         name="model"
         control={control}
@@ -115,7 +60,10 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
               {MODEL_RADIO_FIELDS.map((field) => (
                 <Stack key={field.value}>
                   <HStack align="center">
-                    <Radio value={field.value} isDisabled={count < field.count}>
+                    <Radio
+                      value={field.value}
+                      isDisabled={remainingCount < field.count}
+                    >
                       {field.label}
                     </Radio>
                     <Badge
@@ -146,7 +94,7 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
             />
             <Button
               type="submit"
-              isDisabled={!count}
+              isDisabled={!remainingCount}
               size="lg"
               leftIcon={<GiMagicLamp fontSize="24px" />}
               loadingText="분석중"
@@ -157,9 +105,9 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
         </FieldWithHeading>
       </FormControl>
       <ConfirmModal
-        isOpen={isOpen}
-        onClose={onClose}
-        onConfirm={onConfirm}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={onSubmitConfirm}
         headerContent="문장 분석 요청"
         bodyContent="입력한 영어 문장을 분석하시겠습니까?"
       />

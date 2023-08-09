@@ -5,10 +5,10 @@ import {
   AnalysisSource,
   CombinedAnalysisList,
   generateAnalysis,
-  SAMPLE_ANALYSIS,
   TAnalysis,
 } from '@/features/syntax-editor';
-import { INVALID_POPUP_DELAY } from '@/features/syntax-editor/constants/settings';
+import { SAMPLE_ANALYSIS } from '@/features/syntax-editor/data';
+import { INVALID_POPUP_DELAY } from '@/features/syntax-editor/constants';
 
 export const userAnalysisListAtom = atomWithStorage<TAnalysis[]>(
   'userAnalysisList',
