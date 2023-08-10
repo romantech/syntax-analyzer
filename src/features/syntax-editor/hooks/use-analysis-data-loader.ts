@@ -23,13 +23,17 @@ export default function useAnalysisDataLoader() {
 
     setUserAnalysisList((prev) => [analysis, ...prev]);
     setCurrentAnalysis(analysis);
+    isProcessed.current = true;
   }, [location.state, setCurrentAnalysis, setUserAnalysisList]);
 
   const loadAndSetAnalysisBySource = useCallback(() => {
     if (!source || !index) return;
 
     const currentAnalysis = analysisListBySource[source][+index];
-    if (currentAnalysis) setCurrentAnalysis(currentAnalysis);
+    if (currentAnalysis) {
+      setCurrentAnalysis(currentAnalysis);
+      isProcessed.current = true;
+    }
   }, [analysisListBySource, setCurrentAnalysis, source, index]);
 
   useEffect(() => {
@@ -37,7 +41,5 @@ export default function useAnalysisDataLoader() {
 
     loadAndSetAnalysisFromState();
     loadAndSetAnalysisBySource();
-
-    isProcessed.current = true;
   }, [loadAndSetAnalysisFromState, loadAndSetAnalysisBySource]);
 }

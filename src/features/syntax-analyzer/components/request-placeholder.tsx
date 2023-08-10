@@ -4,7 +4,7 @@ import { loadingAnimation } from '@/assets/lottie';
 
 export default function RequestPlaceholder(centerProps: CenterProps) {
   return (
-    <Center {...centerProps}>
+    <Center w="full" {...centerProps}>
       <Player
         src={loadingAnimation}
         loop
