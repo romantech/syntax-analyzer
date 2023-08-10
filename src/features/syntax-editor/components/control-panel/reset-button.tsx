@@ -14,7 +14,7 @@ export default function ResetButton() {
   return (
     <ConfirmPopover
       onConfirm={initializer}
-      headerText="초기화 하시겠습니까?"
+      headerText="저장 상태로 초기화 하시겠습니까?"
       gutter={-18}
     >
       {({ onOpen, isOpen }) => (
