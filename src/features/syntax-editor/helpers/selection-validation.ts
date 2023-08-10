@@ -3,7 +3,7 @@ import { getSelectionIndices } from '@/base';
 
 const { INDEX, ID, BEGIN, END } = CONSTITUENT_DATA_ATTRS;
 
-const getAttributeAsNumber = (element: HTMLElement, key: string) => {
+export const getAttributeAsNumber = (element: HTMLElement, key: string) => {
   return Number(element.getAttribute(key));
 };
 
