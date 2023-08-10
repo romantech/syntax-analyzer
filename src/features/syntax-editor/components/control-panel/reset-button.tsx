@@ -7,7 +7,7 @@ import {
 import { MdOutlineRestore } from 'react-icons/md';
 
 export default function ResetButton() {
-  const initializer = useSyntaxEditorInitializer();
+  const { initializer } = useSyntaxEditorInitializer();
   const isTouched = useAtomValue(isSegmentTouchedAtom);
 
   return (
