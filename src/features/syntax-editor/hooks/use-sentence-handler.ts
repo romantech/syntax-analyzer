@@ -1,24 +1,20 @@
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   addConstituent,
-  CONSTITUENT_DATA_ATTRS,
+  checkSelectionBounds,
   deleteModeAtom,
   generateConstituent,
   removeConstituent,
   selectedTagAtom,
+  setAndClearInvalidRangeIndexAtom,
   updateSegmentHistoryAndIndexAtom,
   useSegmentMouseEvent,
 } from '@/features/syntax-editor';
-import { getBeginEndIdxFromSelection, MouseEventHandlers } from '@/base';
+import { clearSelection, MouseEventHandlers } from '@/base';
 import { MouseEvent } from 'react';
 
-const { TOKEN_INDEX } = CONSTITUENT_DATA_ATTRS;
 /** event.detail 속성은 마우스 클릭 횟수 (더블클릭시 2) */
 const isDoubleClicked = (e: MouseEvent) => e.detail > 1;
-
-const isSelectionEmpty = (begin: number, end: number) => {
-  return Math.abs(begin - end) === 0;
-};
 
 export default function useSentenceHandler(): MouseEventHandlers {
   const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
@@ -26,14 +22,20 @@ export default function useSentenceHandler(): MouseEventHandlers {
   const isDeleteMode = useAtomValue(deleteModeAtom);
   const selectedTag = useAtomValue(selectedTagAtom);
 
+  const setAndClearInvalidIndex = useSetAtom(setAndClearInvalidRangeIndexAtom);
+
   const [segment, updateSegment] = useAtom(updateSegmentHistoryAndIndexAtom);
 
   /** 문장 요소 추가 */
   const onMouseUp = (e: MouseEvent) => {
     /** 더블 클릭이 아니고, 태그를 선택했을 때만 실행 */
     if (selectedTag && segment && !isDoubleClicked(e)) {
-      const { begin, end } = getBeginEndIdxFromSelection(TOKEN_INDEX);
-      if (isSelectionEmpty(begin, end)) return;
+      const { begin, end, isValid } = checkSelectionBounds();
+      if (!isValid) {
+        setAndClearInvalidIndex(end - 1);
+        clearSelection();
+        return;
+      }
 
       const constituent = generateConstituent(selectedTag, begin, end);
       const updatedSegment = addConstituent(segment, begin, end, constituent);

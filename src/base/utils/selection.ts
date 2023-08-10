@@ -1,4 +1,4 @@
-import { Nullable } from '@/base/types';
+import { Nullable } from '@/base';
 
 export const getNearestElementByClass = (
   elementParam: Nullable<HTMLElement>,
@@ -12,7 +12,7 @@ export const getNearestElementByClass = (
   return null;
 };
 
-export const getBeginEndIdxFromSelection = (qualifiedName: string) => {
+export const getSelectionIndices = (qualifiedName: string) => {
   let begin = 0;
   let end = 0;
 
@@ -29,7 +29,7 @@ export const getBeginEndIdxFromSelection = (qualifiedName: string) => {
   begin = startIndex ? parseInt(startIndex, 10) : 0;
   end = endIndex ? parseInt(endIndex, 10) + 1 : 0;
 
-  return { begin, end };
+  return { begin, end, startNode, endNode };
 };
 
 export const clearSelection = () => {

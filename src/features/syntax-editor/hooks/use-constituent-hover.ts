@@ -1,22 +1,22 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
+  CONSTITUENT_CLASSES,
   hoveredConstituentAtom,
   isAbbrTooltipVisibleAtom,
 } from '@/features/syntax-editor';
 import { MouseEvent } from 'react';
 import { getNearestElementByClass, MouseEventHandlers } from '@/base';
 import { RESET } from 'jotai/utils';
-import { CONSTITUENT_CLASSES } from '@/features/syntax-editor/constants';
 
 export default function useConstituentHover(): MouseEventHandlers {
   const isAbbrTooltipVisible = useAtomValue(isAbbrTooltipVisibleAtom);
   const setHoveredConstituent = useSetAtom(hoveredConstituentAtom);
 
-  const onMouseOver = (e: MouseEvent) => {
+  const onMouseOver = ({ target }: MouseEvent) => {
     if (!isAbbrTooltipVisible) return;
 
     const element = getNearestElementByClass(
-      e.target as HTMLElement,
+      target as HTMLElement,
       CONSTITUENT_CLASSES.CONSTITUENT,
     );
 

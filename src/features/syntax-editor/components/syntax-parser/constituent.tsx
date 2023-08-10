@@ -17,11 +17,15 @@ import classnames from 'classnames';
 interface ConstituentProps {
   constituent: TConstituent;
   isMultipleTokenRange: boolean;
+  begin: number;
+  end: number;
 }
 
 export default function Constituent({
   children,
   constituent,
+  begin,
+  end,
   isMultipleTokenRange,
 }: PropsWithChildren<ConstituentProps>) {
   const { dark, light } = CONSTITUENT_COLORS[constituent.type];
@@ -36,9 +40,11 @@ export default function Constituent({
   const isCurrentHovered = hoveredConstituent === constituent.id;
 
   const dataAttrs = {
-    [CONSTITUENT_DATA_ATTRS.CONSTITUENT_ID]: constituent.id,
-    [CONSTITUENT_DATA_ATTRS.CONSTITUENT_LABEL]: constituent.label,
-    [CONSTITUENT_DATA_ATTRS.CONSTITUENT_ABBR]: constituent.abbreviation,
+    [CONSTITUENT_DATA_ATTRS.ID]: constituent.id,
+    [CONSTITUENT_DATA_ATTRS.LABEL]: constituent.label,
+    [CONSTITUENT_DATA_ATTRS.ABBR]: constituent.abbreviation,
+    [CONSTITUENT_DATA_ATTRS.BEGIN]: begin,
+    [CONSTITUENT_DATA_ATTRS.END]: end,
   };
 
   return (

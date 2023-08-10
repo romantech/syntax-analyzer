@@ -15,15 +15,15 @@ export default function Segment({
 }: PropsWithChildren<SegmentProps>) {
   if (!segment.constituents.length) return <Fragment>{children}</Fragment>;
 
-  const isMultipleTokenRange = isMultipleTokensInRange(
-    segment.begin,
-    segment.end,
-  );
+  const { begin, end } = segment;
+  const isMultipleTokenRange = isMultipleTokensInRange(begin, end);
 
   return segment.constituents.reduce(
     (tokens, constituent) => (
       <Constituent
         key={constituent.id}
+        begin={begin}
+        end={end}
         constituent={constituent}
         isMultipleTokenRange={isMultipleTokenRange}
       >
