@@ -25,7 +25,7 @@ export default function Constituent({
   isMultipleTokenRange,
 }: PropsWithChildren<ConstituentProps>) {
   const { dark, light } = CONSTITUENT_COLORS[constituent.type];
-  const colorValue = useColorModeValue(light, dark);
+  const textColor = useColorModeValue(light, dark);
 
   const isAbbrTooltipVisible = useAtomValue(isAbbrTooltipVisibleAtom);
   const hoveredConstituent = useAtomValue(hoveredConstituentAtom);
@@ -50,7 +50,7 @@ export default function Constituent({
     >
       <Text
         as="span"
-        color={colorValue}
+        color={textColor}
         className={classnames(CONSTITUENT_CLASSES.CONSTITUENT, {
           [CONSTITUENT_CLASSES.TOKEN_GROUP]: isMultipleTokenRange,
           [CONSTITUENT_CLASSES.TOKEN]: !isMultipleTokenRange,

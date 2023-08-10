@@ -8,7 +8,6 @@ import {
   TAnalysis,
 } from '@/features/syntax-editor';
 import { SAMPLE_ANALYSIS } from '@/features/syntax-editor/data';
-import { INVALID_POPUP_DELAY } from '@/features/syntax-editor/constants';
 
 export const userAnalysisListAtom = atomWithStorage<TAnalysis[]>(
   'userAnalysisList',
@@ -28,7 +27,7 @@ export const selectedAnalysisAtom = atom<Nullable<TAnalysis>>(null);
 
 export const addUserAnalysisActionAtom = atom(
   null,
-  (_, set, payload: { sentence: string; source: AnalysisSource }) => {
+  (_get, set, payload: { sentence: string; source: AnalysisSource }) => {
     const { sentence, source } = payload;
     const analysis = generateAnalysis(sentence, source);
     set(userAnalysisListAtom, (prev) => [analysis, ...prev]);
@@ -41,15 +40,5 @@ export const removeUserAnalysisActionAtom = atom(
     set(userAnalysisListAtom, (prev) =>
       prev.filter((analysis) => analysis.id !== sentenceId),
     );
-  },
-);
-
-export const invalidRangeIndexAtom = atom<Nullable<number>>(null);
-
-export const setAndClearInvalidRangeIndexAtom = atom(
-  null,
-  (_, set, invalidIndex: number) => {
-    set(invalidRangeIndexAtom, invalidIndex);
-    setTimeout(() => set(invalidRangeIndexAtom, null), INVALID_POPUP_DELAY);
   },
 );

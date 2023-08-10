@@ -70,7 +70,7 @@ export const undoRedoAbilityAtom = atom((get) => {
 
 export const undoRedoActionAtom = atom(
   (get) => get(undoRedoAbilityAtom),
-  (get, set, type: 'undo' | 'redo') => {
+  (_get, set, type: 'undo' | 'redo') => {
     set(segmentHistoryIndexAtom, (prev) => {
       if (type === 'undo') return prev - 1;
       return prev + 1;

@@ -1,9 +1,11 @@
 import { atom } from 'jotai';
 import { atomWithReset, atomWithStorage, RESET } from 'jotai/utils';
 import {
-  ConstituentWithoutId,
   DEFAULT_ABBR_INFO_MODE,
   DEFAULT_TAG_INFO_MODE,
+} from '@/features/syntax-editor/constants/settings';
+import {
+  ConstituentWithoutId,
   hasAddedTagAtom,
 } from '@/features/syntax-editor';
 
@@ -21,7 +23,7 @@ export const abbrInfoModeAtom = atomWithStorage(
   DEFAULT_ABBR_INFO_MODE,
 );
 
-export const resetControlPanelAtom = atom(null, (get, set) => {
+export const resetControlPanelAtom = atom(null, (_get, set) => {
   set(selectedTagAtom, RESET);
   set(hoveredConstituentAtom, RESET);
   set(deleteModeAtom, RESET);

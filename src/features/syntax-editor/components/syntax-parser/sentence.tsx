@@ -1,21 +1,22 @@
 import { forwardRef, PropsWithChildren } from 'react';
-import { useAtomValue } from 'jotai';
 import { deleteModeAtom, useSentenceHandler } from '@/features/syntax-editor';
 import { Text, useColorModeValue } from '@chakra-ui/react';
+import { useAtomValue } from 'jotai';
 
 const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren>(
-  ({ children }, ref) => {
+  function Sentence({ children }, ref) {
     const isDeleteMode = useAtomValue(deleteModeAtom);
     const handlers = useSentenceHandler();
     const textColor = useColorModeValue('gray.700', 'gray.300');
+
     return (
       <Text
+        ref={ref}
         fontSize="3xl"
         fontWeight="bold"
-        ref={ref}
         whiteSpace="nowrap"
         color={textColor}
-        cursor={isDeleteMode ? 'pointer' : 'text'}
+        cursor={isDeleteMode ? 'pointer' : 'auto'}
         {...handlers}
       >
         {children}
@@ -23,6 +24,5 @@ const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren>(
     );
   },
 );
-Sentence.displayName = 'Sentence';
 
 export default Sentence;

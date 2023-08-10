@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   addConstituent,
   CONSTITUENT_DATA_ATTRS,
@@ -6,18 +6,19 @@ import {
   generateConstituent,
   removeConstituent,
   selectedTagAtom,
-  setAndClearInvalidRangeIndexAtom,
   updateSegmentHistoryAndIndexAtom,
   useSegmentMouseEvent,
 } from '@/features/syntax-editor';
-import {
-  clearSelection,
-  getBeginEndIdxFromSelection,
-  MouseEventHandlers,
-} from '@/base';
+import { getBeginEndIdxFromSelection, MouseEventHandlers } from '@/base';
 import { MouseEvent } from 'react';
 
 const { TOKEN_INDEX } = CONSTITUENT_DATA_ATTRS;
+/** event.detail 속성은 마우스 클릭 횟수 (더블클릭시 2) */
+const isDoubleClicked = (e: MouseEvent) => e.detail > 1;
+
+const isSelectionEmpty = (begin: number, end: number) => {
+  return Math.abs(begin - end) === 0;
+};
 
 export default function useSentenceHandler(): MouseEventHandlers {
   const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
@@ -25,47 +26,36 @@ export default function useSentenceHandler(): MouseEventHandlers {
   const isDeleteMode = useAtomValue(deleteModeAtom);
   const selectedTag = useAtomValue(selectedTagAtom);
 
-  const setAndClearInvalidIndex = useSetAtom(setAndClearInvalidRangeIndexAtom);
-
-  const [currentSegment, updateSegment] = useAtom(
-    updateSegmentHistoryAndIndexAtom,
-  );
+  const [segment, updateSegment] = useAtom(updateSegmentHistoryAndIndexAtom);
 
   /** 문장 요소 추가 */
-  const onMouseUp = ({ detail }: MouseEvent<HTMLElement>) => {
-    /** 더블 클릭일 땐 실행 안함. detail 속성은 마우스 클릭 횟수 (더블클릭시 2) */
-    if (detail > 1) return;
-    /** 태그 리스트에서 태그를 선택했을 때만 실행 */
-    if (selectedTag && currentSegment && detail === 1) {
+  const onMouseUp = (e: MouseEvent) => {
+    /** 더블 클릭이 아니고, 태그를 선택했을 때만 실행 */
+    if (selectedTag && segment && !isDoubleClicked(e)) {
       const { begin, end } = getBeginEndIdxFromSelection(TOKEN_INDEX);
-      const onInvalid = () => {
-        setAndClearInvalidIndex(end - 1);
-        clearSelection();
-      };
-      const updatedSegment = addConstituent(
-        currentSegment,
-        begin,
-        end,
-        generateConstituent(selectedTag, begin, end),
-        onInvalid,
-      );
-      if (currentSegment !== updatedSegment) updateSegment(updatedSegment);
+      if (isSelectionEmpty(begin, end)) return;
+
+      const constituent = generateConstituent(selectedTag, begin, end);
+      const updatedSegment = addConstituent(segment, begin, end, constituent);
+
+      updateSegment(updatedSegment);
     }
   };
 
   /** 문장 요소 삭제 */
   const onClick = () => {
     /** 삭제 모드이고, 드래그해서 선택한 토큰 정보가 있을 때만 실행 */
-    if (isDeleteMode && targetInfo && currentSegment) {
+    if (isDeleteMode && targetInfo && segment) {
       const constituentId = Number(targetInfo.constituentId);
-      const updatedSegment = removeConstituent(currentSegment, constituentId);
+      const updatedSegment = removeConstituent(segment, constituentId);
+
       updateSegment(updatedSegment);
     }
   };
 
-  const onMouseDown = (e: MouseEvent<HTMLElement>) => {
+  const onMouseDown = (e: MouseEvent) => {
     /** 더블 클릭시 텍스트 전체 선택 방지 */
-    if (e.detail > 1) e.preventDefault();
+    if (isDoubleClicked(e)) e.preventDefault();
   };
 
   return { onClick, onMouseOver, onMouseLeave, onMouseUp, onMouseDown };

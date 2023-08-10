@@ -1,4 +1,4 @@
-import { generateNumberID, Nullable, VoidFunc } from '@/base';
+import { generateNumberID, Nullable } from '@/base';
 import { TConstituent, TSegment } from '@/features/syntax-editor';
 
 export const cloneSegment = (segment: TSegment) => structuredClone(segment);
@@ -29,18 +29,6 @@ const isRangeWithinSegment = (segment: TSegment, begin: number, end: number) =>
 
 const isSegmentWithinRange = (segment: TSegment, begin: number, end: number) =>
   segment.begin >= begin && segment.end <= end;
-
-const isValidRange = (
-  childSegments: TSegment[],
-  begin: number,
-  end: number,
-) => {
-  return childSegments.some((child) => {
-    const isLargerThanRange = isRangeWithinSegment(child, begin, end);
-    const isSmallerThanRange = isSegmentWithinRange(child, begin, end);
-    return isLargerThanRange || isSmallerThanRange;
-  });
-};
 
 /**
  * - begin/end 범위 보다 작은 세그먼트를 필터링해서 반환하는 함수
@@ -113,7 +101,6 @@ const generateAndConfigureSegment = (
  *  @param {number} begin - 범위의 시작 값
  *  @param {number} end - 범위의 종료 값
  *  @param {TConstituent} constituent - 추가할 Constituent
- *  @param {VoidFunc} [onInvalid] - 범위가 유효하지 않을 때 호출할 함수
  *  @returns {TSegment} Constituent 추가된 후의 세그먼트
  */
 export const addConstituent = (
@@ -121,16 +108,7 @@ export const addConstituent = (
   begin: number,
   end: number,
   constituent: TConstituent,
-  onInvalid?: VoidFunc,
 ): TSegment => {
-  if (segment.children.length && constituent.type !== 'token') {
-    const isValid = isValidRange(segment.children, begin, end);
-    if (!isValid) {
-      onInvalid?.();
-      return segment;
-    }
-  }
-
   const clonedSegment: TSegment = cloneSegment(segment);
 
   // Case 1: begin-end 범위가 현재 세그먼트 범위와 일치할 때
@@ -151,7 +129,6 @@ export const addConstituent = (
         begin,
         end,
         constituent,
-        onInvalid,
       );
       return clonedSegment;
     }

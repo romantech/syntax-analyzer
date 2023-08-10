@@ -14,6 +14,7 @@ export default function Segment({
   children,
 }: PropsWithChildren<SegmentProps>) {
   if (!segment.constituents.length) return <Fragment>{children}</Fragment>;
+
   const isMultipleTokenRange = isMultipleTokensInRange(
     segment.begin,
     segment.end,
