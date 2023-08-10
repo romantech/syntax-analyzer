@@ -1,7 +1,13 @@
 import { Badge, HStack, StackProps, Text, VStack } from '@chakra-ui/react';
-import { DateChip, DeleteIconButton, isLessThanAgo, tokenJoiner } from '@/base';
+import {
+  ConfirmPopover,
+  DateChip,
+  DeleteButtonIcon,
+  isLessThanAgo,
+  tokenJoiner,
+} from '@/base';
 
-import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor/constants/settings';
+import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor';
 
 interface DeletableSentenceProps extends StackProps {
   onClick: () => void;
@@ -30,11 +36,15 @@ export default function DeletableSentence({
             </Badge>
           )}
         </HStack>
-        <DeleteIconButton
+        <ConfirmPopover
+          headerText="선택한 문장을 삭제하시겠습니까?"
           onConfirm={onDelete}
-          hidden={hideDeleteButton}
-          popoverHeader="선택한 문장을 삭제하시겠습니까?"
-        />
+          confirmText="삭제"
+        >
+          {({ onOpen }) => (
+            <DeleteButtonIcon onClick={onOpen} hidden={hideDeleteButton} />
+          )}
+        </ConfirmPopover>
       </HStack>
       <Text
         noOfLines={1}
