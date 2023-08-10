@@ -13,8 +13,8 @@ import {
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   analysisListBySourceAtom,
-  currentAnalysisAtom,
   removeUserAnalysisActionAtom,
+  selectedAnalysisAtom,
 } from 'src/features/syntax-editor/store';
 import { ConfirmModal, TextPlaceholder } from '@/base';
 import { Fragment, useRef } from 'react';
@@ -53,7 +53,7 @@ export default function SentenceList({
   const navigate = useNavigate();
 
   const combinedAnalysisList = useAtomValue(analysisListBySourceAtom);
-  const setCurrentAnalysis = useSetAtom(currentAnalysisAtom);
+  const setSelectedAnalysis = useSetAtom(selectedAnalysisAtom);
   const removeUserAnalysis = useSetAtom(removeUserAnalysisActionAtom);
 
   const [parent] = useAutoAnimate();
@@ -67,7 +67,7 @@ export default function SentenceList({
     if (!selectedAnalysis.current) return;
 
     const { analysis, index } = selectedAnalysis.current;
-    setCurrentAnalysis(analysis);
+    setSelectedAnalysis(analysis);
     navigate(getSyntaxEditorPath(analysis.source, index));
   };
 

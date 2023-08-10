@@ -24,7 +24,7 @@ export const analysisListBySourceAtom = atomWithDefault<CombinedAnalysisList>(
   }),
 );
 
-export const currentAnalysisAtom = atom<Nullable<TAnalysis>>(null);
+export const selectedAnalysisAtom = atom<Nullable<TAnalysis>>(null);
 
 export const addUserAnalysisActionAtom = atom(
   null,

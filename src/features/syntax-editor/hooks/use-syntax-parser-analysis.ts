@@ -1,11 +1,11 @@
 import { useAtomValue } from 'jotai';
 import {
-  currentAnalysisAtom,
   currentSegmentFromHistoryAtom,
+  selectedAnalysisAtom,
 } from '@/features/syntax-editor';
 
 export default function useSyntaxParserAnalysis() {
-  const sentence = useAtomValue(currentAnalysisAtom)?.sentence ?? null;
+  const sentence = useAtomValue(selectedAnalysisAtom)?.sentence ?? null;
   const segment = useAtomValue(currentSegmentFromHistoryAtom);
   return { sentence, segment };
 }

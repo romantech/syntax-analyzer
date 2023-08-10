@@ -2,11 +2,11 @@ import { atom } from 'jotai';
 import { atomWithDefault, atomWithReset, RESET } from 'jotai/utils';
 import {
   AnalysisPathParams,
-  currentAnalysisAtom,
   fillSegment,
   removeEmptySegment,
   resetControlPanelAtom,
   sampleAnalysisListAtom,
+  selectedAnalysisAtom,
   TSegment,
   userAnalysisListAtom,
 } from '@/features/syntax-editor';
@@ -27,8 +27,8 @@ export const segmentHistoryIndexAtom = atomWithReset(0);
  * */
 
 export const segmentHistoryAtom = atomWithDefault<TSegment[]>((get) => {
-  const currentAnalysis = get(currentAnalysisAtom);
-  return currentAnalysis ? [currentAnalysis.rootSegment] : [];
+  const selectedAnalysis = get(selectedAnalysisAtom);
+  return selectedAnalysis ? [selectedAnalysis.rootSegment] : [];
 });
 
 export const resetSegmentHistoryAtom = atom(null, (_, set) => {
@@ -81,21 +81,21 @@ export const undoRedoActionAtom = atom(
 );
 
 export const hasAddedTagAtom = atom((get) => {
-  const currentSegment = get(currentSegmentFromHistoryAtom);
-  return Boolean(currentSegment?.children.length);
+  const segment = get(currentSegmentFromHistoryAtom);
+  return Boolean(segment?.children.length);
 });
 
 export const isSegmentTouchedAtom = atom((get) => {
-  const currentAnalysis = get(currentAnalysisAtom)?.rootSegment;
-  const currentHistorySegment = get(currentSegmentFromHistoryAtom);
-  return currentAnalysis !== currentHistorySegment;
+  const segmentFromAnalysis = get(selectedAnalysisAtom)?.rootSegment;
+  const segmentFromHistory = get(currentSegmentFromHistoryAtom);
+  return segmentFromAnalysis !== segmentFromHistory;
 });
 
 export const saveHistorySegmentAtom = atom(
   null,
   (get, set, { source, index }: AnalysisPathParams) => {
-    const currentHistorySegment = get(currentSegmentFromHistoryAtom);
-    if (!currentHistorySegment) return;
+    const segment = get(currentSegmentFromHistoryAtom);
+    if (!segment) return;
 
     const analysisList = {
       user: userAnalysisListAtom,
@@ -104,8 +104,11 @@ export const saveHistorySegmentAtom = atom(
 
     set(analysisList[source], (prev) => {
       const i = parseInt(index, 10);
-      prev[i] = { ...prev[i], rootSegment: currentHistorySegment };
+      prev[i] = { ...prev[i], rootSegment: segment };
+      set(selectedAnalysisAtom, prev[i]);
       return [...prev];
     });
+
+    set(resetControlPanelAtom);
   },
 );

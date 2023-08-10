@@ -6,7 +6,7 @@ export const DEFAULT_ABBR_INFO_MODE = true;
 
 export const DEFAULT_SENTENCE_LIST_TAB = 1; // 0(추가한 문장), 1 (샘플 문장)
 
-export const SAVE_SEGMENT_DELAY = 1000;
+export const SAVE_SEGMENT_DELAY = 500;
 
 export const SAVE_SEGMENT_SUCCESS_TOAST_DURATION = 5000;
 
