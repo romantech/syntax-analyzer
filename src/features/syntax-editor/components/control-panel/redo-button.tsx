@@ -11,7 +11,7 @@ export default function RedoButton() {
     clearSelection();
   };
   return (
-    <Tooltip label="다시 실행" openDelay={200}>
+    <Tooltip label="다시 실행">
       <IconButton
         variant="solid"
         aria-label="Redo the last undone action"

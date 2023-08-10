@@ -45,6 +45,7 @@ export const removeUserAnalysisActionAtom = atom(
 );
 
 export const invalidRangeIndexAtom = atom<Nullable<number>>(null);
+
 export const setAndClearInvalidRangeIndexAtom = atom(
   null,
   (_, set, invalidIndex: number) => {

@@ -45,12 +45,7 @@ export default function SaveButton() {
       gutter={-18}
     >
       {({ onOpen, isOpen }) => (
-        <Tooltip
-          label="태깅 저장"
-          openDelay={200}
-          closeOnPointerDown
-          isDisabled={isOpen}
-        >
+        <Tooltip label="태깅 저장" closeOnPointerDown isDisabled={isOpen}>
           <IconButton
             variant="solid"
             aria-label="Save your tagging result"

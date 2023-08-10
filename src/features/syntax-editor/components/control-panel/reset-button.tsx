@@ -20,7 +20,6 @@ export default function ResetButton() {
       {({ onOpen, isOpen }) => (
         <Tooltip
           label="저장 상태로 초기화"
-          openDelay={200}
           closeOnPointerDown
           isDisabled={isOpen}
         >

@@ -5,12 +5,13 @@ import {
   currentAnalysisAtom,
   fillSegment,
   removeEmptySegment,
+  resetControlPanelAtom,
   sampleAnalysisListAtom,
   TSegment,
   userAnalysisListAtom,
 } from '@/features/syntax-editor';
 import { Nullable } from '@/base';
-import { deleteModeAtom, selectedTagAtom } from './control-panel-store';
+import { deleteModeAtom } from './control-panel-store';
 
 /**
  * useResetAtom 혹은 RESET 심볼을 이용해 초기값으로 되돌릴 수 있음
@@ -35,19 +36,14 @@ export const resetSegmentHistoryAtom = atom(null, (_, set) => {
   set(segmentHistoryIndexAtom, RESET);
 });
 
-export const currentHistorySegmentAtom = atom<Nullable<TSegment>>((get) => {
+export const currentSegmentFromHistoryAtom = atom<Nullable<TSegment>>((get) => {
   const history = get(segmentHistoryAtom);
   const index = get(segmentHistoryIndexAtom);
   return history[index] ?? null;
 });
 
-export const hasAddedTagAtom = atom((get) => {
-  const currentSegment = get(currentHistorySegmentAtom);
-  return Boolean(currentSegment?.children.length);
-});
-
 export const updateSegmentHistoryAndIndexAtom = atom(
-  (get) => get(currentHistorySegmentAtom),
+  (get) => get(currentSegmentFromHistoryAtom),
   (get, set, updatedSegment: TSegment) => {
     const cleanedSegment = removeEmptySegment(updatedSegment);
     const filledSegment = fillSegment(cleanedSegment, updatedSegment.end);
@@ -79,27 +75,33 @@ export const undoRedoActionAtom = atom(
       if (type === 'undo') return prev - 1;
       return prev + 1;
     });
-    set(deleteModeAtom, RESET);
-    set(selectedTagAtom, RESET);
+
+    set(resetControlPanelAtom);
   },
 );
 
+export const hasAddedTagAtom = atom((get) => {
+  const currentSegment = get(currentSegmentFromHistoryAtom);
+  return Boolean(currentSegment?.children.length);
+});
+
 export const isSegmentTouchedAtom = atom((get) => {
   const currentAnalysis = get(currentAnalysisAtom)?.rootSegment;
-  const currentHistorySegment = get(currentHistorySegmentAtom);
+  const currentHistorySegment = get(currentSegmentFromHistoryAtom);
   return currentAnalysis !== currentHistorySegment;
 });
 
 export const saveHistorySegmentAtom = atom(
   null,
   (get, set, { source, index }: AnalysisPathParams) => {
-    const currentHistorySegment = get(currentHistorySegmentAtom);
+    const currentHistorySegment = get(currentSegmentFromHistoryAtom);
     if (!currentHistorySegment) return;
 
     const analysisList = {
       user: userAnalysisListAtom,
       sample: sampleAnalysisListAtom,
     };
+
     set(analysisList[source], (prev) => {
       const i = parseInt(index, 10);
       prev[i] = { ...prev[i], rootSegment: currentHistorySegment };

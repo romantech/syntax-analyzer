@@ -11,7 +11,7 @@ export default function DeleteButton() {
   const isDisableDeleteButton = useAtomValue(isDisableDeleteButtonAtom);
 
   return (
-    <Tooltip label="태그 삭제" openDelay={200}>
+    <Tooltip label="태그 삭제">
       <IconButton
         variant="solid"
         colorScheme={isDeleteMode ? 'blue' : 'gray'}

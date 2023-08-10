@@ -12,7 +12,7 @@ export default function UndoButton() {
   };
 
   return (
-    <Tooltip label="실행 취소" openDelay={200}>
+    <Tooltip label="실행 취소">
       <IconButton
         variant="solid"
         aria-label="Undo the last action"
