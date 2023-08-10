@@ -8,7 +8,7 @@ import {
 } from '@/features/syntax-editor';
 import { useCallback, useEffect, useRef } from 'react';
 
-export default function useAnalysisLoader() {
+export default function useAnalysisDataLoader() {
   const { source, index } = useParams<AnalysisPathParams>();
   const location = useLocation();
   const isProcessed = useRef(false);

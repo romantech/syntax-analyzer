@@ -3,14 +3,14 @@ import {
   ControlPanel,
   SyntaxParser,
   TagListAccordion,
-  useAnalysisLoader,
-  useInitializeSyntaxEditor,
+  useAnalysisDataLoader,
+  useSyntaxEditorInitializer,
 } from '@/features/syntax-editor';
 import { Notice } from '@/base';
 
 export default function SyntaxEditor() {
-  useInitializeSyntaxEditor({ autoReset: true });
-  useAnalysisLoader();
+  useSyntaxEditorInitializer({ resetOnUnmount: true });
+  useAnalysisDataLoader();
 
   return (
     <Stack minH="full" overflowX="auto" gap={8} pt={8}>

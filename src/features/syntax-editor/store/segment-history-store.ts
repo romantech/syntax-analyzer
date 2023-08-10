@@ -18,8 +18,8 @@ import { deleteModeAtom, selectedTagAtom } from './control-panel-store';
  *  */
 export const segmentHistoryIndexAtom = atomWithReset(0);
 /**
- * atomWithDefault 사용시 read function으로 초기값을 지정할 수 있음
- * write function은 atom()과 동일하게 사용 가능
+ * atomWithDefault 사용시 read function 으로 초기값을 지정할 수 있음
+ * write function 은 atom()과 동일하게 사용 가능
  * e.g. setState(...) 혹은 setState(prev => ...) 형태로 사용 가능
  * useResetAtom 혹은 RESET 심볼을 이용해 초기값으로 되돌릴 수 있음
  * @see https://jotai.org/docs/utilities/resettable#atomwithdefault

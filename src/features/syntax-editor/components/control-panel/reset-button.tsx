@@ -2,12 +2,12 @@ import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 import {
   isSegmentTouchedAtom,
-  useInitializeSyntaxEditor,
+  useSyntaxEditorInitializer,
 } from '@/features/syntax-editor';
 import { MdOutlineRestore } from 'react-icons/md';
 
 export default function ResetButton() {
-  const initializer = useInitializeSyntaxEditor();
+  const initializer = useSyntaxEditorInitializer();
   const isTouched = useAtomValue(isSegmentTouchedAtom);
 
   return (

@@ -5,13 +5,13 @@ import {
 } from '@/features/syntax-editor';
 import { useCallback, useEffect } from 'react';
 
-interface UseInitializeSyntaxEditorProps {
-  autoReset?: boolean;
+interface UseInitializerProps {
+  resetOnUnmount?: boolean;
 }
 
-export default function useInitializeSyntaxEditor({
-  autoReset = false,
-}: UseInitializeSyntaxEditorProps = {}) {
+export default function useSyntaxEditorInitializer({
+  resetOnUnmount = false,
+}: UseInitializerProps = {}) {
   const resetSegmentHistory = useResetAtom(resetSegmentHistoryAtom);
   const resetControlPanel = useResetAtom(resetControlPanelAtom);
 
@@ -20,8 +20,10 @@ export default function useInitializeSyntaxEditor({
   }, [resetControlPanel, resetSegmentHistory]);
 
   useEffect(() => {
-    if (autoReset) initializer();
-  }, [autoReset, initializer]);
+    return () => {
+      if (resetOnUnmount) initializer();
+    };
+  }, [resetOnUnmount, initializer]);
 
-  return initializer;
+  return { initializer };
 }
