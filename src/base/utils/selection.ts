@@ -1,5 +1,46 @@
 import { Nullable } from '@/base';
 
+interface SelectionIndicesResult {
+  begin: number;
+  end: number;
+  startNode: Nullable<HTMLElement>;
+  endNode: Nullable<HTMLElement>;
+}
+
+export const getSelectionIndices = (
+  qualifiedName: string,
+): SelectionIndicesResult => {
+  let begin = 0;
+  let end = 0;
+
+  const sel = window.getSelection();
+  if (!sel?.rangeCount) {
+    return { begin: 0, end: 0, startNode: null, endNode: null };
+  }
+
+  let startNode = sel.getRangeAt(0).startContainer as Node;
+  let endNode = sel.getRangeAt(0).endContainer as Node;
+
+  if (startNode.nodeType === Node.TEXT_NODE) startNode = startNode.parentNode!;
+  if (endNode.nodeType === Node.TEXT_NODE) endNode = endNode.parentNode!;
+
+  const startElement = startNode as HTMLElement;
+  const endElement = endNode as HTMLElement;
+
+  const startIndex = startElement.getAttribute(qualifiedName);
+  const endIndex = endElement.getAttribute(qualifiedName);
+
+  begin = startIndex ? Number(startIndex) : 0;
+  end = endIndex ? Number(endIndex) + 1 : 0;
+
+  return { begin, end, startNode: startElement, endNode: endElement };
+};
+
+export const clearSelection = () => {
+  const selection = window.getSelection();
+  selection?.removeAllRanges();
+};
+
 export const getNearestElementByClass = (
   elementParam: Nullable<HTMLElement>,
   className: string,
@@ -10,29 +51,4 @@ export const getNearestElementByClass = (
     element = element.parentElement;
   }
   return null;
-};
-
-export const getSelectionIndices = (qualifiedName: string) => {
-  let begin = 0;
-  let end = 0;
-
-  const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0) return { begin, end };
-
-  const range = sel.getRangeAt(0);
-  const startNode = range.startContainer.parentNode as HTMLElement;
-  const endNode = range.endContainer.parentNode as HTMLElement;
-
-  const startIndex = startNode.getAttribute(qualifiedName);
-  const endIndex = endNode.getAttribute(qualifiedName);
-
-  begin = startIndex ? parseInt(startIndex, 10) : 0;
-  end = endIndex ? parseInt(endIndex, 10) + 1 : 0;
-
-  return { begin, end, startNode, endNode };
-};
-
-export const clearSelection = () => {
-  const selection = window.getSelection();
-  selection?.removeAllRanges();
 };

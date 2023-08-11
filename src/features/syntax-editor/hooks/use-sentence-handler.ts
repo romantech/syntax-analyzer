@@ -1,7 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import {
   addConstituent,
-  checkSelectionBounds,
   deleteModeAtom,
   generateConstituent,
   removeConstituent,
@@ -9,6 +8,7 @@ import {
   setAndClearInvalidRangeIndexAtom,
   updateSegmentHistoryAndIndexAtom,
   useSegmentMouseEvent,
+  validateSelectionBounds,
 } from '@/features/syntax-editor';
 import { clearSelection, MouseEventHandlers } from '@/base';
 import { MouseEvent } from 'react';
@@ -30,7 +30,7 @@ export default function useSentenceHandler(): MouseEventHandlers {
   const onMouseUp = (e: MouseEvent) => {
     /** 더블 클릭이 아니고, 태그를 선택했을 때만 실행 */
     if (selectedTag && segment && !isDoubleClicked(e)) {
-      const { begin, end, isValid } = checkSelectionBounds();
+      const { begin, end, isValid } = validateSelectionBounds();
       if (!isValid) {
         setAndClearInvalidIndex(end - 1);
         clearSelection();
