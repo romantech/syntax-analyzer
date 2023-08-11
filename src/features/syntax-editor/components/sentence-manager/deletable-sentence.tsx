@@ -14,6 +14,7 @@ interface DeletableSentenceProps extends StackProps {
   onDelete: () => void;
   hideDeleteButton?: boolean;
   sentence: string[] | string;
+  showGPTBadge: boolean;
   createdAt: string;
 }
 
@@ -22,17 +23,23 @@ export default function DeletableSentence({
   sentence,
   createdAt,
   onDelete,
+  showGPTBadge,
   hideDeleteButton = false,
   ...stackProps
 }: DeletableSentenceProps) {
   return (
-    <VStack align="start" gap={0} p={1.5} {...stackProps}>
+    <VStack align="start" gap={0.5} p={1.5} {...stackProps}>
       <HStack w="full" justify="space-between">
-        <HStack gap={2.5}>
+        <HStack gap={1.5}>
           <DateChip date={createdAt} h={5} />
           {isLessThanAgo(createdAt, NEW_BADGE_DISPLAY_DURATION) && (
             <Badge fontSize="8px" colorScheme="green">
               New
+            </Badge>
+          )}
+          {showGPTBadge && (
+            <Badge fontSize="8px" colorScheme="red">
+              GPT
             </Badge>
           )}
         </HStack>

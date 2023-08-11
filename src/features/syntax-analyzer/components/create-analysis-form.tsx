@@ -23,14 +23,14 @@ import { SentenceInput } from '@/features/syntax-editor';
 const MODEL_RADIO_FIELDS = [
   {
     value: 'gpt-4',
-    label: 'Model 4',
+    label: 'gpt-4',
     desc: '분석 속도는 느리지만 정확도는 높아요',
     count: 3,
     recommend: true,
   },
   {
     value: 'gpt-3.5-turbo',
-    label: 'Model 3.5',
+    label: 'gpt-3.5',
     desc: '분석 속도는 빠르지만 정확도는 낮아요',
     count: 1,
     recommend: false,
@@ -65,7 +65,9 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
                       value={field.value}
                       isDisabled={remainingCount < field.count}
                     >
-                      {field.label}
+                      <Text as="span" textTransform="uppercase">
+                        {field.label}
+                      </Text>
                     </Radio>
                     <Badge
                       fontSize={10}

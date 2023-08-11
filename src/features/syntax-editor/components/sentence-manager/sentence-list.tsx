@@ -109,6 +109,7 @@ export default function SentenceList({
                         hideDeleteButton={source === 'sample'}
                         onClick={() => onSentenceClick({ analysis, index })}
                         onDelete={() => removeUserAnalysis(analysis.id)}
+                        showGPTBadge={analysis.isAnalyzedByGPT}
                       />
                     ))}
                   </Stack>

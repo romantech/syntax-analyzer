@@ -131,6 +131,7 @@ const sample1: TAnalysis = {
       },
     ],
   },
+  isAnalyzedByGPT: false,
 };
 const sample2: TAnalysis = {
   id: 'FoG2oo3NGMpb9daQcYtOn',
@@ -273,6 +274,7 @@ const sample2: TAnalysis = {
       },
     ],
   },
+  isAnalyzedByGPT: false,
 };
 const sample3: TAnalysis = {
   id: 'poAWpn8l7laknHPG7VLXz',
@@ -450,6 +452,7 @@ const sample3: TAnalysis = {
       },
     ],
   },
+  isAnalyzedByGPT: false,
 };
 const sample4: TAnalysis = {
   id: '5ykRceJ5NZwvTT5H2SXTU',
@@ -634,6 +637,7 @@ const sample4: TAnalysis = {
       },
     ],
   },
+  isAnalyzedByGPT: false,
 };
 const sample5: TAnalysis = {
   id: 'rEo6EErtakVY5qYZNFdUA',
@@ -844,6 +848,7 @@ const sample5: TAnalysis = {
       },
     ],
   },
+  isAnalyzedByGPT: false,
 };
 
 export const SAMPLE_ANALYSIS: TAnalysis[] = [
