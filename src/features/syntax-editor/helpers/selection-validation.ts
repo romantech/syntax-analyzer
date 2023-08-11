@@ -33,9 +33,9 @@ const isSelectionMatchingSegment = (
 
 /**
  * 주어진 요소의 상위 문장 성분들 중에서 가장 큰 target 값 반환
- * 예: 문장 성분의 구조가 [[0, 1], [1, 3]]이며, 부모는 [0, 3], 자식은 [0, 1], [1, 3] 3개가 있다고 가정
- * - [1, 3]을 포함하는 가장 큰 부모는 end(base)가 3인 요소를 상위로 탐색하여 가장 큰 begin(target) 반환
- * - [0, 1]을 포함하는 가장 큰 부모는 begin(base)가 0인 요소를 상위로 탐색하여 가장 큰 end(target) 반환
+ * 예: 문장 성분의 구조가 [[0, 1], [1, 3]]이며, 부모는 [0, 3], 자식은 [0, 1], [1, 3] 이라고 가정,
+ * - [0, 1]을 포함하는 begin(base)가 0인 부모 요소를 탐색하여 가장 큰 end(target) 반환
+ * - [1, 3]을 포함하는 end(base)가 3인 부모 요소를 탐색하여 가장 큰 begin(target) 반환
  */
 const computeMaxRange = (
   element: HTMLElement,
@@ -67,14 +67,14 @@ const computeMaxRange = (
 
 /**
  * 선택한 범위의 유효성 검사. 유효하지 않은 케이스 예시:
- * 1. 구/절이 교차할 때 - [[0, 2], [2, 13]]에서 1~4 범위 선택
+ * 1. 구/절이 교차할 때. 예: [[0, 2], [2, 5]]에서 1~3 범위 선택
  * 2. 시작(begin)과 끝(end)이 동일할 때
  * */
 export const validateSelectionBounds = () => {
   const { begin, end, startNode, endNode } = getSelectionIndices(INDEX);
   const getReturnValue = (isValid: boolean) => ({ begin, end, isValid });
 
-  // TOKEN_GROUP_SELECTOR 선택자와 일치하는 가장 가까운 조상 요소 탐색
+  // 선택자와 일치하는 가장 가까운 조상 요소 선택
   const beginGroup = startNode?.closest(TOKEN_GROUP_SELECTOR) as HTMLElement;
   const endGroup = endNode?.closest(TOKEN_GROUP_SELECTOR) as HTMLElement;
 
@@ -85,7 +85,7 @@ export const validateSelectionBounds = () => {
   if (!beginGroup || !endGroup) {
     const group = beginGroup ?? endGroup;
 
-    // [(0..., [1, 3]] 혹은 [[0, 1], ...3] 2개 케이스 모두 검사
+    // [0..., [1, 3]] 혹은 [[0, 1], ...3] 2개 케이스 모두 검사
     const resultB = computeMaxRange(group, BEGIN, END);
     const resultE = computeMaxRange(group, END, BEGIN);
 
@@ -105,10 +105,10 @@ export const validateSelectionBounds = () => {
     return getReturnValue(true);
 
   // 공통 부모 안에서 서로 다른 문장 성분을 걸쳐서 선택한 경우
-  // 예: 부모 [0, 4], 자식 1 [0, 2], 자식 2 [2, 4] 일 때 자식 1~2의 범위 선택
+  // 예: 부모 [0, 4], 자식 1 [0, 2], 자식 2 [2, 4] 일 때 자식 1~2 범위 선택
   if (startId !== endId) {
     if (
-      // [[0, 1], ...4] 일 때 begin/end 범위가 0~2 이면 [0, 1] 문장 성분을 포함하므로 유효
+      // 예: [[0, 1], ...4] 일 때 begin/end 범위가 0~2 이면 [0, 1] 문장 성분을 포함하므로 유효
       (endGroup.contains(beginGroup) && begin <= segmentBegin) ||
       (beginGroup.contains(endGroup) && end >= segmentEnd)
     ) {
