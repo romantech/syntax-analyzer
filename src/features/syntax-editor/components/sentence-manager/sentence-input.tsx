@@ -6,12 +6,16 @@ import {
   InputGroup,
   InputLeftElement,
   InputProps,
+  List,
+  ListIcon,
+  ListItem,
 } from '@chakra-ui/react';
-import { PiTextTBold } from 'react-icons/pi';
+import { PiNotePencil, PiTextTBold } from 'react-icons/pi';
 import { forwardRef } from 'react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-
-const DEFAULT_HELPER_MESSAGE = `축약 표현은 자동으로 풀어집니다 (I'll → I will)`;
+import { RiEnglishInput } from 'react-icons/ri';
+import { BsMagic } from 'react-icons/bs';
+import { TbArrowAutofitWidth } from 'react-icons/tb';
 
 interface SentenceInputProps extends InputProps {
   errorMessage?: string;
@@ -19,15 +23,7 @@ interface SentenceInputProps extends InputProps {
 }
 
 const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
-  function SentenceInput(
-    {
-      errorMessage,
-      helperMessage = DEFAULT_HELPER_MESSAGE,
-      size = 'lg',
-      ...inputProps
-    },
-    ref,
-  ) {
+  function SentenceInput({ errorMessage, size = 'lg', ...inputProps }, ref) {
     const [parent] = useAutoAnimate({ duration: 180 });
     return (
       <Box flexGrow={1} ref={parent}>
@@ -36,14 +32,33 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
             <PiTextTBold />
           </InputLeftElement>
           <Input
-            placeholder="90자 미만의 영어 문장을 입력해주세요"
+            placeholder="영어 문장을 입력해 주세요"
             maxLength={90}
             {...inputProps}
             ref={ref}
           />
         </InputGroup>
         <FormErrorMessage>{errorMessage}</FormErrorMessage>
-        <FormHelperText color="gray.500">{helperMessage}</FormHelperText>
+        <FormHelperText color="gray.500">
+          <List spacing={1.5}>
+            <ListItem>
+              <ListIcon as={BsMagic} />
+              {`축약 표현은 자동으로 풀어져요 (I'll → I will)`}
+            </ListItem>
+            <ListItem>
+              <ListIcon as={RiEnglishInput} />
+              영어와 문장 부호만 입력할 수 있어요
+            </ListItem>
+            <ListItem>
+              <ListIcon as={TbArrowAutofitWidth} />
+              최대 90자까지만 입력할 수 있어요
+            </ListItem>
+            <ListItem>
+              <ListIcon as={PiNotePencil} />
+              최소 3 단어로 이루어진 문장을 입력해 주세요
+            </ListItem>
+          </List>
+        </FormHelperText>
       </Box>
     );
   },
