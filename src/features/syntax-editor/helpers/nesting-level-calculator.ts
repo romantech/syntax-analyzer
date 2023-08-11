@@ -4,7 +4,7 @@ import { kebabToCamel } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_DATA_ATTRS,
-  getAttributeAsNumber,
+  getNumberAttr,
 } from '@/features/syntax-editor';
 
 const assignCalculatedLevel = (element: HTMLElement) => {
@@ -38,7 +38,7 @@ export const calculateNestingLevel = (ref: RefObject<HTMLElement>) => {
 
   Array.from(childElements).forEach((span) => {
     const spanElement = span as HTMLElement;
-    if (getAttributeAsNumber(spanElement, CONSTITUENT_DATA_ATTRS.ID)) {
+    if (getNumberAttr(spanElement, CONSTITUENT_DATA_ATTRS.ID)) {
       assignCalculatedLevel(spanElement);
     }
   });
