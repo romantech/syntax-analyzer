@@ -10,9 +10,11 @@ const TOKEN_GROUP_SELECTOR = '.' + CONSTITUENT_CLASSES.TOKEN_GROUP;
 export const getAttributeAsNumber = (element: HTMLElement, key: string) =>
   Number(element.getAttribute(key));
 
+/** 유효한 선택 범위가 아닐 때 - valid */
 const isSelectionEmpty = (begin: number, end: number) =>
   Math.abs(begin - end) === 0;
 
+/* 태깅하지 않았을 때 - valid */
 const hasNoTokenGroups = (startGroup: HTMLElement, endGroup: HTMLElement) =>
   !startGroup && !endGroup;
 
@@ -100,5 +102,5 @@ export const validateSelectionBounds = () => {
     return getReturnValue(maxBegin === begin && maxEnd === end);
   }
 
-  return getReturnValue(true);
+  return getReturnValue(startGroup === endGroup);
 };
