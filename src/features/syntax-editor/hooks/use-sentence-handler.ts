@@ -26,7 +26,7 @@ export default function useSentenceHandler(): MouseEventHandlers {
 
   const [segment, updateSegment] = useAtom(updateSegmentHistoryAndIndexAtom);
 
-  /** 문장 요소 추가 */
+  /** 문장 성분 추가 */
   const onMouseUp = (e: MouseEvent) => {
     /** 더블 클릭이 아니고, 태그를 선택했을 때만 실행 */
     if (selectedTag && segment && !isDoubleClicked(e)) {

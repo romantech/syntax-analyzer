@@ -11,17 +11,17 @@ export const getNumberAttr = (element: HTMLElement, key: string) => {
   return Number(element.getAttribute(key));
 };
 
-/** 유효한 선택 범위가 아닐 때 - invalid */
+/** 유효한 선택 범위인지 확인 */
 const isSelectionEmpty = (begin: number, end: number) => {
   return Math.abs(begin - end) === 0;
 };
 
-/* begin/end 범위내 문장 성분이 없어서 교차할 구/절이 없는 상황일 때 - valid */
+/* 주어진 범위 내 문장 성분이 없는지 확인 */
 const hasNoTokenGroups = (beginGroup: HTMLElement, endGroup: HTMLElement) => {
   return !beginGroup && !endGroup;
 };
 
-/** begin/end 범위가 상위 문장 성분 범위와 일치할 때 - valid */
+/** 선택한 범위가 상위 문장 성분 범위와 일치하는지 확인 */
 const isSelectionMatchingSegment = (
   begin: number,
   end: number,
@@ -32,7 +32,7 @@ const isSelectionMatchingSegment = (
 };
 
 /**
- * 주어진 요소의 부모 문장 성분들을 탐색하여 가장 큰 target 값 반환
+ * 주어진 요소의 상위 문장 성분들 중에서 가장 큰 target 값 반환
  * 예: 문장 성분의 구조가 [[0, 1], [1, 3]]이며, 부모는 [0, 3], 자식은 [0, 1], [1, 3] 3개가 있다고 가정
  * - [1, 3]을 포함하는 가장 큰 부모는 end(base)가 3인 요소를 상위로 탐색하여 가장 큰 begin(target) 반환
  * - [0, 1]을 포함하는 가장 큰 부모는 begin(base)가 0인 요소를 상위로 탐색하여 가장 큰 end(target) 반환
@@ -66,9 +66,9 @@ const computeMaxRange = (
 };
 
 /**
- * 구/절이 교차하거나 유효하지 않은 선택 범위(begin/end 둘다 0)인지 검사하는 함수
- * e.g. [[0, 2][2, 13]]에서 [1, 4] 범위를 드래그하면 구/절이 교차하므로 유효하지 않음
- * e.g. begin/end 차이가 0이면 유효하지 않은 선택 범위
+ * 선택한 범위의 유효성 검사. 유효하지 않은 케이스 예시:
+ * 1. 구/절이 교차할 때 - [[0, 2], [2, 13]]에서 1~4 범위 선택
+ * 2. 시작(begin)과 끝(end)이 동일할 때
  * */
 export const validateSelectionBounds = () => {
   const { begin, end, startNode, endNode } = getSelectionIndices(INDEX);
@@ -81,11 +81,11 @@ export const validateSelectionBounds = () => {
   if (isSelectionEmpty(begin, end)) return getReturnValue(false);
   if (hasNoTokenGroups(beginGroup, endGroup)) return getReturnValue(true);
 
-  // begin/end 둘 중 하나의 범위에 문장 요소가 없는 상황일 때
+  // begin/end 둘 중 하나의 범위 안에 문장 성분이 없는 경우
   if (!beginGroup || !endGroup) {
     const group = beginGroup ?? endGroup;
 
-    // [(0, 1), [1, 3]] 혹은 [[0, 1], (1, 3)] 2개 케이스 모두 검사
+    // [(0..., [1, 3]] 혹은 [[0, 1], ...3] 2개 케이스 모두 검사
     const resultB = computeMaxRange(group, BEGIN, END);
     const resultE = computeMaxRange(group, END, BEGIN);
 
@@ -104,17 +104,22 @@ export const validateSelectionBounds = () => {
   if (isSelectionMatchingSegment(begin, end, segmentBegin, segmentEnd))
     return getReturnValue(true);
 
+  // 공통 부모 안에서 서로 다른 문장 성분을 걸쳐서 선택한 경우
+  // 예: 부모 [0, 4], 자식 1 [0, 2], 자식 2 [2, 4] 일 때 자식 1~2의 범위 선택
   if (startId !== endId) {
     if (
+      // [[0, 1], ...4] 일 때 begin/end 범위가 0~2 이면 [0, 1] 문장 성분을 포함하므로 유효
       (endGroup.contains(beginGroup) && begin <= segmentBegin) ||
       (beginGroup.contains(endGroup) && end >= segmentEnd)
     ) {
       return getReturnValue(true);
     }
 
+    // 선택한 범위가 공통 부모 범위와 일치하는지 확인
     const { maxBegin, maxEnd } = computeMaxRange(beginGroup, BEGIN, END);
     return getReturnValue(maxBegin === begin && maxEnd === end);
   }
 
+  // 선택한 범위 안에 다른 문장 성분이 없는지 확인 (없다면 범위 내에서 자유롭게 태깅 가능)
   return getReturnValue(beginGroup === endGroup);
 };
