@@ -1,14 +1,14 @@
 import { atomWithDefault, atomWithStorage } from 'jotai/utils';
-import { Nullable } from '@/base';
-import { atom } from 'jotai';
+import { debounce, Nullable } from '@/base';
+import { atom, Getter, Setter } from 'jotai';
 import {
   AnalysisSource,
   CombinedAnalysisList,
   generateAnalysis,
-  INVALID_POPUP_DELAY,
   TAnalysis,
 } from '@/features/syntax-editor';
 import { SAMPLE_ANALYSIS } from '@/features/syntax-editor/data';
+import { INVALID_POPUP_DELAY } from '@/features/syntax-editor/constants/settings';
 
 export const userAnalysisListAtom = atomWithStorage<TAnalysis[]>(
   'userAnalysisList',
@@ -46,13 +46,14 @@ export const removeUserAnalysisActionAtom = atom(
 
 export const invalidRangeIndexAtom = atom<Nullable<number>>(null);
 
+const debouncedClearInvalidRange = debounce((_get: Getter, set: Setter) => {
+  set(invalidRangeIndexAtom, null);
+}, INVALID_POPUP_DELAY);
+
 export const setAndClearInvalidRangeIndexAtom = atom(
   null,
   (_get, set, invalidIndex: number) => {
     set(invalidRangeIndexAtom, invalidIndex);
-
-    setTimeout(() => {
-      set(invalidRangeIndexAtom, null);
-    }, INVALID_POPUP_DELAY);
+    debouncedClearInvalidRange(_get, set);
   },
 );
