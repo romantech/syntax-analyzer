@@ -96,7 +96,7 @@ export default function RandomSentenceForm() {
         <Text as="i" cursor="pointer">
           <Highlight
             query={['spotlight', 'emphasize', 'Accentuate']}
-            styles={{ color: 'teal.300', fontWeight: 'bold' }}
+            styles={{ color: 'teal.400', fontWeight: 'bold' }}
           >
             With the Highlight component, you can spotlight, emphasize and
             accentuate words.
@@ -106,7 +106,7 @@ export default function RandomSentenceForm() {
         <Text as="i" cursor="pointer">
           <Highlight
             query={['library', 'exam']}
-            styles={{ color: 'teal.300', fontWeight: 'bold' }}
+            styles={{ color: 'teal.400', fontWeight: 'bold' }}
           >
             Tom and Jerry are studying at the library for their final exam.
           </Highlight>
