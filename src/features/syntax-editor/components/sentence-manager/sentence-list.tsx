@@ -77,6 +77,7 @@ export default function SentenceList({
         defaultIndex={DEFAULT_SENTENCE_LIST_TAB}
         index={tabIndex}
         onChange={onTabChange}
+        colorScheme="teal"
       >
         <TabList>
           {TAB_LIST.map(({ label }) => (

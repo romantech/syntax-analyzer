@@ -19,6 +19,7 @@ import {
 import { ConfirmModal } from '@/base';
 import { GiMagicLamp } from 'react-icons/gi';
 import { SentenceInput } from '@/features/syntax-editor';
+import { PropsWithChildren } from 'react';
 
 const MODEL_RADIO_FIELDS = [
   {
@@ -51,14 +52,7 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
   } = useCreateAnalysisForm();
 
   return (
-    <Stack
-      as="form"
-      flexGrow={1}
-      maxW={690}
-      onSubmit={onSubmit}
-      gap={10}
-      {...stackProps}
-    >
+    <AnalysisFormBox as="form" onSubmit={onSubmit} {...stackProps}>
       <Controller
         name="model"
         control={control}
@@ -69,6 +63,7 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
                 <Stack key={field.value}>
                   <HStack align="center">
                     <Radio
+                      colorScheme="teal"
                       value={field.value}
                       isDisabled={remainingCount < field.count}
                     >
@@ -79,7 +74,7 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
                     <Badge
                       fontSize={10}
                       variant="outline"
-                      colorScheme="green"
+                      colorScheme="teal"
                       hidden={!field.recommend}
                     >
                       recommended
@@ -121,9 +116,20 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
         headerContent="문장 분석 요청"
         bodyContent="입력한 영어 문장을 분석하시겠습니까?"
       />
-    </Stack>
+    </AnalysisFormBox>
   );
 }
+
+const AnalysisFormBox = ({
+  children,
+  ...stackProps
+}: PropsWithChildren<StackProps>) => {
+  return (
+    <Stack w="full" maxW={690} gap={10} {...stackProps}>
+      {children}
+    </Stack>
+  );
+};
 
 const AnalysisFormSkeleton = (stackProps: StackProps) => {
   const ESkeleton = (props: SkeletonProps) => (
@@ -131,7 +137,7 @@ const AnalysisFormSkeleton = (stackProps: StackProps) => {
   );
 
   return (
-    <Stack gap={10} flexGrow={1} maxW={690} {...stackProps}>
+    <AnalysisFormBox {...stackProps}>
       <Stack gap={5} mb={2}>
         <ESkeleton maxW={180} mb={1} />
         <Stack>
@@ -147,7 +153,7 @@ const AnalysisFormSkeleton = (stackProps: StackProps) => {
         </HStack>
         <ESkeleton maxW={250} h="85px" />
       </Stack>
-    </Stack>
+    </AnalysisFormBox>
   );
 };
 

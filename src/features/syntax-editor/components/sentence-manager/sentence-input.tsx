@@ -35,6 +35,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
             placeholder="영어 문장을 입력해 주세요"
             maxLength={90}
             variant="filled"
+            focusBorderColor="teal.400"
             {...inputProps}
             ref={ref}
           />

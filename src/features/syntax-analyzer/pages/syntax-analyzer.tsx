@@ -29,7 +29,7 @@ export default function SyntaxAnalyzer() {
           <Suspense fallback={<CreateAnalysisForm.Skeleton />}>
             <CreateAnalysisForm />
           </Suspense>
-          <Center h="430px" px={3}>
+          <Center h="430px" px={8}>
             <Divider orientation="vertical" />
           </Center>
           <RandomSentenceForm />

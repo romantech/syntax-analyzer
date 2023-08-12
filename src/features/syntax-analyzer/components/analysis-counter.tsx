@@ -27,11 +27,11 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
   const limitDesc = `하루 최대 ${MAX_ANALYSIS_COUNT}회까지 분석할 수 있어요 (GPT-4 모델은 요청당 3회씩 차감)`;
 
   return (
-    <AnalysisCounterBox maxW={690} {...stackProps}>
+    <AnalysisCounterBox {...stackProps}>
       <CircularProgress
         size="50px"
         value={remainingCountInPercent(count)}
-        color="green.400"
+        color="teal.400"
       >
         <CircularProgressLabel>
           {remainingCountInPercent(count) + '%'}
@@ -54,7 +54,14 @@ const AnalysisCounterBox = ({
   ...stackProps
 }: PropsWithChildren<StackProps>) => {
   return (
-    <HStack borderWidth={1} borderRadius="2xl" p={4} {...stackProps}>
+    <HStack
+      w="full"
+      maxW={690}
+      borderWidth={1}
+      borderRadius="2xl"
+      p={4}
+      {...stackProps}
+    >
       {children}
     </HStack>
   );
@@ -62,7 +69,7 @@ const AnalysisCounterBox = ({
 
 const AnalysisCounterSkeleton = (stackProps: StackProps) => {
   return (
-    <AnalysisCounterBox maxW={690} {...stackProps}>
+    <AnalysisCounterBox {...stackProps}>
       <SkeletonCircle w="50px" h="50px" />
       <Stack>
         <Skeleton h={5} w={200} borderRadius="md" />
