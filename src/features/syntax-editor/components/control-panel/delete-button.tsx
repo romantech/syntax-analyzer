@@ -14,7 +14,7 @@ export default function DeleteButton() {
     <Tooltip label="태그 삭제">
       <IconButton
         variant="solid"
-        colorScheme={isDeleteMode ? 'blue' : 'gray'}
+        colorScheme={isDeleteMode ? 'teal' : 'gray'}
         aria-label="Delete Tag"
         icon={<BsFillEraserFill />}
         onClick={toggleDeleteMode}

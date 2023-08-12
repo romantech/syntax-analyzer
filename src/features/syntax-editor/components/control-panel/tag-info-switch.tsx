@@ -12,6 +12,7 @@ export default function TagInfoSwitch({
     <HStack {...stackProps} w={w} justify={justify}>
       <FormLabel noOfLines={1}>태그 정보 툴팁</FormLabel>
       <Switch
+        colorScheme="teal"
         isChecked={isTagInfoMode}
         onChange={() => setTagInfoMode(!isTagInfoMode)}
       />

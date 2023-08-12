@@ -12,6 +12,7 @@ export default function AbbrInfoSwitch({
     <HStack {...stackProps} w={w} justify={justify}>
       <FormLabel noOfLines={1}>태그 약어 툴팁</FormLabel>
       <Switch
+        colorScheme="teal"
         isChecked={isAbbrInfoMode}
         onChange={() => setIsAbbrInfoMode(!isAbbrInfoMode)}
       />

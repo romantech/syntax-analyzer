@@ -31,7 +31,7 @@ export default function SelectableTagButton({ constituent }: TagButtonProps) {
         textTransform="capitalize"
         size="sm"
         onClick={() => onTagClick(constituent)}
-        colorScheme={isSelected ? 'blue' : 'gray'}
+        colorScheme={isSelected ? 'teal' : 'gray'}
       >
         {ko}
       </Button>

@@ -56,7 +56,7 @@ export default function DeletableSentence({
       <Text
         noOfLines={1}
         cursor="pointer"
-        _hover={{ color: 'blue.300' }}
+        _hover={{ color: 'teal.400' }}
         onClick={onClick}
       >
         {typeof sentence === 'string' ? sentence : tokenJoiner(sentence)}

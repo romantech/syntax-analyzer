@@ -44,7 +44,7 @@ export default function ConfirmModal({
             <Button ref={cancelRef} onClick={onClose}>
               취소
             </Button>
-            <Button colorScheme="blue" onClick={onConfirm} ml={3}>
+            <Button colorScheme="teal" onClick={onConfirm} ml={3}>
               확인
             </Button>
           </AlertDialogFooter>

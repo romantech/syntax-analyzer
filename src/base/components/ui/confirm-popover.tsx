@@ -48,10 +48,10 @@ export default function ConfirmPopover({
           </PopoverHeader>
           <PopoverFooter display="flex" justifyContent="flex-end" border="0">
             <ButtonGroup size="sm">
-              <Button onClick={onClose} colorScheme="blue">
-                {cancelText}
+              <Button onClick={onClose}>{cancelText}</Button>
+              <Button colorScheme="teal" onClick={onConfirmButtonClick}>
+                {confirmText}
               </Button>
-              <Button onClick={onConfirmButtonClick}>{confirmText}</Button>
             </ButtonGroup>
           </PopoverFooter>
         </PopoverContent>

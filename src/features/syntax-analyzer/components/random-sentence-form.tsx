@@ -41,6 +41,7 @@ export default function RandomSentenceForm() {
           <Input
             variant="filled"
             maxLength={20}
+            focusBorderColor="teal.400"
             placeholder="영문 토픽을 입력 해주세요"
           />
           <Button w={120} variant="outline">
@@ -51,8 +52,13 @@ export default function RandomSentenceForm() {
           <Divider orientation="vertical" />
         </Center>
         <HStack>
-          <Text as="b" fontSize={14} whiteSpace="pre">{`생성\n개수`}</Text>
-          <NumberInput maxW={70} min={1} max={5} defaultValue={5}>
+          <NumberInput
+            focusBorderColor="teal.400"
+            maxW={70}
+            min={1}
+            max={5}
+            defaultValue={5}
+          >
             <NumberInputField />
             <NumberInputStepper>
               <NumberIncrementStepper />

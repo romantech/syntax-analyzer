@@ -9,7 +9,6 @@ import {
   TabList,
   Tabs,
   useColorMode,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
 import { BsGithub } from 'react-icons/bs';
@@ -44,7 +43,6 @@ const useTabIndex = () => {
 export function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
   const ToggleIcon = colorMode === 'light' ? MdModeNight : MdOutlineLightMode;
-  const hoverTextColor = useColorModeValue('blue.400', 'gray.400');
   const tabIndex = useTabIndex();
 
   return (
@@ -54,16 +52,21 @@ export function Header() {
           <Heading size="md" textTransform="uppercase" fontWeight="extrabold">
             syntax analyzer
           </Heading>
-          <Tabs variant="soft-rounded" index={tabIndex} ml={6}>
+          <Tabs
+            variant="soft-rounded"
+            index={tabIndex}
+            ml={6}
+            colorScheme="gray"
+          >
             <TabList>
               {NAV_TABS.map((tab, i) => (
                 <Tab
                   as={NavLink}
                   key={tab.label}
                   to={tab.path}
-                  transition="all 0.4s"
+                  transition="all 0.3s"
                   textTransform="capitalize"
-                  _hover={{ color: tabIndex !== i ? hoverTextColor : '' }}
+                  _hover={{ color: tabIndex !== i ? 'gray.400' : '' }}
                 >
                   {tab.label}
                 </Tab>
