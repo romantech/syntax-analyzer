@@ -34,12 +34,13 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
           <Input
             placeholder="영어 문장을 입력해 주세요"
             maxLength={90}
+            variant="filled"
             {...inputProps}
             ref={ref}
           />
         </InputGroup>
         <FormErrorMessage>{errorMessage}</FormErrorMessage>
-        <FormHelperText color="gray.500">
+        <FormHelperText color="gray.500" pt={1}>
           <List spacing={1.5}>
             <ListItem>
               <ListIcon as={BsMagic} />

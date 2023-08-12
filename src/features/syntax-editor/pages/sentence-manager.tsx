@@ -11,7 +11,7 @@ export default function SentenceManager() {
 
   return (
     <HStack pt={8} gap={8} align="start" justify="center">
-      <Stack w="full" maxW={650}>
+      <Stack w="full" maxW={650} spacing={4}>
         <Notice
           size="sm"
           borderRadius="md"

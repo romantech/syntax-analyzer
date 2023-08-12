@@ -51,7 +51,14 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
   } = useCreateAnalysisForm();
 
   return (
-    <Stack as="form" onSubmit={onSubmit} gap={10} {...stackProps}>
+    <Stack
+      as="form"
+      flexGrow={1}
+      maxW={690}
+      onSubmit={onSubmit}
+      gap={10}
+      {...stackProps}
+    >
       <Controller
         name="model"
         control={control}
@@ -118,13 +125,13 @@ export default function CreateAnalysisForm({ ...stackProps }: StackProps) {
   );
 }
 
-const AnalysisFormSkeleton = () => {
+const AnalysisFormSkeleton = (stackProps: StackProps) => {
   const ESkeleton = (props: SkeletonProps) => (
     <Skeleton w="full" borderRadius="md" h={10} {...props} />
   );
 
   return (
-    <Stack gap={10}>
+    <Stack gap={10} flexGrow={1} maxW={690} {...stackProps}>
       <Stack gap={5} mb={2}>
         <ESkeleton maxW={180} mb={1} />
         <Stack>
@@ -138,6 +145,7 @@ const AnalysisFormSkeleton = () => {
           <ESkeleton />
           <ESkeleton maxW={110} />
         </HStack>
+        <ESkeleton maxW={250} h="85px" />
       </Stack>
     </Stack>
   );

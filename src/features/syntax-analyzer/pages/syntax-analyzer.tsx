@@ -1,8 +1,16 @@
-import { Box, CenterProps, Stack, StackProps } from '@chakra-ui/react';
+import {
+  Center,
+  CenterProps,
+  Divider,
+  HStack,
+  Stack,
+  StackProps,
+} from '@chakra-ui/react';
 import {
   AnalysisCounter,
   CREATE_ANALYSIS_BASE_KEY,
   CreateAnalysisForm,
+  RandomSentenceForm,
   RequestPlaceholder,
 } from '@/features/syntax-analyzer';
 import { Suspense } from 'react';
@@ -12,21 +20,23 @@ export default function SyntaxAnalyzer() {
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
 
   return (
-    <Box position="relative" h="80%" overflow="hidden" pt={8}>
-      <Stack
-        maxW="container.md"
-        gap={10}
-        {...getFormTransitionStyles(isMutating)}
-      >
+    <Stack position="relative" h="80%" overflow="hidden" pt={8} spacing={10}>
+      <Stack gap={10} {...getFormTransitionStyles(isMutating)}>
         <Suspense fallback={<AnalysisCounter.Skeleton />}>
           <AnalysisCounter />
         </Suspense>
-        <Suspense fallback={<CreateAnalysisForm.Skeleton />}>
-          <CreateAnalysisForm />
-        </Suspense>
+        <HStack align="start" justify="space-between">
+          <Suspense fallback={<CreateAnalysisForm.Skeleton />}>
+            <CreateAnalysisForm />
+          </Suspense>
+          <Center h="430px" px={3}>
+            <Divider orientation="vertical" />
+          </Center>
+          <RandomSentenceForm />
+        </HStack>
       </Stack>
       <RequestPlaceholder {...getLoadingTransitionStyles(isMutating)} />
-    </Box>
+    </Stack>
   );
 }
 
