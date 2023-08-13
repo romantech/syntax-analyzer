@@ -26,8 +26,35 @@ import {
 } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
 import { CiShoppingTag } from 'react-icons/ci';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { randomSentenceFormSchema } from '@/features/syntax-analyzer/schemes';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { DevTool } from '@hookform/devtools';
+
+type RandomSentenceFormValues = {
+  sent_count: number;
+  topics: string[];
+};
+
+const useRandomSentenceForm = () => {
+  const useFormResults = useForm<RandomSentenceFormValues>({
+    /** yup 스키마의 기본값 설정
+     * @see https://github.com/orgs/react-hook-form/discussions/1936
+     * */
+    defaultValues: randomSentenceFormSchema.cast({}),
+    resolver: yupResolver(randomSentenceFormSchema),
+  });
+
+  return { ...useFormResults };
+};
 
 export default function RandomSentenceForm() {
+  const { handleSubmit, register, control } = useRandomSentenceForm();
+
+  const onSubmit: SubmitHandler<RandomSentenceFormValues> = (data) => {
+    console.log(data);
+  };
+
   return (
     <Stack w="full" maxW={690} gap={5}>
       <Heading size="lg" textTransform="uppercase" pb={1}>
@@ -39,13 +66,15 @@ export default function RandomSentenceForm() {
         <ListItem>키워드는 3개까지 추가할 수 있어요</ListItem>
       </UnorderedList>
 
-      <HStack>
+      <HStack as="form" onSubmit={handleSubmit(onSubmit)}>
+        <DevTool control={control} />
         <HStack>
           <InputGroup>
             <InputLeftElement pointerEvents="none">
               <CiShoppingTag fontSize={18} />
             </InputLeftElement>
             <Input
+              {...register('topics')}
               variant="filled"
               maxLength={20}
               focusBorderColor="teal.400"
@@ -60,20 +89,30 @@ export default function RandomSentenceForm() {
           <Divider orientation="vertical" />
         </Center>
         <HStack>
-          <NumberInput
-            focusBorderColor="teal.400"
-            maxW={70}
-            min={1}
-            max={5}
-            defaultValue={3}
+          <Controller
+            name="sent_count"
+            control={control}
+            render={({ field }) => (
+              <NumberInput
+                {...field}
+                focusBorderColor="teal.400"
+                maxW={70}
+                min={1}
+                max={5}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            )}
+          />
+          <Button
+            leftIcon={<RiAiGenerate />}
+            textTransform="uppercase"
+            type="submit"
           >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
-          <Button leftIcon={<RiAiGenerate />} textTransform="uppercase">
             generate
           </Button>
         </HStack>
