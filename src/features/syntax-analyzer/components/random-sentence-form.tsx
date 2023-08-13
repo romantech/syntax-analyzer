@@ -40,12 +40,7 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ValidationError } from 'yup';
 import { useRef } from 'react';
-
-type RandomSentenceFormValues = {
-  sent_count: number;
-  topics: string[];
-  keyword: string;
-};
+import { RandomSentenceFormValues } from '@/features/syntax-analyzer/types';
 
 const useRandomSentenceForm = () => {
   const useFormResults = useForm<RandomSentenceFormValues>({
