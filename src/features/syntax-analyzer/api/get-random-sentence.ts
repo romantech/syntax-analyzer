@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { RandomSentenceFormValues } from '@/features/syntax-analyzer/types';
 
 type RandomSentenceResponse = string[];
-type RandomSentenceParams = Omit<RandomSentenceFormValues, 'keyword'>;
+export type RandomSentenceParams = Omit<RandomSentenceFormValues, 'keyword'>;
 export const getRandomSentence = async <
   T = RandomSentenceResponse,
   K = RandomSentenceParams,

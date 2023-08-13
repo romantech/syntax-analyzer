@@ -19,13 +19,12 @@ const topicsSchema = yup
 export const randomSentenceFormSchema = yup.object({
   sent_count: yup
     .number()
-    .integer('정수만 입력할 수 있어요')
-    .min(1, '최소 1개 문장')
+    .positive('최소 1개 문장')
     .max(5, '최대 5개 문장')
     .required()
     .default(() => 3),
-  topics: topicsSchema, // 기본값 빈 배열로 설정하고 null/undefined 는 빈 배열로 변환
-  keyword: keywordSchema, // 기본값 빈 문자열로 설정하고 null/undefined 는 빈 문자열로 변환
+  topics: topicsSchema,
+  keyword: keywordSchema,
 });
 
 export const addTopicSchema = randomSentenceFormSchema.pick([
