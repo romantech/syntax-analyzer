@@ -56,7 +56,7 @@ const AnalysisCounterBox = ({
   return (
     <HStack
       w="full"
-      maxW={690}
+      maxW={654}
       borderWidth={1}
       borderRadius="2xl"
       p={4}

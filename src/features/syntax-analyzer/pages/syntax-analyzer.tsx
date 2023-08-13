@@ -20,7 +20,7 @@ export default function SyntaxAnalyzer() {
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
 
   return (
-    <Stack position="relative" h="80%" overflow="hidden" pt={8} spacing={10}>
+    <Stack position="relative" h="full" overflow="hidden" pt={8} spacing={10}>
       <Stack gap={10} {...getFormTransitionStyles(isMutating)}>
         <Suspense fallback={<AnalysisCounter.Skeleton />}>
           <AnalysisCounter />
@@ -29,8 +29,8 @@ export default function SyntaxAnalyzer() {
           <Suspense fallback={<CreateAnalysisForm.Skeleton />}>
             <CreateAnalysisForm />
           </Suspense>
-          <Center h="430px" px={8}>
-            <Divider orientation="vertical" />
+          <Center h="full" px={10}>
+            <Divider h="98%" orientation="vertical" />
           </Center>
           <RandomSentenceForm />
         </HStack>
@@ -42,7 +42,7 @@ export default function SyntaxAnalyzer() {
 
 const getFormTransitionStyles = (isMutating: number): StackProps => {
   return {
-    transition: 'transform 0.6s, opacity 0.6s, width 0.6s',
+    transition: 'transform 0.7s, opacity 0.4s, width 0.7s',
     w: isMutating ? '0' : 'full',
     h: isMutating ? '0' : 'fit-content',
     opacity: isMutating ? 0 : 1,
@@ -53,10 +53,12 @@ const getFormTransitionStyles = (isMutating: number): StackProps => {
 const getLoadingTransitionStyles = (isMutating: number): CenterProps => {
   return {
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transition: 'transform 0.6s, opacity 0.6s',
-    transform: `translate(-50%, -50%) ${isMutating ? '' : 'translateX(100%)'}`,
+    top: '45%',
+    left: '45%',
     opacity: isMutating ? 1 : 0,
+    transition: 'transform 0.7s, opacity 0.4s',
+    transform: `translate(-50%, -50%) ${
+      isMutating ? 'translateX(0)' : 'translateX(100%)'
+    }`,
   };
 };
