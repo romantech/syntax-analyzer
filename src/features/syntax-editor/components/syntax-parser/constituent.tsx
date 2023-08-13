@@ -12,7 +12,7 @@ import {
 } from '@/features/syntax-editor';
 import { NumberTuple } from '@/base';
 import { useAtomValue } from 'jotai';
-import classnames from 'classnames';
+import { clsx } from 'clsx';
 
 interface ConstituentProps {
   constituent: TConstituent;
@@ -57,7 +57,7 @@ export default function Constituent({
       <Text
         as="span"
         color={textColor}
-        className={classnames(CONSTITUENT_CLASSES.CONSTITUENT, {
+        className={clsx(CONSTITUENT_CLASSES.CONSTITUENT, {
           [CONSTITUENT_CLASSES.TOKEN_GROUP]: isMultipleTokenRange,
           [CONSTITUENT_CLASSES.TOKEN]: !isMultipleTokenRange,
         })}
