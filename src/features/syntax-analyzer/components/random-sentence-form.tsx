@@ -3,7 +3,6 @@ import {
   Center,
   Divider,
   FormControl,
-  FormErrorMessage,
   Heading,
   Highlight,
   HStack,
@@ -16,6 +15,11 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Popover,
+  PopoverAnchor,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
   Stack,
   StackDivider,
   Tag,
@@ -34,8 +38,8 @@ import {
   randomSentenceFormSchema,
 } from '@/features/syntax-analyzer/schemes';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { DevTool } from '@hookform/devtools';
 import { ValidationError } from 'yup';
+import { useRef } from 'react';
 
 type RandomSentenceFormValues = {
   sent_count: number;
@@ -95,6 +99,15 @@ export default function RandomSentenceForm() {
     );
   };
 
+  /**
+   * By default, Popover focus is to sent to PopoverContent when it opens.
+   * Pass the keywordInputRef prop to send focus to a specific element instead.
+   * @see https://react-hook-form.com/faqs
+   * @see https://chakra-ui.com/docs/components/popover/usage
+   * */
+  const keywordInputRef = useRef<HTMLInputElement | null>(null);
+  const { ref: keywordRef, ...keywordRest } = register('keyword');
+
   return (
     <Stack w="full" maxW={690} gap={5}>
       <Heading size="lg" textTransform="uppercase" pb={1}>
@@ -107,27 +120,42 @@ export default function RandomSentenceForm() {
       </UnorderedList>
 
       <HStack as="form" onSubmit={handleSubmit(onSubmit)}>
-        <DevTool control={control} />
         <Stack>
           <FormControl isInvalid={!!errors.keyword}>
             <HStack>
-              <InputGroup>
-                <InputLeftElement pointerEvents="none">
-                  <CiShoppingTag fontSize={18} />
-                </InputLeftElement>
-                <Input
-                  {...register('keyword')}
-                  variant="filled"
-                  maxLength={20}
-                  focusBorderColor="teal.400"
-                  placeholder="영문 키워드를 입력 해주세요"
-                />
-              </InputGroup>
+              <Popover
+                isOpen={!!errors.keyword}
+                placement="top"
+                initialFocusRef={keywordInputRef}
+              >
+                <PopoverAnchor>
+                  <InputGroup>
+                    <InputLeftElement pointerEvents="none">
+                      <CiShoppingTag fontSize={18} />
+                    </InputLeftElement>
+                    <Input
+                      {...keywordRest}
+                      variant="filled"
+                      ref={(element) => {
+                        // Popover 표시될 때 focus 유지하기 위해 ref share
+                        keywordRef(element);
+                        keywordInputRef.current = element;
+                      }}
+                      maxLength={20}
+                      focusBorderColor="teal.400"
+                      placeholder="영문 키워드를 입력 해주세요"
+                    />
+                  </InputGroup>
+                </PopoverAnchor>
+                <PopoverContent w="fit-content">
+                  <PopoverArrow />
+                  <PopoverBody>{errors.keyword?.message}</PopoverBody>
+                </PopoverContent>
+              </Popover>
               <Button minW="fit-content" variant="outline" onClick={onAddTopic}>
                 토픽 추가
               </Button>
             </HStack>
-            <FormErrorMessage>{errors.keyword?.message}</FormErrorMessage>
           </FormControl>
         </Stack>
         <Center h="38px" px={3}>
@@ -154,15 +182,15 @@ export default function RandomSentenceForm() {
             )}
           />
           <Button
+            type="submit"
             leftIcon={<RiAiGenerate />}
             textTransform="uppercase"
-            type="submit"
           >
             generate
           </Button>
         </HStack>
+        <Input {...register('topics')} hidden />
       </HStack>
-      <Input {...register('topics')} hidden />
       <Wrap mt={-2} maxW="sm">
         {topics.map((topic) => (
           <Tag
@@ -171,12 +199,11 @@ export default function RandomSentenceForm() {
             borderRadius="md"
             variant="solid"
             colorScheme="teal"
-            onClick={() => onTagClick(topic)}
           >
             <TagLabel w="fit" textTransform="uppercase">
               {topic}
             </TagLabel>
-            <TagCloseButton />
+            <TagCloseButton onClick={() => onTagClick(topic)} />
           </Tag>
         ))}
       </Wrap>
