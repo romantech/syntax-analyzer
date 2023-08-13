@@ -28,6 +28,8 @@ import {
   TagLabel,
   Text,
   UnorderedList,
+  useClipboard,
+  useToast,
   VStack,
   Wrap,
   WrapProps,
@@ -43,10 +45,11 @@ import {
 } from 'react-hook-form';
 import { addTopicSchema } from '@/features/syntax-analyzer/schemes';
 import { ValidationError } from 'yup';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { RandomSentenceFormValues } from '@/features/syntax-analyzer/types';
 import { DevTool } from '@hookform/devtools';
 import { useRandomSentenceForm } from '@/features/syntax-analyzer';
+import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor';
 
 export default function RandomSentenceForm() {
   const { methods, generateRandomSentences, isFetching, data } =
@@ -109,7 +112,7 @@ const RandomSentenceInstructions = (listProps: ListProps) => {
     <UnorderedList {...listProps}>
       <ListItem>입력한 키워드와 관련된 랜덤 문장을 생성할 수 있어요</ListItem>
       <ListItem>키워드는 3개까지 추가할 수 있어요 (선택)</ListItem>
-      <ListItem>1회 최대 5개의 랜덤 문장을 생성할 수 있어요</ListItem>
+      <ListItem>문장을 클릭하면 클립보드에 복사할 수 있어요</ListItem>
     </UnorderedList>
   );
 };
@@ -119,6 +122,19 @@ interface RandomSentencesProps {
   query: string[];
 }
 const RandomSentences = ({ data, query }: RandomSentencesProps) => {
+  const toast = useToast();
+  const { onCopy, setValue, hasCopied } = useClipboard('', 1000);
+
+  useEffect(() => {
+    if (hasCopied) {
+      toast({
+        title: '복사 성공',
+        status: 'success',
+        duration: COPY_SENTENCE_SUCCESS_TOAST_DURATION,
+      });
+    }
+  }, [hasCopied, toast]);
+
   return (
     <VStack
       align="stretch"
@@ -127,7 +143,15 @@ const RandomSentences = ({ data, query }: RandomSentencesProps) => {
       divider={<StackDivider borderColor="gray.700" />}
     >
       {data?.map((sentence) => (
-        <Text as="i" cursor="pointer" key={sentence}>
+        <Text
+          as="i"
+          cursor="pointer"
+          key={sentence}
+          onMouseEnter={() => {
+            setValue(sentence);
+          }}
+          onClick={onCopy}
+        >
           <Highlight
             query={query}
             styles={{ color: 'teal.400', fontWeight: 'bold' }}

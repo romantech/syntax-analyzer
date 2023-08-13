@@ -32,8 +32,6 @@ export default function SaveButton() {
         title: '저장 성공',
         status: 'success',
         duration: SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
-        isClosable: true,
-        containerStyle: { position: 'relative', bottom: 5 },
       });
     }, SAVE_SEGMENT_DELAY);
   };

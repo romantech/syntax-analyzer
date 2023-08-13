@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/routes';
-import { theme } from '@/theme';
+import { theme, toastOptions } from '@/theme';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { queryClient } from '@/lib';
@@ -12,7 +12,7 @@ const rootElement = document.getElementById('root');
 
 ReactDOM.createRoot(rootElement!).render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={theme} toastOptions={toastOptions}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
