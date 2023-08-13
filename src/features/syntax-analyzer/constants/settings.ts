@@ -1,1 +1,1 @@
-export const MAX_ANALYSIS_COUNT = 12;
+export const MAX_ANALYSIS_COUNT = 10;

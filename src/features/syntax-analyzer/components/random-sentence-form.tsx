@@ -6,6 +6,8 @@ import {
   Highlight,
   HStack,
   Input,
+  InputGroup,
+  InputLeftElement,
   ListItem,
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -23,6 +25,7 @@ import {
   Wrap,
 } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
+import { CiShoppingTag } from 'react-icons/ci';
 
 export default function RandomSentenceForm() {
   return (
@@ -33,18 +36,23 @@ export default function RandomSentenceForm() {
       <UnorderedList>
         <ListItem>입력한 키워드와 관련된 랜덤 문장을 생성할 수 있어요</ListItem>
         <ListItem>1회 최대 5개의 랜덤 문장을 생성할 수 있어요</ListItem>
-        <ListItem>토픽은 3개까지 추가할 수 있어요</ListItem>
+        <ListItem>키워드는 3개까지 추가할 수 있어요</ListItem>
       </UnorderedList>
 
       <HStack>
         <HStack>
-          <Input
-            variant="filled"
-            maxLength={20}
-            focusBorderColor="teal.400"
-            placeholder="영문 토픽을 입력 해주세요"
-          />
-          <Button w={120} variant="outline">
+          <InputGroup>
+            <InputLeftElement pointerEvents="none">
+              <CiShoppingTag fontSize={18} />
+            </InputLeftElement>
+            <Input
+              variant="filled"
+              maxLength={20}
+              focusBorderColor="teal.400"
+              placeholder="영문 키워드를 입력 해주세요"
+            />
+          </InputGroup>
+          <Button minW="fit-content" variant="outline">
             토픽 추가
           </Button>
         </HStack>
@@ -57,7 +65,7 @@ export default function RandomSentenceForm() {
             maxW={70}
             min={1}
             max={5}
-            defaultValue={5}
+            defaultValue={3}
           >
             <NumberInputField />
             <NumberInputStepper>
@@ -70,8 +78,8 @@ export default function RandomSentenceForm() {
           </Button>
         </HStack>
       </HStack>
-      <Wrap mt={-2} maxW="630px">
-        {['apple', 'keyboard', 'macbook'].map((label, i) => (
+      <Wrap mt={-2} maxW="sm">
+        {['spotlight', 'library', 'exam'].map((label, i) => (
           <Tag
             size="sm"
             key={i}
