@@ -88,6 +88,13 @@ export default function RandomSentenceForm() {
     }
   };
 
+  const onTagClick = (keyword: string) => {
+    setValue(
+      'topics',
+      topics.filter((topic) => topic !== keyword),
+    );
+  };
+
   return (
     <Stack w="full" maxW={690} gap={5}>
       <Heading size="lg" textTransform="uppercase" pb={1}>
@@ -164,6 +171,7 @@ export default function RandomSentenceForm() {
             borderRadius="md"
             variant="solid"
             colorScheme="teal"
+            onClick={() => onTagClick(topic)}
           >
             <TagLabel w="fit" textTransform="uppercase">
               {topic}
