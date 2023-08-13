@@ -20,6 +20,7 @@ import {
   PopoverArrow,
   PopoverBody,
   PopoverContent,
+  SlideFade,
   Stack,
   StackDivider,
   StackProps,
@@ -46,9 +47,13 @@ import { ValidationError } from 'yup';
 import { useEffect, useRef } from 'react';
 import { RandomSentenceFormValues } from '@/features/syntax-analyzer/types';
 import { DevTool } from '@hookform/devtools';
-import { useRandomSentenceForm } from '@/features/syntax-analyzer';
+import {
+  RANDOM_SENTENCE_BASE_KEY,
+  useRandomSentenceForm,
+} from '@/features/syntax-analyzer';
 import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { useIsFetching } from '@tanstack/react-query';
 
 export default function RandomSentenceForm() {
   const { methods, generateRandomSentences, isFetching, data } =
@@ -122,6 +127,7 @@ interface RandomSentencesProps {
 }
 const RandomSentences = ({ data, query }: RandomSentencesProps) => {
   const toast = useToast();
+  const isFetching = useIsFetching({ queryKey: RANDOM_SENTENCE_BASE_KEY });
   const { onCopy, setValue, hasCopied } = useClipboard('', 1000);
 
   useEffect(() => {
@@ -135,29 +141,31 @@ const RandomSentences = ({ data, query }: RandomSentencesProps) => {
   }, [hasCopied, toast]);
 
   return (
-    <VStack
-      align="stretch"
-      maxH="190px"
-      overflowY="auto"
-      divider={<StackDivider borderColor="gray.700" />}
-    >
-      {data?.map((sentence) => (
-        <Text
-          as="i"
-          cursor="pointer"
-          key={sentence}
-          onMouseEnter={() => setValue(sentence)}
-          onClick={onCopy}
-        >
-          <Highlight
-            query={query}
-            styles={{ color: 'teal.400', fontWeight: 'bold' }}
+    <SlideFade in={Boolean(data) && !isFetching} offsetY="20px">
+      <VStack
+        align="stretch"
+        maxH="190px"
+        overflowY="auto"
+        divider={<StackDivider borderColor="gray.700" />}
+      >
+        {data?.map((sentence) => (
+          <Text
+            as="i"
+            cursor="pointer"
+            key={sentence}
+            onMouseEnter={() => setValue(sentence)}
+            onClick={onCopy}
           >
-            {sentence}
-          </Highlight>
-        </Text>
-      ))}
-    </VStack>
+            <Highlight
+              query={query}
+              styles={{ color: 'teal.400', fontWeight: 'bold' }}
+            >
+              {sentence}
+            </Highlight>
+          </Text>
+        ))}
+      </VStack>
+    </SlideFade>
   );
 };
 
