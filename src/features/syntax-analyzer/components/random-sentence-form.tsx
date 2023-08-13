@@ -2,6 +2,8 @@ import {
   Button,
   Center,
   Divider,
+  FormControl,
+  FormErrorMessage,
   Heading,
   Highlight,
   HStack,
@@ -27,13 +29,18 @@ import {
 import { RiAiGenerate } from 'react-icons/ri';
 import { CiShoppingTag } from 'react-icons/ci';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { randomSentenceFormSchema } from '@/features/syntax-analyzer/schemes';
+import {
+  addTopicSchema,
+  randomSentenceFormSchema,
+} from '@/features/syntax-analyzer/schemes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DevTool } from '@hookform/devtools';
+import { ValidationError } from 'yup';
 
 type RandomSentenceFormValues = {
   sent_count: number;
   topics: string[];
+  keyword: string;
 };
 
 const useRandomSentenceForm = () => {
@@ -49,10 +56,36 @@ const useRandomSentenceForm = () => {
 };
 
 export default function RandomSentenceForm() {
-  const { handleSubmit, register, control } = useRandomSentenceForm();
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    setError,
+    getValues,
+    resetField,
+    watch,
+    control,
+    formState: { errors },
+  } = useRandomSentenceForm();
+
+  const topics = watch('topics');
 
   const onSubmit: SubmitHandler<RandomSentenceFormValues> = (data) => {
     console.log(data);
+  };
+
+  const onAddTopic = async () => {
+    const keyword = getValues('keyword');
+
+    try {
+      await addTopicSchema.validate({ keyword, topics: [...topics, keyword] });
+      setValue('topics', [...topics, keyword]);
+      resetField('keyword');
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        setError('keyword', { type: 'manual', message: err.errors[0] });
+      }
+    }
   };
 
   return (
@@ -68,23 +101,28 @@ export default function RandomSentenceForm() {
 
       <HStack as="form" onSubmit={handleSubmit(onSubmit)}>
         <DevTool control={control} />
-        <HStack>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <CiShoppingTag fontSize={18} />
-            </InputLeftElement>
-            <Input
-              {...register('topics')}
-              variant="filled"
-              maxLength={20}
-              focusBorderColor="teal.400"
-              placeholder="영문 키워드를 입력 해주세요"
-            />
-          </InputGroup>
-          <Button minW="fit-content" variant="outline">
-            토픽 추가
-          </Button>
-        </HStack>
+        <Stack>
+          <FormControl isInvalid={!!errors.keyword}>
+            <HStack>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <CiShoppingTag fontSize={18} />
+                </InputLeftElement>
+                <Input
+                  {...register('keyword')}
+                  variant="filled"
+                  maxLength={20}
+                  focusBorderColor="teal.400"
+                  placeholder="영문 키워드를 입력 해주세요"
+                />
+              </InputGroup>
+              <Button minW="fit-content" variant="outline" onClick={onAddTopic}>
+                토픽 추가
+              </Button>
+            </HStack>
+            <FormErrorMessage>{errors.keyword?.message}</FormErrorMessage>
+          </FormControl>
+        </Stack>
         <Center h="38px" px={3}>
           <Divider orientation="vertical" />
         </Center>
@@ -117,17 +155,18 @@ export default function RandomSentenceForm() {
           </Button>
         </HStack>
       </HStack>
+      <Input {...register('topics')} hidden />
       <Wrap mt={-2} maxW="sm">
-        {['spotlight', 'library', 'exam'].map((label, i) => (
+        {topics.map((topic) => (
           <Tag
             size="sm"
-            key={i}
+            key={topic}
             borderRadius="md"
             variant="solid"
             colorScheme="teal"
           >
-            <TagLabel w="fit" textTransform="capitalize">
-              {label}
+            <TagLabel w="fit" textTransform="uppercase">
+              {topic}
             </TagLabel>
             <TagCloseButton />
           </Tag>
