@@ -31,8 +31,6 @@ import {
   useClipboard,
   useToast,
   VStack,
-  Wrap,
-  WrapProps,
 } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
 import { CiShoppingTag } from 'react-icons/ci';
@@ -50,6 +48,7 @@ import { RandomSentenceFormValues } from '@/features/syntax-analyzer/types';
 import { DevTool } from '@hookform/devtools';
 import { useRandomSentenceForm } from '@/features/syntax-analyzer';
 import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 export default function RandomSentenceForm() {
   const { methods, generateRandomSentences, isFetching, data } =
@@ -100,7 +99,7 @@ export default function RandomSentenceForm() {
           </HStack>
           <Input {...register('topics')} hidden />
         </HStack>
-        <TopicList mt={-2} maxW="sm" />
+        <TopicList mt={-2} maxW={590} />
       </FormProvider>
       <RandomSentences data={data} query={getValues('topics')} />
     </Stack>
@@ -147,9 +146,7 @@ const RandomSentences = ({ data, query }: RandomSentencesProps) => {
           as="i"
           cursor="pointer"
           key={sentence}
-          onMouseEnter={() => {
-            setValue(sentence);
-          }}
+          onMouseEnter={() => setValue(sentence)}
           onClick={onCopy}
         >
           <Highlight
@@ -164,17 +161,19 @@ const RandomSentences = ({ data, query }: RandomSentencesProps) => {
   );
 };
 
-const TopicList = (wrapProps: WrapProps) => {
+const TopicList = (stackProps: StackProps) => {
   const { control, setValue } = useFormContext<RandomSentenceFormValues>();
   const topics = useWatch({ name: 'topics', control });
+  const [parent] = useAutoAnimate({ duration: 200 });
 
   const onTagClick = (keyword: string) => {
     const filteredTopics = topics.filter((topic) => topic !== keyword);
     setValue('topics', filteredTopics);
   };
 
+  /** Wrap 컴포넌트 사용시 useAutoAnimate 작동 안함 */
   return (
-    <Wrap {...wrapProps}>
+    <HStack flexWrap="wrap" {...stackProps} ref={parent}>
       {topics.map((topic) => (
         <Tag
           size="sm"
@@ -189,7 +188,7 @@ const TopicList = (wrapProps: WrapProps) => {
           <TagCloseButton onClick={() => onTagClick(topic)} />
         </Tag>
       ))}
-    </Wrap>
+    </HStack>
   );
 };
 
