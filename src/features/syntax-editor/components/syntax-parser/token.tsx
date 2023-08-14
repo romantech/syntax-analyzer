@@ -37,7 +37,7 @@ export default function Token({ token, index, ...textProps }: TokenProps) {
       </PopoverAnchor>
       <Portal>
         <PopoverContent w="fit-content">
-          <PopoverBody>구/절은 서로 교차할 수 없습니다</PopoverBody>
+          <PopoverBody>구/절은 서로 교차할 수 없어요</PopoverBody>
         </PopoverContent>
       </Portal>
     </Popover>

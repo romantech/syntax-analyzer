@@ -15,3 +15,6 @@ export const COPY_SENTENCE_SUCCESS_TOAST_DURATION = 1000;
 export const NEW_BADGE_DISPLAY_DURATION = 60 * 5; // seconds
 
 export const TAG_LIST_DEFAULT_INDEX = 0; // null, 0(general), 1(phrase), 2(clause)
+
+export const MAX_SENTENCE_LENGTH = 90;
+export const MIN_SENTENCE_WORDS = 3;

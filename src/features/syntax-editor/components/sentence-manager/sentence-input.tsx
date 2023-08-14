@@ -16,6 +16,10 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { RiEnglishInput } from 'react-icons/ri';
 import { BsMagic } from 'react-icons/bs';
 import { TbArrowAutofitWidth } from 'react-icons/tb';
+import {
+  MAX_SENTENCE_LENGTH,
+  MIN_SENTENCE_WORDS,
+} from '@/features/syntax-editor';
 
 interface SentenceInputProps extends InputProps {
   errorMessage?: string;
@@ -33,7 +37,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
           </InputLeftElement>
           <Input
             placeholder="영어 문장을 입력해 주세요"
-            maxLength={90}
+            maxLength={MAX_SENTENCE_LENGTH}
             variant="filled"
             focusBorderColor="teal.400"
             {...inputProps}
@@ -43,27 +47,36 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
         <FormErrorMessage>{errorMessage}</FormErrorMessage>
         <FormHelperText color="gray.500" pt={1}>
           <List spacing={1.5}>
-            <ListItem>
-              <ListIcon as={BsMagic} />
-              {`축약 표현은 자동으로 풀어져요 (I'll → I will)`}
-            </ListItem>
-            <ListItem>
-              <ListIcon as={RiEnglishInput} />
-              영어와 문장 부호만 입력할 수 있어요
-            </ListItem>
-            <ListItem>
-              <ListIcon as={TbArrowAutofitWidth} />
-              최대 90자까지만 입력할 수 있어요
-            </ListItem>
-            <ListItem>
-              <ListIcon as={PiNotePencil} />
-              최소 3 단어로 이루어진 문장을 입력해 주세요
-            </ListItem>
+            {HELPER_TEXTS.map(({ icon, text }, i) => (
+              <ListItem key={i}>
+                <ListIcon as={icon} />
+                {text}
+              </ListItem>
+            ))}
           </List>
         </FormHelperText>
       </Box>
     );
   },
 );
+
+const HELPER_TEXTS = [
+  {
+    icon: BsMagic,
+    text: `축약 표현은 자동으로 풀어져요 (I'll → I will)`,
+  },
+  {
+    icon: RiEnglishInput,
+    text: '영어와 문장 부호만 입력할 수 있어요',
+  },
+  {
+    icon: TbArrowAutofitWidth,
+    text: `최대 ${MAX_SENTENCE_LENGTH}자까지만 입력할 수 있어요`,
+  },
+  {
+    icon: PiNotePencil,
+    text: `최소 ${MIN_SENTENCE_WORDS} 단어로 이루어진 문장을 입력해 주세요`,
+  },
+];
 
 export default SentenceInput;
