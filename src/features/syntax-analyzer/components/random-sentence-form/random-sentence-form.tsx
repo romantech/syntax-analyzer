@@ -23,10 +23,8 @@ export default function RandomSentenceForm() {
     useRandomSentenceForm();
 
   return (
-    <Stack w="full" maxW={690} gap={5}>
-      <FieldGroupHeader pb={1} mb={0}>
-        랜덤 문장 생성
-      </FieldGroupHeader>
+    <Stack w="full" maxW={690} gap={4}>
+      <FieldGroupHeader pb={0}>랜덤 문장 생성</FieldGroupHeader>
       <RandomSentenceInstructions />
       <FormProvider {...methods}>
         <HStack>
