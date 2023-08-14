@@ -69,8 +69,8 @@ export default function AddTopicForm(stackProps: StackProps) {
             </InputLeftElement>
             <Input
               {...registerRest}
-              onChange={(v) => {
-                onChange(v);
+              onChange={async (v) => {
+                await onChange(v);
                 if (errors.keyword) clearErrors('keyword');
               }}
               variant="filled"

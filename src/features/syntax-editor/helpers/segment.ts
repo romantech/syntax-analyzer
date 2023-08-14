@@ -161,9 +161,9 @@ export const addConstituent = (
    * 1. left/middle/right 범위와 일치하는 문장 성분을 찾아서 추출(pluck)
    * 2. left/middle/right 범위에 속하는 세그먼트를 찾아서 자식으로 이동
    * */
-  let left: Nullable<TSegment> = null;
+  let left: Nullable<TSegment>;
   let middle: Nullable<TSegment> = null;
-  let right: Nullable<TSegment> = null;
+  let right: Nullable<TSegment>;
 
   const firstChildBegin = clonedSegment.children.at(0)!.begin;
   const lastChildEnd = clonedSegment.children.at(-1)!.end;

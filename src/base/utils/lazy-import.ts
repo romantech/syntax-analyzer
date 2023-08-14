@@ -3,6 +3,7 @@ import { ComponentType, lazy } from 'react';
 // named imports for React.lazy: https://github.com/facebook/react/issues/14603#issuecomment-726551598
 // @ts-expected-error TS complains about the return type of lazyImport, but it's correct
 export function lazyImport<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends ComponentType<any>,
   I extends { [K2 in K]: T },
   K extends keyof I,

@@ -16,8 +16,8 @@ export type RandomSentenceFormValues = {
  * @see https://github.com/orgs/react-hook-form/discussions/1936
  * */
 const defaultValues = randomSentenceFormSchema.cast({});
-const { keyword, ...rest } = defaultValues;
-const defaultParams = { ...rest, timestamp: Date.now() };
+const { topics, sent_count } = defaultValues;
+const defaultParams = { topics, sent_count, timestamp: Date.now() };
 
 export const useRandomSentenceForm = () => {
   const [params, setParams] = useState(defaultParams);

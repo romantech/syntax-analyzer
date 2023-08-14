@@ -1,4 +1,4 @@
-import { Fragment, PropsWithChildren } from 'react';
+import { Fragment, PropsWithChildren, ReactElement } from 'react';
 import {
   Constituent,
   isMultipleTokensInRange,
@@ -30,6 +30,6 @@ export default function Segment({
         {tokens}
       </Constituent>
     ),
-    children as JSX.Element,
+    children as ReactElement,
   );
 }
