@@ -6,10 +6,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import {
-  AnalysisFormValues,
-  FieldGroupHeader,
-} from '@/features/syntax-analyzer';
+import { AnalysisFormValues } from '@/features/syntax-analyzer';
 import { Control, Controller } from 'react-hook-form';
 
 const MODEL_FIELDS = [
@@ -44,7 +41,6 @@ export default function ModelChoiceGroup({
       control={control}
       render={({ field: { onChange, value } }) => (
         <RadioGroup onChange={onChange} value={value}>
-          <FieldGroupHeader>ai 모델 선택</FieldGroupHeader>
           {MODEL_FIELDS.map((field) => (
             <Stack key={field.value}>
               <HStack align="center">

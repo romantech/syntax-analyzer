@@ -24,10 +24,14 @@ import {
 interface SentenceInputProps extends InputProps {
   errorMessage?: string;
   helperMessage?: string;
+  showHelperText?: boolean;
 }
 
 const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
-  function SentenceInput({ errorMessage, size = 'lg', ...inputProps }, ref) {
+  function SentenceInput(
+    { errorMessage, size = 'lg', showHelperText = false, ...inputProps },
+    ref,
+  ) {
     const [parent] = useAutoAnimate({ duration: 180 });
     return (
       <Box flexGrow={1} ref={parent}>
@@ -45,7 +49,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
           />
         </InputGroup>
         <FormErrorMessage>{errorMessage}</FormErrorMessage>
-        <FormHelperText color="gray.500" pt={1}>
+        <FormHelperText color="gray.500" pt={1} hidden={!showHelperText}>
           <List spacing={1.5}>
             {HELPER_TEXTS.map(({ icon, text }, i) => (
               <ListItem key={i}>

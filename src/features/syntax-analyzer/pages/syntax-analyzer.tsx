@@ -1,20 +1,15 @@
-import {
-  Center,
-  CenterProps,
-  Divider,
-  HStack,
-  Stack,
-  StackProps,
-} from '@chakra-ui/react';
+import { Box, CenterProps, HStack, Stack, StackProps } from '@chakra-ui/react';
 import {
   AnalysisCounter,
   AnalysisForm,
   AnalysisLoadingIndicator,
   CREATE_ANALYSIS_BASE_KEY,
+  FieldGroupHeader,
   RandomSentenceForm,
 } from '@/features/syntax-analyzer';
 import { Suspense } from 'react';
 import { useIsMutating } from '@tanstack/react-query';
+import { CenteredDivider } from '@/base';
 
 export default function SyntaxAnalyzer() {
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
@@ -29,10 +24,16 @@ export default function SyntaxAnalyzer() {
           <Suspense fallback={<AnalysisForm.Skeleton />}>
             <AnalysisForm />
           </Suspense>
-          <Center h="full" px={10}>
-            <Divider h="98%" orientation="vertical" />
-          </Center>
-          <RandomSentenceForm />
+          <CenteredDivider
+            h="full"
+            dividerH="98%"
+            orientation="vertical"
+            px={10}
+          />
+          <Box>
+            <FieldGroupHeader>랜덤 문장 생성</FieldGroupHeader>
+            <RandomSentenceForm />
+          </Box>
         </HStack>
       </Stack>
       <AnalysisLoadingIndicator {...getLoadingTransitionStyles(isMutating)} />

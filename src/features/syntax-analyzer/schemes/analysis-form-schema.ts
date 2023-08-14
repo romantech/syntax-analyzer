@@ -3,7 +3,7 @@ import { englishSentenceSchema } from './english-sentence-schema';
 import { AnalysisModel } from '@/features/syntax-analyzer';
 
 export const addSentenceFormSchema = yup.object({
-  sentence: englishSentenceSchema.required(),
+  sentence: englishSentenceSchema.required().ensure(),
 });
 
 export const createAnalysisFormSchema = yup.object({

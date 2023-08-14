@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   FormControl,
   HStack,
@@ -32,7 +33,10 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
 
   return (
     <AnalysisFormBox as="form" onSubmit={onSubmit} {...stackProps}>
-      <ModelChoiceGroup control={control} remainingCount={remainingCount} />
+      <Box>
+        <FieldGroupHeader>ai 모델 선택</FieldGroupHeader>
+        <ModelChoiceGroup control={control} remainingCount={remainingCount} />
+      </Box>
       <FormControl isInvalid={!!errors.sentence}>
         <FieldGroupHeader>영어 문장 입력</FieldGroupHeader>
         <HStack align="start">
@@ -40,6 +44,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
             {...register('sentence')}
             errorMessage={errors.sentence?.message}
             isDisabled={isLoading}
+            showHelperText
           />
           <Button
             type="submit"

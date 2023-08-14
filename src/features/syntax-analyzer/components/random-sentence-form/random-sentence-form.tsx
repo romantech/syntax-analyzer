@@ -1,37 +1,34 @@
-import {
-  Button,
-  Center,
-  Divider,
-  HStack,
-  Input,
-  Stack,
-} from '@chakra-ui/react';
+import { Button, HStack, Input, Stack, StackProps } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
 import { FormProvider } from 'react-hook-form';
 import {
   AddTopicForm,
-  FieldGroupHeader,
   RandomSentenceCount,
   RandomSentenceInstructions,
   RandomSentenceList,
   TopicTagList,
   useRandomSentenceForm,
 } from '@/features/syntax-analyzer';
+import { CenteredDivider } from '@/base';
 
-export default function RandomSentenceForm() {
+interface RandomSentenceFormProps extends StackProps {
+  showInstructions?: boolean;
+}
+
+export default function RandomSentenceForm({
+  showInstructions = true,
+  ...stackProps
+}: RandomSentenceFormProps) {
   const { methods, isFetching, data, generateSentences } =
     useRandomSentenceForm();
 
   return (
-    <Stack w="full" maxW={690} gap={4}>
-      <FieldGroupHeader pb={0}>랜덤 문장 생성</FieldGroupHeader>
-      <RandomSentenceInstructions />
+    <Stack w="full" maxW={690} gap={4} {...stackProps}>
+      <RandomSentenceInstructions hidden={!showInstructions} />
       <FormProvider {...methods}>
         <HStack>
           <AddTopicForm />
-          <Center h="38px" px={3}>
-            <Divider orientation="vertical" />
-          </Center>
+          <CenteredDivider h="38px" px={3} orientation="vertical" />
           <HStack>
             <RandomSentenceCount />
             <Button

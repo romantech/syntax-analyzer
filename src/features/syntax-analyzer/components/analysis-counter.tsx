@@ -1,9 +1,7 @@
 import {
   Box,
-  Center,
   CircularProgress,
   CircularProgressLabel,
-  Divider,
   HStack,
   Skeleton,
   SkeletonCircle,
@@ -16,6 +14,7 @@ import {
   MAX_ANALYSIS_COUNT,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
+import { CenteredDivider } from '@/base';
 
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
   const { data: count } = useRemainingCountQuery({
@@ -37,10 +36,7 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
           {remainingCountInPercent(count) + '%'}
         </CircularProgressLabel>
       </CircularProgress>
-
-      <Center height="40px" px={1}>
-        <Divider orientation="vertical" />
-      </Center>
+      <CenteredDivider orientation="vertical" height="40px" px={1} />
       <Box>
         <Text fontWeight="bold">{countTitle}</Text>
         <Text>{limitDesc}</Text>

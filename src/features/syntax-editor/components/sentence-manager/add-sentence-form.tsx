@@ -1,5 +1,6 @@
 import {
   Box,
+  BoxProps,
   Button,
   FormControl,
   HStack,
@@ -15,36 +16,35 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { addSentenceFormSchema } from '@/features/syntax-analyzer';
 
-const DEFAULT_VALUE = { sentence: '' };
+const defaultValues = addSentenceFormSchema.cast({});
+const resolver = yupResolver(addSentenceFormSchema);
+const formProps = { resolver, defaultValues };
 
-interface AddSentenceProps {
+interface AddSentenceProps extends BoxProps {
   onConfirmEffect?: VoidFunc;
 }
 
-export default function AddSentenceForm({ onConfirmEffect }: AddSentenceProps) {
-  const {
-    register,
-    handleSubmit,
-    getValues,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<typeof DEFAULT_VALUE>({
-    resolver: yupResolver(addSentenceFormSchema),
-    defaultValues: DEFAULT_VALUE,
-  });
+export default function AddSentenceForm({
+  onConfirmEffect,
+  ...boxProps
+}: AddSentenceProps) {
+  const { register, handleSubmit, getValues, reset, formState } =
+    useForm<typeof defaultValues>(formProps);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const addAnalysis = useSetAtom(addUserAnalysisActionAtom);
 
   const onConfirm = () => {
     addAnalysis({ sentence: getValues('sentence'), source: 'user' });
-    reset();
-    onClose();
     onConfirmEffect?.();
+    onClose();
+    reset();
   };
 
+  const { errors, isSubmitting } = formState;
+
   return (
-    <Box as="form" onSubmit={handleSubmit(onOpen)} w="full">
+    <Box as="form" w="full" onSubmit={handleSubmit(onOpen)} {...boxProps}>
       <FormControl isInvalid={!!errors.sentence}>
         <HStack align="start">
           <SentenceInput
