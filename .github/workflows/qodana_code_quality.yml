@@ -1,8 +1,8 @@
 name: Qodana
+# Qodana Community 라이선스에선 JS/TS 포함 안돼서 pull_request/push 비활성
+# https://www.jetbrains.com/help/qodana/pricing.html#license-comparison-matrix
 on:
   workflow_dispatch:
-# Qodana Community 라이선스에선 JS/TS 포함안돼서 비활성
-# https://www.jetbrains.com/help/qodana/pricing.html#license-comparison-matrix
 #  pull_request:
 #  push:
 #    branches:

@@ -1,5 +1,6 @@
-export { default as CreateAnalysisForm } from './create-analysis-form';
-export { default as AnalysisCounter } from './analysis-counter';
-export { default as RequestPlaceholder } from './request-placeholder';
-export { default as FieldWithHeading } from './field-with-heading';
+export * from './analysis-form';
 export * from './random-sentence-form';
+
+export { default as AnalysisCounter } from './analysis-counter';
+export { default as AnalysisLoadingIndicator } from './analysis-loading-indicator';
+export { default as FieldGroupHeader } from './field-group-header';

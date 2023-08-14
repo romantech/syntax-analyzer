@@ -28,7 +28,7 @@ const updateAnalysisMetaData = (analysis: TAnalysis) => ({
   createdAt: new Date().toISOString(),
 });
 
-export const useCreateAnalysisForm = () => {
+export const useAnalysisForm = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 

@@ -12,12 +12,15 @@ import { RANDOM_SENTENCE_BASE_KEY } from '@/features/syntax-analyzer';
 import { useEffect } from 'react';
 import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor';
 
-interface RandomSentencesProps {
+interface RandomSentenceListProps {
   data?: string[];
   query: string[];
 }
 
-export default function RandomSentences({ data, query }: RandomSentencesProps) {
+export default function RandomSentenceList({
+  data,
+  query,
+}: RandomSentenceListProps) {
   const toast = useToast();
   const isFetching = useIsFetching({ queryKey: RANDOM_SENTENCE_BASE_KEY });
   const { onCopy, setValue, hasCopied } = useClipboard('', 1000);

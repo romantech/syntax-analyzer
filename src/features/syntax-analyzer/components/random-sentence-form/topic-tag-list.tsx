@@ -9,7 +9,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { RandomSentenceFormValues } from '@/features/syntax-analyzer';
 
-export default function Topics(stackProps: StackProps) {
+export default function TopicTagList(stackProps: StackProps) {
   const { control, setValue } = useFormContext<RandomSentenceFormValues>();
   const topics = useWatch({ name: 'topics', control });
   const [parent] = useAutoAnimate({ duration: 200 });

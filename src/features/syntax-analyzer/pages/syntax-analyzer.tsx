@@ -8,10 +8,10 @@ import {
 } from '@chakra-ui/react';
 import {
   AnalysisCounter,
+  AnalysisForm,
+  AnalysisLoadingIndicator,
   CREATE_ANALYSIS_BASE_KEY,
-  CreateAnalysisForm,
   RandomSentenceForm,
-  RequestPlaceholder,
 } from '@/features/syntax-analyzer';
 import { Suspense } from 'react';
 import { useIsMutating } from '@tanstack/react-query';
@@ -26,8 +26,8 @@ export default function SyntaxAnalyzer() {
           <AnalysisCounter />
         </Suspense>
         <HStack align="start" justify="space-between">
-          <Suspense fallback={<CreateAnalysisForm.Skeleton />}>
-            <CreateAnalysisForm />
+          <Suspense fallback={<AnalysisForm.Skeleton />}>
+            <AnalysisForm />
           </Suspense>
           <Center h="full" px={10}>
             <Divider h="98%" orientation="vertical" />
@@ -35,7 +35,7 @@ export default function SyntaxAnalyzer() {
           <RandomSentenceForm />
         </HStack>
       </Stack>
-      <RequestPlaceholder {...getLoadingTransitionStyles(isMutating)} />
+      <AnalysisLoadingIndicator {...getLoadingTransitionStyles(isMutating)} />
     </Stack>
   );
 }

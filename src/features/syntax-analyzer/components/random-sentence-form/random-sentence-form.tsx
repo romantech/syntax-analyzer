@@ -2,7 +2,6 @@ import {
   Button,
   Center,
   Divider,
-  Heading,
   HStack,
   Input,
   Stack,
@@ -11,10 +10,11 @@ import { RiAiGenerate } from 'react-icons/ri';
 import { FormProvider } from 'react-hook-form';
 import {
   AddTopicForm,
+  FieldGroupHeader,
   RandomSentenceCount,
   RandomSentenceInstructions,
-  RandomSentences,
-  Topics,
+  RandomSentenceList,
+  TopicTagList,
   useRandomSentenceForm,
 } from '@/features/syntax-analyzer';
 
@@ -24,9 +24,9 @@ export default function RandomSentenceForm() {
 
   return (
     <Stack w="full" maxW={690} gap={5}>
-      <Heading size="lg" textTransform="uppercase" pb={1}>
+      <FieldGroupHeader pb={1} mb={0}>
         랜덤 문장 생성
-      </Heading>
+      </FieldGroupHeader>
       <RandomSentenceInstructions />
       <FormProvider {...methods}>
         <HStack>
@@ -47,9 +47,9 @@ export default function RandomSentenceForm() {
           </HStack>
           <Input {...methods.register('topics')} hidden />
         </HStack>
-        <Topics mt={-2} maxW={590} />
+        <TopicTagList mt={-2} maxW={590} />
       </FormProvider>
-      <RandomSentences data={data} query={methods.getValues('topics')} />
+      <RandomSentenceList data={data} query={methods.getValues('topics')} />
     </Stack>
   );
 }
