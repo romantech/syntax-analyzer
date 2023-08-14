@@ -1,2 +1,2 @@
-export { default as useCreateAnalysisForm } from './use-create-analysis-form';
-export { default as useRandomSentenceForm } from './use-random-sentence-form';
+export * from './use-create-analysis-form';
+export * from './use-random-sentence-form';

@@ -1,7 +1,7 @@
 import { axios, paramsSerializer } from '@/lib';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { RandomSentenceFormValues } from '@/features/syntax-analyzer/types';
+import { RandomSentenceFormValues } from '@/features/syntax-analyzer';
 
 type RandomSentenceResponse = string[];
 type RandomSentenceParams = Omit<RandomSentenceFormValues, 'keyword'>;
@@ -19,7 +19,7 @@ export const getRandomSentence = async <T = RandomSentenceResponse>({
 
 export const RANDOM_SENTENCE_BASE_KEY = ['random-sentence'] as const;
 
-export const useRandomSentence = <T = RandomSentenceResponse, K = T>(
+export const useRandomSentenceQuery = <T = RandomSentenceResponse, K = T>(
   params: RandomSentenceParams & { timestamp?: number },
   options?: UseQueryOptions<T, AxiosError, K>,
 ) => {

@@ -1,8 +1,8 @@
 import { axios } from '@/lib';
-import { AnalysisModel } from '@/features/syntax-analyzer';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { TAnalysis } from '@/features/syntax-editor';
+import { AnalysisModel } from '@/features/syntax-analyzer';
 
 export type CreateAnalysisResponse = TAnalysis;
 export type CreateAnalysisPayload = {
@@ -28,7 +28,7 @@ export const createAnalysis = async <
  * */
 export const CREATE_ANALYSIS_BASE_KEY = ['analysis'];
 
-export const useCreateAnalysis = <
+export const useCreateAnalysisMutation = <
   TData = TAnalysis,
   TVariables = CreateAnalysisPayload,
 >(

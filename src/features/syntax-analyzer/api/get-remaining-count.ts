@@ -15,7 +15,7 @@ export const REMAINING_COUNT_BASE_KEY = ['remaining'];
  * TError: query 함수 에러 타입
  * TData : select 함수로 쿼리 리턴값을 가공할 때 사용하는 리턴 타입
  * */
-export const useRemainingCount = <
+export const useRemainingCountQuery = <
   TQueryFnData = RemainingCountResponse,
   TData = TQueryFnData,
 >(

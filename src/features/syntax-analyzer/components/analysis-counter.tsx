@@ -14,11 +14,11 @@ import {
 import { PropsWithChildren } from 'react';
 import {
   MAX_ANALYSIS_COUNT,
-  useRemainingCount,
+  useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
-  const { data: count } = useRemainingCount({
+  const { data: count } = useRemainingCountQuery({
     suspense: true,
     select: ({ count }) => count,
   });

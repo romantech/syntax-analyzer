@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import {
-  AnalysisFormValues,
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
-  useCreateAnalysis,
-  useRemainingCount,
+  useCreateAnalysisMutation,
+  useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,6 +13,9 @@ import { getSyntaxEditorPath } from '@/routes';
 import { expandAbbreviations, tokenizer } from '@/base';
 import { useDisclosure } from '@chakra-ui/react';
 import { TAnalysis } from '@/features/syntax-editor';
+
+export type AnalysisModel = 'gpt-3.5-turbo' | 'gpt-4';
+export type AnalysisFormValues = { model: AnalysisModel; sentence: string };
 
 const getDefaultValue = (count: number): AnalysisFormValues => ({
   sentence: '',
@@ -26,7 +28,7 @@ const updateAnalysisMetaData = (analysis: TAnalysis) => ({
   createdAt: new Date().toISOString(),
 });
 
-export default function useCreateAnalysisForm() {
+export const useCreateAnalysisForm = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -36,17 +38,17 @@ export default function useCreateAnalysisForm() {
     onOpen: openModal,
   } = useDisclosure();
 
-  const { data: remainingCount = 0 } = useRemainingCount({
+  const { data: remainingCount = 0 } = useRemainingCountQuery({
     select: ({ count }) => count,
     suspense: true,
   });
 
-  const useFormResults = useForm<AnalysisFormValues>({
+  const formResults = useForm<AnalysisFormValues>({
     defaultValues: getDefaultValue(remainingCount),
     resolver: yupResolver(createAnalysisFormSchema),
   });
 
-  const useMutationResults = useCreateAnalysis({
+  const mutationResults = useCreateAnalysisMutation({
     onMutate: closeModal,
     onSuccess: async (analysis) => {
       const updatedAnalysis = updateAnalysisMetaData(analysis);
@@ -58,8 +60,8 @@ export default function useCreateAnalysisForm() {
     },
   });
 
-  const { getValues, handleSubmit } = useFormResults;
-  const { mutate } = useMutationResults;
+  const { getValues, handleSubmit } = formResults;
+  const { mutate } = mutationResults;
 
   const onSubmitConfirm = () => {
     const { model, sentence } = getValues();
@@ -76,7 +78,7 @@ export default function useCreateAnalysisForm() {
     isModalOpen,
     closeModal,
     remainingCount,
-    ...useFormResults,
-    ...useMutationResults,
+    ...formResults,
+    ...mutationResults,
   };
-}
+};
