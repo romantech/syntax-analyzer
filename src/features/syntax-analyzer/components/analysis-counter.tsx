@@ -19,7 +19,7 @@ import { CenteredDivider } from '@/base';
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
   const { data: count } = useRemainingCountQuery({
     suspense: true,
-    select: ({ count }) => count,
+    select: ({ analysis }) => analysis,
   });
 
   const countTitle = `남은 분석 횟수 ${count}회`;

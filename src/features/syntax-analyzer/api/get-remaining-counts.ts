@@ -2,13 +2,13 @@ import { axios } from '@/lib';
 import { QueryClient, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-type RemainingCountResponse = { count: number };
-export const getRemainingCount = async <T = RemainingCountResponse>() => {
-  const { data } = await axios.get<T>('analysis/remaining');
+type RemainingCountResponse = { analysis: number; random_sentence: number };
+export const getRemainingCounts = async <T = RemainingCountResponse>() => {
+  const { data } = await axios.get<T>('analysis/remaining-counts');
   return data;
 };
 
-export const REMAINING_COUNT_BASE_KEY = ['remaining'];
+export const REMAINING_COUNT_BASE_KEY = ['remaining-counts'];
 
 /**
  * TQueryFnData: query 함수 리턴 타입
@@ -23,7 +23,7 @@ export const useRemainingCountQuery = <
 ) => {
   return useQuery({
     queryKey: REMAINING_COUNT_BASE_KEY,
-    queryFn: getRemainingCount,
+    queryFn: getRemainingCounts,
     ...options,
   });
 };
@@ -34,6 +34,6 @@ export const useRemainingCountQuery = <
  * */
 export const analysisCountLoader = (queryClient: QueryClient) => {
   return () => {
-    return queryClient.fetchQuery(REMAINING_COUNT_BASE_KEY, getRemainingCount);
+    return queryClient.fetchQuery(REMAINING_COUNT_BASE_KEY, getRemainingCounts);
   };
 };

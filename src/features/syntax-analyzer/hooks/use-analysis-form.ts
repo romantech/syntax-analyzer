@@ -39,7 +39,7 @@ export const useAnalysisForm = () => {
   } = useDisclosure();
 
   const { data: remainingCount = 0 } = useRemainingCountQuery({
-    select: ({ count }) => count,
+    select: ({ analysis }) => analysis,
     suspense: true,
   });
 

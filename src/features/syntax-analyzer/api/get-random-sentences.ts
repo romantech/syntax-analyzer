@@ -6,18 +6,18 @@ import { RandomSentenceFormValues } from '@/features/syntax-analyzer';
 type RandomSentenceResponse = string[];
 type RandomSentenceParams = Omit<RandomSentenceFormValues, 'keyword'>;
 
-export const getRandomSentence = async <T = RandomSentenceResponse>({
+export const getRandomSentences = async <T = RandomSentenceResponse>({
   sent_count,
   topics,
 }: RandomSentenceParams) => {
-  const { data } = await axios.get<T>('analysis/random-sentence', {
+  const { data } = await axios.get<T>('analysis/random-sentences', {
     params: { sent_count, topics },
     paramsSerializer,
   });
   return data;
 };
 
-export const RANDOM_SENTENCE_BASE_KEY = ['random-sentence'] as const;
+export const RANDOM_SENTENCE_BASE_KEY = ['random-sentences'] as const;
 
 export const useRandomSentenceQuery = <T = RandomSentenceResponse, K = T>(
   params: RandomSentenceParams & { timestamp?: number },
@@ -25,7 +25,7 @@ export const useRandomSentenceQuery = <T = RandomSentenceResponse, K = T>(
 ) => {
   return useQuery({
     queryKey: [...RANDOM_SENTENCE_BASE_KEY, params],
-    queryFn: () => getRandomSentence<T>(params),
+    queryFn: () => getRandomSentences<T>(params),
     ...options,
   });
 };
