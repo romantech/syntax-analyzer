@@ -1,12 +1,13 @@
+---
 #-------------------------------------------------------------------------------#
 #               Qodana analysis is configured by qodana.yaml file               #
 #             https://www.jetbrains.com/help/qodana/qodana-yaml.html            #
 #-------------------------------------------------------------------------------#
-version: "1.0"
+version: '1.0'
 
 #Specify inspection profile for code analysis
 profile:
-  name: qodana.starter
+  name: qodana.recommended
 
 #Enable inspections
 #include:
@@ -17,6 +18,17 @@ profile:
 #  - name: <SomeDisabledInspectionId>
 #    paths:
 #      - <path/where/not/run/inspection>
+
+exclude:
+  - name: All
+    paths:
+      - node_modules/
+include:
+  - name: Eslint
+  - name: GrazieInspection
+  - name: IdentifierGrammar
+  - name: LanguageDetectionInspection
+  - name: CheckDependencyLicenses
 
 #The following options are only applied in CI/CD environment
 #These options are ignored during local run
