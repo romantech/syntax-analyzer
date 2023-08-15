@@ -1,8 +1,8 @@
-import { Button, HStack, Input, Stack, StackProps } from '@chakra-ui/react';
-import { RiAiGenerate } from 'react-icons/ri';
+import { HStack, Input, Stack, StackProps } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
 import {
   AddTopicForm,
+  GenerateButton,
   RandomSentenceCount,
   RandomSentenceInstructions,
   RandomSentenceList,
@@ -10,6 +10,7 @@ import {
   useRandomSentenceForm,
 } from '@/features/syntax-analyzer';
 import { CenteredDivider } from '@/base';
+import { Suspense } from 'react';
 
 interface RandomSentenceFormProps extends StackProps {
   showInstructions?: boolean;
@@ -31,14 +32,12 @@ export default function RandomSentenceForm({
           <CenteredDivider h="38px" px={3} orientation="vertical" />
           <HStack>
             <RandomSentenceCount />
-            <Button
-              onClick={generateSentences}
-              leftIcon={<RiAiGenerate />}
-              textTransform="uppercase"
-              isLoading={isFetching}
-            >
-              generate
-            </Button>
+            <Suspense fallback={<GenerateButton.Skeleton />}>
+              <GenerateButton
+                onClick={generateSentences}
+                isLoading={isFetching}
+              />
+            </Suspense>
           </HStack>
           <Input {...methods.register('topics')} hidden />
         </HStack>

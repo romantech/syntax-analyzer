@@ -92,7 +92,7 @@ export default function AddTopicForm(stackProps: StackProps) {
         </PopoverContent>
       </Popover>
       <Button minW="fit-content" variant="outline" type="submit">
-        토픽 추가
+        추가
       </Button>
     </HStack>
   );

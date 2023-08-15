@@ -4,3 +4,4 @@ export { default as RandomSentenceInstructions } from './random-sentence-instruc
 export { default as RandomSentenceForm } from './random-sentence-form';
 export { default as RandomSentenceCount } from './random-sentence-count';
 export { default as RandomSentenceList } from './random-sentence-list';
+export { default as GenerateButton } from './generate-button';
