@@ -1,5 +1,6 @@
 import {
   MAX_SENTENCE_COUNT,
+  UsageLimitTooltip,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 import {
@@ -7,7 +8,6 @@ import {
   ButtonProps,
   Skeleton,
   Text,
-  Tooltip,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
@@ -25,12 +25,7 @@ export default function GenerateButton({
   const hasCount = count > 0;
 
   return (
-    <Tooltip
-      isDisabled={hasCount}
-      label={'사용량을 모두 소진했어요\n내일 다시 시도해주세요'}
-      placement="top"
-      whiteSpace="pre-line"
-    >
+    <UsageLimitTooltip isDisabled={hasCount}>
       <Button
         w={190}
         onClick={onClick}
@@ -48,7 +43,7 @@ export default function GenerateButton({
           fontSize="sm"
         >{`(${count}/${MAX_SENTENCE_COUNT})`}</Text>
       </Button>
-    </Tooltip>
+    </UsageLimitTooltip>
   );
 }
 

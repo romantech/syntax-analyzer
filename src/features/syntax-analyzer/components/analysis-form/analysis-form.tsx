@@ -11,6 +11,7 @@ import {
 import {
   FieldGroupHeader,
   ModelChoiceGroup,
+  UsageLimitTooltip,
   useAnalysisForm,
 } from '@/features/syntax-analyzer';
 import { ConfirmModal } from '@/base';
@@ -46,15 +47,17 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
             isDisabled={isLoading}
             showHelperText
           />
-          <Button
-            type="submit"
-            isDisabled={!remainingCount}
-            size="lg"
-            leftIcon={<GiMagicLamp fontSize="24px" />}
-            loadingText="분석중"
-          >
-            분석
-          </Button>
+          <UsageLimitTooltip isDisabled={!!remainingCount}>
+            <Button
+              type="submit"
+              isDisabled={!remainingCount}
+              size="lg"
+              leftIcon={<GiMagicLamp fontSize="24px" />}
+              loadingText="분석중"
+            >
+              분석
+            </Button>
+          </UsageLimitTooltip>
         </HStack>
       </FormControl>
       <ConfirmModal
