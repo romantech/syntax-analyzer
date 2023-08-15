@@ -10,7 +10,7 @@ export const getRandomSentences = async <T = RandomSentenceResponse>({
   sent_count,
   topics,
 }: RandomSentenceParams) => {
-  const { data } = await axios.get<T>('analysis/random-sentences', {
+  const { data } = await axios.get<T>('analyzer/random-sentences', {
     params: { sent_count, topics },
     paramsSerializer,
   });

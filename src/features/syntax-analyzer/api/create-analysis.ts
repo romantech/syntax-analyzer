@@ -16,7 +16,7 @@ export const createAnalysis = async <
 >(
   payload: K,
 ) => {
-  const { data } = await axios.post<T>('analysis', payload);
+  const { data } = await axios.post<T>('analyzer', payload);
   return data;
 };
 

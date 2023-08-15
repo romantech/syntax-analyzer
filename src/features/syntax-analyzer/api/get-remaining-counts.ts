@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 
 type RemainingCountResponse = { analysis: number; random_sentence: number };
 export const getRemainingCounts = async <T = RemainingCountResponse>() => {
-  const { data } = await axios.get<T>('analysis/remaining-counts');
+  const { data } = await axios.get<T>('analyzer/remaining-counts');
   return data;
 };
 
