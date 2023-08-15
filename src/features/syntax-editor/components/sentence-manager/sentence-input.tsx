@@ -40,7 +40,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
             <PiTextTBold />
           </InputLeftElement>
           <Input
-            placeholder="영어 문장을 입력해 주세요"
+            placeholder="90자 미만의 영어 문장을 입력해 주세요"
             maxLength={MAX_SENTENCE_LENGTH}
             variant="filled"
             focusBorderColor="teal.400"
