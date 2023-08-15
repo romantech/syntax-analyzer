@@ -2,7 +2,13 @@ import {
   MAX_SENTENCE_COUNT,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
-import { Button, ButtonProps, Skeleton, Text } from '@chakra-ui/react';
+import {
+  Button,
+  ButtonProps,
+  Skeleton,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
 
 export default function GenerateButton({
@@ -29,7 +35,7 @@ export default function GenerateButton({
       <Text
         pl={1}
         as="span"
-        color="gray.400"
+        color={useColorModeValue('gray.400', 'gray.500')}
         fontSize="sm"
       >{`(${count}/${MAX_SENTENCE_COUNT})`}</Text>
     </Button>
