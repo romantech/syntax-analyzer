@@ -36,7 +36,10 @@ export default function SyntaxAnalyzer() {
           </Box>
         </HStack>
       </Stack>
-      <AnalysisLoadingIndicator {...getLoadingTransitionStyles(isMutating)} />
+      <AnalysisLoadingIndicator
+        play={Boolean(isMutating)}
+        {...getLoadingTransitionStyles(isMutating)}
+      />
     </Stack>
   );
 }

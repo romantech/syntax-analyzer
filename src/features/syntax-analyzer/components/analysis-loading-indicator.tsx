@@ -1,14 +1,29 @@
 import { Player } from '@lottiefiles/react-lottie-player';
 import { Center, CenterProps, Heading, Stack, Text } from '@chakra-ui/react';
 import { loadingAnimation } from '@/assets/lottie';
+import { useEffect, useRef } from 'react';
 
-export default function AnalysisLoadingIndicator(centerProps: CenterProps) {
+interface AnalysisLoadingIndicatorProps extends CenterProps {
+  play: boolean;
+}
+
+export default function AnalysisLoadingIndicator({
+  play,
+  ...centerProps
+}: AnalysisLoadingIndicatorProps) {
+  const playerRef = useRef<Player>(null);
+
+  useEffect(() => {
+    if (play) playerRef.current?.play();
+    else playerRef.current?.stop();
+  }, [play]);
+
   return (
     <Center zIndex={-1} {...centerProps}>
       <Player
-        src={loadingAnimation}
         loop
-        autoplay
+        ref={playerRef}
+        src={loadingAnimation}
         style={{ width: 350, height: 350 }}
       />
       <Stack spacing={5}>
