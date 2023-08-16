@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 import {
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
@@ -13,6 +12,7 @@ import { getSyntaxEditorPath } from '@/routes';
 import { expandAbbreviations, tokenizer } from '@/base';
 import { useDisclosure } from '@chakra-ui/react';
 import { TAnalysis } from '@/features/syntax-editor';
+import { useEffect } from 'react';
 
 export type AnalysisModel = 'gpt-3.5-turbo' | 'gpt-4';
 export type AnalysisFormValues = { model: AnalysisModel; sentence: string };
@@ -30,7 +30,6 @@ const updateAnalysisMetaData = (analysis: TAnalysis) => ({
 
 export const useAnalysisForm = () => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const {
     isOpen: isModalOpen,
@@ -41,27 +40,29 @@ export const useAnalysisForm = () => {
   const { data: remainingCount = 0 } = useRemainingCountQuery({
     select: ({ analysis }) => analysis,
     suspense: true,
+    // observer 레벨에서 동작하는 가짜 데이터 / 캐시 저장 안함
+    placeholderData: { analysis: 0, random_sentence: 0 },
   });
 
   const formResults = useForm<AnalysisFormValues>({
-    defaultValues: getDefaultValue(remainingCount),
     resolver: yupResolver(createAnalysisFormSchema),
   });
 
   const mutationResults = useCreateAnalysisMutation({
     onMutate: closeModal,
-    onSuccess: async (analysis) => {
-      const updatedAnalysis = updateAnalysisMetaData(analysis);
-
-      await queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);
-      navigate(getSyntaxEditorPath('user', 0), {
-        state: { analysis: updatedAnalysis },
-      });
+    onSuccess: (data) => {
+      const analysis = updateAnalysisMetaData(data);
+      navigate(getSyntaxEditorPath('user', 0), { state: { analysis } });
     },
+    meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });
 
-  const { getValues, handleSubmit } = formResults;
+  const { getValues, handleSubmit, reset } = formResults;
   const { mutate } = mutationResults;
+
+  useEffect(() => {
+    reset(getDefaultValue(remainingCount));
+  }, [remainingCount, reset]);
 
   const onSubmitConfirm = () => {
     const { model, sentence } = getValues();

@@ -41,11 +41,12 @@ export default function SyntaxAnalyzer() {
   );
 }
 
+const TRANSFORM_DURATION = '0.7s';
+const OPACITY_DURATION = '0.4s';
+
 const getFormTransitionStyles = (isMutating: number): StackProps => {
   return {
-    transition: 'transform 0.7s, opacity 0.4s, width 0.7s',
-    w: isMutating ? '0' : 'full',
-    h: isMutating ? '0' : 'fit-content',
+    transition: `transform ${TRANSFORM_DURATION}, opacity ${OPACITY_DURATION}`,
     opacity: isMutating ? 0 : 1,
     transform: isMutating ? 'translateX(-100%)' : 'translateX(0)',
   };
@@ -57,7 +58,7 @@ const getLoadingTransitionStyles = (isMutating: number): CenterProps => {
     top: '45%',
     left: '45%',
     opacity: isMutating ? 1 : 0,
-    transition: 'transform 0.7s, opacity 0.4s',
+    transition: `transform ${TRANSFORM_DURATION}, opacity ${OPACITY_DURATION}`,
     transform: `translate(-50%, -50%) ${
       isMutating ? 'translateX(0)' : 'translateX(100%)'
     }`,

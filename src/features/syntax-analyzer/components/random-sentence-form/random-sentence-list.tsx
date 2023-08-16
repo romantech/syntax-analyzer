@@ -28,7 +28,7 @@ export default function RandomSentenceList({
   useEffect(() => {
     if (hasCopied) {
       toast({
-        title: '복사 성공',
+        title: '클립보드에 복사되었습니다',
         status: 'success',
         duration: COPY_SENTENCE_SUCCESS_TOAST_DURATION,
       });

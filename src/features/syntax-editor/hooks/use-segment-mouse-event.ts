@@ -1,13 +1,13 @@
 import { MouseEvent, useRef, useState } from 'react';
 import { useColorMode } from '@chakra-ui/react';
 import {
-  CONSTITUENT_CLASSES,
   ConstituentDataSet,
   DELETE_MODE_HOVER_COLOR_SCHEME,
   deleteModeAtom,
 } from '@/features/syntax-editor';
 import { useAtomValue } from 'jotai';
 import { getNearestElementByClass } from '@/base';
+import { CONSTITUENT_CLASSES } from '@/features/syntax-editor/constants';
 
 const { CONSTITUENT } = CONSTITUENT_CLASSES;
 

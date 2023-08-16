@@ -23,7 +23,7 @@ export default function ErrorBoundary() {
           </Heading>
         </ScaleFade>
         <ScaleFade initialScale={0.1} in={isMounted}>
-          <Text fontSize="xl" textTransform="uppercase">
+          <Text fontSize="xl" textTransform="capitalize" maxW={500}>
             {errorMessage.current}
           </Text>
         </ScaleFade>

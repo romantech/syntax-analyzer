@@ -7,7 +7,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRandomSentenceQuery } from '@/features/syntax-analyzer/api';
 import { useState } from 'react';
 import { useBoolean } from '@chakra-ui/react';
-import { useQueryClient } from '@tanstack/react-query';
 
 export type RandomSentenceFormValues = {
   sent_count: number; // 생성할 랜덤 문장 개수
@@ -24,8 +23,6 @@ const { topics, sent_count } = defaultValues;
 const defaultParams = { topics, sent_count, timestamp: Date.now() };
 
 export const useRandomSentenceForm = () => {
-  const queryClient = useQueryClient();
-
   const [params, setParams] = useState(defaultParams);
   const [readyToFetch, setReadyToFetch] = useBoolean();
 
@@ -39,9 +36,7 @@ export const useRandomSentenceForm = () => {
   const { data, isFetching } = useRandomSentenceQuery(params, {
     enabled: readyToFetch,
     cacheTime: 0,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(REMAINING_COUNT_BASE_KEY);
-    },
+    meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });
 
   /**
