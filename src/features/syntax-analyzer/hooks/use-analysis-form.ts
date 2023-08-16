@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
+  RemainingCountResponse,
   useCreateAnalysisMutation,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
@@ -17,16 +18,12 @@ import { useEffect } from 'react';
 export type AnalysisModel = 'gpt-3.5-turbo' | 'gpt-4';
 export type AnalysisFormValues = { model: AnalysisModel; sentence: string };
 
-const getDefaultValue = (count: number): AnalysisFormValues => ({
-  sentence: '',
-  model: count > 2 ? 'gpt-4' : 'gpt-3.5-turbo',
-});
+const placeholderData: RemainingCountResponse = {
+  analysis: 0,
+  random_sentence: 0,
+};
 
-const updateAnalysisMetaData = (analysis: TAnalysis) => ({
-  ...analysis,
-  id: nanoid(),
-  createdAt: new Date().toISOString(),
-});
+const resolver = yupResolver(createAnalysisFormSchema);
 
 export const useAnalysisForm = () => {
   const navigate = useNavigate();
@@ -40,13 +37,10 @@ export const useAnalysisForm = () => {
   const { data: remainingCount = 0 } = useRemainingCountQuery({
     select: ({ analysis }) => analysis,
     suspense: true,
-    // observer 레벨에서 동작하는 가짜 데이터 / 캐시 저장 안함
-    placeholderData: { analysis: 0, random_sentence: 0 },
+    placeholderData, // observer 레벨에서 동작하는 가짜 데이터 / 캐시 저장 안함
   });
 
-  const formResults = useForm<AnalysisFormValues>({
-    resolver: yupResolver(createAnalysisFormSchema),
-  });
+  const formResults = useForm<AnalysisFormValues>({ resolver });
 
   const mutationResults = useCreateAnalysisMutation({
     onMutate: closeModal,
@@ -83,3 +77,14 @@ export const useAnalysisForm = () => {
     ...mutationResults,
   };
 };
+
+const getDefaultValue = (count: number): AnalysisFormValues => ({
+  sentence: '',
+  model: count > 2 ? 'gpt-4' : 'gpt-3.5-turbo',
+});
+
+const updateAnalysisMetaData = (analysis: TAnalysis) => ({
+  ...analysis,
+  id: nanoid(),
+  createdAt: new Date().toISOString(),
+});

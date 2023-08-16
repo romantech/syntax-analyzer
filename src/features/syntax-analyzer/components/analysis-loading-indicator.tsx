@@ -14,6 +14,7 @@ export default function AnalysisLoadingIndicator({
   const playerRef = useRef<Player>(null);
 
   useEffect(() => {
+    /** @see https://dev.to/franklin030601/how-to-use-lottie-animations-react-js-cn0 */
     if (play) playerRef.current?.play();
     else playerRef.current?.stop();
   }, [play]);

@@ -2,7 +2,10 @@ import { axios } from '@/lib';
 import { QueryClient, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
-type RemainingCountResponse = { analysis: number; random_sentence: number };
+export type RemainingCountResponse = {
+  analysis: number;
+  random_sentence: number;
+};
 export const getRemainingCounts = async <T = RemainingCountResponse>() => {
   const { data } = await axios.get<T>('analyzer/remaining-counts');
   return data;
