@@ -3,9 +3,9 @@ import { FormProvider } from 'react-hook-form';
 import {
   AddTopicForm,
   GenerateButton,
-  RandomSentenceCount,
   RandomSentenceInstructions,
   RandomSentenceList,
+  SentenceCountPicker,
   TopicTagList,
   useRandomSentenceForm,
 } from '@/features/syntax-analyzer';
@@ -23,6 +23,8 @@ export default function RandomSentenceForm({
   const { methods, isFetching, data, generateSentences } =
     useRandomSentenceForm();
 
+  const { register, getValues } = methods;
+
   return (
     <Stack w="full" maxW={690} gap={4} {...stackProps}>
       <RandomSentenceInstructions hidden={!showInstructions} />
@@ -31,7 +33,7 @@ export default function RandomSentenceForm({
           <AddTopicForm />
           <CenteredDivider h="38px" px={3} orientation="vertical" />
           <HStack>
-            <RandomSentenceCount />
+            <SentenceCountPicker />
             <Suspense fallback={<GenerateButton.Skeleton />}>
               <GenerateButton
                 onClick={generateSentences}
@@ -39,11 +41,11 @@ export default function RandomSentenceForm({
               />
             </Suspense>
           </HStack>
-          <Input {...methods.register('topics')} hidden />
+          <Input {...register('topics')} hidden />
         </HStack>
         <TopicTagList mt={-2} maxW={590} />
       </FormProvider>
-      <RandomSentenceList data={data} query={methods.getValues('topics')} />
+      <RandomSentenceList data={data} query={getValues('topics')} />
     </Stack>
   );
 }

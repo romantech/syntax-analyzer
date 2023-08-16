@@ -7,7 +7,7 @@ import {
   NumberInputStepper,
 } from '@chakra-ui/react';
 
-export default function RandomSentenceCount() {
+export default function SentenceCountPicker() {
   const { control } = useFormContext();
 
   return (
