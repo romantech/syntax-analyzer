@@ -3,7 +3,7 @@ import { atomWithReset, atomWithStorage, RESET } from 'jotai/utils';
 import {
   DEFAULT_ABBR_INFO_MODE,
   DEFAULT_TAG_INFO_MODE,
-} from '@/features/syntax-editor/constants/settings';
+} from '@/features/syntax-editor/constants';
 import {
   ConstituentWithoutId,
   hasAddedTagAtom,
