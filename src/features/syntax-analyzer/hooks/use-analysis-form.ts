@@ -8,12 +8,11 @@ import {
 } from '@/features/syntax-analyzer';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { nanoid } from 'nanoid';
 import { getSyntaxEditorPath } from '@/routes';
 import { expandAbbreviations, tokenizer } from '@/base';
-import { useDisclosure, UseToastOptions } from '@chakra-ui/react';
-import { TAnalysis } from '@/features/syntax-editor';
+import { useDisclosure, useToast, UseToastOptions } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { updateAnalysisMetaData } from '@/features/syntax-editor';
 
 export type AnalysisModel = 'gpt-3.5-turbo' | 'gpt-4';
 export type AnalysisFormValues = { model: AnalysisModel; sentence: string };
@@ -31,6 +30,7 @@ const toastOptions: UseToastOptions = {
 
 export const useAnalysisForm = () => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   const {
     isOpen: isModalOpen,
@@ -53,7 +53,8 @@ export const useAnalysisForm = () => {
     onSuccess: (data) => {
       const analysis = updateAnalysisMetaData(data);
       const toPath = getSyntaxEditorPath('user', 0);
-      navigate(toPath, { state: { analysis, toastOptions } });
+      navigate(toPath, { state: { analysis } });
+      toast(toastOptions);
     },
     meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });
@@ -88,10 +89,4 @@ export const useAnalysisForm = () => {
 const getDefaultValue = (count: number): AnalysisFormValues => ({
   sentence: '',
   model: count > 2 ? 'gpt-4' : 'gpt-3.5-turbo',
-});
-
-const updateAnalysisMetaData = (analysis: TAnalysis) => ({
-  ...analysis,
-  id: nanoid(),
-  createdAt: new Date().toISOString(),
 });

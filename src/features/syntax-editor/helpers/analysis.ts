@@ -24,3 +24,9 @@ export const generateAnalysis = (
     isAnalyzedByGPT: false,
   };
 };
+
+export const updateAnalysisMetaData = (analysis: TAnalysis) => ({
+  ...analysis,
+  id: nanoid(),
+  createdAt: new Date().toISOString(),
+});
