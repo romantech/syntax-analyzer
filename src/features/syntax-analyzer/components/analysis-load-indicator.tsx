@@ -1,15 +1,16 @@
 import { Player } from '@lottiefiles/react-lottie-player';
-import { Center, CenterProps, Heading, Stack, Text } from '@chakra-ui/react';
+import { Heading, Stack, StackProps, Text } from '@chakra-ui/react';
 import { loadingAnimation } from '@/assets/lottie';
 import { useEffect, useRef } from 'react';
+import { LoadingTransition } from '@/features/syntax-analyzer';
 
-interface AnalysisLoadingIndicatorProps extends CenterProps {
+interface AnalysisLoadingIndicatorProps extends StackProps {
   play: boolean;
 }
 
-export default function AnalysisLoadingIndicator({
+export default function AnalysisLoadIndicator({
   play,
-  ...centerProps
+  ...stackProps
 }: AnalysisLoadingIndicatorProps) {
   const playerRef = useRef<Player>(null);
 
@@ -20,7 +21,15 @@ export default function AnalysisLoadingIndicator({
   }, [play]);
 
   return (
-    <Center zIndex={-1} {...centerProps}>
+    <LoadingTransition
+      type="indicator"
+      display="flex"
+      direction="row"
+      align="center"
+      isLoading={play}
+      zIndex={-1}
+      {...stackProps}
+    >
       <Player
         loop
         ref={playerRef}
@@ -46,6 +55,6 @@ export default function AnalysisLoadingIndicator({
           까지 소요될 수 있어요
         </Text>
       </Stack>
-    </Center>
+    </LoadingTransition>
   );
 }
