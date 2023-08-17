@@ -4,6 +4,7 @@ import {
   REMAINING_COUNT_BASE_KEY,
   type RemainingCountResponse as PlaceholderData,
   useCreateAnalysisMutation,
+  useInjectAnalysis,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 import { useForm } from 'react-hook-form';
@@ -25,9 +26,10 @@ const toastOptions: UseToastOptions = {
   duration: 4000,
 };
 
-export const useAnalysisForm = () => {
+export default function useAnalysisForm() {
   const navigate = useNavigate();
   const toast = useToast();
+  const { injectAnalysis } = useInjectAnalysis();
 
   const {
     isOpen: isModalOpen,
@@ -49,9 +51,9 @@ export const useAnalysisForm = () => {
     onMutate: closeModal,
     onSuccess: (data) => {
       const analysis = updateAnalysisMetaData(data);
-      const toPath = getSyntaxEditorPath('user', 0);
+      injectAnalysis(analysis);
 
-      navigate(toPath, { state: { analysis } });
+      navigate(getSyntaxEditorPath('user', 0));
       toast(toastOptions);
     },
     meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
@@ -82,7 +84,7 @@ export const useAnalysisForm = () => {
     ...formResults,
     ...mutationResults,
   };
-};
+}
 
 const getDefaultValues = (count: number): AnalysisFormValues => ({
   sentence: '',

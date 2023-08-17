@@ -22,7 +22,7 @@ const defaultValues = randomSentenceFormSchema.cast({});
 const { topics, sent_count } = defaultValues;
 const defaultParams = { topics, sent_count, timestamp: Date.now() };
 
-export const useRandomSentenceForm = () => {
+export default function useRandomSentenceForm() {
   const [params, setParams] = useState(defaultParams);
   const [readyToFetch, setReadyToFetch] = useBoolean();
 
@@ -51,4 +51,4 @@ export const useRandomSentenceForm = () => {
   };
 
   return { methods, data, isFetching, generateSentences };
-};
+}
