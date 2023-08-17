@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from '@/app';
-import { ErrorBoundary, Home } from '@/features/misc';
+import { ErrorComponent, Home } from '@/features/misc';
 import { SITE_URLS } from './paths';
 import {
   SentenceManager,
@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
   {
     path: SITE_URLS.ROOT,
     element: <App />,
-    errorElement: <ErrorBoundary />,
+    errorElement: <ErrorComponent />,
     children: [
       {
         index: true,

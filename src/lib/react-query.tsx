@@ -12,7 +12,7 @@ const defaultOptions: DefaultOptions = {
   queries: {
     refetchOnWindowFocus: false,
     staleTime: 1000 * 30, // 30 seconds
-    retry: 2,
+    retry: 1,
   },
 };
 
