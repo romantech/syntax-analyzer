@@ -30,7 +30,7 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
       <CircularProgress
         size="50px"
         value={remainingCountInPercent(count)}
-        color="teal.400"
+        color="teal.300"
       >
         <CircularProgressLabel>
           {remainingCountInPercent(count) + '%'}

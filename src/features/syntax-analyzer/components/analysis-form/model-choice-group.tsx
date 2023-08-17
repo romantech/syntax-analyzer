@@ -56,7 +56,7 @@ export default function ModelChoiceGroup({
                 <Badge
                   fontSize={10}
                   variant="outline"
-                  colorScheme="teal"
+                  colorScheme="orange"
                   hidden={!field.recommend}
                 >
                   recommended

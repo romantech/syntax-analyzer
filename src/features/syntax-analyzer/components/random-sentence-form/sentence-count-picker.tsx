@@ -17,7 +17,7 @@ export default function SentenceCountPicker() {
       render={({ field }) => (
         <NumberInput
           {...field}
-          focusBorderColor="teal.400"
+          focusBorderColor="teal.300"
           maxW={70}
           min={1}
           max={5}

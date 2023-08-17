@@ -80,7 +80,7 @@ export default function AddTopicForm(stackProps: StackProps) {
                 keywordInputRef.current = element;
               }}
               maxLength={20}
-              focusBorderColor="teal.400"
+              focusBorderColor="teal.300"
               placeholder="영문 키워드를 입력 해주세요"
               onBlur={() => clearErrors('keyword')}
             />

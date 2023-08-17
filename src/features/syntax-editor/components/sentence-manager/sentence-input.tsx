@@ -43,7 +43,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
             placeholder={`${MAX_SENTENCE_LENGTH}자 미만의 영어 문장을 입력해 주세요`}
             maxLength={MAX_SENTENCE_LENGTH}
             variant="filled"
-            focusBorderColor="teal.400"
+            focusBorderColor="teal.300"
             {...inputProps}
             ref={ref}
           />
