@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
-  RemainingCountResponse,
+  type RemainingCountResponse as PlaceholderData,
   useCreateAnalysisMutation,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
@@ -17,10 +17,7 @@ import { updateAnalysisMetaData } from '@/features/syntax-editor';
 export type AnalysisModel = 'gpt-3.5-turbo' | 'gpt-4';
 export type AnalysisFormValues = { model: AnalysisModel; sentence: string };
 
-const placeholderData: RemainingCountResponse = {
-  analysis: 0,
-  random_sentence: 0,
-};
+const placeholderData: PlaceholderData = { analysis: 0, random_sentence: 0 };
 
 const toastOptions: UseToastOptions = {
   title: '문장 분석을 완료했습니다',
@@ -53,6 +50,7 @@ export const useAnalysisForm = () => {
     onSuccess: (data) => {
       const analysis = updateAnalysisMetaData(data);
       const toPath = getSyntaxEditorPath('user', 0);
+
       navigate(toPath, { state: { analysis } });
       toast(toastOptions);
     },
@@ -63,7 +61,7 @@ export const useAnalysisForm = () => {
   const { mutate } = mutationResults;
 
   useEffect(() => {
-    reset(getDefaultValue(remainingCount));
+    reset(getDefaultValues(remainingCount));
   }, [remainingCount, reset]);
 
   const onSubmitConfirm = () => {
@@ -86,7 +84,7 @@ export const useAnalysisForm = () => {
   };
 };
 
-const getDefaultValue = (count: number): AnalysisFormValues => ({
+const getDefaultValues = (count: number): AnalysisFormValues => ({
   sentence: '',
   model: count > 2 ? 'gpt-4' : 'gpt-3.5-turbo',
 });
