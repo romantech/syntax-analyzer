@@ -1,4 +1,5 @@
 import { Box, Flex, Stack } from '@chakra-ui/react';
+import { Notice } from '@/base';
 import {
   ControlPanel,
   SyntaxParser,
@@ -6,7 +7,6 @@ import {
   useAnalysisDataLoader,
   useSyntaxEditorInitializer,
 } from '@/features/syntax-editor';
-import { Notice } from '@/base';
 
 export default function SyntaxEditor() {
   useSyntaxEditorInitializer({ resetOnUnmount: true });

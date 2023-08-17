@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { nanoid } from 'nanoid';
 import { getSyntaxEditorPath } from '@/routes';
 import { expandAbbreviations, tokenizer } from '@/base';
-import { useDisclosure } from '@chakra-ui/react';
+import { useDisclosure, UseToastOptions } from '@chakra-ui/react';
 import { TAnalysis } from '@/features/syntax-editor';
 import { useEffect } from 'react';
 
@@ -23,7 +23,11 @@ const placeholderData: RemainingCountResponse = {
   random_sentence: 0,
 };
 
-const resolver = yupResolver(createAnalysisFormSchema);
+const toastOptions: UseToastOptions = {
+  title: '문장 분석을 완료했습니다',
+  status: 'success',
+  duration: 4000,
+};
 
 export const useAnalysisForm = () => {
   const navigate = useNavigate();
@@ -40,13 +44,16 @@ export const useAnalysisForm = () => {
     placeholderData, // observer 레벨에서 동작하는 가짜 데이터 / 캐시 저장 안함
   });
 
-  const formResults = useForm<AnalysisFormValues>({ resolver });
+  const formResults = useForm<AnalysisFormValues>({
+    resolver: yupResolver(createAnalysisFormSchema),
+  });
 
   const mutationResults = useCreateAnalysisMutation({
     onMutate: closeModal,
     onSuccess: (data) => {
       const analysis = updateAnalysisMetaData(data);
-      navigate(getSyntaxEditorPath('user', 0), { state: { analysis } });
+      const toPath = getSyntaxEditorPath('user', 0);
+      navigate(toPath, { state: { analysis, toastOptions } });
     },
     meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });
