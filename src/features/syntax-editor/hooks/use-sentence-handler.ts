@@ -16,7 +16,7 @@ import { MouseEvent } from 'react';
 /** event.detail 속성은 마우스 클릭 횟수 (더블클릭시 2) */
 const isDoubleClicked = (e: MouseEvent) => e.detail > 1;
 
-export default function useSentenceHandler(): MouseEventHandlers {
+export const useSentenceHandler = (): MouseEventHandlers => {
   const { onMouseOver, onMouseLeave, targetInfo } = useSegmentMouseEvent();
 
   const isDeleteMode = useAtomValue(deleteModeAtom);
@@ -61,4 +61,4 @@ export default function useSentenceHandler(): MouseEventHandlers {
   };
 
   return { onClick, onMouseOver, onMouseLeave, onMouseUp, onMouseDown };
-}
+};

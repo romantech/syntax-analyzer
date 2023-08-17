@@ -11,10 +11,10 @@ interface UseCalculateNestedLevelProps {
   trigger?: unknown;
 }
 
-export default function useCalculateNestingLevel({
+export const useCalculateNestingLevel = ({
   targetRef,
   trigger,
-}: UseCalculateNestedLevelProps) {
+}: UseCalculateNestedLevelProps) => {
   const [isNestingLevelCalculated, setNestingLevelCalculated] = useBoolean();
   const segmentHistoryIndex = useAtomValue(segmentHistoryIndexAtom);
 
@@ -26,4 +26,4 @@ export default function useCalculateNestingLevel({
   }, [targetRef, trigger, segmentHistoryIndex, setNestingLevelCalculated]);
 
   return isNestingLevelCalculated;
-}
+};

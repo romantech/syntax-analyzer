@@ -11,7 +11,7 @@ import { CONSTITUENT_CLASSES } from '@/features/syntax-editor/constants';
 
 const { CONSTITUENT } = CONSTITUENT_CLASSES;
 
-export default function useSegmentMouseEvent() {
+export const useSegmentMouseEvent = () => {
   const hoverRef = useRef<HTMLElement | null>(null);
   const [targetInfo, setTargetInfo] = useState<ConstituentDataSet | null>(null);
   const { colorMode } = useColorMode();
@@ -50,4 +50,4 @@ export default function useSegmentMouseEvent() {
     onMouseLeave: restoreOriginalColor,
     targetInfo,
   };
-}
+};

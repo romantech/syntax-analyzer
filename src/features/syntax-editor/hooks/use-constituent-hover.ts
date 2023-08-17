@@ -8,7 +8,7 @@ import { MouseEvent } from 'react';
 import { getNearestElementByClass, MouseEventHandlers } from '@/base';
 import { RESET } from 'jotai/utils';
 
-export default function useConstituentHover(): MouseEventHandlers {
+export const useConstituentHover = (): MouseEventHandlers => {
   const isAbbrTooltipVisible = useAtomValue(isAbbrTooltipVisibleAtom);
   const setHoveredConstituent = useSetAtom(hoveredConstituentAtom);
 
@@ -29,4 +29,4 @@ export default function useConstituentHover(): MouseEventHandlers {
   const onMouseLeave = () => setHoveredConstituent(RESET);
 
   return { onMouseOver, onMouseLeave };
-}
+};

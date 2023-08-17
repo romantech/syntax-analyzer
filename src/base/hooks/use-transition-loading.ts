@@ -1,6 +1,6 @@
 import { startTransition, useEffect, useState } from 'react';
 
-export default function useTransitionLoading(dependencies: unknown[]) {
+export const useTransitionLoading = (dependencies: unknown[]) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -8,4 +8,4 @@ export default function useTransitionLoading(dependencies: unknown[]) {
   }, [dependencies]);
 
   return isLoading;
-}
+};

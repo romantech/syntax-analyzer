@@ -9,9 +9,9 @@ interface UseInitializerProps {
   resetOnUnmount?: boolean;
 }
 
-export default function useSyntaxEditorInitializer({
+export const useSyntaxEditorInitializer = ({
   resetOnUnmount = false,
-}: UseInitializerProps = {}) {
+}: UseInitializerProps = {}) => {
   const resetSegmentHistory = useResetAtom(resetSegmentHistoryAtom);
   const resetControlPanel = useResetAtom(resetControlPanelAtom);
 
@@ -26,4 +26,4 @@ export default function useSyntaxEditorInitializer({
   }, [resetOnUnmount, initializer]);
 
   return { initializer };
-}
+};

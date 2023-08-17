@@ -4,8 +4,8 @@ import {
   selectedAnalysisAtom,
 } from '@/features/syntax-editor';
 
-export default function useSyntaxParserAnalysis() {
+export const useSyntaxParserAnalysis = () => {
   const sentence = useAtomValue(selectedAnalysisAtom)?.sentence ?? null;
   const segment = useAtomValue(currentSegmentFromHistoryAtom);
   return { sentence, segment };
-}
+};

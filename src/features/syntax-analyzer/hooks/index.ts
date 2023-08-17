@@ -1,3 +1,3 @@
-export { default as useAnalysisForm } from './use-analysis-form';
-export { default as useRandomSentenceForm } from './use-random-sentence-form';
-export { default as useInjectAnalysis } from './use-inject-analysis';
+export * from './use-analysis-form';
+export * from './use-random-sentence-form';
+export * from './use-inject-analysis';

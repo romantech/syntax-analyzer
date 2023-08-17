@@ -35,7 +35,7 @@ const safeGetItem = <T>(key: string, defaultValue: T) => {
   return defaultValue;
 };
 
-export default function useLocalStorage<T>(key: string, defaultValue: T) {
+export const useLocalStorage = <T>(key: string, defaultValue: T) => {
   const [value, setValue] = useState(() => safeGetItem(key, defaultValue));
 
   useEffect(() => {
@@ -43,4 +43,4 @@ export default function useLocalStorage<T>(key: string, defaultValue: T) {
   }, [key, value]);
 
   return [value, setValue] as const;
-}
+};

@@ -7,7 +7,7 @@ import {
 } from '@/features/syntax-editor';
 import { useCallback, useEffect, useRef } from 'react';
 
-export default function useAnalysisDataLoader() {
+export const useAnalysisDataLoader = () => {
   const { source, index } = useParams<AnalysisPathParams>();
   const isProcessed = useRef(false);
 
@@ -28,4 +28,4 @@ export default function useAnalysisDataLoader() {
     if (isProcessed.current) return;
     loadAndSetAnalysisBySource();
   }, [loadAndSetAnalysisBySource]);
-}
+};

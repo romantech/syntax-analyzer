@@ -26,7 +26,7 @@ const toastOptions: UseToastOptions = {
   duration: 4000,
 };
 
-export default function useAnalysisForm() {
+export const useAnalysisForm = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { injectAnalysis } = useInjectAnalysis();
@@ -84,7 +84,7 @@ export default function useAnalysisForm() {
     ...formResults,
     ...mutationResults,
   };
-}
+};
 
 const getDefaultValues = (count: number): AnalysisFormValues => ({
   sentence: '',

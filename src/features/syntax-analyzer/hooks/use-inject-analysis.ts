@@ -6,7 +6,7 @@ import {
 import { useCallback } from 'react';
 import { useLocalStorage } from '@/base';
 
-export default function useInjectAnalysis() {
+export const useInjectAnalysis = () => {
   const [userAnalysis] = useLocalStorage<TAnalysis[]>('userAnalysisList', []);
 
   const injectAnalysis = useCallback(
@@ -17,4 +17,4 @@ export default function useInjectAnalysis() {
   );
 
   return { injectAnalysis };
-}
+};
