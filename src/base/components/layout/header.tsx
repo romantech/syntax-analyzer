@@ -45,7 +45,7 @@ export function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const ToggleIcon = colorMode === 'light' ? MdModeNight : MdOutlineLightMode;
-  const bg = useColorModeValue('#FFFFFFBF', '#1A202BBF');
+  const bg = useColorModeValue('whiteAlpha.800', 'grayAlpha.800');
   const boxShadow = useColorModeValue('sm', 'md');
 
   return (
