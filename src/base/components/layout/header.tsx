@@ -1,8 +1,7 @@
 import {
-  Box,
   Button,
+  Container,
   Flex,
-  HStack,
   Icon,
   Spacer,
   Tab,
@@ -46,50 +45,49 @@ export function Header() {
   const tabIndex = useTabIndex();
 
   return (
-    <Box
+    <Container
       position="sticky"
-      w="full"
+      display="flex"
+      maxW="8xl"
       as="nav"
       py={4}
       boxShadow={useColorModeValue('sm', 'md')}
     >
-      <HStack maxW="8xl" mx="auto">
-        <Tabs variant="soft-rounded" index={tabIndex} colorScheme="gray">
-          <TabList>
-            {NAV_TABS.map((tab, i) => (
-              <Tab
-                as={NavLink}
-                key={tab.label}
-                to={tab.path}
-                transition="all 0.3s"
-                textTransform="capitalize"
-                _hover={{ color: tabIndex !== i ? 'gray.400' : '' }}
-              >
-                {tab.label}
-              </Tab>
-            ))}
-          </TabList>
-        </Tabs>
-        <Spacer />
-        <Flex align="center">
-          <Button
-            variant="ghost"
-            as="a"
-            target="_blank"
-            aria-label="Github repository"
-            href="https://github.com/romantech/syntax-analyzer"
-          >
-            <Icon as={BsGithub} boxSize="1.2rem" />
-          </Button>
-          <Button
-            onClick={toggleColorMode}
-            variant="ghost"
-            aria-label="Toggle color mode"
-          >
-            <Icon as={ToggleIcon} boxSize="1.2rem" />
-          </Button>
-        </Flex>
-      </HStack>
-    </Box>
+      <Tabs variant="soft-rounded" index={tabIndex} colorScheme="gray">
+        <TabList>
+          {NAV_TABS.map((tab, i) => (
+            <Tab
+              as={NavLink}
+              key={tab.label}
+              to={tab.path}
+              transition="all 0.3s"
+              textTransform="capitalize"
+              _hover={{ color: tabIndex !== i ? 'gray.400' : '' }}
+            >
+              {tab.label}
+            </Tab>
+          ))}
+        </TabList>
+      </Tabs>
+      <Spacer />
+      <Flex align="center">
+        <Button
+          variant="ghost"
+          as="a"
+          target="_blank"
+          aria-label="Github repository"
+          href="https://github.com/romantech/syntax-analyzer"
+        >
+          <Icon as={BsGithub} boxSize="1.2rem" />
+        </Button>
+        <Button
+          onClick={toggleColorMode}
+          variant="ghost"
+          aria-label="Toggle color mode"
+        >
+          <Icon as={ToggleIcon} boxSize="1.2rem" />
+        </Button>
+      </Flex>
+    </Container>
   );
 }
