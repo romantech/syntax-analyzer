@@ -9,7 +9,7 @@ export function Layout({
   return (
     <VStack h="100vh" gap={0}>
       <Header />
-      <Container maxW="8xl" flexGrow={1} {...containerProps}>
+      <Container as="main" maxW="8xl" flexGrow={1} {...containerProps}>
         {children}
       </Container>
     </VStack>

@@ -1,15 +1,9 @@
 import { Heading, Stack, Text, VStack } from '@chakra-ui/react';
 import { LinkParticles } from '@/base';
 
-export default function Home() {
+const TitleSection = () => {
   return (
-    <VStack
-      position="relative"
-      gap={8}
-      align="start"
-      minH="90%"
-      justify="center"
-    >
+    <Stack>
       <LinkParticles />
       <Stack>
         <Heading
@@ -34,6 +28,20 @@ export default function Home() {
         glance, and harness the freedom to directly edit and adapt as you see
         fit.
       </Text>
+    </Stack>
+  );
+};
+
+export default function Home() {
+  return (
+    <VStack
+      position="relative"
+      gap={8}
+      align="start"
+      minH="90%"
+      justify="center"
+    >
+      <TitleSection />
     </VStack>
   );
 }

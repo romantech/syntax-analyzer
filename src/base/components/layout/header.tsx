@@ -1,7 +1,8 @@
 import {
+  Box,
   Button,
-  Container,
   Flex,
+  HStack,
   Icon,
   Spacer,
   Tab,
@@ -40,54 +41,62 @@ const useTabIndex = () => {
 };
 
 export function Header() {
-  const { colorMode, toggleColorMode } = useColorMode();
-  const ToggleIcon = colorMode === 'light' ? MdModeNight : MdOutlineLightMode;
   const tabIndex = useTabIndex();
+  const { colorMode, toggleColorMode } = useColorMode();
+
+  const ToggleIcon = colorMode === 'light' ? MdModeNight : MdOutlineLightMode;
+  const bg = useColorModeValue('#FFFFFFBF', '#1A202BBF');
+  const boxShadow = useColorModeValue('sm', 'md');
 
   return (
-    <Container
-      position="sticky"
-      display="flex"
-      maxW="8xl"
+    <Box
       as="nav"
-      py={4}
-      boxShadow={useColorModeValue('sm', 'md')}
+      position="sticky"
+      w="full"
+      top={0}
+      p={4}
+      zIndex={10}
+      backdropFilter="blur(10px)"
+      bg={bg}
+      boxShadow={boxShadow}
     >
-      <Tabs variant="soft-rounded" index={tabIndex} colorScheme="gray">
-        <TabList>
-          {NAV_TABS.map((tab, i) => (
-            <Tab
-              as={NavLink}
-              key={tab.label}
-              to={tab.path}
-              transition="all 0.3s"
-              textTransform="capitalize"
-              _hover={{ color: tabIndex !== i ? 'gray.400' : '' }}
-            >
-              {tab.label}
-            </Tab>
-          ))}
-        </TabList>
-      </Tabs>
-      <Spacer />
-      <Flex align="center">
-        <Button
-          variant="ghost"
-          as="a"
-          target="_blank"
-          aria-label="Github repository"
-          href="https://github.com/romantech/syntax-analyzer"
-        >
-          <Icon as={BsGithub} boxSize="1.2rem" />
-        </Button>
-        <Button
-          onClick={toggleColorMode}
-          variant="ghost"
-          aria-label="Toggle color mode"
-        >
-          <Icon as={ToggleIcon} boxSize="1.2rem" />
-        </Button>
-      </Flex>
-    </Container>
+      <HStack maxW="8xl" mx="auto">
+        <Tabs variant="soft-rounded" index={tabIndex} colorScheme="gray">
+          <TabList>
+            {NAV_TABS.map((tab, i) => (
+              <Tab
+                as={NavLink}
+                key={tab.label}
+                to={tab.path}
+                transition="all 0.3s"
+                textTransform="capitalize"
+                _hover={{ color: tabIndex !== i ? 'gray.400' : '' }}
+              >
+                {tab.label}
+              </Tab>
+            ))}
+          </TabList>
+        </Tabs>
+        <Spacer />
+        <Flex align="center">
+          <Button
+            variant="ghost"
+            as="a"
+            target="_blank"
+            aria-label="Github repository"
+            href="https://github.com/romantech/syntax-analyzer"
+          >
+            <Icon as={BsGithub} boxSize="1.2rem" />
+          </Button>
+          <Button
+            onClick={toggleColorMode}
+            variant="ghost"
+            aria-label="Toggle color mode"
+          >
+            <Icon as={ToggleIcon} boxSize="1.2rem" />
+          </Button>
+        </Flex>
+      </HStack>
+    </Box>
   );
 }
