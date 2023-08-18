@@ -1,23 +1,7 @@
 import { Heading, Stack, Text, VStack } from '@chakra-ui/react';
-import Particles from 'react-tsparticles';
-import { loadLinksPreset } from 'tsparticles-preset-links';
-import { Engine, ISourceOptions } from 'tsparticles-engine';
+import { LinkParticles } from '@/base';
 
 export default function Home() {
-  const options: ISourceOptions = {
-    preset: 'links',
-    fullScreen: { enable: false, zIndex: -1 },
-    background: { color: 'transparent' },
-    particles: {
-      opacity: { value: 0.3 },
-      line_linked: { opacity: 0.3 },
-    },
-  };
-
-  const customInit = async (engine: Engine) => {
-    await loadLinksPreset(engine);
-  };
-
   return (
     <VStack
       position="relative"
@@ -26,11 +10,7 @@ export default function Home() {
       minH="90%"
       justify="center"
     >
-      <Particles
-        style={{ position: 'absolute', top: 0, left: 0 }}
-        options={options}
-        init={customInit}
-      />
+      <LinkParticles />
       <Stack>
         <Heading
           size="lg"

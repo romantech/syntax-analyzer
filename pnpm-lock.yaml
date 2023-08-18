@@ -32,9 +32,6 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
-  framer-motion:
-    specifier: ^10.13.0
-    version: 10.13.0(react-dom@18.2.0)(react@18.2.0)
   jotai:
     specifier: ^2.2.2
     version: 2.2.2(react@18.2.0)
@@ -65,12 +62,6 @@ dependencies:
   sass:
     specifier: ^1.64.1
     version: 1.64.1
-  tsparticles-engine:
-    specifier: ^2.12.0
-    version: 2.12.0
-  tsparticles-preset-links:
-    specifier: ^2.12.0
-    version: 2.12.0
   yup:
     specifier: ^1.2.0
     version: 1.2.0
@@ -151,6 +142,9 @@ devDependencies:
   react-icons:
     specifier: ^4.10.1
     version: 4.10.1(react@18.2.0)
+  tsparticles-preset-links:
+    specifier: ^2.12.0
+    version: 2.12.0
   typescript:
     specifier: ^5.0.2
     version: 5.0.2
@@ -5040,24 +5034,23 @@ packages:
       tsparticles-updater-opacity: 2.12.0
       tsparticles-updater-out-modes: 2.12.0
       tsparticles-updater-size: 2.12.0
-    dev: false
+    dev: true
 
   /tsparticles-engine@2.12.0:
     resolution: {integrity: sha512-ZjDIYex6jBJ4iMc9+z0uPe7SgBnmb6l+EJm83MPIsOny9lPpetMsnw/8YJ3xdxn8hV+S3myTpTN1CkOVmFv0QQ==}
     requiresBuild: true
-    dev: false
 
   /tsparticles-interaction-particles-links@2.12.0:
     resolution: {integrity: sha512-e7I8gRs4rmKfcsHONXMkJnymRWpxHmeaJIo4g2NaDRjIgeb2AcJSWKWZvrsoLnm7zvaf/cMQlbN6vQwCixYq3A==}
     dependencies:
       tsparticles-engine: 2.12.0
-    dev: false
+    dev: true
 
   /tsparticles-move-base@2.12.0:
     resolution: {integrity: sha512-oSogCDougIImq+iRtIFJD0YFArlorSi8IW3HD2gO3USkH+aNn3ZqZNTqp321uB08K34HpS263DTbhLHa/D6BWw==}
     dependencies:
       tsparticles-engine: 2.12.0
-    dev: false
+    dev: true
 
   /tsparticles-preset-links@2.12.0:
     resolution: {integrity: sha512-ZWr4oDUVt+166lEmgjNCzysOXmyYAMH2ZD9dGIbqxamXK2TRt1/2JOj4edExiA3Qjml1zIu8TJ24yGRFF+FFMA==}
@@ -5065,37 +5058,37 @@ packages:
       tsparticles-basic: 2.12.0
       tsparticles-engine: 2.12.0
       tsparticles-interaction-particles-links: 2.12.0
-    dev: false
+    dev: true
 
   /tsparticles-shape-circle@2.12.0:
     resolution: {integrity: sha512-L6OngbAlbadG7b783x16ns3+SZ7i0SSB66M8xGa5/k+YcY7zm8zG0uPt1Hd+xQDR2aNA3RngVM10O23/Lwk65Q==}
     dependencies:
       tsparticles-engine: 2.12.0
-    dev: false
+    dev: true
 
   /tsparticles-updater-color@2.12.0:
     resolution: {integrity: sha512-KcG3a8zd0f8CTiOrylXGChBrjhKcchvDJjx9sp5qpwQK61JlNojNCU35xoaSk2eEHeOvFjh0o3CXWUmYPUcBTQ==}
     dependencies:
       tsparticles-engine: 2.12.0
-    dev: false
+    dev: true
 
   /tsparticles-updater-opacity@2.12.0:
     resolution: {integrity: sha512-YUjMsgHdaYi4HN89LLogboYcCi1o9VGo21upoqxq19yRy0hRCtx2NhH22iHF/i5WrX6jqshN0iuiiNefC53CsA==}
     dependencies:
       tsparticles-engine: 2.12.0
-    dev: false
+    dev: true
 
   /tsparticles-updater-out-modes@2.12.0:
     resolution: {integrity: sha512-owBp4Gk0JNlSrmp12XVEeBroDhLZU+Uq3szbWlHGSfcR88W4c/0bt0FiH5bHUqORIkw+m8O56hCjbqwj69kpOQ==}
     dependencies:
       tsparticles-engine: 2.12.0
-    dev: false
+    dev: true
 
   /tsparticles-updater-size@2.12.0:
     resolution: {integrity: sha512-B0yRdEDd/qZXCGDL/ussHfx5YJ9UhTqNvmS5X2rR2hiZhBAE2fmsXLeWkdtF2QusjPeEqFDxrkGiLOsh6poqRA==}
     dependencies:
       tsparticles-engine: 2.12.0
-    dev: false
+    dev: true
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
