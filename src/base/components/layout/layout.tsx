@@ -7,7 +7,7 @@ export function Layout({
   ...containerProps
 }: PropsWithChildren<ContainerProps>) {
   return (
-    <VStack h="100vh" gap={0}>
+    <VStack minH="100vh" gap={0}>
       <Header />
       <Container as="main" maxW="8xl" flexGrow={1} {...containerProps}>
         {children}

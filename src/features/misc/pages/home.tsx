@@ -1,9 +1,9 @@
-import { Heading, Stack, Text, VStack } from '@chakra-ui/react';
-import { LinkParticles } from '@/base';
+import { Box, Center, Heading, Stack, Text } from '@chakra-ui/react';
+import { LinkParticles, useHideBodyScroll } from '@/base';
 
 const TitleSection = () => {
   return (
-    <Stack>
+    <Stack justify="center" h="100vh" scrollSnapAlign="start">
       <LinkParticles />
       <Stack>
         <Heading
@@ -32,16 +32,30 @@ const TitleSection = () => {
   );
 };
 
-export default function Home() {
+const AnalyzerDescSection = () => {
   return (
-    <VStack
+    <Center h="100vh" scrollSnapAlign="start">
+      <Heading>Analyzer Description Section</Heading>
+    </Center>
+  );
+};
+
+export default function Home() {
+  useHideBodyScroll();
+
+  return (
+    <Box
       position="relative"
-      gap={8}
-      align="start"
-      minH="90%"
-      justify="center"
+      h="100vh"
+      overflowY="auto"
+      scrollSnapType="y mandatory"
+      sx={{
+        '&::-webkit-scrollbar': { display: 'none' },
+        scrollbarWidth: 'none',
+      }}
     >
       <TitleSection />
-    </VStack>
+      <AnalyzerDescSection />
+    </Box>
   );
 }

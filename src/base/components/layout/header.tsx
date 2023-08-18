@@ -45,13 +45,16 @@ export function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const ToggleIcon = colorMode === 'light' ? MdModeNight : MdOutlineLightMode;
+
   const bg = useColorModeValue('whiteAlpha.800', 'grayAlpha.800');
-  const boxShadow = useColorModeValue('sm', 'md');
+  const boxShadow = useColorModeValue('sm', 'lg');
+
+  const position = tabIndex === 0 ? 'fixed' : 'sticky';
 
   return (
     <Box
       as="nav"
-      position="sticky"
+      position={position}
       w="full"
       top={0}
       p={4}
