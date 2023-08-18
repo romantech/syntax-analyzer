@@ -6,7 +6,7 @@ export default function Home() {
       <Stack>
         <Heading
           size="lg"
-          bgGradient="linear(to-r, teal.300, yellow.400 50%)"
+          bgGradient="linear(to-r, teal.300, yellow.400 60%)"
           bgClip="text"
         >
           Interpreting English Structure with AI
@@ -16,8 +16,6 @@ export default function Home() {
           textTransform="uppercase"
           whiteSpace="pre-line"
           fontWeight="extrabold"
-          bgGradient="linear(to-r, gray.100, gray.500)"
-          bgClip="text"
         >
           {`english syntax\nanalyzer`}
         </Heading>

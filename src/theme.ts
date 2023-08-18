@@ -1,8 +1,4 @@
-import {
-  extendTheme,
-  type ThemeConfig,
-  ToastProviderProps,
-} from '@chakra-ui/react';
+import { extendTheme, ThemeConfig, ToastProviderProps } from '@chakra-ui/react';
 
 const config: ThemeConfig = {
   initialColorMode: 'dark',
