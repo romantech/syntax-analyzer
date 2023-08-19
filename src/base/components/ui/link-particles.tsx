@@ -8,7 +8,7 @@ export default function LinkParticles(particleProps: IParticlesProps) {
 
   const options: IParticlesProps['options'] = {
     preset: 'links',
-    fullScreen: { enable: false, zIndex: -1 },
+    fullScreen: { enable: true, zIndex: -1 },
     background: { color: 'transparent' },
     particles: {
       color: { value: color },
@@ -18,11 +18,6 @@ export default function LinkParticles(particleProps: IParticlesProps) {
   };
 
   return (
-    <Particles
-      style={{ position: 'absolute', top: 0, left: 0 }}
-      options={options}
-      init={loadLinksPreset}
-      {...particleProps}
-    />
+    <Particles options={options} init={loadLinksPreset} {...particleProps} />
   );
 }

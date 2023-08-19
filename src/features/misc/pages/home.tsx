@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { useHideBodyScroll } from '@/base';
+import { LinkParticles, useHideBodyScroll } from '@/base';
 import { AnalyzerShowcase, HeroShocase } from '@/features/misc/components';
 
 const getScrollHandler = (nextSectionId: string) => () => {
@@ -21,6 +21,7 @@ export default function Home() {
         scrollbarWidth: 'none',
       }}
     >
+      <LinkParticles />
       <HeroShocase onScrollDown={getScrollHandler('analyzer-overview')} />
       <AnalyzerShowcase id="analyzer-overview" />
     </Box>

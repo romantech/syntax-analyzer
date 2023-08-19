@@ -1,5 +1,4 @@
 import { Heading, Stack, StackProps, Text } from '@chakra-ui/react';
-import { LinkParticles } from '@/base';
 import { ScrollDownButton } from '@/features/misc/components';
 
 interface TitleSectionProps extends StackProps {
@@ -12,7 +11,6 @@ export default function HeroShowcase({
 }: TitleSectionProps) {
   return (
     <Stack justify="center" h="100vh" scrollSnapAlign="start" {...stackProps}>
-      <LinkParticles />
       <Stack>
         <Heading
           size="lg"

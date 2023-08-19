@@ -10,7 +10,7 @@ import {
 import { LazyImage } from '@/base';
 import { NavLink } from 'react-router-dom';
 import { ScrollDownButton } from '@/features/misc';
-import { ReactNode } from 'react';
+import { FunctionComponent } from 'react';
 
 type ImageProps = {
   src: string;
@@ -36,9 +36,9 @@ export const ShowcaseTemplate = ({
   imageFirst = true,
   ...flexProps
 }: ShowcaseTemplateProps) => {
-  const Contents: ReactNode[] = [];
+  const Contents: FunctionComponent[] = [];
 
-  const Description = (
+  const Description = () => (
     <Stack maxW={350} gap={8}>
       <Heading
         bgGradient="linear(to-r, teal.300, yellow.400 70%)"
@@ -56,7 +56,7 @@ export const ShowcaseTemplate = ({
     </Stack>
   );
 
-  const Image = <LazyImage {...imageProps} maxW={540} />;
+  const Image = () => <LazyImage {...imageProps} maxW={540} />;
 
   if (imageFirst) Contents.push(Image, Description);
   else Contents.push(Description, Image);
@@ -71,7 +71,9 @@ export const ShowcaseTemplate = ({
       {...flexProps}
     >
       <HStack flexGrow={1} justify="center" align="start" gap={12}>
-        {Contents.map((Content) => Content)}
+        {Contents.map((Content, i) => (
+          <Content key={i} />
+        ))}
       </HStack>
       <ScrollDownButton onClick={onScrollDown} hidden={!onScrollDown} />
     </Flex>
