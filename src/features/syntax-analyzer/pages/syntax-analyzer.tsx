@@ -25,12 +25,7 @@ export default function SyntaxAnalyzer() {
           <Suspense fallback={<AnalysisForm.Skeleton />}>
             <AnalysisForm />
           </Suspense>
-          <CenteredDivider
-            h="full"
-            dividerH="98%"
-            orientation="vertical"
-            px={10}
-          />
+          <CenteredDivider h={380} orientation="vertical" pt={2} px={10} />
           <Box>
             <FieldGroupHeader>랜덤 문장 생성</FieldGroupHeader>
             <RandomSentenceForm />

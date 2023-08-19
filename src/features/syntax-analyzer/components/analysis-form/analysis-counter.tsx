@@ -23,7 +23,7 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
   });
 
   const countTitle = `남은 분석 횟수 ${count}회`;
-  const limitDesc = `하루 최대 ${MAX_ANALYSIS_COUNT}회까지 분석할 수 있어요 (GPT-4 모델은 요청당 3회씩 차감)`;
+  const limitDesc = `하루 최대 ${MAX_ANALYSIS_COUNT}회까지 분석할 수 있어요 (GPT-4 모델은 요청당 3회 차감)`;
 
   return (
     <AnalysisCounterBox {...stackProps}>
@@ -52,7 +52,7 @@ const AnalysisCounterBox = ({
   return (
     <HStack
       w="full"
-      maxW={654}
+      maxW={690}
       borderWidth={1}
       borderRadius="2xl"
       p={4}
