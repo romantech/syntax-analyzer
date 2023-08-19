@@ -1,7 +1,42 @@
-import { Box, Center, Heading, Stack, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Center,
+  Heading,
+  IconButton,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { LinkParticles, useHideBodyScroll } from '@/base';
+import { FaAnglesDown } from 'react-icons/fa6';
+import { motion } from 'framer-motion';
+
+const MotionIconButton = motion(IconButton);
+
+const ScrollDownButton = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <MotionIconButton
+      fontSize="xl"
+      position="absolute"
+      transform="translateX(-50%)"
+      left="50%"
+      bottom={20}
+      variant="unstyled"
+      aria-label="Scroll down"
+      icon={<FaAnglesDown />}
+      initial={{ y: '0%' }}
+      animate={{ y: ['0%', '50%', '0%'] }}
+      transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
+      onClick={onClick}
+    />
+  );
+};
 
 const TitleSection = () => {
+  const onClick = () => {
+    const nextSection = document.querySelector('#section2');
+    nextSection?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <Stack justify="center" h="100vh" scrollSnapAlign="start">
       <LinkParticles />
@@ -28,13 +63,14 @@ const TitleSection = () => {
         glance, and harness the freedom to directly edit and adapt as you see
         fit.
       </Text>
+      <ScrollDownButton onClick={onClick} />
     </Stack>
   );
 };
 
 const AnalyzerDescSection = () => {
   return (
-    <Center h="100vh" scrollSnapAlign="start">
+    <Center id="section2" h="100vh" scrollSnapAlign="start">
       <Heading>Analyzer Description Section</Heading>
     </Center>
   );
