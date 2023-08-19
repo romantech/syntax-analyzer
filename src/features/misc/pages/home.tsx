@@ -18,6 +18,8 @@ export default function Home() {
     >
       <HeroSection nextSectionClass="analyzer-overview" />
       <AnalyzerOverView className="analyzer-overview" />
+      <AnalyzerOverView className="analyzer-overview" />
+      <AnalyzerOverView className="analyzer-overview" />
     </Box>
   );
 }
