@@ -3,18 +3,13 @@ import { LinkParticles } from '@/base';
 import { ScrollDownButton } from '@/features/misc/components';
 
 interface TitleSectionProps extends StackProps {
-  nextSectionClass: string;
+  onScrollDown?: () => void;
 }
 
 export default function HeroSection({
-  nextSectionClass,
+  onScrollDown,
   ...stackProps
 }: TitleSectionProps) {
-  const onClick = () => {
-    const nextSection = document.querySelector(`.${nextSectionClass}`);
-    nextSection?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <Stack justify="center" h="100vh" scrollSnapAlign="start" {...stackProps}>
       <LinkParticles />
@@ -41,7 +36,7 @@ export default function HeroSection({
         glance, and harness the freedom to directly edit and adapt as you see
         fit.
       </Text>
-      <ScrollDownButton onClick={onClick} />
+      <ScrollDownButton onClick={onScrollDown} hidden={!onScrollDown} />
     </Stack>
   );
 }
