@@ -39,7 +39,7 @@ export const ShowcaseTemplate = ({
   const Contents: FunctionComponent[] = [];
 
   const Description = () => (
-    <Stack maxW={350} gap={8}>
+    <Stack maxW={400} gap={8}>
       <Heading
         bgGradient="linear(to-r, teal.300, yellow.400 70%)"
         bgClip="text"

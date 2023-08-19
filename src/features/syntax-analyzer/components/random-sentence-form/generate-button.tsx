@@ -27,7 +27,7 @@ export default function GenerateButton({
   return (
     <UsageLimitTooltip isDisabled={hasCount}>
       <Button
-        w={190}
+        minW={170}
         onClick={onClick}
         leftIcon={<RiAiGenerate />}
         textTransform="uppercase"
@@ -35,7 +35,7 @@ export default function GenerateButton({
         isDisabled={!hasCount}
         {...buttonProps}
       >
-        <Text as="span">generate</Text>
+        <Text as="span">문장 생성</Text>
         <Text
           pl={1}
           as="span"
@@ -48,7 +48,7 @@ export default function GenerateButton({
 }
 
 const GenerateButtonSkeleton = () => {
-  return <Skeleton w={190} h={39} borderRadius="md" />;
+  return <Skeleton minW={170} h={39} borderRadius="md" />;
 };
 
 GenerateButton.Skeleton = GenerateButtonSkeleton;
