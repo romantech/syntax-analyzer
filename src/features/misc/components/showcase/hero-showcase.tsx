@@ -6,7 +6,7 @@ interface TitleSectionProps extends StackProps {
   onScrollDown?: () => void;
 }
 
-export default function HeroSection({
+export default function HeroShowcase({
   onScrollDown,
   ...stackProps
 }: TitleSectionProps) {
