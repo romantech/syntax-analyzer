@@ -2,7 +2,7 @@ import { SITE_URLS } from '@/routes';
 import { ShowcaseTemplate, withShowcase } from '@/features/misc';
 
 const baseUrl = import.meta.env.VITE_IMAGE_KIT_BASE_URL;
-const src = `${baseUrl}/syntax-analyzer/feature-1.png`;
+const src = `${baseUrl}/syntax-analyzer/analysis.png`;
 const placeholderSrc = `${src}?tr=bl-30,q-50`;
 
 const AnalyzerShowcase = withShowcase(ShowcaseTemplate, {

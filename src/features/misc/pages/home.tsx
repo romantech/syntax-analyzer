@@ -1,6 +1,10 @@
 import { Box } from '@chakra-ui/react';
 import { LinkParticles, useHideBodyScroll } from '@/base';
-import { AnalyzerShowcase, HeroShocase } from '@/features/misc/components';
+import {
+  AnalyzerShowcase,
+  EditorShowcase,
+  HeroShowcase,
+} from '@/features/misc/components';
 
 const getScrollHandler = (nextSectionId: string) => () => {
   const nextSection = document.querySelector(`#${nextSectionId}`);
@@ -22,8 +26,12 @@ export default function Home() {
       }}
     >
       <LinkParticles />
-      <HeroShocase onScrollDown={getScrollHandler('analyzer-overview')} />
-      <AnalyzerShowcase id="analyzer-overview" />
+      <HeroShowcase onScrollDown={getScrollHandler('analyzer-showcase')} />
+      <AnalyzerShowcase
+        id="analyzer-showcase"
+        onScrollDown={getScrollHandler('editor-showcase')}
+      />
+      <EditorShowcase id="editor-showcase" />
     </Box>
   );
 }
