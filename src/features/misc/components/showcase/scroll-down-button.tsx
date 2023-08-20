@@ -1,42 +1,40 @@
 import { motion } from 'framer-motion';
-import { Center, CenterProps } from '@chakra-ui/react';
+import { IconButton, IconButtonProps } from '@chakra-ui/react';
 import { FaAnglesDown } from 'react-icons/fa6';
 
-const MotionIconButton = motion(Center);
+const MotionIconButton = motion(IconButton);
 
-type ScrollDownButtonProps = Omit<CenterProps, 'aria-label'>;
+type ScrollDownButtonProps = Omit<IconButtonProps, 'aria-label'>;
 
-export default function ScrollDownButton(centerProps: ScrollDownButtonProps) {
+const motionVariants = {
+  initial: { y: '0%' },
+  bounce: {
+    y: ['0%', '50%', '0%'],
+    transition: {
+      y: {
+        duration: 0.7,
+        repeat: Infinity,
+        ease: 'linear',
+      },
+    },
+  },
+};
+
+export default function ScrollDownButton(buttonProps: ScrollDownButtonProps) {
   return (
     <MotionIconButton
-      fontSize="xl"
+      isRound
       position="absolute"
-      transform="translateX(-50%)"
-      cursor="pointer"
-      borderRadius="full"
       left="50%"
       bottom="6%"
-      variant="unstyled"
+      fontSize="xl"
+      icon={<FaAnglesDown />}
       aria-label="Scroll down"
-      initial={{ y: '0%' }}
-      animate={{ y: ['0%', '40%', '0%'] }}
-      transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
-      _hover={{
-        boxShadow: '0 0 20px 20px rgba(0,0,0,0.8)',
-        transition: 'box-shadow 0.3s ease-in-out',
-      }}
-      _after={{
-        content: '""',
-        display: 'block',
-        position: 'absolute',
-        top: '-20px', // 클릭 가능 영역 확장
-        right: '-20px',
-        bottom: '-20px',
-        left: '-20px',
-      }}
-      {...centerProps}
-    >
-      <FaAnglesDown />
-    </MotionIconButton>
+      transform="translateX(-50%)"
+      variants={motionVariants}
+      initial="initial"
+      animate="bounce"
+      {...buttonProps}
+    />
   );
 }
