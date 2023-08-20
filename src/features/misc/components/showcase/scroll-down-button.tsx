@@ -22,7 +22,7 @@ export default function ScrollDownButton(centerProps: ScrollDownButtonProps) {
       animate={{ y: ['0%', '40%', '0%'] }}
       transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
       _hover={{
-        boxShadow: '0 0 20px 30px rgba(0,0,0,0.8)',
+        boxShadow: '0 0 20px 20px rgba(0,0,0,0.8)',
         transition: 'box-shadow 0.3s ease-in-out',
       }}
       _after={{

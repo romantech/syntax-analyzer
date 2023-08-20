@@ -7,7 +7,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { DIGITS_PATTERN, Layout, useIsMounted } from '@/base';
+import { DIGITS_PATTERN, Layout, LinkParticles, useIsMounted } from '@/base';
 import {
   isRouteErrorResponse,
   useNavigate,
@@ -46,9 +46,17 @@ export default function ErrorComponent({
   const buttonText = isRouteError ? '돌아가기' : '다시 시도하기';
 
   return (
-    <Layout justify="center" align="center" gap={6} flexGrow={0.9}>
+    <Layout
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      gap={8}
+      flexGrow={0.9}
+    >
+      <LinkParticles />
       <ScaleFade initialScale={0.1} in={isMounted}>
-        <Heading as="h1" size="4xl">
+        <Heading as="h1" size="4xl" fontWeight="extrabold">
           Ooops!
         </Heading>
       </ScaleFade>
