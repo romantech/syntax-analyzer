@@ -8,6 +8,7 @@ import {
 } from '@/features/misc/components';
 
 enum ShowCaseID {
+  HERO = 'hero-showcase',
   ANALYZER = 'analyzer-showcase',
   EDITOR = 'editor-showcase',
   GENERATOR = 'generator-showcase',
@@ -17,6 +18,13 @@ const getScrollHandler = (nextSectionId: ShowCaseID) => () => {
   const nextSection = document.querySelector(`#${nextSectionId}`);
   nextSection?.scrollIntoView({ behavior: 'smooth' });
 };
+
+const showCases = [
+  { id: ShowCaseID.HERO, Component: HeroShowcase },
+  { id: ShowCaseID.ANALYZER, Component: AnalyzerShowcase },
+  { id: ShowCaseID.EDITOR, Component: EditorShowcase },
+  { id: ShowCaseID.GENERATOR, Component: GeneratorShowcase },
+];
 
 export default function Home() {
   return (
@@ -33,16 +41,11 @@ export default function Home() {
     >
       <LinkParticles />
       <Stack maxW="8xl" mx="auto">
-        <HeroShowcase onScrollDown={getScrollHandler(ShowCaseID.ANALYZER)} />
-        <AnalyzerShowcase
-          id={ShowCaseID.ANALYZER}
-          onScrollDown={getScrollHandler(ShowCaseID.EDITOR)}
-        />
-        <EditorShowcase
-          id={ShowCaseID.EDITOR}
-          onScrollDown={getScrollHandler(ShowCaseID.GENERATOR)}
-        />
-        <GeneratorShowcase id={ShowCaseID.GENERATOR} />
+        {showCases.map(({ id, Component }, i) => {
+          const nextId = showCases[i + 1]?.id;
+          const scrollHandler = nextId ? getScrollHandler(nextId) : undefined;
+          return <Component key={id} id={id} onScrollDown={scrollHandler} />;
+        })}
       </Stack>
     </Layout>
   );
