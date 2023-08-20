@@ -22,7 +22,8 @@ export default function SentenceCountPicker() {
         <NumberInput
           {...field}
           focusBorderColor="teal.300"
-          maxW={70}
+          w="full"
+          maxW={66}
           min={MIN_PICKER_SENTENCE}
           max={MAX_PICKER_SENTENCE}
         >
