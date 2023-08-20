@@ -1,6 +1,6 @@
-import { ENGLISH_INPUT_PATTERN, THREE_WORDS_PATTERN } from '@/base';
-
 import * as yup from 'yup';
+import { ENGLISH_INPUT_PATTERN, THREE_WORDS_PATTERN } from '@/base';
+import { MAX_SENTENCE_LENGTH } from '@/features/syntax-editor';
 
 export const englishInputSchema = yup
   .string()
@@ -15,6 +15,6 @@ export const threeWordsSchema = yup
 export const englishSentenceSchema = yup
   .string()
   .trim()
-  .max(90)
+  .max(MAX_SENTENCE_LENGTH)
   .concat(englishInputSchema)
   .concat(threeWordsSchema);

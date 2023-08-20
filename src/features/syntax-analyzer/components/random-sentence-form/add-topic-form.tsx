@@ -80,6 +80,7 @@ export default function AddTopicForm(stackProps: StackProps) {
                 keywordInputRef.current = element;
               }}
               maxLength={20}
+              minW={240}
               focusBorderColor="teal.300"
               placeholder="영문 키워드를 입력 해주세요"
               onBlur={() => clearErrors('keyword')}
@@ -92,7 +93,7 @@ export default function AddTopicForm(stackProps: StackProps) {
         </PopoverContent>
       </Popover>
       <Button minW="fit-content" variant="outline" type="submit">
-        추가
+        토픽 등록
       </Button>
     </HStack>
   );

@@ -76,7 +76,7 @@ const AnalysisFormBox = ({
   ...stackProps
 }: PropsWithChildren<StackProps>) => {
   return (
-    <Stack w="full" maxW={690} gap={10} {...stackProps}>
+    <Stack w="full" maxW={660} gap={10} {...stackProps}>
       {children}
     </Stack>
   );

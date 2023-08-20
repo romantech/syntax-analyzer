@@ -26,7 +26,7 @@ export default function RandomSentenceForm({
   const { register, getValues } = methods;
 
   return (
-    <Stack w="full" maxW={690} gap={4} {...stackProps}>
+    <Stack gap={4} {...stackProps}>
       <RandomSentenceInstructions hidden={!showInstructions} />
       <FormProvider {...methods}>
         <HStack>
