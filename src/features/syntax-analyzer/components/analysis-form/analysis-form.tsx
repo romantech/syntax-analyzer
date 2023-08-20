@@ -11,12 +11,12 @@ import {
 import {
   FieldGroupHeader,
   ModelChoiceGroup,
+  SentenceInput,
   UsageLimitTooltip,
   useAnalysisForm,
 } from '@/features/syntax-analyzer';
 import { ConfirmModal } from '@/base';
 import { GiMagicLamp } from 'react-icons/gi';
-import { SentenceInput } from '@/features/syntax-editor';
 import { PropsWithChildren } from 'react';
 
 export default function AnalysisForm({ ...stackProps }: StackProps) {

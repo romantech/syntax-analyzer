@@ -16,8 +16,8 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { RiEnglishInput } from 'react-icons/ri';
 import { BsMagic } from 'react-icons/bs';
 import { TbArrowAutofitWidth } from 'react-icons/tb';
-import { MAX_SENTENCE_LENGTH } from '@/features/syntax-editor';
-import { HELPER_MESSAGES } from '@/features/syntax-analyzer';
+import { MAX_SENTENCE_LENGTH } from '@/features/syntax-analyzer/constants';
+import { HELPER_MESSAGES } from '@/features/syntax-analyzer/schemes';
 
 interface SentenceInputProps extends InputProps {
   errorMessage?: string;

@@ -9,3 +9,6 @@ export const MAX_TOPIC_LENGTH = 20;
 export const MIN_PICKER_SENTENCE = 1;
 export const MAX_PICKER_SENTENCE = 5;
 export const DEFAULT_PICKER_COUNT = 3;
+
+export const MAX_SENTENCE_LENGTH = 80;
+export const MIN_SENTENCE_WORDS = 3;
