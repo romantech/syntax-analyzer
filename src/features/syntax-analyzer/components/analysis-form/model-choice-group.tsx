@@ -40,7 +40,13 @@ export default function ModelChoiceGroup({
       name="model"
       control={control}
       render={({ field: { onChange, value } }) => (
-        <RadioGroup onChange={onChange} value={value}>
+        <RadioGroup
+          onChange={onChange}
+          value={value}
+          display="flex"
+          flexDirection="column"
+          gap={2}
+        >
           {MODEL_FIELDS.map((field) => (
             <Stack key={field.value}>
               <HStack align="center">

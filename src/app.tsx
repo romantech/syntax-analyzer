@@ -1,5 +1,5 @@
 import { Outlet, useNavigation } from 'react-router-dom';
-import { Layout, Loading } from '@/base';
+import { Loading } from '@/base';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorComponent } from '@/features/misc';
@@ -10,7 +10,7 @@ function App() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorComponent} onReset={reset}>
-      <Layout>{isLoading ? <Loading /> : <Outlet />}</Layout>
+      {isLoading ? <Loading /> : <Outlet />}
     </ErrorBoundary>
   );
 }

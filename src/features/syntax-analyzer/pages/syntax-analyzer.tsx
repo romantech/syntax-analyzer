@@ -1,4 +1,4 @@
-import { Box, HStack, Stack } from '@chakra-ui/react';
+import { Box, HStack } from '@chakra-ui/react';
 import {
   AnalysisCounter,
   AnalysisForm,
@@ -10,13 +10,13 @@ import {
 } from '@/features/syntax-analyzer';
 import { Suspense } from 'react';
 import { useIsMutating } from '@tanstack/react-query';
-import { CenteredDivider } from '@/base';
+import { CenteredDivider, Layout } from '@/base';
 
 export default function SyntaxAnalyzer() {
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
 
   return (
-    <Stack position="relative" h="full" overflow="hidden" pt={8} spacing={10}>
+    <Layout position="relative" overflow="hidden" pt={8}>
       <LoadingTransition gap={10} isLoading={!!isMutating} type="content">
         <Suspense fallback={<AnalysisCounter.Skeleton />}>
           <AnalysisCounter />
@@ -33,6 +33,6 @@ export default function SyntaxAnalyzer() {
         </HStack>
       </LoadingTransition>
       <AnalysisLoadIndicator play={!!isMutating} />
-    </Stack>
+    </Layout>
   );
 }

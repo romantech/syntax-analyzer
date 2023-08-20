@@ -2,13 +2,16 @@ import { Provider } from 'jotai';
 import { Outlet } from 'react-router-dom';
 import { DevTools } from 'jotai-devtools';
 import { analysisStore } from '@/features/syntax-editor';
+import { Layout } from '@/base';
 
 export default function SyntaxEditorRoot() {
   return (
-    <Provider store={analysisStore}>
-      <DevTools theme="dark" />
-      <Outlet />
-    </Provider>
+    <Layout>
+      <Provider store={analysisStore}>
+        <DevTools theme="dark" />
+        <Outlet />
+      </Provider>
+    </Layout>
   );
 }
 

@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/react';
-import { LinkParticles, useHideBodyScroll } from '@/base';
+import { Stack } from '@chakra-ui/react';
+import { Layout, LinkParticles } from '@/base';
 import {
   AnalyzerShowcase,
   EditorShowcase,
@@ -12,11 +12,10 @@ const getScrollHandler = (nextSectionId: string) => () => {
 };
 
 export default function Home() {
-  useHideBodyScroll();
-
   return (
-    <Box
+    <Layout
       position="relative"
+      maxW="full"
       h="100vh"
       overflowY="auto"
       scrollSnapType="y mandatory"
@@ -26,12 +25,14 @@ export default function Home() {
       }}
     >
       <LinkParticles />
-      <HeroShowcase onScrollDown={getScrollHandler('analyzer-showcase')} />
-      <AnalyzerShowcase
-        id="analyzer-showcase"
-        onScrollDown={getScrollHandler('editor-showcase')}
-      />
-      <EditorShowcase id="editor-showcase" />
-    </Box>
+      <Stack maxW="8xl" mx="auto">
+        <HeroShowcase onScrollDown={getScrollHandler('analyzer-showcase')} />
+        <AnalyzerShowcase
+          id="analyzer-showcase"
+          onScrollDown={getScrollHandler('editor-showcase')}
+        />
+        <EditorShowcase id="editor-showcase" />
+      </Stack>
+    </Layout>
   );
 }
