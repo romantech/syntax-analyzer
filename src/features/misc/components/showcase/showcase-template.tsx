@@ -49,7 +49,7 @@ export const ShowcaseTemplate = ({
       </Heading>
       <Stack gap={4}>
         <Text fontSize="xl">{description}</Text>
-        <Link as={NavLink} color="teal.300" to={linkUrl}>
+        <Link as={NavLink} color="teal.300" to={linkUrl} w="fit-content">
           Try it now
         </Link>
       </Stack>
