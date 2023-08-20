@@ -9,7 +9,7 @@ const AnalyzerShowcase = withShowcase(ShowcaseTemplate, {
   imageProps: { src, placeholderSrc, alt: 'Analyzer Overview' },
   title: `Syntax Unpacked\n with a Single Click`,
   description:
-    'Just type in your text, choose a model, and watch as we unravel the intricacies of subjects, verbs, objects, and more.',
+    'Input a sentence, choose your model, and see it deftly unravel the complex ties between subjects, verbs, objects, and beyond.',
   linkUrl: SITE_URLS.SYNTAX_ANALYZER.ROOT,
 });
 

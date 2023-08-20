@@ -7,9 +7,9 @@ const placeholderSrc = `${src}?tr=bl-30,q-50`;
 
 const EditorShowcase = withShowcase(ShowcaseTemplate, {
   imageProps: { src, placeholderSrc, alt: 'Editor Overview' },
-  title: `Elevated Visual\nSyntax Experience`,
+  title: `Refined Visual\nSyntax Exploration`,
   description:
-    'Engage in direct tagging of words, phrases, and clauses. Access over 30 of the most frequented syntax tags. Amplify your English learning with enriched visual enhancements.',
+    'Engage with precise tagging of words, phrases, and clauses. Discover over 30 essential syntax tags and enhance your English mastery with sleek visual cues.',
   linkUrl: getSyntaxEditorPath('sample', 4),
   imageFirst: false,
 });
