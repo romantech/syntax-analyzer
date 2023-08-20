@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { ENGLISH_INPUT_PATTERN, THREE_WORDS_PATTERN } from '@/base';
-import { MAX_SENTENCE_LENGTH } from '@/features/syntax-editor';
+import { MAX_SENTENCE_LENGTH } from '@/features/syntax-editor/constants';
 
 export const englishInputSchema = yup
   .string()
