@@ -31,7 +31,7 @@ export default function ErrorComponent({
   const navigate = useNavigate();
 
   const isMounted = useIsMounted();
-  const errorMessage = useRef(error?.message || '문제가 발생했어요');
+  const errorMessage = useRef(error?.message ?? '문제가 발생했어요');
 
   const isRouteError = isRouteErrorResponse(routerError);
   if (isRouteError) {
@@ -64,7 +64,7 @@ export default function ErrorComponent({
         <VStack>
           <Text fontSize="xl" textTransform="capitalize" maxW={500}>
             <Highlight
-              query={errorMessage.current.match(DIGITS_PATTERN)}
+              query={errorMessage.current.match(DIGITS_PATTERN) ?? []}
               styles={highlightStyles}
             >
               {errorMessage.current}
