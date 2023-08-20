@@ -14,6 +14,7 @@ import {
 import { SubmitHandler, useFormContext } from 'react-hook-form';
 import {
   addTopicSchema,
+  MAX_TOPIC_LENGTH,
   RandomSentenceFormValues,
 } from '@/features/syntax-analyzer';
 import { useRef } from 'react';
@@ -79,7 +80,7 @@ export default function AddTopicForm(stackProps: StackProps) {
                 registerRef(element);
                 keywordInputRef.current = element;
               }}
-              maxLength={20}
+              maxLength={MAX_TOPIC_LENGTH}
               minW={240}
               focusBorderColor="teal.300"
               placeholder="영문 키워드를 입력 해주세요"

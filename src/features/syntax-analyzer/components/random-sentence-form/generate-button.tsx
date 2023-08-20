@@ -1,5 +1,5 @@
 import {
-  MAX_SENTENCE_COUNT,
+  DAILY_SENTENCE_LIMIT,
   UsageLimitTooltip,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
@@ -41,7 +41,7 @@ export default function GenerateButton({
           as="span"
           color={countColor}
           fontSize="sm"
-        >{`(${count}/${MAX_SENTENCE_COUNT})`}</Text>
+        >{`(${count}/${DAILY_SENTENCE_LIMIT})`}</Text>
       </Button>
     </UsageLimitTooltip>
   );

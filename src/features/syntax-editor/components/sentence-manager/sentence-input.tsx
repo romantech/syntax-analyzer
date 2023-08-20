@@ -16,10 +16,8 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { RiEnglishInput } from 'react-icons/ri';
 import { BsMagic } from 'react-icons/bs';
 import { TbArrowAutofitWidth } from 'react-icons/tb';
-import {
-  MAX_SENTENCE_LENGTH,
-  MIN_SENTENCE_WORDS,
-} from '@/features/syntax-editor';
+import { MAX_SENTENCE_LENGTH } from '@/features/syntax-editor';
+import { HELPER_MESSAGES } from '@/features/syntax-analyzer';
 
 interface SentenceInputProps extends InputProps {
   errorMessage?: string;
@@ -33,6 +31,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
     ref,
   ) {
     const [parent] = useAutoAnimate({ duration: 180 });
+
     return (
       <Box flexGrow={1} ref={parent}>
         <InputGroup size={size}>
@@ -71,15 +70,15 @@ const HELPER_TEXTS = [
   },
   {
     icon: RiEnglishInput,
-    text: '영어와 문장 부호만 입력할 수 있어요',
+    text: HELPER_MESSAGES.ENGLISH_OR_SYMBOL,
   },
   {
     icon: TbArrowAutofitWidth,
-    text: `최대 ${MAX_SENTENCE_LENGTH}자까지만 입력할 수 있어요`,
+    text: HELPER_MESSAGES.MAX_LENGTH,
   },
   {
     icon: PiNotePencil,
-    text: `최소 ${MIN_SENTENCE_WORDS} 단어로 이루어진 문장을 입력해 주세요`,
+    text: HELPER_MESSAGES.MIN_WORDS,
   },
 ];
 

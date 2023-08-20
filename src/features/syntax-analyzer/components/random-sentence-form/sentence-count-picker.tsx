@@ -6,6 +6,10 @@ import {
   NumberInputField,
   NumberInputStepper,
 } from '@chakra-ui/react';
+import {
+  MAX_PICKER_SENTENCE,
+  MIN_PICKER_SENTENCE,
+} from '@/features/syntax-analyzer';
 
 export default function SentenceCountPicker() {
   const { control } = useFormContext();
@@ -19,8 +23,8 @@ export default function SentenceCountPicker() {
           {...field}
           focusBorderColor="teal.300"
           maxW={70}
-          min={1}
-          max={5}
+          min={MIN_PICKER_SENTENCE}
+          max={MAX_PICKER_SENTENCE}
         >
           <NumberInputField />
           <NumberInputStepper>
