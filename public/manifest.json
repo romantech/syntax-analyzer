@@ -1,7 +1,7 @@
 {
   "short_name": "Syntax Analyzer",
   "name": "Syntax Analyzer",
-  "description": "An intuitive tool for English syntax analysis.",
+  "description": "Visual tool for English syntax analysis and editing.",
   "lang": "ko",
   "categories": ["education", "tools"],
   "icons": [
