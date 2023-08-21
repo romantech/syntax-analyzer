@@ -1,6 +1,5 @@
 import { useRef } from 'react';
-
-import { SlideFade, Spinner } from '@chakra-ui/react';
+import { SlideFade } from '@chakra-ui/react';
 import {
   SegmentList,
   Sentence,
@@ -9,7 +8,7 @@ import {
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
 import { TbMoodEmpty } from 'react-icons/tb';
-import { TextPlaceholder, useTransitionLoading } from '@/base';
+import { TextPlaceholder, ThreeDotsWave, useTransitionLoading } from '@/base';
 import '@/features/syntax-editor/styles/constituent.scss';
 
 /**
@@ -32,7 +31,7 @@ export default function SyntaxParser() {
     trigger: isLoading,
   });
 
-  if (isLoading) return <Spinner size="md" thickness="3px" color="blue.300" />;
+  if (isLoading) return <ThreeDotsWave delay={300} />;
 
   if (!segment || !sentence) {
     return (

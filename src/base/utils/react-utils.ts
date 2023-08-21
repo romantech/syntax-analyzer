@@ -7,8 +7,8 @@ import { ComponentType, lazy } from 'react';
  * @example
  * const { Home, About } = lazyImport(() => import('@/features/misc'));
  *
- * @see {https://github.com/facebook/react/issues/14603#issuecomment-736878172|React's discussion on named imports}
- * @see {https://github.com/JLarky/react-lazily/blob/main/src/core/lazily.ts|react-lazily source code for a similar approach}
+ * @see {https://github.com/facebook/react/issues/14603#issuecomment-736878172 React's discussion on named imports}
+ * @see {https://github.com/JLarky/react-lazily/blob/main/src/core/lazily.ts react-lazily source code for a similar approach}
  */
 export const lazyImport = <T extends NonNullable<unknown>, U extends keyof T>(
   loader: (x?: string) => Promise<T>,
