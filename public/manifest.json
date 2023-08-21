@@ -1,8 +1,8 @@
 {
   "short_name": "Syntax Analyzer",
   "name": "Syntax Analyzer",
-  "description": "Visual tool for English syntax analysis and editing.",
-  "lang": "ko",
+  "description": "Visual tool for English syntax analysis. Explore and edit sentence structures with a single click. Discover over 30 essential tags and generate tailored random sentences.",
+  "lang": "en",
   "categories": ["education", "tools"],
   "icons": [
     {
