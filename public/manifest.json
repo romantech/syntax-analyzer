@@ -1,0 +1,30 @@
+{
+  "short_name": "Syntax Analyzer",
+  "name": "Syntax Analyzer",
+  "description": "An intuitive tool for English syntax analysis.",
+  "lang": "ko",
+  "categories": ["education", "tools"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1a202b",
+  "theme_color": "#1a202b",
+  "orientation": "portrait-primary"
+}
