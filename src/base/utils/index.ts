@@ -4,3 +4,4 @@ export * from './selection';
 export * from './string';
 export * from './react-utils';
 export * from './timers';
+export * from './image';
