@@ -1,18 +1,24 @@
-import { Outlet, useNavigation } from 'react-router-dom';
-import { ThreeDotsWave } from '@/base';
+import { Outlet } from 'react-router-dom';
+import { Layout, ThreeDotsWave } from '@/base';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorComponent } from '@/features/misc';
+import { Suspense } from 'react';
 
-function App() {
-  const isLoading = useNavigation().state === 'loading';
+const Fallback = () => (
+  <Layout h="calc(100vh - 72px)" centerContent justifyContent="center">
+    <ThreeDotsWave />
+  </Layout>
+);
+
+export const App = () => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
     <ErrorBoundary FallbackComponent={ErrorComponent} onReset={reset}>
-      {isLoading ? <ThreeDotsWave /> : <Outlet />}
+      <Suspense fallback={<Fallback />}>
+        <Outlet />
+      </Suspense>
     </ErrorBoundary>
   );
-}
-
-export default App;
+};
