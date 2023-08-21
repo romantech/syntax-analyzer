@@ -68,9 +68,9 @@ const AnalysisCounterSkeleton = (stackProps: StackProps) => {
   return (
     <AnalysisCounterBox {...stackProps}>
       <SkeletonCircle w="50px" h="50px" />
-      <Stack>
-        <Skeleton h={5} w={200} borderRadius="md" />
-        <Skeleton h={5} w={400} borderRadius="md" />
+      <Stack w="full">
+        <Skeleton h={5} maxW={200} borderRadius="md" />
+        <Skeleton h={5} maxW={450} borderRadius="md" />
       </Stack>
     </AnalysisCounterBox>
   );
