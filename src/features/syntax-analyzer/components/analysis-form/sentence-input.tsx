@@ -48,7 +48,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
           />
         </InputGroup>
         <FormErrorMessage>{errorMessage}</FormErrorMessage>
-        <FormHelperText color="gray.500" pt={1} hidden={!showHelperText}>
+        <FormHelperText color="description" pt={1} hidden={!showHelperText}>
           <List spacing={1.5}>
             {HELPER_TEXTS.map(({ icon, text }, i) => (
               <ListItem key={i}>

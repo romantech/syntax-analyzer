@@ -3,13 +3,7 @@ import {
   UsageLimitTooltip,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
-import {
-  Button,
-  ButtonProps,
-  Skeleton,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Button, ButtonProps, Skeleton, Text } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
 
 export default function GenerateButton({
@@ -21,7 +15,6 @@ export default function GenerateButton({
     select: (data) => data.random_sentence,
     suspense: true,
   });
-  const countColor = useColorModeValue('gray.400', 'gray.500');
   const hasCount = count > 0;
 
   return (
@@ -39,7 +32,7 @@ export default function GenerateButton({
         <Text
           pl={1}
           as="span"
-          color={countColor}
+          color="description"
           fontSize="sm"
         >{`(${count}/${DAILY_SENTENCE_LIMIT})`}</Text>
       </Button>

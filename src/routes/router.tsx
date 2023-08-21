@@ -25,11 +25,11 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: SITE_URLS.SYNTAX_ANALYZER.ROOT,
+        path: SITE_URLS.ANALYZER.ROOT,
         element: <SyntaxAnalyzer />,
       },
       {
-        path: SITE_URLS.SYNTAX_EDITOR.ROOT,
+        path: SITE_URLS.EDITOR.ROOT,
         element: <SyntaxEditorRoot />,
         children: [
           {
@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
             element: <SentenceManager />,
           },
           {
-            path: SITE_URLS.SYNTAX_EDITOR.EDIT,
+            path: SITE_URLS.EDITOR.EDIT,
             element: <SyntaxEditor />,
           },
           {

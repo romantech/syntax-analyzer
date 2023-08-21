@@ -25,13 +25,13 @@ const NAV_TABS = [
   },
   {
     label: 'analyzer',
-    path: SITE_URLS.SYNTAX_ANALYZER.ROOT,
-    matchPath: `${SITE_URLS.SYNTAX_ANALYZER.ROOT}/*`,
+    path: SITE_URLS.ANALYZER.ROOT,
+    matchPath: `${SITE_URLS.ANALYZER.ROOT}/*`,
   },
   {
     label: 'editor',
-    path: SITE_URLS.SYNTAX_EDITOR.ROOT,
-    matchPath: `${SITE_URLS.SYNTAX_EDITOR.ROOT}/*`,
+    path: SITE_URLS.EDITOR.ROOT,
+    matchPath: `${SITE_URLS.EDITOR.ROOT}/*`,
   },
 ] as const;
 
@@ -48,6 +48,7 @@ export function Header() {
 
   const bg = useColorModeValue('whiteAlpha.800', 'grayAlpha.800');
   const boxShadow = useColorModeValue('sm', 'lg');
+  const hoverColor = useColorModeValue('gray.400', 'gray.100');
 
   const position = tabIndex === 0 ? 'fixed' : 'sticky';
 
@@ -72,8 +73,9 @@ export function Header() {
                 key={tab.label}
                 to={tab.path}
                 transition="all 0.3s"
+                color="description"
                 textTransform="capitalize"
-                _hover={{ color: tabIndex !== i ? 'gray.400' : '' }}
+                _hover={{ color: tabIndex !== i ? hoverColor : '' }}
               >
                 {tab.label}
               </Tab>

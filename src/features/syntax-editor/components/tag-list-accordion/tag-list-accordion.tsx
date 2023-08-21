@@ -7,7 +7,9 @@ import {
   type AccordionProps,
   Heading,
   HStack,
+  List,
   Text,
+  Wrap,
   WrapItem,
 } from '@chakra-ui/react';
 import {
@@ -55,17 +57,14 @@ export default function TagListAccordion({
             <AccordionIcon />
           </AccordionButton>
 
-          <AccordionPanel
-            display="flex"
-            flexWrap="wrap"
-            gap={2}
-            maxW="container.lg"
-          >
-            {category.constituents.map((constituent) => (
-              <WrapItem key={constituent.label}>
-                <SelectableTagButton constituent={constituent} />
-              </WrapItem>
-            ))}
+          <AccordionPanel maxW="container.lg">
+            <Wrap spacing={2}>
+              {category.constituents.map((constituent) => (
+                <WrapItem key={constituent.label}>
+                  <SelectableTagButton constituent={constituent} />
+                </WrapItem>
+              ))}
+            </Wrap>
           </AccordionPanel>
         </AccordionItem>
       ))}

@@ -16,6 +16,15 @@ export const toastOptions: ToastProviderProps = {
   },
 };
 
+const semanticTokens: Colors = {
+  colors: {
+    description: {
+      default: 'gray.600',
+      _dark: 'gray.400',
+    },
+  },
+};
+
 const colors: Colors = {
   grayAlpha: {
     50: 'rgba(26, 32, 43, 0.04)',
@@ -36,4 +45,4 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 };
 
-export const theme = extendTheme({ config, colors });
+export const theme = extendTheme({ config, colors, semanticTokens });

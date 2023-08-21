@@ -10,11 +10,14 @@ export default function AbbrInfoSwitch({
   const [isAbbrInfoMode, setIsAbbrInfoMode] = useAtom(abbrInfoModeAtom);
   return (
     <HStack {...stackProps} w={w} justify={justify}>
-      <FormLabel noOfLines={1}>태그 약어 툴팁</FormLabel>
+      <FormLabel id="tag-abbreviations" noOfLines={1}>
+        태그 약어 툴팁
+      </FormLabel>
       <Switch
+        aria-labelledby="tag-abbreviations"
         colorScheme="teal"
         isChecked={isAbbrInfoMode}
-        onChange={() => setIsAbbrInfoMode(!isAbbrInfoMode)}
+        onChange={() => setIsAbbrInfoMode((prev) => !prev)}
       />
     </HStack>
   );

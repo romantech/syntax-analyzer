@@ -10,11 +10,14 @@ export default function TagInfoSwitch({
   const [isTagInfoMode, setTagInfoMode] = useAtom(tagInfoModeAtom);
   return (
     <HStack {...stackProps} w={w} justify={justify}>
-      <FormLabel noOfLines={1}>태그 정보 툴팁</FormLabel>
+      <FormLabel id="tag-information" noOfLines={1}>
+        태그 정보 툴팁
+      </FormLabel>
       <Switch
+        aria-labelledby="tag-information"
         colorScheme="teal"
         isChecked={isTagInfoMode}
-        onChange={() => setTagInfoMode(!isTagInfoMode)}
+        onChange={() => setTagInfoMode((prev) => !prev)}
       />
     </HStack>
   );

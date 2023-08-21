@@ -31,6 +31,7 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
         size="50px"
         value={remainingCountInPercent(count)}
         color="teal.300"
+        aria-label="Remaining analysis count"
       >
         <CircularProgressLabel>
           {remainingCountInPercent(count) + '%'}

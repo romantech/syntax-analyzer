@@ -68,7 +68,7 @@ export default function ModelChoiceGroup({
                   recommended
                 </Badge>
               </HStack>
-              <Text ml={6} fontSize={14} color="gray.500" mt={-1}>
+              <Text ml={6} fontSize={14} color="description" mt={-1}>
                 {field.desc}
               </Text>
             </Stack>
