@@ -1,13 +1,18 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import App from '@/app';
-import { ErrorComponent, Home } from '@/features/misc';
 import { SITE_URLS } from './paths';
-import {
-  SentenceManager,
-  SyntaxEditor,
-  SyntaxEditorRoot,
-} from '@/features/syntax-editor';
-import { SyntaxAnalyzer } from '@/features/syntax-analyzer';
+import { lazyImport } from '@/base';
+
+const { App } = lazyImport(() => import('@/app'));
+
+const { ErrorComponent, Home } = lazyImport(() => import('@/features/misc'));
+
+const { SyntaxAnalyzer } = lazyImport(
+  () => import('@/features/syntax-analyzer'),
+);
+
+const { SentenceManager, SyntaxEditor, SyntaxEditorRoot } = lazyImport(
+  () => import('@/features/syntax-editor'),
+);
 
 export const router = createBrowserRouter([
   {
