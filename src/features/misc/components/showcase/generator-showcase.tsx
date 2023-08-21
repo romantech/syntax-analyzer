@@ -14,7 +14,7 @@ const EditorShowcase = withShowcase(ShowcaseTemplate, {
   title: `Generate Tailored\nRandom Sentences`,
   description:
     'Select themes and watch as sentences are uniquely crafted for your preference. Mix up to 3 topics to form an assortment of distinguished expressions.',
-  linkUrl: SITE_URLS.SYNTAX_EDITOR.ROOT,
+  linkUrl: SITE_URLS.EDITOR.ROOT,
 });
 
 export default EditorShowcase;

@@ -14,7 +14,7 @@ const AnalyzerShowcase = withShowcase(ShowcaseTemplate, {
   title: `Syntax Unpacked\n with a Single Click`,
   description:
     'Input a sentence, choose your model, and see it deftly unravel the complex ties between subjects, verbs, objects, and beyond.',
-  linkUrl: SITE_URLS.SYNTAX_ANALYZER.ROOT,
+  linkUrl: SITE_URLS.ANALYZER.ROOT,
 });
 
 export default AnalyzerShowcase;

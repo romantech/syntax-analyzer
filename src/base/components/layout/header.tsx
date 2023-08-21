@@ -25,13 +25,13 @@ const NAV_TABS = [
   },
   {
     label: 'analyzer',
-    path: SITE_URLS.SYNTAX_ANALYZER.ROOT,
-    matchPath: `${SITE_URLS.SYNTAX_ANALYZER.ROOT}/*`,
+    path: SITE_URLS.ANALYZER.ROOT,
+    matchPath: `${SITE_URLS.ANALYZER.ROOT}/*`,
   },
   {
     label: 'editor',
-    path: SITE_URLS.SYNTAX_EDITOR.ROOT,
-    matchPath: `${SITE_URLS.SYNTAX_EDITOR.ROOT}/*`,
+    path: SITE_URLS.EDITOR.ROOT,
+    matchPath: `${SITE_URLS.EDITOR.ROOT}/*`,
   },
 ] as const;
 
