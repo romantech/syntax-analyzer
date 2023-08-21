@@ -49,6 +49,9 @@ export function Header() {
   const bg = useColorModeValue('whiteAlpha.800', 'grayAlpha.800');
   const boxShadow = useColorModeValue('sm', 'lg');
 
+  const color = useColorModeValue('gray.600', 'gray.400');
+  const hoverColor = useColorModeValue('gray.400', 'gray.100');
+
   const position = tabIndex === 0 ? 'fixed' : 'sticky';
 
   return (
@@ -72,8 +75,9 @@ export function Header() {
                 key={tab.label}
                 to={tab.path}
                 transition="all 0.3s"
+                color={color}
                 textTransform="capitalize"
-                _hover={{ color: tabIndex !== i ? 'gray.400' : '' }}
+                _hover={{ color: tabIndex !== i ? hoverColor : '' }}
               >
                 {tab.label}
               </Tab>
