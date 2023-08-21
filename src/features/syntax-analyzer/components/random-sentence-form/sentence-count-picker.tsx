@@ -22,6 +22,7 @@ export default function SentenceCountPicker() {
         <NumberInput
           {...field}
           focusBorderColor="teal.300"
+          aria-label="Sentence count picker"
           w="full"
           maxW={66}
           min={MIN_PICKER_SENTENCE}
