@@ -1,6 +1,7 @@
 ![og-image](https://github.com/romantech/syntax-analyzer/assets/8604840/8302c919-aada-4b26-8425-cefe462275de)
-> OpenAI API를 이용한 영어 구문 분석 / 편집기
-> 
+OpenAI API를 이용해 영어 구문(주어, 동사, 목적어 등)을 분석하고 직접 편집할 수 있는 기능을 제공하는 웹 어플리케이션입니다. 
+30여 가지의 문장 성분 태그를 이용해 복잡한 문장 구조를 한눈에 들어오도록 시각화할 수 있습니다. 입력한 주제와 연관된 랜덤 문장도 생성할 수 있어요.
+
 - 배포 링크 : [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - 백엔드 레포지토리 : https://github.com/romantech/project-server
 
