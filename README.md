@@ -1,13 +1,14 @@
-![og-image](https://github.com/romantech/syntax-analyzer/assets/8604840/8302c919-aada-4b26-8425-cefe462275de)
+![og-image](https://github.com/romantech/syntax-analyzer/assets/8604840/747803a5-7670-4c18-99b8-07c4245b5312)
+
 OpenAI API를 이용해 영어 구문(주어, 동사, 목적어 등)을 분석하고 직접 편집할 수 있는 기능을 제공하는 웹 어플리케이션입니다. 
 30여 가지의 문장 성분 태그를 이용해 복잡한 문장 구조를 한눈에 들어오도록 시각화할 수 있습니다. 입력한 주제와 연관된 랜덤 문장도 생성할 수 있어요.
 
 - 배포 링크 : [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - 백엔드 레포지토리 : https://github.com/romantech/project-server
 
+
 # 사용 스택
 ### Frontend
-
 - **Framework**: React with Typescript
 - **UI Library**: Chakra UI
 - **CSS Preprocessor**: SCSS
@@ -16,14 +17,15 @@ OpenAI API를 이용해 영어 구문(주어, 동사, 목적어 등)을 분석�
 - **Form Handling**: React Hook Form / Yup
 
 ### Backend
-
 - **Framework**: Express with Typescript
 - **Database & Cache**: Redis (using ioredis)
+
 
 # 주요 기능
 1. 영어 구문 분석 : 주어, 동사, 목적어, 절, 구 등 문장 성분 분석
 2. 영어 구문 편집기 : 30여 가지 구성 요소 태그를 이용한 문장 구조 시각화
 3. 영어 문장 생성 : 입력한 주제와 연관된 랜덤 문장 생성
+
 
 # 분석 데이터 생성 흐름
 ```mermaid
@@ -71,6 +73,7 @@ sequenceDiagram
     end
 ```
 
+
 # 문장 성분 리스트
 | label | abbreviation | type | description |
 | --- | --- | --- | --- |
@@ -108,18 +111,13 @@ sequenceDiagram
 
 # 스크린샷
 #### 홈 화면
-
-![2023-08-22 16 57 08](https://github.com/romantech/syntax-analyzer/assets/8604840/8f2efe41-3f31-4088-97c0-1e0091408ea0)
+![home](https://github.com/romantech/syntax-analyzer/assets/8604840/b09f7777-e0c9-48aa-9ad4-5de85e8eb106)
 
 #### 영어 구문 분석 요청 양식
-
-![analysis-16-9](https://github.com/romantech/syntax-analyzer/assets/8604840/f9396d10-41b8-40ec-9cf5-ff207da980b8)
+![analysis-16-9](https://github.com/romantech/syntax-analyzer/assets/8604840/1a2e169b-d4f8-4792-8816-be42cfb153f6)
 
 #### 영어 구문 편집기
-
-![editor-16-9](https://github.com/romantech/syntax-analyzer/assets/8604840/06b08333-cc3f-4768-8bee-72aeadf84992)
+![editor-16-9](https://github.com/romantech/syntax-analyzer/assets/8604840/5eb8336b-fdc1-4ed0-aa0b-a88a7e576a57)
 
 #### 랜덤 문장 생성
-
-![generator-16-9](https://github.com/romantech/syntax-analyzer/assets/8604840/566668e1-1546-4428-941f-1b2cda88c21b)
-
+![generator-16-9](https://github.com/romantech/syntax-analyzer/assets/8604840/114fb4e4-e29a-4f65-a8c7-b9d963b39dbf)
