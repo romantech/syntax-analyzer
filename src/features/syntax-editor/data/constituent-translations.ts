@@ -90,7 +90,7 @@ export const CONSTITUENT_TRANSLATIONS: Record<
   },
   'coordinating clause': {
     ko: '등위절',
-    desc: '동등한 문법적 가치를 가진 두 개 이상의 절',
+    desc: '동일한 중요도를 가진 두 개 이상의 절',
   },
   'parallel clause': {
     ko: '병렬절',
