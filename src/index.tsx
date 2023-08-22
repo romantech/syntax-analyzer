@@ -12,12 +12,12 @@ const rootElement = document.getElementById('root');
 
 ReactDOM.createRoot(rootElement!).render(
   <React.StrictMode>
+    <Analytics />
     <ChakraProvider theme={theme} toastOptions={toastOptions}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <ConfiguredQueryProvider>
         <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
         <RouterProvider router={router} />
-        <Analytics />
       </ConfiguredQueryProvider>
     </ChakraProvider>
   </React.StrictMode>,
