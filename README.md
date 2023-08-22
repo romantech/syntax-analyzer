@@ -1,8 +1,8 @@
 ![og-image](https://github.com/romantech/syntax-analyzer/assets/8604840/747803a5-7670-4c18-99b8-07c4245b5312)
 
-Syntax Analyzer는 영어 문장의 구문(주어, 동사, 목적어, 절, 구 등)을 자동으로 분석해주고, 분석한 구문을 직접 편집할 수 있는 웹 어플리케이션입니다. 자주 사용하는 30여 가지의 문장 성분 태그를 통해 복잡한 문장 구조를 한눈에 파악할 수 있습니다. 입력한 주제와 연관된 랜덤 문장을 생성할 수도 있습니다. 구문 분석과 랜덤 문장 생성은 OpenAI API를 활용했습니다.
+Syntax Analyzer는 영어 문장의 다양한 구문(주어, 동사, 목적어, 절, 구 등)을 자동으로 분석해 주고, 분석한 구문을 원하는 형태로 편집할 수 있는 웹 어플리케이션입니다. 자주 사용하는 30여 가지의 문장 성분 태그를 통해 복잡한 문장 구조를 한눈에 파악할 수 있습니다. 입력한 주제와 연관된 랜덤 문장 생성 기능도 제공합니다. 구문 분석과 랜덤 문장 생성은 직접 작성한 프롬프트와 OpenAI API를 활용했습니다.
 
-- 배포 링크 : [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
+- 어플리케이션 링크 : [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - 백엔드 레포지토리 : https://github.com/romantech/project-server
 
 # 목차
@@ -31,7 +31,7 @@ Syntax Analyzer는 영어 문장의 구문(주어, 동사, 목적어, 절, 구 �
 - **Database & Cache**: Redis (using ioredis)
 
 # 주요 기능
-
+> I'll 같은 축약 표현은 자동으로 풀어서 분석합니다 e.g. I'll -> I will
 1. 영어 구문 분석 : 주어, 동사, 목적어, 절, 구 등 문장 성분 분석
 2. 영어 구문 편집기 : 30여 가지의 구성 요소 태그를 이용한 문장 구조 시각화
 3. 영어 문장 생성 : 입력한 주제와 연관된 랜덤 문장 생성
