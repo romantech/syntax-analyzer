@@ -48,23 +48,16 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // react-router-dom/@remix-run/react-router 모듈은 @react-router 이름의 청크로 분리
+          // react-router-dom/@remix-run/react-router 모듈은 react-router 이름의 청크로 분리
           if (
             id.includes('react-router-dom') ||
             id.includes('@remix-run') ||
             id.includes('react-router')
           ) {
-            return '@react-router';
+            return 'react-router';
           }
-          if (
-            id.includes('@chakra-ui') ||
-            id.includes('framer-motion') ||
-            id.includes('@emotion')
-          ) {
-            return '@chakra-ui';
-          }
-          if (id.includes('lottie')) return '@lottie';
-          if (id.includes('tsparticles')) return '@tsparticles';
+          if (id.includes('lottie')) return 'lottie';
+          if (id.includes('tsparticles')) return 'tsparticles';
         },
       },
     },
