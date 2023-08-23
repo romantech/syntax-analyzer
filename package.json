@@ -1,8 +1,25 @@
 {
   "name": "syntax-analyzer",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "author": "Romantech",
+  "license": "MIT",
+  "description": "Visual tool for English syntax analysis",
+  "keywords": [
+    "syntax",
+    "analysis",
+    "English",
+    "OpenAI",
+    "ChatGPT"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:romantech/syntax-analyzer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/romantech/syntax-analyzer/issues"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -14,7 +31,7 @@
     "@emotion/styled": "^11.11.0",
     "@fingerprintjs/fingerprintjs": "3.4.2",
     "@formkit/auto-animate": "^0.7.0",
-    "@hookform/resolvers": "^3.2.0",
+    "@hookform/resolvers": "^3.3.0",
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@tanstack/react-query": "^4.33.0",
     "@vercel/analytics": "^1.0.2",
@@ -38,9 +55,9 @@
     "@hookform/devtools": "^4.3.1",
     "@tanstack/eslint-plugin-query": "^4.32.5",
     "@tanstack/react-query-devtools": "^4.33.0",
-    "@types/node": "^20.5.1",
+    "@types/node": "^20.5.3",
     "@types/qs": "^6.9.7",
-    "@types/react": "^18.2.20",
+    "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
