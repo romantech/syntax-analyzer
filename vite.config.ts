@@ -1,4 +1,4 @@
-import { defineConfig, type PluginOption } from 'vite';
+import { defineConfig, type PluginOption, splitVendorChunkPlugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -20,8 +20,8 @@ export default defineConfig(({ mode }) => ({
            * */
           'jotai/babel/plugin-react-refresh',
           /**
-           * Jotai는 리코일 처럼 키(key)가 아닌 객체 참조 기반 작동 -> 아톰 식별자 없음
-           * 수동으로 debugLabel을 추가할 수 있지만 번거로움.
+           * Jotai 는 리코일 처럼 키(key)가 아닌 객체 참조 기반 작동 -> 아톰 식별자 없음
+           * 수동으로 debugLabel 을 추가할 수 있지만 번거로움.
            * 아래 플러그인을 사용하면 모든 아톰에 debugLabel 추가해줌(개발자 도구에서 확인 可)
            * */
           'jotai/babel/plugin-debug-label',
@@ -29,6 +29,7 @@ export default defineConfig(({ mode }) => ({
       },
     }),
     tsconfigPaths(),
+    splitVendorChunkPlugin(), // vendor 청크 분리
     visualizer() as unknown as PluginOption,
 
     /**
@@ -43,7 +44,31 @@ export default defineConfig(({ mode }) => ({
     /** 배포 환경에서만 콘솔/디버거 비활성; 참고로 build.minify 기본값은 esbuild */
     pure: mode === 'production' ? ['console', 'debugger'] : [],
   },
-
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // react-router-dom/@remix-run/react-router 모듈은 @react-router 이름의 청크로 분리
+          if (
+            id.includes('react-router-dom') ||
+            id.includes('@remix-run') ||
+            id.includes('react-router')
+          ) {
+            return '@react-router';
+          }
+          if (
+            id.includes('@chakra-ui') ||
+            id.includes('framer-motion') ||
+            id.includes('@emotion')
+          ) {
+            return '@chakra-ui';
+          }
+          if (id.includes('lottie')) return '@lottie';
+          if (id.includes('tsparticles')) return '@tsparticles';
+        },
+      },
+    },
+  },
   server: { open: true },
   define: {
     /** Jotai Devtools process is not defined 문제 해결

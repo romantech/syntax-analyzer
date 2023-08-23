@@ -25,4 +25,4 @@ dist-ssr
 *.sw?
 
 # Build statistics
-stats.html
+stats.*
