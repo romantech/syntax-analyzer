@@ -5,12 +5,13 @@ import {
   ScaleFade,
   SystemStyleObject,
   Text,
+  useBoolean,
   VStack,
 } from '@chakra-ui/react';
 import { DIGITS_PATTERN, Layout, LinkParticles, useIsMounted } from '@/base';
 import {
   isRouteErrorResponse,
-  useNavigate,
+  Navigate,
   useRouteError,
 } from 'react-router-dom';
 import { useRef } from 'react';
@@ -28,7 +29,7 @@ export default function ErrorComponent({
   error,
 }: Partial<FallbackProps>) {
   const routerError = useRouteError() as Error;
-  const navigate = useNavigate();
+  const [shouldRedirect, setShouldRedirect] = useBoolean(false);
 
   const isMounted = useIsMounted();
   const errorMessage = useRef(error?.message ?? '문제가 발생했어요');
@@ -40,10 +41,12 @@ export default function ErrorComponent({
   }
 
   const onActionButtonClick = isRouteError
-    ? () => navigate('..', { replace: true }) // 상위 라우터 계층으로 이동
+    ? () => setShouldRedirect.on()
     : resetErrorBoundary;
 
   const buttonText = isRouteError ? '돌아가기' : '다시 시도하기';
+
+  if (shouldRedirect) return <Navigate to=".." replace />;
 
   return (
     <Layout

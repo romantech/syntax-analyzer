@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { SITE_URLS } from './paths';
 import { lazyImport } from '@/base';
 
@@ -39,10 +39,6 @@ export const router = createBrowserRouter([
           {
             path: SITE_URLS.EDITOR.EDIT,
             element: <SyntaxEditor />,
-          },
-          {
-            path: '*',
-            element: <Navigate to="." replace />,
           },
         ],
       },
