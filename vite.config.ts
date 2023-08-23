@@ -1,8 +1,27 @@
-import { defineConfig, type PluginOption, splitVendorChunkPlugin } from 'vite';
+import { defineConfig, type PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { dependencies } from './package.json';
+
+const vendor = ['react', 'react-router-dom', 'react-dom'];
+
+/**
+ * Generates chunks based on the given dependencies.
+ * Skips over dependencies already included in the 'vendor' chunk.
+ * For more on this approach, see {@link https://sambitsahoo.com/blog/vite-code-splitting-that-works.html Referenced Code}
+ *
+ * @param {Record<string, string>} deps - Dependencies to consider for chunk generation.
+ */
+const renderChunks = (deps: Record<string, string>) => {
+  const chunks = {};
+  Object.keys(deps).forEach((key) => {
+    if (vendor.includes(key)) return;
+    chunks[key] = [key];
+  });
+  return chunks;
+};
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -29,7 +48,6 @@ export default defineConfig(({ mode }) => ({
       },
     }),
     tsconfigPaths(),
-    splitVendorChunkPlugin(), // vendor 청크 분리
     visualizer() as unknown as PluginOption,
 
     /**
@@ -47,17 +65,9 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          // react-router-dom/@remix-run/react-router 모듈은 react-router 이름의 청크로 분리
-          if (
-            id.includes('react-router-dom') ||
-            id.includes('@remix-run') ||
-            id.includes('react-router')
-          ) {
-            return 'react-router';
-          }
-          if (id.includes('lottie')) return 'lottie';
-          if (id.includes('tsparticles')) return 'tsparticles';
+        manualChunks: {
+          vendor, // react, react-router-dom, react-dom 모듈은 vendor 이름의 청크로 분리
+          ...renderChunks(dependencies),
         },
       },
     },

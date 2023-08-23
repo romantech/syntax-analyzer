@@ -1,9 +1,9 @@
 import { Box, BoxProps, HStack } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-const DotGroup = motion(HStack);
-const Dot = motion(Box);
+const DotGroup = m(HStack);
+const Dot = m(Box);
 
 const dotVariants = {
   initial: { y: '0%' },

@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { IconButton, IconButtonProps } from '@chakra-ui/react';
 import { FaAnglesDown } from 'react-icons/fa6';
 
-const MotionIconButton = motion(IconButton);
+const MotionIconButton = m(IconButton);
 
 type ScrollDownButtonProps = Omit<IconButtonProps, 'aria-label'>;
 

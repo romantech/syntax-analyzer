@@ -8,3 +8,4 @@ export { default as LazyImage, type LazyImageProps } from './lazy-image';
 
 export { default as ThemedSpinner } from './themed-spinner';
 export { default as ThreeDotsWave } from './three-dots-wave';
+export { domAnimation } from 'framer-motion';
