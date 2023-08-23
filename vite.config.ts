@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { VitePWA } from 'vite-plugin-pwa';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -28,6 +29,8 @@ export default defineConfig({
       },
     }),
     tsconfigPaths(),
+    visualizer({ open: true }) as unknown as PluginOption,
+
     /**
      * vite-plugin-pwa 플러그인으로 서비스 워커 스크립트 자동 등록
      * 서비스 워커는 웹페이지와 브라우저 사이에서 작동하는 프록시 스크립트
