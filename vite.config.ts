@@ -5,7 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     /**
      * react() 는 vitejs/plugin-react 플러그인의 메인 함수
@@ -29,7 +29,7 @@ export default defineConfig({
       },
     }),
     tsconfigPaths(),
-    visualizer({ open: true }) as unknown as PluginOption,
+    visualizer() as unknown as PluginOption,
 
     /**
      * vite-plugin-pwa 플러그인으로 서비스 워커 스크립트 자동 등록
@@ -39,10 +39,15 @@ export default defineConfig({
      * */
     VitePWA({ registerType: 'autoUpdate' }),
   ],
+  esbuild: {
+    /** 배포 환경에서만 콘솔/디버거 비활성; 참고로 build.minify 기본값은 esbuild */
+    pure: mode === 'production' ? ['console', 'debugger'] : [],
+  },
+
   server: { open: true },
   define: {
     /** Jotai Devtools process is not defined 문제 해결
      * @see https://github.com/jotaijs/jotai-devtools/issues/82#issuecomment-1632818246 */
     'process.platform': null,
   },
-});
+}));
