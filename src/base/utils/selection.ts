@@ -7,6 +7,12 @@ interface SelectionIndicesResult {
   endNode: Nullable<HTMLElement>;
 }
 
+/**
+ * Retrieves the selection indices and nodes within a specified qualified name.
+ *
+ * @param {string} qualifiedName - The qualified name to search for in the HTML elements.
+ * @return {SelectionIndicesResult} - An object containing the beginning and ending indices of the selection, as well as the start and end nodes.
+ */
 export const getSelectionIndices = (
   qualifiedName: string,
 ): SelectionIndicesResult => {
@@ -36,15 +42,27 @@ export const getSelectionIndices = (
   return { begin, end, startNode: startElement, endNode: endElement };
 };
 
-export const clearSelection = () => {
+/**
+ * Clears the current selection in the window.
+ *
+ * @return {void} No return value.
+ */
+export const clearSelection = (): void => {
   const selection = window.getSelection();
   selection?.removeAllRanges();
 };
 
+/**
+ * Finds and returns the nearest element with the specified class name.
+ *
+ * @param {Nullable<HTMLElement>} elementParam - The starting element to search from.
+ * @param {string} className - The class name to search for.
+ * @return {Nullable<HTMLElement>} - The nearest element with the specified class name, or null if not found.
+ */
 export const getNearestElementByClass = (
   elementParam: Nullable<HTMLElement>,
   className: string,
-) => {
+): Nullable<HTMLElement> => {
   let element = elementParam;
   while (element) {
     if (element.classList.contains(className)) return element;

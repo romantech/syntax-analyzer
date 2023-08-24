@@ -5,7 +5,13 @@ import {
   PUNCTUATION_PATTERN,
 } from '@/base/constants';
 
-export const isPunctuation = (token?: string) =>
+/**
+ * Checks if a given token is a punctuation.
+ *
+ * @param {string} token - The token to check.
+ * @return {boolean} True if the token is a punctuation, false otherwise.
+ */
+export const isPunctuation = (token?: string): boolean =>
   Boolean(token?.match(PUNCTUATION_PATTERN));
 
 /** split(/\s+/) : 1개 이상의 연속된 공백을 기준으로 분리 */
@@ -16,13 +22,25 @@ export const tokenizer = (text: string) => {
     .filter(Boolean);
 };
 
-export const tokenJoiner = (tokens: ReturnType<typeof tokenizer>) => {
+/**
+ * Joins an array of tokens into a single string, separating them with spaces.
+ *
+ * @param {ReturnType<typeof tokenizer>} tokens - The array of tokens to be joined.
+ * @return {string} - The joined string.
+ */
+export const tokenJoiner = (tokens: ReturnType<typeof tokenizer>): string => {
   return tokens.reduce((prev, cur) => {
     if (cur.match(NON_WORD_CHAR_PATTERN)) return prev + cur;
     else return prev + ' ' + cur;
   }, '');
 };
 
+/**
+ * Replaces kebab-case with camelCase.
+ *
+ * @param {string} str - The kebab-case string to be converted.
+ * @return {string} The camelCase string.
+ */
 export const kebabToCamel = (str: string) => {
   /**
    * -([a-z]) : -로 시작하고 소문자로 끝나는 문자열
@@ -32,7 +50,13 @@ export const kebabToCamel = (str: string) => {
   return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 };
 
-export const expandAbbreviations = (sentence: string) => {
+/**
+ * Replaces abbreviations in a sentence with their expanded forms.
+ *
+ * @param {string} sentence - The sentence to expand abbreviations in.
+ * @return {string} The sentence with abbreviations expanded.
+ */
+export const expandAbbreviations = (sentence: string): string => {
   return sentence.replace(
     ABBREVIATIONS_PATTERNS,
     (match) => ABBREVIATIONS[match],

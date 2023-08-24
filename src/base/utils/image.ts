@@ -9,10 +9,17 @@ interface ImageOptions {
   quality?: number;
 }
 
+/**
+ * Generates an image URL with ImageKit placeholder transformation parameters.
+ *
+ * @param {string} originalSrc - The original source URL of the image.
+ * @param {ImageOptions} options - Optional parameters for the image transformation.
+ * @return {string} - The transformed image URL with placeholder parameters.
+ */
 export const getImageKitPlaceholder = (
   originalSrc: string,
   options: ImageOptions = {},
-) => {
+): string => {
   const paramMapping: Record<keyof ImageOptions, string> = {
     width: 'w',
     blur: 'bl',

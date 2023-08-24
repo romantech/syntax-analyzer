@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+/**
+ * Generates a function comment for the given function body.
+ *
+ * @return {void} No return value.
+ */
 export const useHideBodyScroll = () => {
   const originalOverflow = useRef('');
 
