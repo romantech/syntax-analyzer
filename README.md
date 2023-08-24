@@ -94,6 +94,7 @@ sequenceDiagram
 4. 자식 세그먼트가 하나도 없을 때: 새로운 세그먼트 생성
 
 아래는 "Global warming is a significant issue" 문장의 간단한 구문 분석 예시입니다.
+
 <img width="2331" alt="syntax-parser-implementation" src="https://github.com/romantech/syntax-analyzer/assets/8604840/41759f01-c8be-49e2-989e-710001e5e152">
 
 # 문장 성분 목록
