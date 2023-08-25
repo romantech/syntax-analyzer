@@ -98,7 +98,7 @@ sequenceDiagram
 
 아래 이미지는 _"Global warming is a significant issue"_ 문장을 기준으로 3-6, 5-6, 4-6 토큰 인덱스 구간에 문장 성분을 추가할 때마다 세그먼트가 어떻게 변화하는지 보여주는 예시입니다.
 
-![syntax-parser-implementation-dark-crop-optimized](https://github.com/romantech/syntax-analyzer/assets/8604840/65147749-8aca-4892-9203-a48192914430)
+![syntax-parser-implementation-dark-optimized](https://github.com/romantech/syntax-analyzer/assets/8604840/4cb5fd1c-8c73-4396-880b-ccdad38a06b2)
 
 # 문장 성분 목록
 영어 문장은 아래 구성 요소를 기준으로 분석되며, 구문 편집기의 태그로도 활용됩니다. 약어와 설명은 편집기의 툴팁으로 표시됩니다. 한 단어는 토큰(token), 두 단어 이상은 유형에 따라 구(phrase) 혹은 절(clause)로 구분합니다. 
