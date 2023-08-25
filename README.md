@@ -6,14 +6,24 @@ Syntax Analyzer는 영어 문장의 다양한 구문(주어, 동사, 목적어, 
 - 백엔드 레포지토리 : https://github.com/romantech/project-server
 
 # 목차
+- [주요 기능](#주요-기능)
 - [사용 스택](#사용-스택)
     - [Frontend](#frontend)
     - [Backend](#backend)
-- [주요 기능](#주요-기능)
 - [분석 데이터 생성 흐름](#분석-데이터-생성-흐름)
 - [구문 분석기 구현 방식](#구문-분석기-구현-방식)
+- [태깅 제약 조건](#태깅-제약-조건)
 - [문장 성분 목록](#문장-성분-목록)
 - [스크린샷](#스크린샷)
+
+# 주요 기능
+
+> [!NOTE]  
+> I'll 같은 축약 표현은 자동으로 풀어서 분석합니다, e.g., I'll → I will
+
+1. 영어 구문 분석 : 주어, 동사, 목적어, 절, 구 등 문장 성분 분석
+2. 영어 구문 편집기 : 30여 가지의 구성 요소 태그를 이용한 문장 구조 시각화
+3. 영어 문장 생성 : 입력한 주제와 연관된 랜덤 문장 생성
 
 # 사용 스택
 
@@ -31,15 +41,6 @@ Syntax Analyzer는 영어 문장의 다양한 구문(주어, 동사, 목적어, 
 - **Framework**: Express with Typescript
 - **Database & Cache**: Redis (using ioredis)
 - **Syntax Analysis**: OpenAI
-
-# 주요 기능
-
-> [!NOTE]  
-> I'll 같은 축약 표현은 자동으로 풀어서 분석합니다, e.g., I'll → I will
-
-1. 영어 구문 분석 : 주어, 동사, 목적어, 절, 구 등 문장 성분 분석
-2. 영어 구문 편집기 : 30여 가지의 구성 요소 태그를 이용한 문장 구조 시각화
-3. 영어 문장 생성 : 입력한 주제와 연관된 랜덤 문장 생성
 
 # 분석 데이터 생성 흐름
 
@@ -99,6 +100,21 @@ sequenceDiagram
 아래 이미지는 _"Global warming is a significant issue"_ 문장을 기준으로 3-6, 5-6, 4-6 토큰 인덱스 구간에 문장 성분을 추가할 때마다 세그먼트가 어떻게 변화하는지 보여주는 예시입니다.
 
 ![syntax-parser-implementation-dark-optimized](https://github.com/romantech/syntax-analyzer/assets/8604840/4cb5fd1c-8c73-4396-880b-ccdad38a06b2)
+
+# 태깅 제약 조건
+
+문장 성분 태깅은 문장의 각 단어나 구/절에 문법적인 역할을 표시하는 작업입니다. 태깅 작업은 기본적으로 단어 단위로 이루어지며, 구/절은 서로 교차할 수 없는 제약이 있습니다. 이미 구조가 형성된 세그먼트를 교차해서 태깅하면 기존 구조를 해체하고 다시 재구성해야 하는 문제가 발생하기 때문입니다. 
+
+예를 들어 "Global warming is a significant issue" 문장에 아래처럼 S, V, O가 태깅된 상태에서 "warming is" 혹은 "is a significant" 범위를 태깅하는 것은 금지합니다. 대신 "Global warming is" 처럼 두 문장 성분을 모두 포함하는 경우는 허용합니다. 
+
+```
+[Global warming] [is] [a significant issue]
+---------------- ---- ---------------------
+       S          V             O
+
+허용 : Global warming is / is a significant issue
+금지 : warming is / is a / is a significant
+```
 
 # 문장 성분 목록
 영어 문장은 아래 구성 요소를 기준으로 분석되며, 구문 편집기의 태그로도 활용됩니다. 약어와 설명은 편집기의 툴팁으로 표시됩니다. 한 단어는 토큰(token), 두 단어 이상은 유형에 따라 구(phrase) 혹은 절(clause)로 구분합니다. 
