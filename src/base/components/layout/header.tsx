@@ -16,6 +16,7 @@ import { BsGithub } from 'react-icons/bs';
 import { matchPath, NavLink, useLocation } from 'react-router-dom';
 
 import { SITE_URLS } from '@/routes/paths';
+import { FiCoffee } from 'react-icons/fi';
 
 const NAV_TABS = [
   {
@@ -84,6 +85,15 @@ export function Header() {
         </Tabs>
         <Spacer />
         <Flex align="center">
+          <Button
+            variant="ghost"
+            as="a"
+            target="_blank"
+            aria-label="Buy me a coffee"
+            href="https://www.buymeacoffee.com/colorfilter"
+          >
+            <Icon as={FiCoffee} boxSize="1.2rem" />
+          </Button>
           <Button
             variant="ghost"
             as="a"
