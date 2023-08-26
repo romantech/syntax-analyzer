@@ -1,4 +1,4 @@
-# 영어 구문 분석기
+# 영어 구문 분석 / 편집기
 
 ![og-image](https://github.com/romantech/syntax-analyzer/assets/8604840/747803a5-7670-4c18-99b8-07c4245b5312)
 
