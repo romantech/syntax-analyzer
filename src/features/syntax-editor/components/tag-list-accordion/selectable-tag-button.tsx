@@ -26,14 +26,14 @@ export default function SelectableTagButton({ constituent }: TagButtonProps) {
   const { ko, desc } = CONSTITUENT_TRANSLATIONS[constituent.label];
   const isSelected = selectedTag?.elementId === constituent.elementId;
   return (
-    <Tooltip label={desc} isDisabled={!isTagInfoMode} openDelay={200}>
+    <Tooltip label={en} isDisabled={!isTagInfoMode} openDelay={200}>
       <Button
         textTransform="capitalize"
         size="sm"
         onClick={() => onTagClick(constituent)}
         colorScheme={isSelected ? 'teal' : 'gray'}
       >
-        {ko}
+        {en}
       </Button>
     </Tooltip>
   );
