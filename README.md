@@ -97,15 +97,15 @@ sequenceDiagram
 3. 시작-끝 범위를 포함하는 자식 세그먼트가 없을 때: 자식 세그먼트를 결합하여 새로운 세그먼트 생성
 4. 자식 세그먼트가 하나도 없을 때: 새로운 세그먼트 생성
 
-아래 이미지는 _"Global warming is a significant issue"_ 문장을 기준으로 3-6, 5-6, 4-6 토큰 인덱스 구간에 문장 성분을 추가할 때마다 세그먼트가 어떻게 변화하는지 보여주는 예시입니다.
+아래 이미지는 `Global warming is a significant issue` 문장을 기준으로 `3-6`, `5-6`, `4-6` 토큰 인덱스 범위에 문장 성분을 추가할 때마다 세그먼트가 어떻게 변화하는지 보여주는 예시입니다.
 
 ![syntax-parser-implementation-dark-optimized](https://github.com/romantech/syntax-analyzer/assets/8604840/4cb5fd1c-8c73-4396-880b-ccdad38a06b2)
 
 # 태깅 제약 조건
 
-문장 성분 태깅은 문장의 각 단어나 구/절에 문법적인 역할을 표시하는 작업입니다. 태깅 작업은 기본적으로 단어 단위로 이루어지며, 구/절은 서로 교차할 수 없는 제약이 있습니다. 이미 구조가 형성된 세그먼트를 교차해서 태깅하면 기존 구조를 해체하고 다시 재구성해야 하는 문제가 발생하기 때문입니다. 
+문장 성분 태깅은 문장의 각 단어나 구/절에 문법적인 역할을 표시하는 작업입니다. 태깅 작업은 기본적으로 단어 단위로 이루어지며, 구/절은 서로 교차할 수 없는 제약을 설정했습니다. 이미 구조가 형성된 세그먼트를 교차 태깅하면 기존 구조를 해체하고 재구성해야 하는 문제가 발생하기 때문입니다. 
 
-예를 들어 "Global warming is a significant issue" 문장에 아래처럼 S, V, O가 태깅된 상태에서 "warming is" 혹은 "is a significant" 범위를 태깅하는 것은 금지합니다. 대신 "Global warming is" 처럼 두 문장 성분을 모두 포함하는 경우는 허용합니다. 
+예를 들어 `Global warming is a significant issue` 문장에 아래처럼 `S`, `V`, `O`가 태깅된 상태에서 `warming is` 혹은 `is a significant` 구간을 태깅하는 것은 금지합니다. 대신 `Global warming is` 처럼 두 문장 성분을 모두 포함하는 구간은 허용합니다.
 
 ```
 [Global warming] [is] [a significant issue]
