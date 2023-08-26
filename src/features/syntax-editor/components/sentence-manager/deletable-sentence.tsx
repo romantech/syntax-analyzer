@@ -44,9 +44,9 @@ export default function DeletableSentence({
           )}
         </HStack>
         <ConfirmPopover
-          headerText="선택한 문장을 삭제하시겠습니까?"
+          headerText="Do you want to delete the selected sentence?"
           onConfirm={onDelete}
-          confirmText="삭제"
+          confirmText="Delete"
         >
           {({ onOpen }) => (
             <DeleteButtonIcon onClick={onOpen} hidden={hideDeleteButton} />
