@@ -6,9 +6,9 @@ import {
 } from '@/features/syntax-analyzer';
 
 export const HELPER_MESSAGES = {
-  ENGLISH_OR_SYMBOL: '영어 혹은 문장 부호만 입력할 수 있어요',
-  MIN_WORDS: `최소 ${MIN_SENTENCE_WORDS} 단어로 이루어진 문장을 입력해 주세요`,
-  MAX_LENGTH: `최대 ${MAX_SENTENCE_LENGTH}자까지만 입력할 수 있어요`,
+  ENGLISH_OR_SYMBOL: 'Only English or punctuation can be entered',
+  MIN_WORDS: `Please enter a sentence consisting of at least ${MIN_SENTENCE_WORDS} words`,
+  MAX_LENGTH: `You can only enter up to ${MAX_SENTENCE_LENGTH} characters`,
 } as const;
 
 export const englishInputSchema = yup
