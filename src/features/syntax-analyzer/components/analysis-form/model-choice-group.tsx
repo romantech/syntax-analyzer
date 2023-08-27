@@ -6,22 +6,26 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { AnalysisFormValues } from '@/features/syntax-analyzer';
+import {
+  AnalysisFormValues,
+  GPT_3_DECREMENT_COUNT,
+  GPT_4_DECREMENT_COUNT,
+} from '@/features/syntax-analyzer';
 import { Control, Controller } from 'react-hook-form';
 
 const MODEL_FIELDS = [
   {
-    value: 'gpt-4',
-    label: 'gpt-4',
-    desc: '분석 속도는 느리지만 정확도는 높아요',
-    count: 3,
+    value: 'gpt-3.5-turbo',
+    label: 'GPT-3.5 (Fine-tuned)',
+    desc: '정확도는 GPT 4와 비슷하거나 다소 낮지만 속도가 빨라요',
+    count: GPT_3_DECREMENT_COUNT,
     recommend: true,
   },
   {
-    value: 'gpt-3.5-turbo',
-    label: 'gpt-3.5',
-    desc: '분석 속도는 빠르지만 정확도는 낮아요',
-    count: 1,
+    value: 'gpt-4',
+    label: 'GPT-4',
+    desc: '정확도는 높지만 속도가 느려요',
+    count: GPT_4_DECREMENT_COUNT,
     recommend: false,
   },
 ];
@@ -55,9 +59,7 @@ export default function ModelChoiceGroup({
                   value={field.value}
                   isDisabled={remainingCount < field.count}
                 >
-                  <Text as="span" textTransform="uppercase">
-                    {field.label}
-                  </Text>
+                  <Text as="span">{field.label}</Text>
                 </Radio>
                 <Badge
                   fontSize={10}

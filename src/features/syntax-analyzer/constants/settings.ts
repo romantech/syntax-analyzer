@@ -1,5 +1,8 @@
 export const DAILY_ANALYSIS_LIMIT = 10;
 
+export const GPT_4_DECREMENT_COUNT = 5;
+export const GPT_3_DECREMENT_COUNT = 1;
+
 export const MAX_TOPIC_ADDITION = 3;
 export const DAILY_SENTENCE_LIMIT = 20;
 

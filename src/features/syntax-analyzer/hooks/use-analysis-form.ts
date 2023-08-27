@@ -12,7 +12,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { getSyntaxEditorPath } from '@/routes';
 import { expandAbbreviations, tokenizer } from '@/base';
 import { useDisclosure, useToast, UseToastOptions } from '@chakra-ui/react';
-import { useEffect } from 'react';
 import { updateAnalysisMetaData } from '@/features/syntax-editor';
 
 export type AnalysisModel = 'gpt-3.5-turbo' | 'gpt-4';
@@ -45,6 +44,7 @@ export const useAnalysisForm = () => {
 
   const formResults = useForm<AnalysisFormValues>({
     resolver: yupResolver(createAnalysisFormSchema),
+    defaultValues: createAnalysisFormSchema.cast({}),
   });
 
   const mutationResults = useCreateAnalysisMutation({
@@ -59,12 +59,8 @@ export const useAnalysisForm = () => {
     meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });
 
-  const { getValues, handleSubmit, reset } = formResults;
+  const { getValues, handleSubmit } = formResults;
   const { mutate } = mutationResults;
-
-  useEffect(() => {
-    reset(getDefaultValues(remainingCount));
-  }, [remainingCount, reset]);
 
   const onSubmitConfirm = () => {
     const { model, sentence } = getValues();
@@ -85,8 +81,3 @@ export const useAnalysisForm = () => {
     ...mutationResults,
   };
 };
-
-const getDefaultValues = (count: number): AnalysisFormValues => ({
-  sentence: '',
-  model: count > 2 ? 'gpt-4' : 'gpt-3.5-turbo',
-});
