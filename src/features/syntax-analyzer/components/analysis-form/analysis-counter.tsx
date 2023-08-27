@@ -12,6 +12,7 @@ import {
 import { PropsWithChildren } from 'react';
 import {
   DAILY_ANALYSIS_LIMIT,
+  GPT_4_DECREMENT_COUNT,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 import { CenteredDivider } from '@/base';
@@ -23,7 +24,7 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
   });
 
   const countTitle = `남은 분석 횟수 ${count}회`;
-  const limitDesc = `하루 최대 ${DAILY_ANALYSIS_LIMIT}회까지 분석할 수 있어요 (GPT-4 모델은 요청당 3회 차감)`;
+  const limitDesc = `하루 최대 ${DAILY_ANALYSIS_LIMIT}회까지 분석할 수 있어요 (GPT-4 모델은 요청당 ${GPT_4_DECREMENT_COUNT}회 차감)`;
 
   return (
     <AnalysisCounterBox {...stackProps}>

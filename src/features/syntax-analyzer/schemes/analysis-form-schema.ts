@@ -10,6 +10,6 @@ export const createAnalysisFormSchema = yup.object({
   model: yup
     .mixed<AnalysisModel>()
     .oneOf(['gpt-3.5-turbo', 'gpt-4'])
-    .required(),
-  sentence: englishSentenceSchema.required(),
+    .default('gpt-3.5-turbo'),
+  sentence: englishSentenceSchema.ensure(),
 });
