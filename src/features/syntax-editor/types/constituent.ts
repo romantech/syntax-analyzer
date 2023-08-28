@@ -15,12 +15,12 @@ export type ConstituentColors = {
 };
 
 export type TConstituent = {
-  id: number; // A random 9-digit number
-  elementId: number; // Constituent ID with a fixed value
-  label: string; // Grammatical constituent name in lowercase
-  abbreviation: string; // Abbreviated constituent name in lowercase
-  type: ConstituentType; // Constituent type
-  comment?: string; // Optional comment
+  id: number; // Random 9-digit number
+  elementId: number; // Constituent ID
+  label: string; // Grammatical label, e.g., "subject"
+  abbreviation: string; // Abbreviation, e.g., "s"
+  type: ConstituentType; // Type of constituent
+  comment?: string; // Optional commentary
 };
 
 export type ConstituentWithoutId = Omit<TConstituent, 'id'>;

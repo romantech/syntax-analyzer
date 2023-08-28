@@ -4,20 +4,20 @@ import { ISODateString } from '@/base';
 export type AnalysisSource = 'user' | 'sample';
 
 export type TSegment = {
-  id: number; // A random 9-digit number
-  begin: number; // Start token index
-  end: number; // End token index
-  constituents: TConstituent[]; // Can be empty
-  children: TSegment[]; // Can be empty
+  id: number; // Random 9-digit number
+  begin: number; // Start index
+  end: number; // End  index
+  constituents: TConstituent[]; // Segment constituents
+  children: TSegment[]; // Sub-segments
 };
 
 export type TAnalysis = {
-  id: string; // A random string of 21 bytes
-  source: AnalysisSource; // Source of the sentence
-  createdAt: ISODateString; // Timestamp in ISO 8601 format
+  id: string; // Random 21-byte string
+  source: AnalysisSource; // Data source
+  createdAt: ISODateString; // ISO 8601 timestamp
   sentence: string[]; // Tokenized sentence
-  rootSegment: TSegment; // The array contains only a single root segment
-  isAnalyzedByGPT: boolean; // Whether the AI has analyzed it or not
+  rootSegment: TSegment; // Root segment
+  isAnalyzedByGPT: boolean; // AI-analyzed status
 };
 
 export type CombinedAnalysisList = { [key in AnalysisSource]: TAnalysis[] };
