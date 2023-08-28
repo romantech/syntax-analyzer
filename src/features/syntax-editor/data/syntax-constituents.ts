@@ -154,6 +154,12 @@ export const SYNTAX_CONSTITUENTS: ConstituentWithoutId[] = [
     abbreviation: 'ind.cl',
     type: 'clause',
   },
+  {
+    elementId: 31,
+    label: 'verb phrase',
+    abbreviation: 'vrb.phr',
+    type: 'phrase',
+  },
 ];
 
 type ConstituentGroup = { [key in ConstituentType]: ConstituentWithoutId[] };

@@ -118,4 +118,8 @@ export const CONSTITUENT_TRANSLATIONS: Record<
     ko: '독립절',
     desc: '다른 절에 의존하지 않고 독립적으로 완전한 의미를 가진 절',
   },
+  'verb phrase': {
+    ko: '동사구',
+    desc: '문장 내에서 동사의 역할을 하는 구문',
+  },
 };
