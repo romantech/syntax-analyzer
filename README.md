@@ -84,7 +84,7 @@ sequenceDiagram
             end
 
             S->>R: Update request count
-            Note over S,R: GPT 3.5 reduced by 1#59; GPT 4 reduced by 3 #32;#32;#32;
+            Note over S,R: GPT 3.5 reduced by 1#59; GPT 4 reduced by 5 #32;#32;#32;
 
             S-->>C: 200 OK with analysis data
             deactivate S
