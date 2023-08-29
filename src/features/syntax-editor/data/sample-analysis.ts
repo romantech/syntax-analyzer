@@ -67,16 +67,16 @@ const sample1: TAnalysis = {
             constituents: [],
             children: [
               {
-                id: 4992863643,
+                id: 3477384577,
                 begin: 3,
                 end: 6,
                 constituents: [
                   {
-                    elementId: 4,
-                    label: 'object',
-                    abbreviation: 'o',
+                    elementId: 8,
+                    label: 'complement',
+                    abbreviation: 'c',
                     type: 'token-group',
-                    id: 7485815545,
+                    id: 7655769284,
                   },
                 ],
                 children: [],
@@ -102,7 +102,7 @@ const sample1: TAnalysis = {
                     ],
                     children: [
                       {
-                        id: 7514833777,
+                        id: 2248311719,
                         begin: 6,
                         end: 7,
                         constituents: [],
@@ -141,18 +141,10 @@ const sample1: TAnalysis = {
                     ],
                   },
                   {
-                    id: 8449212612,
+                    id: 1836575184,
                     begin: 11,
                     end: 12,
-                    constituents: [
-                      {
-                        elementId: 4,
-                        label: 'object',
-                        abbreviation: 'o',
-                        type: 'token',
-                        id: 1484187479,
-                      },
-                    ],
+                    constituents: [],
                     children: [],
                   },
                 ],
@@ -166,147 +158,167 @@ const sample1: TAnalysis = {
   isAnalyzedByGPT: false,
 };
 const sample2: TAnalysis = {
-  id: '925XgvM_A2tpAw5vSc5jv',
+  id: '06Y2m64EK_Ti554mgq8An',
   source: 'sample',
   sentence: [
-    'She',
-    'learned',
-    'to',
-    'play',
-    'the',
-    'piano',
-    'at',
-    'a',
-    'young',
-    'age',
+    'The',
+    'idea',
+    'that',
+    'she',
+    'proposed',
+    'was',
+    'innovative',
     '.',
   ],
   createdAt: '2023-05-09T23:08:08.000Z',
   rootSegment: {
-    id: 5722716962,
+    id: 6274535247,
     begin: 0,
-    end: 11,
+    end: 8,
     constituents: [],
     children: [
       {
-        id: 8776534114,
+        id: 7791173368,
         begin: 0,
-        end: 1,
+        end: 5,
         constituents: [
           {
-            elementId: 1,
-            label: 'subject',
-            abbreviation: 's',
-            type: 'token',
-            id: 2649578475,
+            elementId: 16,
+            label: 'noun phrase',
+            abbreviation: 'n.phr',
+            type: 'phrase',
+            id: 7145336918,
           },
         ],
-        children: [],
-      },
-      {
-        id: 2627854792,
-        begin: 1,
-        end: 11,
-        constituents: [],
         children: [
           {
-            id: 1765953692,
-            begin: 1,
+            id: 8649411294,
+            begin: 0,
             end: 2,
             constituents: [
               {
-                elementId: 2,
-                label: 'verb',
-                abbreviation: 'v',
-                type: 'token',
-                id: 6716283875,
+                elementId: 1,
+                label: 'subject',
+                abbreviation: 's',
+                type: 'token-group',
+                id: 8375662743,
               },
             ],
             children: [],
           },
           {
-            id: 1968414591,
+            id: 5182495111,
             begin: 2,
-            end: 11,
-            constituents: [],
+            end: 5,
+            constituents: [
+              {
+                elementId: 28,
+                label: 'relative clause',
+                abbreviation: 'rel.cl',
+                type: 'clause',
+                id: 5331242185,
+              },
+            ],
             children: [
               {
-                id: 9514746682,
+                id: 9914312429,
                 begin: 2,
+                end: 3,
+                constituents: [],
+                children: [],
+              },
+              {
+                id: 3516616638,
+                begin: 3,
+                end: 4,
+                constituents: [
+                  {
+                    elementId: 1,
+                    label: 'subject',
+                    abbreviation: 's',
+                    type: 'token',
+                    id: 1264731896,
+                  },
+                ],
+                children: [],
+              },
+              {
+                id: 4959738335,
+                begin: 4,
+                end: 5,
+                constituents: [
+                  {
+                    elementId: 2,
+                    label: 'verb',
+                    abbreviation: 'v',
+                    type: 'token',
+                    id: 2567146467,
+                  },
+                ],
+                children: [],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 9734175418,
+        begin: 5,
+        end: 8,
+        constituents: [],
+        children: [
+          {
+            id: 9932347252,
+            begin: 5,
+            end: 7,
+            constituents: [
+              {
+                elementId: 18,
+                label: 'verb phrase',
+                abbreviation: 'v.phr',
+                type: 'phrase',
+                id: 2112542757,
+              },
+            ],
+            children: [
+              {
+                id: 6345522913,
+                begin: 5,
                 end: 6,
                 constituents: [
                   {
-                    elementId: 21,
-                    label: 'infinitive phrase',
-                    abbreviation: 'inf.phr',
-                    type: 'phrase',
-                    id: 3224568742,
+                    elementId: 2,
+                    label: 'verb',
+                    abbreviation: 'v',
+                    type: 'token',
+                    id: 8211364863,
                   },
                 ],
-                children: [
-                  {
-                    id: 2162278679,
-                    begin: 2,
-                    end: 4,
-                    constituents: [
-                      {
-                        elementId: 10,
-                        label: 'to-infinitive',
-                        abbreviation: 'to-inf',
-                        type: 'token-group',
-                        id: 2967282866,
-                      },
-                    ],
-                    children: [],
-                  },
-                  {
-                    id: 8862553615,
-                    begin: 4,
-                    end: 6,
-                    constituents: [
-                      {
-                        elementId: 6,
-                        label: 'direct object',
-                        abbreviation: 'd.o.',
-                        type: 'token-group',
-                        id: 1181227913,
-                      },
-                    ],
-                    children: [],
-                  },
-                ],
+                children: [],
               },
               {
-                id: 9517942192,
+                id: 4482922447,
                 begin: 6,
-                end: 11,
-                constituents: [],
-                children: [
+                end: 7,
+                constituents: [
                   {
-                    id: 9428524589,
-                    begin: 6,
-                    end: 10,
-                    constituents: [
-                      {
-                        elementId: 15,
-                        label: 'prepositional phrase',
-                        abbreviation: 'prp.phr',
-                        type: 'phrase',
-                        id: 7927719169,
-                      },
-                    ],
-                    children: [],
-                  },
-                  {
-                    id: 4983968383,
-                    begin: 10,
-                    end: 11,
-                    constituents: [],
-                    children: [],
+                    elementId: 8,
+                    label: 'complement',
+                    abbreviation: 'c',
+                    type: 'token',
+                    id: 1199396999,
                   },
                 ],
+                children: [],
               },
             ],
+          },
+          {
+            id: 4984882489,
+            begin: 7,
+            end: 8,
+            constituents: [],
+            children: [],
           },
         ],
       },
@@ -339,16 +351,16 @@ const sample3: TAnalysis = {
     constituents: [],
     children: [
       {
-        id: 3613576812,
+        id: 5616955679,
         begin: 0,
         end: 2,
         constituents: [
           {
-            elementId: 20,
-            label: 'gerund phrase',
-            abbreviation: 'g.phr',
-            type: 'phrase',
-            id: 4743266174,
+            elementId: 26,
+            label: 'adverbial clause',
+            abbreviation: 'adv.cl',
+            type: 'clause',
+            id: 8851721763,
           },
         ],
         children: [],
@@ -360,7 +372,7 @@ const sample3: TAnalysis = {
         constituents: [],
         children: [
           {
-            id: 3614237127,
+            id: 5319341826,
             begin: 2,
             end: 3,
             constituents: [],
@@ -372,11 +384,11 @@ const sample3: TAnalysis = {
             end: 11,
             constituents: [
               {
-                elementId: 28,
-                label: 'relative clause',
-                abbreviation: 'rel.cl',
+                elementId: 30,
+                label: 'independent clause',
+                abbreviation: 'ind.cl',
                 type: 'clause',
-                id: 4976265783,
+                id: 6688563755,
               },
             ],
             children: [
@@ -416,16 +428,16 @@ const sample3: TAnalysis = {
                 end: 11,
                 constituents: [
                   {
-                    elementId: 4,
-                    label: 'object',
-                    abbreviation: 'o',
+                    elementId: 6,
+                    label: 'direct object',
+                    abbreviation: 'd.o.',
                     type: 'token-group',
-                    id: 6746351949,
+                    id: 7169222875,
                   },
                 ],
                 children: [
                   {
-                    id: 6623273385,
+                    id: 7786767711,
                     begin: 5,
                     end: 7,
                     constituents: [],
@@ -444,14 +456,37 @@ const sample3: TAnalysis = {
                         id: 9434458545,
                       },
                     ],
-                    children: [],
+                    children: [
+                      {
+                        id: 7495248359,
+                        begin: 7,
+                        end: 8,
+                        constituents: [],
+                        children: [],
+                      },
+                      {
+                        id: 4884362565,
+                        begin: 8,
+                        end: 11,
+                        constituents: [
+                          {
+                            elementId: 15,
+                            label: 'prepositional phrase',
+                            abbreviation: 'prp.phr',
+                            type: 'phrase',
+                            id: 8787621813,
+                          },
+                        ],
+                        children: [],
+                      },
+                    ],
                   },
                 ],
               },
             ],
           },
           {
-            id: 6174276882,
+            id: 1893881529,
             begin: 11,
             end: 12,
             constituents: [],
