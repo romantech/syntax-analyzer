@@ -7,7 +7,6 @@ import {
   type AccordionProps,
   Heading,
   HStack,
-  List,
   Text,
   Wrap,
   WrapItem,
@@ -21,17 +20,17 @@ import { groupedConstituentsByType } from '@/features/syntax-editor/data';
 const CONSTITUENT_CATEGORIES = [
   {
     label: 'general',
-    desc: '주어/동사 등 태그',
+    desc: '주어/동사/목적어 등',
     constituents: groupedConstituentsByType.token,
   },
   {
     label: 'phrase',
-    desc: '전치사구/동명사구 등 태그',
+    desc: '전치사구/동명사구 등',
     constituents: groupedConstituentsByType.phrase,
   },
   {
     label: 'clause',
-    desc: '독립절/의존절 등 태그',
+    desc: '독립절/종속절 등',
     constituents: groupedConstituentsByType.clause,
   },
 ];
