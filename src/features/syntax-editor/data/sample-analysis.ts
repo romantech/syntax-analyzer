@@ -791,7 +791,7 @@ const sample5: TAnalysis = {
                 ],
                 children: [
                   {
-                    id: 4791528438,
+                    id: 6423763828,
                     begin: 2,
                     end: 4,
                     constituents: [],
@@ -956,16 +956,16 @@ const sample5: TAnalysis = {
                             children: [],
                           },
                           {
-                            id: 7445192987,
+                            id: 5297411718,
                             begin: 11,
                             end: 12,
                             constituents: [
                               {
-                                elementId: 4,
-                                label: 'object',
-                                abbreviation: 'o',
+                                elementId: 8,
+                                label: 'complement',
+                                abbreviation: 'c',
                                 type: 'token',
-                                id: 8745354555,
+                                id: 1369534737,
                               },
                             ],
                             children: [],
@@ -975,7 +975,7 @@ const sample5: TAnalysis = {
                     ],
                   },
                   {
-                    id: 3118983541,
+                    id: 7592571375,
                     begin: 12,
                     end: 13,
                     constituents: [],
