@@ -41,7 +41,6 @@ export default function SaveButton() {
     <ConfirmPopover
       onConfirm={onSave}
       headerText="현재 태깅 내용을 저장하시겠습니까?"
-      gutter={-18}
     >
       {({ onOpen, isOpen }) => (
         <Tooltip

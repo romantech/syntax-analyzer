@@ -16,7 +16,6 @@ export default function ResetButton() {
     <ConfirmPopover
       onConfirm={initializer}
       headerText="저장 상태로 초기화 하시겠습니까?"
-      gutter={-18}
     >
       {({ onOpen, isOpen }) => (
         <Tooltip

@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ButtonGroup,
   Popover,
@@ -39,7 +40,9 @@ export default function ConfirmPopover({
 
   return (
     <Popover isOpen={isOpen} onClose={onClose} {...popoverProps}>
-      <PopoverTrigger>{children({ onOpen, isOpen })}</PopoverTrigger>
+      <PopoverTrigger>
+        <Box>{children({ onOpen, isOpen })}</Box>
+      </PopoverTrigger>
       <Portal>
         <PopoverContent w="fit-content" minW={220}>
           <PopoverArrow />
