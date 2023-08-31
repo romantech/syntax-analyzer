@@ -184,6 +184,12 @@ export const SYNTAX_CONSTITUENTS: ConstituentWithoutId[] = [
     abbreviation: 'ind.cl',
     type: 'clause',
   },
+  {
+    elementId: 31,
+    label: 'adverb',
+    abbreviation: 'adv',
+    type: 'token',
+  },
 ];
 
 type ConstituentGroup = { [key in ConstituentType]: ConstituentWithoutId[] };

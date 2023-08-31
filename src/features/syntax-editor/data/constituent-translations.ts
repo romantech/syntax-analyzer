@@ -127,4 +127,8 @@ export const CONSTITUENT_TRANSLATIONS: Record<
     ko: '독립절',
     desc: '독립적으로 완전한 의미를 가진 절',
   },
+  adverb: {
+    ko: '부사',
+    desc: '동사, 형용사, 부사를 수식하는 단어',
+  },
 };
