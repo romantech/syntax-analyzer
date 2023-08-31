@@ -78,8 +78,8 @@ export const SYNTAX_CONSTITUENTS: ConstituentWithoutId[] = [
   },
   {
     elementId: 13,
-    label: 'coordinating conjunction',
-    abbreviation: 'co.t',
+    label: 'conjunction',
+    abbreviation: 'conj',
     type: 'token',
   },
   {

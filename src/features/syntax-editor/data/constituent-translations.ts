@@ -44,7 +44,7 @@ export const CONSTITUENT_TRANSLATIONS: Record<
     desc: '목적어를 설명하거나 보완하는 단어나 구',
   },
   'to-infinitive': {
-    ko: 'to부정사',
+    ko: 'to 부정사',
     desc: "'to'와 함께 사용되는 동사의 기본형",
   },
   gerund: {
@@ -55,9 +55,9 @@ export const CONSTITUENT_TRANSLATIONS: Record<
     ko: '분사',
     desc: '동사의 과거 분사나 현재 분사 형태',
   },
-  'coordinating conjunction': {
-    ko: '등위 접속사',
-    desc: '동일한 문법적 가치를 가진 구나 절을 연결하는 접속사',
+  conjunction: {
+    ko: '접속사',
+    desc: '문법적으로 연결하는 단어',
   },
   'participle phrase': {
     ko: '분사구',

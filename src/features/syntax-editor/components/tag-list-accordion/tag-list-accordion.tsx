@@ -56,7 +56,7 @@ export default function TagListAccordion({
             <AccordionIcon />
           </AccordionButton>
 
-          <AccordionPanel maxW="container.lg">
+          <AccordionPanel>
             <Wrap spacing={2}>
               {category.constituents.map((constituent) => (
                 <WrapItem key={constituent.label}>

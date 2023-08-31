@@ -28,7 +28,6 @@ export default function SelectableTagButton({ constituent }: TagButtonProps) {
   return (
     <Tooltip label={desc} isDisabled={!isTagInfoMode} openDelay={200}>
       <Button
-        textTransform="capitalize"
         size="sm"
         onClick={() => onTagClick(constituent)}
         colorScheme={isSelected ? 'teal' : 'gray'}
