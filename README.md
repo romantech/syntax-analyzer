@@ -44,7 +44,7 @@ Syntax Analyzer는 영어 문장의 다양한 구문(주어, 동사, 목적어, 
 
 - **Framework**: Express with Typescript
 - **Database & Cache**: Redis (using ioredis)
-- **Syntax Analysis**: OpenAI
+- **Syntax Analysis**: OpenAI / LangChain
 
 # 분석 데이터 생성 흐름
 
