@@ -3,6 +3,7 @@ import { IconButton, Tooltip, useToast } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
   AnalysisPathParams,
+  CONTROL_OPEN_POPUP_DELAY,
   isSegmentTouchedAtom,
   SAVE_SEGMENT_DELAY,
   SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
@@ -43,7 +44,12 @@ export default function SaveButton() {
       gutter={-18}
     >
       {({ onOpen, isOpen }) => (
-        <Tooltip label="태깅 저장" closeOnPointerDown isDisabled={isOpen}>
+        <Tooltip
+          label="태깅 저장"
+          closeOnPointerDown
+          isDisabled={isOpen}
+          openDelay={CONTROL_OPEN_POPUP_DELAY}
+        >
           <IconButton
             variant="solid"
             aria-label="Save your tagging result"

@@ -1,5 +1,6 @@
 import { useAtom, useAtomValue } from 'jotai';
 import {
+  CONTROL_OPEN_POPUP_DELAY,
   isDisableDeleteButtonAtom,
   toggleDeleteModeActionAtom,
 } from '@/features/syntax-editor';
@@ -11,7 +12,7 @@ export default function DeleteButton() {
   const isDisableDeleteButton = useAtomValue(isDisableDeleteButtonAtom);
 
   return (
-    <Tooltip label="태그 삭제">
+    <Tooltip label="태그 삭제" openDelay={CONTROL_OPEN_POPUP_DELAY}>
       <IconButton
         variant="solid"
         colorScheme={isDeleteMode ? 'teal' : 'gray'}

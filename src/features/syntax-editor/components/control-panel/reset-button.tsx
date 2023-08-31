@@ -1,6 +1,7 @@
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 import {
+  CONTROL_OPEN_POPUP_DELAY,
   isSegmentTouchedAtom,
   useSyntaxEditorInitializer,
 } from '@/features/syntax-editor';
@@ -22,6 +23,7 @@ export default function ResetButton() {
           label="저장 상태로 초기화"
           closeOnPointerDown
           isDisabled={isOpen}
+          openDelay={CONTROL_OPEN_POPUP_DELAY}
         >
           <IconButton
             variant="solid"

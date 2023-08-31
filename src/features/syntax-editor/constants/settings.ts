@@ -1,4 +1,5 @@
 export const INVALID_POPUP_DELAY = 800;
+export const CONTROL_OPEN_POPUP_DELAY = 600;
 
 export const DEFAULT_TAG_INFO_MODE = true;
 export const DEFAULT_ABBR_INFO_MODE = true;
