@@ -63,15 +63,27 @@ module.exports = {
     'import/order': [
       'warn',
       {
+        // 그룹 순서 지정
         groups: [
           'builtin', // Built-in imports go first
           'external', // External imports
           'internal', // Absolute imports
-          ['sibling', 'parent'], // Relative imports from siblings and parents can mix
+          ['parent', 'sibling'], // Relative imports from siblings and parents can mix
           'index', // index imports
-          'unknown', // unknown
+          'object',
+          'type',
         ],
         'newlines-between': 'always',
+        // 패턴으로 세부적인 순서 지정
+        pathGroups: [
+          {
+            pattern: '{react,react-dom/*}',
+            group: 'external',
+            position: 'before',
+          },
+        ],
+        // 리액트 패키지는 external 그룹에서 알파벳 순이 아닌 상단에 위치시키기 위해 예외 처리
+        pathGroupsExcludedImportTypes: ['react'],
         alphabetize: { order: 'asc', caseInsensitive: true },
       },
     ],
