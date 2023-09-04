@@ -50,7 +50,13 @@ module.exports = {
     'react/prop-types': 'off',
     'no-unused-expressions': 'warn',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_', // _로 시작하는 인자 무시
+        varsIgnorePattern: '^_', // _로 시작하는 변수 무시
+      },
+    ],
 
     /** import 정렬 관련 설정 */
     'import/no-unresolved': 'error',
