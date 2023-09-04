@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+
 import {
   Box,
   FormErrorMessage,
@@ -11,7 +13,6 @@ import {
   ListItem,
 } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { forwardRef } from 'react';
 import { BsMagic } from 'react-icons/bs';
 import { PiNotePencil, PiTextTBold } from 'react-icons/pi';
 import { RiEnglishInput } from 'react-icons/ri';

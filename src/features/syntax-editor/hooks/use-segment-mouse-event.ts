@@ -1,6 +1,7 @@
+import { MouseEvent, useRef, useState } from 'react';
+
 import { useColorMode } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { MouseEvent, useRef, useState } from 'react';
 
 import { getNearestElementByClass } from '@/base';
 import {

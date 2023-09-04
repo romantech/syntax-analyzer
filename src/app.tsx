@@ -1,6 +1,7 @@
+import { Suspense } from 'react';
+
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { LazyMotion } from 'framer-motion';
-import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Outlet } from 'react-router-dom';
 

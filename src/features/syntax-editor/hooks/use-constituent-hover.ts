@@ -1,6 +1,7 @@
+import { MouseEvent } from 'react';
+
 import { useAtomValue, useSetAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
-import { MouseEvent } from 'react';
 
 import { getNearestElementByClass, MouseEventHandlers } from '@/base';
 import {

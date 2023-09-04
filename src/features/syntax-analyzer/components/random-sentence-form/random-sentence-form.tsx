@@ -1,5 +1,6 @@
-import { HStack, Input, Stack, StackProps } from '@chakra-ui/react';
 import { Suspense } from 'react';
+
+import { HStack, Input, Stack, StackProps } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
 
 import { CenteredDivider } from '@/base';

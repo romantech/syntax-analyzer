@@ -1,5 +1,6 @@
-import { Box, HStack, ScaleFade, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
+
+import { Box, HStack, ScaleFade, Stack } from '@chakra-ui/react';
 
 import { CenteredDivider, Notice, useIsMounted } from '@/base';
 import {

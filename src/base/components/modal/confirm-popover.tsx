@@ -1,3 +1,5 @@
+import { MouseEventHandler, ReactNode } from 'react';
+
 import {
   Box,
   Button,
@@ -12,7 +14,6 @@ import {
   Portal,
   useDisclosure,
 } from '@chakra-ui/react';
-import { MouseEventHandler, ReactNode } from 'react';
 
 import { VoidFunc } from '@/base';
 

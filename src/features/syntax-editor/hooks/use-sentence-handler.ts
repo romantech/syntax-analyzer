@@ -1,5 +1,6 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { MouseEvent } from 'react';
+
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { clearSelection, MouseEventHandlers } from '@/base';
 import {

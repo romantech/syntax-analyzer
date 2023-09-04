@@ -1,5 +1,6 @@
-import { AspectRatio, AspectRatioProps, Image } from '@chakra-ui/react';
 import { Fragment, useState } from 'react';
+
+import { AspectRatio, AspectRatioProps, Image } from '@chakra-ui/react';
 
 export interface LazyImageProps extends AspectRatioProps {
   src: string;

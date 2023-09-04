@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import {
   Highlight,
   SlideFade,
@@ -8,7 +10,6 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useIsFetching } from '@tanstack/react-query';
-import { useEffect } from 'react';
 
 import { RANDOM_SENTENCE_BASE_KEY } from '@/features/syntax-analyzer';
 import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor';

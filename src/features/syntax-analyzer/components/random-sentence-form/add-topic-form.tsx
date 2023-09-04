@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import {
   Button,
   HStack,
@@ -11,7 +13,6 @@ import {
   PopoverContent,
   StackProps,
 } from '@chakra-ui/react';
-import { useRef } from 'react';
 import { SubmitHandler, useFormContext } from 'react-hook-form';
 import { CiShoppingTag } from 'react-icons/ci';
 import { ValidationError } from 'yup';

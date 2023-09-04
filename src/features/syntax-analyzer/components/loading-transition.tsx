@@ -1,5 +1,6 @@
-import { Stack, StackProps } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react';
+
+import { Stack, StackProps } from '@chakra-ui/react';
 
 interface LoadingFadeProps extends StackProps {
   isLoading: boolean;

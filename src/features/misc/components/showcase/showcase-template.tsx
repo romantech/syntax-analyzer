@@ -1,3 +1,5 @@
+import { FunctionComponent } from 'react';
+
 import {
   Flex,
   FlexProps,
@@ -7,7 +9,6 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { FunctionComponent } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { LazyImage, LazyImageProps } from '@/base';

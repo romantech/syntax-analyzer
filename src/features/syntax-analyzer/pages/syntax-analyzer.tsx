@@ -1,6 +1,7 @@
+import { Suspense } from 'react';
+
 import { Box, HStack } from '@chakra-ui/react';
 import { useIsMutating } from '@tanstack/react-query';
-import { Suspense } from 'react';
 
 import { CenteredDivider, Layout } from '@/base';
 import {

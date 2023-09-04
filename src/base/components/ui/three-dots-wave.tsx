@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
+
 import { Box, BoxProps, HStack } from '@chakra-ui/react';
 import { m } from 'framer-motion';
-import { useEffect, useState } from 'react';
 
 const DotGroup = m(HStack);
 const Dot = m(Box);

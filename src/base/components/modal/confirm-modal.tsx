@@ -1,3 +1,5 @@
+import { ReactNode, useRef } from 'react';
+
 import {
   AlertDialog,
   AlertDialogBody,
@@ -8,7 +10,6 @@ import {
   AlertDialogOverlay,
   Button,
 } from '@chakra-ui/react';
-import { ReactNode, useRef } from 'react';
 
 interface ConfirmModalProps {
   onConfirm: () => void;

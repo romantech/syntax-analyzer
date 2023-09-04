@@ -1,6 +1,7 @@
+import { RefObject, useEffect } from 'react';
+
 import { useBoolean } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { RefObject, useEffect } from 'react';
 
 import {
   calculateNestingLevel,

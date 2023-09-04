@@ -1,3 +1,5 @@
+import { PropsWithChildren } from 'react';
+
 import {
   Box,
   CircularProgress,
@@ -9,7 +11,6 @@ import {
   type StackProps,
   Text,
 } from '@chakra-ui/react';
-import { PropsWithChildren } from 'react';
 
 import { CenteredDivider } from '@/base';
 import {

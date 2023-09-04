@@ -1,3 +1,5 @@
+import { PropsWithChildren } from 'react';
+
 import {
   Box,
   Button,
@@ -8,7 +10,6 @@ import {
   Stack,
   type StackProps,
 } from '@chakra-ui/react';
-import { PropsWithChildren } from 'react';
 import { GiMagicLamp } from 'react-icons/gi';
 
 import { ConfirmModal } from '@/base';

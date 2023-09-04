@@ -1,3 +1,5 @@
+import { PropsWithChildren } from 'react';
+
 import { useToast } from '@chakra-ui/react';
 import {
   DefaultOptions,
@@ -6,7 +8,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { PropsWithChildren } from 'react';
 
 const defaultOptions: DefaultOptions = {
   queries: {

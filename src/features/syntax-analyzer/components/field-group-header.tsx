@@ -1,5 +1,6 @@
-import { Heading, HeadingProps } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react';
+
+import { Heading, HeadingProps } from '@chakra-ui/react';
 
 export default function FieldGroupHeader({
   children,

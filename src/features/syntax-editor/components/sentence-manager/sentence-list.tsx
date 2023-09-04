@@ -1,3 +1,5 @@
+import { Fragment, useRef } from 'react';
+
 import {
   Card,
   CardBody,
@@ -12,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { Fragment, useRef } from 'react';
 import { TbMoodEmpty } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
