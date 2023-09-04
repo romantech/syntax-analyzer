@@ -26,3 +26,6 @@ dist-ssr
 
 # Build statistics
 stats.*
+
+# ESLint cache file
+.eslintcache
