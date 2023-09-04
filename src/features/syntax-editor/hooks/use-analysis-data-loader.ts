@@ -1,11 +1,12 @@
-import { useParams } from 'react-router-dom';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useCallback, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+
 import {
   analysisListBySourceAtom,
   AnalysisPathParams,
   selectedAnalysisAtom,
 } from '@/features/syntax-editor';
-import { useCallback, useEffect, useRef } from 'react';
 
 export const useAnalysisDataLoader = () => {
   const { source, index } = useParams<AnalysisPathParams>();

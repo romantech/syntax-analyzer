@@ -1,6 +1,6 @@
-import { loadLinksPreset } from 'tsparticles-preset-links';
-import Particles, { IParticlesProps } from 'react-tsparticles';
 import { useColorMode } from '@chakra-ui/react';
+import { IParticlesProps, Particles } from 'react-tsparticles';
+import { loadLinksPreset } from 'tsparticles-preset-links';
 
 export default function LinkParticles(particleProps: IParticlesProps) {
   const isLightMode = useColorMode().colorMode === 'light';

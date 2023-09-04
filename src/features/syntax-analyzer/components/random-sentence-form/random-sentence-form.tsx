@@ -1,5 +1,8 @@
 import { HStack, Input, Stack, StackProps } from '@chakra-ui/react';
+import { Suspense } from 'react';
 import { FormProvider } from 'react-hook-form';
+
+import { CenteredDivider } from '@/base';
 import {
   AddTopicForm,
   GenerateButton,
@@ -9,8 +12,6 @@ import {
   TopicTagList,
   useRandomSentenceForm,
 } from '@/features/syntax-analyzer';
-import { CenteredDivider } from '@/base';
-import { Suspense } from 'react';
 
 interface RandomSentenceFormProps extends StackProps {
   showInstructions?: boolean;

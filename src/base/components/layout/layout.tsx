@@ -1,5 +1,6 @@
-import React, { PropsWithChildren } from 'react';
 import { Container, ContainerProps, VStack } from '@chakra-ui/react';
+import { PropsWithChildren } from 'react';
+
 import { Header } from '@/base/components';
 
 export function Layout({

@@ -1,12 +1,13 @@
+import { useBoolean } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+
 import {
   randomSentenceFormSchema,
   REMAINING_COUNT_BASE_KEY,
 } from '@/features/syntax-analyzer';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useRandomSentenceQuery } from '@/features/syntax-analyzer/api';
-import { useState } from 'react';
-import { useBoolean } from '@chakra-ui/react';
 
 export type RandomSentenceFormValues = {
   sent_count: number; // 생성할 랜덤 문장 개수

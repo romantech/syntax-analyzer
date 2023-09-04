@@ -1,4 +1,4 @@
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { load } from '@fingerprintjs/fingerprintjs';
 import { atom } from 'jotai';
 
 /**
@@ -7,7 +7,7 @@ import { atom } from 'jotai';
  * 3.x 버전은 배포 버전에서도 무료로 사용할 수 있지만 정확도는 떨어짐
  * */
 export const fingerprintAtom = atom(async () => {
-  const fp = await FingerprintJS.load({ monitoring: false });
+  const fp = await load({ monitoring: false });
 
   const { visitorId } = await fp.get();
   return visitorId;

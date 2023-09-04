@@ -1,5 +1,5 @@
-import { m } from 'framer-motion';
 import { IconButton, IconButtonProps } from '@chakra-ui/react';
+import { m } from 'framer-motion';
 import { FaAnglesDown } from 'react-icons/fa6';
 
 const MotionIconButton = m(IconButton);

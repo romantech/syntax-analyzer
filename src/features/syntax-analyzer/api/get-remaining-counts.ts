@@ -1,6 +1,7 @@
-import { axios } from '@/lib';
 import { QueryClient, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+
+import { axios } from '@/lib';
 
 export type RemainingCountResponse = {
   analysis: number;

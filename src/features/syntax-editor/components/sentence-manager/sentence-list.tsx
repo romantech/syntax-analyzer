@@ -10,27 +10,25 @@ import {
   Tabs,
   useDisclosure,
 } from '@chakra-ui/react';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useAtomValue, useSetAtom } from 'jotai';
-import {
-  analysisListBySourceAtom,
-  removeUserAnalysisActionAtom,
-  selectedAnalysisAtom,
-} from 'src/features/syntax-editor/store';
-import { ConfirmModal, TextPlaceholder } from '@/base';
 import { Fragment, useRef } from 'react';
+import { TbMoodEmpty } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 
-import { TbMoodEmpty } from 'react-icons/tb';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { ConfirmModal, TextPlaceholder } from '@/base';
 import {
   AnalysisSource,
   DeletableSentence,
   TAnalysis,
 } from '@/features/syntax-editor';
-
-import { getSyntaxEditorPath } from '@/routes';
-
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants';
+import { getSyntaxEditorPath } from '@/routes';
+import {
+  analysisListBySourceAtom,
+  removeUserAnalysisActionAtom,
+  selectedAnalysisAtom,
+} from 'src/features/syntax-editor/store';
 
 type AnalysisInfo = { index: number; analysis: TAnalysis };
 

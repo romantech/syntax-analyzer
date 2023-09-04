@@ -8,14 +8,15 @@ import {
   useBoolean,
   VStack,
 } from '@chakra-ui/react';
-import { DIGITS_PATTERN, Layout, LinkParticles, useIsMounted } from '@/base';
+import { useRef } from 'react';
+import { FallbackProps } from 'react-error-boundary';
 import {
   isRouteErrorResponse,
   Navigate,
   useRouteError,
 } from 'react-router-dom';
-import { useRef } from 'react';
-import { FallbackProps } from 'react-error-boundary';
+
+import { DIGITS_PATTERN, Layout, LinkParticles, useIsMounted } from '@/base';
 
 const highlightStyles: SystemStyleObject = {
   p: '1',

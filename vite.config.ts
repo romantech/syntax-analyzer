@@ -1,8 +1,9 @@
-import { defineConfig, type PluginOption } from 'vite';
 import react from '@vitejs/plugin-react';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { defineConfig, type PluginOption } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
+import tsconfigPaths from 'vite-tsconfig-paths';
+
 import { dependencies } from './package.json';
 
 const vendor = ['react', 'react-router-dom', 'react-dom'];

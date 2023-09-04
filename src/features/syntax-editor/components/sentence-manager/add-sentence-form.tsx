@@ -6,15 +6,16 @@ import {
   HStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { addUserAnalysisActionAtom } from '@/features/syntax-editor';
-import { useSetAtom } from 'jotai';
-import { ConfirmModal, VoidFunc } from '@/base';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useSetAtom } from 'jotai';
 import { useForm } from 'react-hook-form';
+
+import { ConfirmModal, VoidFunc } from '@/base';
 import {
   addSentenceFormSchema,
   SentenceInput,
 } from '@/features/syntax-analyzer';
+import { addUserAnalysisActionAtom } from '@/features/syntax-editor';
 
 const defaultValues = addSentenceFormSchema.cast({});
 const resolver = yupResolver(addSentenceFormSchema);

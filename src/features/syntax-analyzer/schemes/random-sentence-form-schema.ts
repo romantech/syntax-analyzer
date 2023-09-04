@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { englishInputSchema } from './english-sentence-schema';
+
 import {
   DEFAULT_PICKER_COUNT,
   MAX_PICKER_SENTENCE,
@@ -8,6 +8,8 @@ import {
   MIN_PICKER_SENTENCE,
   MIN_TOPIC_LENGTH,
 } from '@/features/syntax-analyzer/constants';
+
+import { englishInputSchema } from './english-sentence-schema';
 
 const keywordSchema = englishInputSchema
   .lowercase()

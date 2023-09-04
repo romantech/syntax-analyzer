@@ -1,4 +1,5 @@
 import { ComponentType } from 'react';
+
 import { getDisplayName } from '@/base';
 import { ShowcaseTemplateProps } from '@/features/misc';
 

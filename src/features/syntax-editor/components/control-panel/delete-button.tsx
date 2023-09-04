@@ -1,11 +1,12 @@
+import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useAtom, useAtomValue } from 'jotai';
+import { BsFillEraserFill } from 'react-icons/bs';
+
 import {
   CONTROL_OPEN_POPUP_DELAY,
   isDisableDeleteButtonAtom,
   toggleDeleteModeActionAtom,
 } from '@/features/syntax-editor';
-import { IconButton, Tooltip } from '@chakra-ui/react';
-import { BsFillEraserFill } from 'react-icons/bs';
 
 export default function DeleteButton() {
   const [isDeleteMode, toggleDeleteMode] = useAtom(toggleDeleteModeActionAtom);

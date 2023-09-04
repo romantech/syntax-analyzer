@@ -7,10 +7,11 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { LazyImage, LazyImageProps } from '@/base';
-import { NavLink } from 'react-router-dom';
-import { ScrollDownButton } from '@/features/misc';
 import { FunctionComponent } from 'react';
+import { NavLink } from 'react-router-dom';
+
+import { LazyImage, LazyImageProps } from '@/base';
+import { ScrollDownButton } from '@/features/misc';
 
 export interface ShowcaseTemplateProps extends FlexProps {
   imageProps: LazyImageProps;

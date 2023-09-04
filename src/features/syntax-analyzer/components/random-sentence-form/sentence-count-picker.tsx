@@ -1,4 +1,3 @@
-import { Controller, useFormContext } from 'react-hook-form';
 import {
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -6,6 +5,8 @@ import {
   NumberInputField,
   NumberInputStepper,
 } from '@chakra-ui/react';
+import { Controller, useFormContext } from 'react-hook-form';
+
 import {
   MAX_PICKER_SENTENCE,
   MIN_PICKER_SENTENCE,

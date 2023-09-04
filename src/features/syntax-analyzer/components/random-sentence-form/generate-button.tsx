@@ -1,10 +1,11 @@
+import { Button, ButtonProps, Skeleton, Text } from '@chakra-ui/react';
+import { RiAiGenerate } from 'react-icons/ri';
+
 import {
   DAILY_SENTENCE_LIMIT,
   UsageLimitTooltip,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
-import { Button, ButtonProps, Skeleton, Text } from '@chakra-ui/react';
-import { RiAiGenerate } from 'react-icons/ri';
 
 export default function GenerateButton({
   onClick,

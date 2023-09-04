@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+
 import { expandAbbreviations, generateNumberID, tokenizer } from '@/base';
 import type { AnalysisSource, TAnalysis } from '@/features/syntax-editor';
 

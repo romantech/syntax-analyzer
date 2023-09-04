@@ -1,5 +1,8 @@
-import { useRef } from 'react';
 import { SlideFade } from '@chakra-ui/react';
+import { useRef } from 'react';
+import { TbMoodEmpty } from 'react-icons/tb';
+
+import { TextPlaceholder, ThreeDotsWave, useTransitionLoading } from '@/base';
 import {
   SegmentList,
   Sentence,
@@ -7,8 +10,6 @@ import {
   useCalculateNestingLevel,
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
-import { TbMoodEmpty } from 'react-icons/tb';
-import { TextPlaceholder, ThreeDotsWave, useTransitionLoading } from '@/base';
 import '@/features/syntax-editor/styles/constituent.scss';
 
 /**

@@ -1,5 +1,4 @@
 import { As, Icon, Text, TextProps } from '@chakra-ui/react';
-import React from 'react';
 
 interface TextPlaceholderProps extends TextProps {
   text: string;

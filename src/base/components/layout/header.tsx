@@ -11,12 +11,12 @@ import {
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
 import { BsGithub } from 'react-icons/bs';
+import { FiCoffee } from 'react-icons/fi';
+import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
 import { matchPath, NavLink, useLocation } from 'react-router-dom';
 
 import { SITE_URLS } from '@/routes/paths';
-import { FiCoffee } from 'react-icons/fi';
 
 const NAV_TABS = [
   {

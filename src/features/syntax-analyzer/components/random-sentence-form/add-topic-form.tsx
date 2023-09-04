@@ -11,15 +11,16 @@ import {
   PopoverContent,
   StackProps,
 } from '@chakra-ui/react';
+import { useRef } from 'react';
 import { SubmitHandler, useFormContext } from 'react-hook-form';
+import { CiShoppingTag } from 'react-icons/ci';
+import { ValidationError } from 'yup';
+
 import {
   addTopicSchema,
   MAX_TOPIC_LENGTH,
   RandomSentenceFormValues,
 } from '@/features/syntax-analyzer';
-import { useRef } from 'react';
-import { ValidationError } from 'yup';
-import { CiShoppingTag } from 'react-icons/ci';
 
 export default function AddTopicForm(stackProps: StackProps) {
   const {

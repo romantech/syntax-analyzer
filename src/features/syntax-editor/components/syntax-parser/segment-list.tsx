@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import { Segment, TSegment } from '@/features/syntax-editor';
 
 interface SegmentsProps {

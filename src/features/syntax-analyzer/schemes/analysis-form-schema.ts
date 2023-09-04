@@ -1,6 +1,8 @@
 import * as yup from 'yup';
-import { englishSentenceSchema } from './english-sentence-schema';
+
 import { AnalysisModel } from '@/features/syntax-analyzer';
+
+import { englishSentenceSchema } from './english-sentence-schema';
 
 export const addSentenceFormSchema = yup.object({
   sentence: englishSentenceSchema.required().ensure(),

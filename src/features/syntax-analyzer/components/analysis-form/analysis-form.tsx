@@ -8,6 +8,10 @@ import {
   Stack,
   type StackProps,
 } from '@chakra-ui/react';
+import { PropsWithChildren } from 'react';
+import { GiMagicLamp } from 'react-icons/gi';
+
+import { ConfirmModal } from '@/base';
 import {
   FieldGroupHeader,
   ModelChoiceGroup,
@@ -15,9 +19,6 @@ import {
   UsageLimitTooltip,
   useAnalysisForm,
 } from '@/features/syntax-analyzer';
-import { ConfirmModal } from '@/base';
-import { GiMagicLamp } from 'react-icons/gi';
-import { PropsWithChildren } from 'react';
 
 export default function AnalysisForm({ ...stackProps }: StackProps) {
   const {

@@ -1,5 +1,7 @@
 import { atom } from 'jotai';
 import { atomWithDefault, atomWithReset, RESET } from 'jotai/utils';
+
+import { Nullable } from '@/base';
 import {
   AnalysisPathParams,
   fillSegment,
@@ -10,7 +12,7 @@ import {
   TSegment,
   userAnalysisListAtom,
 } from '@/features/syntax-editor';
-import { Nullable } from '@/base';
+
 import { deleteModeAtom } from './control-panel-store';
 
 /**

@@ -1,4 +1,5 @@
 import { Fragment, PropsWithChildren, ReactElement } from 'react';
+
 import {
   Constituent,
   isMultipleTokensInRange,

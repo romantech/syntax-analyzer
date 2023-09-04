@@ -1,17 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Analytics } from '@vercel/analytics/react';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
+
+import { ConfiguredQueryProvider } from '@/lib';
 import { router } from '@/routes';
 import { theme, toastOptions } from '@/theme';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ConfiguredQueryProvider } from '@/lib';
-import { Analytics } from '@vercel/analytics/react';
 
 const rootElement = document.getElementById('root');
 
-ReactDOM.createRoot(rootElement!).render(
-  <React.StrictMode>
+createRoot(rootElement!).render(
+  <StrictMode>
     <Analytics />
     <ChakraProvider theme={theme} toastOptions={toastOptions}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
@@ -20,5 +21,5 @@ ReactDOM.createRoot(rootElement!).render(
         <RouterProvider router={router} />
       </ConfiguredQueryProvider>
     </ChakraProvider>
-  </React.StrictMode>,
+  </StrictMode>,
 );

@@ -1,6 +1,6 @@
 import { ButtonProps, Center, Icon, useColorModeValue } from '@chakra-ui/react';
-import { CgClose } from 'react-icons/cg';
 import { forwardRef } from 'react';
+import { CgClose } from 'react-icons/cg';
 
 const DeleteButtonIcon = forwardRef<HTMLButtonElement, ButtonProps>(
   function DeleteButtonIcon(buttonProps, ref) {

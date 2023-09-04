@@ -41,7 +41,7 @@ export const tokenJoiner = (tokens: ReturnType<typeof tokenizer>): string => {
  * @param {string} str - The kebab-case string to be converted.
  * @return {string} The camelCase string.
  */
-export const kebabToCamel = (str: string) => {
+export const kebabToCamel = (str: string): string => {
   /**
    * -([a-z]) : -로 시작하고 소문자로 끝나는 문자열
    * e.g. hello-world -> '-w' 매칭

@@ -1,5 +1,6 @@
 import { Button, Tooltip } from '@chakra-ui/react';
 import { useAtom, useAtomValue } from 'jotai';
+
 import {
   CONSTITUENT_TRANSLATIONS,
   ConstituentWithoutId,

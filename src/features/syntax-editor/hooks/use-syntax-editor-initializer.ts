@@ -1,9 +1,10 @@
 import { useResetAtom } from 'jotai/utils';
+import { useCallback, useEffect } from 'react';
+
 import {
   resetControlPanelAtom,
   resetSegmentHistoryAtom,
 } from '@/features/syntax-editor';
-import { useCallback, useEffect } from 'react';
 
 interface UseInitializerProps {
   resetOnUnmount?: boolean;

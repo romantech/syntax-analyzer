@@ -1,11 +1,12 @@
+import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
+import { ImRedo } from 'react-icons/im';
+
+import { clearSelection } from '@/base';
 import {
   CONTROL_OPEN_POPUP_DELAY,
   undoRedoActionAtom,
 } from '@/features/syntax-editor';
-import { IconButton, Tooltip } from '@chakra-ui/react';
-import { ImRedo } from 'react-icons/im';
-import { clearSelection } from '@/base';
 
 export default function RedoButton() {
   const [actionable, action] = useAtom(undoRedoActionAtom);

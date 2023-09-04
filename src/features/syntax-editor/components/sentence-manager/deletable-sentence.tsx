@@ -1,4 +1,5 @@
 import { Badge, HStack, StackProps, Text, VStack } from '@chakra-ui/react';
+
 import {
   ConfirmPopover,
   DateChip,
@@ -6,7 +7,6 @@ import {
   isLessThanAgo,
   tokenJoiner,
 } from '@/base';
-
 import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor';
 
 interface DeletableSentenceProps extends StackProps {

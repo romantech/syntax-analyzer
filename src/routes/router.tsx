@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { SITE_URLS } from './paths';
+
 import { lazyImport } from '@/base';
+
+import { SITE_URLS } from './paths';
 
 const { App } = lazyImport(() => import('@/app'));
 

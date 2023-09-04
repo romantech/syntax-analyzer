@@ -10,12 +10,13 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { PropsWithChildren } from 'react';
+
+import { CenteredDivider } from '@/base';
 import {
   DAILY_ANALYSIS_LIMIT,
   GPT_4_DECREMENT_COUNT,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
-import { CenteredDivider } from '@/base';
 
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
   const { data: count } = useRemainingCountQuery({

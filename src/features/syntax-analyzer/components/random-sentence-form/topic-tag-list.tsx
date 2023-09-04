@@ -5,8 +5,9 @@ import {
   TagCloseButton,
   TagLabel,
 } from '@chakra-ui/react';
-import { useFormContext, useWatch } from 'react-hook-form';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { useFormContext, useWatch } from 'react-hook-form';
+
 import { RandomSentenceFormValues } from '@/features/syntax-analyzer';
 
 export default function TopicTagList(stackProps: StackProps) {

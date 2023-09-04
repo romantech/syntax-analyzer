@@ -1,4 +1,8 @@
 import { Box, HStack } from '@chakra-ui/react';
+import { useIsMutating } from '@tanstack/react-query';
+import { Suspense } from 'react';
+
+import { CenteredDivider, Layout } from '@/base';
 import {
   AnalysisCounter,
   AnalysisForm,
@@ -8,9 +12,6 @@ import {
   LoadingTransition,
   RandomSentenceForm,
 } from '@/features/syntax-analyzer';
-import { Suspense } from 'react';
-import { useIsMutating } from '@tanstack/react-query';
-import { CenteredDivider, Layout } from '@/base';
 
 export default function SyntaxAnalyzer() {
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });

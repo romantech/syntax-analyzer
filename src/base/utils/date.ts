@@ -1,5 +1,6 @@
 import { format, isValid, parseISO } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import * as locale from 'date-fns/locale';
+
 import { ISODateString } from '@/base/types';
 
 /**
@@ -11,7 +12,7 @@ import { ISODateString } from '@/base/types';
 export const getFormattedKoDate = (isoString: ISODateString): string => {
   const date = parseISO(isoString);
   if (!isValid(date)) throw new Error(`Invalid ISO string: ${isoString}`);
-  return format(date, 'PPP(eee) p', { locale: ko });
+  return format(date, 'PPP(eee) p', { locale: locale.ko });
 };
 
 /**

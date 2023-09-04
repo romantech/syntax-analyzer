@@ -6,12 +6,13 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { Control, Controller } from 'react-hook-form';
+
 import {
   AnalysisFormValues,
   GPT_3_DECREMENT_COUNT,
   GPT_4_DECREMENT_COUNT,
 } from '@/features/syntax-analyzer';
-import { Control, Controller } from 'react-hook-form';
 
 const MODEL_FIELDS = [
   {

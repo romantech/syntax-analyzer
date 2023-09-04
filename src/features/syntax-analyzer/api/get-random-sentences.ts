@@ -1,7 +1,8 @@
-import { axios, paramsSerializer } from '@/lib';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+
 import { RandomSentenceFormValues } from '@/features/syntax-analyzer';
+import { axios, paramsSerializer } from '@/lib';
 
 type RandomSentenceResponse = string[];
 type RandomSentenceParams = Omit<RandomSentenceFormValues, 'keyword'>;

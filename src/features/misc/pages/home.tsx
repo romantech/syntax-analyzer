@@ -1,4 +1,5 @@
 import { Stack } from '@chakra-ui/react';
+
 import { Layout, LinkParticles } from '@/base';
 import {
   AnalyzerShowcase,

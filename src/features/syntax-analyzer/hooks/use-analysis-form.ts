@@ -1,4 +1,9 @@
+import { useDisclosure, useToast, UseToastOptions } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+
+import { expandAbbreviations, tokenizer } from '@/base';
 import {
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
@@ -7,12 +12,8 @@ import {
   useInjectAnalysis,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { getSyntaxEditorPath } from '@/routes';
-import { expandAbbreviations, tokenizer } from '@/base';
-import { useDisclosure, useToast, UseToastOptions } from '@chakra-ui/react';
 import { updateAnalysisMetaData } from '@/features/syntax-editor';
+import { getSyntaxEditorPath } from '@/routes';
 
 export type AnalysisModel = 'gpt-3.5-turbo' | 'gpt-4';
 export type AnalysisFormValues = { model: AnalysisModel; sentence: string };

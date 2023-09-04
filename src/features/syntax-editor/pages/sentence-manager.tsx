@@ -1,15 +1,16 @@
 import { Box, HStack, ScaleFade, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
+
 import { CenteredDivider, Notice, useIsMounted } from '@/base';
+import {
+  FieldGroupHeader,
+  RandomSentenceForm,
+} from '@/features/syntax-analyzer';
 import {
   AddSentenceForm,
   DEFAULT_SENTENCE_LIST_TAB,
   SentenceList,
 } from '@/features/syntax-editor';
-import {
-  FieldGroupHeader,
-  RandomSentenceForm,
-} from '@/features/syntax-analyzer';
 
 export default function SentenceManager() {
   const isMounted = useIsMounted();

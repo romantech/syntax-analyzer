@@ -10,12 +10,13 @@ import {
   ListIcon,
   ListItem,
 } from '@chakra-ui/react';
-import { PiNotePencil, PiTextTBold } from 'react-icons/pi';
-import { forwardRef } from 'react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { RiEnglishInput } from 'react-icons/ri';
+import { forwardRef } from 'react';
 import { BsMagic } from 'react-icons/bs';
+import { PiNotePencil, PiTextTBold } from 'react-icons/pi';
+import { RiEnglishInput } from 'react-icons/ri';
 import { TbArrowAutofitWidth } from 'react-icons/tb';
+
 import { MAX_SENTENCE_LENGTH } from '@/features/syntax-analyzer/constants';
 import { HELPER_MESSAGES } from '@/features/syntax-analyzer/schemes';
 

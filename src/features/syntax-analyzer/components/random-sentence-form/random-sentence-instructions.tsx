@@ -1,4 +1,5 @@
 import { ListItem, ListProps, UnorderedList } from '@chakra-ui/react';
+
 import { MAX_TOPIC_ADDITION } from '@/features/syntax-analyzer';
 
 const INSTRUCTIONS = [

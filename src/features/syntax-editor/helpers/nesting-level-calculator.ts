@@ -1,6 +1,6 @@
 import { RefObject } from 'react';
-import { kebabToCamel } from '@/base';
 
+import { kebabToCamel } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_DATA_ATTRS,

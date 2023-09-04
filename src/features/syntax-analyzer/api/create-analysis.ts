@@ -1,8 +1,9 @@
-import { axios } from '@/lib';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { TAnalysis } from '@/features/syntax-editor';
+
 import { AnalysisModel } from '@/features/syntax-analyzer';
+import { TAnalysis } from '@/features/syntax-editor';
+import { axios } from '@/lib';
 
 export type CreateAnalysisResponse = TAnalysis;
 export type CreateAnalysisPayload = {

@@ -172,6 +172,7 @@ export const addConstituent = (
    * begin(2) !== firstChildBegin(0) 참이면 case 4-2 이므로 begin 값을 leftEnd 로 설정
    * */
   const leftEnd = begin === firstChildBegin ? end : begin;
+  // eslint-disable-next-line prefer-const
   left = generateAndConfigureSegment(
     clonedSegment.children,
     firstChildBegin,
@@ -183,6 +184,7 @@ export const addConstituent = (
     middle = generateAndConfigureSegment(clonedSegment.children, begin, end);
   }
 
+  // eslint-disable-next-line prefer-const
   right = generateAndConfigureSegment(
     clonedSegment.children,
     end,

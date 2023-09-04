@@ -1,4 +1,5 @@
 import { Heading, Stack, StackProps, Text } from '@chakra-ui/react';
+
 import { ScrollDownButton } from '@/features/misc/components';
 
 interface TitleSectionProps extends StackProps {

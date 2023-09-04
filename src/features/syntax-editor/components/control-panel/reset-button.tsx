@@ -1,12 +1,13 @@
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
+import { MdOutlineRestore } from 'react-icons/md';
+
+import { ConfirmPopover } from '@/base';
 import {
   CONTROL_OPEN_POPUP_DELAY,
   isSegmentTouchedAtom,
   useSyntaxEditorInitializer,
 } from '@/features/syntax-editor';
-import { MdOutlineRestore } from 'react-icons/md';
-import { ConfirmPopover } from '@/base';
 
 export default function ResetButton() {
   const { initializer } = useSyntaxEditorInitializer();

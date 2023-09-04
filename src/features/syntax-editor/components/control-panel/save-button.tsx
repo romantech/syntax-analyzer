@@ -1,6 +1,10 @@
-import { IoSaveSharp } from 'react-icons/io5';
 import { IconButton, Tooltip, useToast } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useState } from 'react';
+import { IoSaveSharp } from 'react-icons/io5';
+import { useParams } from 'react-router-dom';
+
+import { ConfirmPopover } from '@/base';
 import {
   AnalysisPathParams,
   CONTROL_OPEN_POPUP_DELAY,
@@ -9,9 +13,6 @@ import {
   SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
   saveHistorySegmentAtom,
 } from '@/features/syntax-editor';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { ConfirmPopover } from '@/base';
 
 export default function SaveButton() {
   const toast = useToast();

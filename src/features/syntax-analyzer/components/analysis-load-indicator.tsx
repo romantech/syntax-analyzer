@@ -1,7 +1,8 @@
-import { Player } from '@lottiefiles/react-lottie-player';
 import { Heading, Stack, StackProps, Text } from '@chakra-ui/react';
-import { loadingAnimation } from '@/assets/lottie';
+import { Player } from '@lottiefiles/react-lottie-player';
 import { useEffect, useRef } from 'react';
+
+import { loadingAnimation } from '@/assets/lottie';
 import { LoadingTransition } from '@/features/syntax-analyzer';
 
 interface AnalysisLoadingIndicatorProps extends StackProps {

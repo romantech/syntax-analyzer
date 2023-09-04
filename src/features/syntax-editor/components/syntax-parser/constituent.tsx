@@ -1,5 +1,9 @@
-import { PropsWithChildren } from 'react';
 import { Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import { clsx } from 'clsx';
+import { useAtomValue } from 'jotai';
+import { PropsWithChildren } from 'react';
+
+import { NumberTuple } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_COLORS,
@@ -10,9 +14,6 @@ import {
   type TConstituent,
   useConstituentHover,
 } from '@/features/syntax-editor';
-import { NumberTuple } from '@/base';
-import { useAtomValue } from 'jotai';
-import { clsx } from 'clsx';
 
 interface ConstituentProps {
   constituent: TConstituent;

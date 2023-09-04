@@ -1,8 +1,8 @@
+import { getSelectionIndices } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_DATA_ATTRS,
 } from '@/features/syntax-editor';
-import { getSelectionIndices } from '@/base';
 
 const { INDEX, ID, BEGIN, END } = CONSTITUENT_DATA_ATTRS;
 const TOKEN_GROUP_SELECTOR = '.' + CONSTITUENT_CLASSES.TOKEN_GROUP;

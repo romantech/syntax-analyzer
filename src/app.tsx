@@ -1,10 +1,11 @@
-import { Outlet } from 'react-router-dom';
-import { Layout, ThreeDotsWave, useRemoveBodyBgColor } from '@/base';
-import { ErrorBoundary } from 'react-error-boundary';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import { ErrorComponent } from '@/features/misc';
-import { Suspense } from 'react';
 import { LazyMotion } from 'framer-motion';
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Outlet } from 'react-router-dom';
+
+import { Layout, ThreeDotsWave, useRemoveBodyBgColor } from '@/base';
+import { ErrorComponent } from '@/features/misc';
 
 /**
  * Reduce bundle size by only importing the domAnimation feature

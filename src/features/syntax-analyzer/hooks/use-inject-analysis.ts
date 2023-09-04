@@ -1,10 +1,11 @@
+import { useCallback } from 'react';
+
+import { useLocalStorage } from '@/base';
 import {
   analysisStore,
   TAnalysis,
   userAnalysisListAtom,
 } from '@/features/syntax-editor';
-import { useCallback } from 'react';
-import { useLocalStorage } from '@/base';
 
 export const useInjectAnalysis = () => {
   const [userAnalysis] = useLocalStorage<TAnalysis[]>('userAnalysisList', []);
