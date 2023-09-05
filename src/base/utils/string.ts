@@ -2,6 +2,7 @@ import {
   ABBREVIATIONS,
   ABBREVIATIONS_PATTERNS,
   NON_WORD_CHAR_PATTERN,
+  NUM_WITH_COMMAS_REGEX,
   PUNCTUATION_PATTERN,
 } from '@/base/constants';
 
@@ -60,5 +61,17 @@ export const expandAbbreviations = (sentence: string): string => {
   return sentence.replace(
     ABBREVIATIONS_PATTERNS,
     (match) => ABBREVIATIONS[match],
+  );
+};
+
+/**
+ * Removes comma as a thousand separator from a sentence.
+ *
+ * @param {string} sentence - The sentence with comma as a thousand separator.
+ * @return {string} The sentence without a thousand separator.
+ */
+export const removeThousandSeparator = (sentence: string): string => {
+  return sentence.replace(NUM_WITH_COMMAS_REGEX, (match) =>
+    match.replace(/,/g, ''),
   );
 };

@@ -3,7 +3,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { expandAbbreviations, tokenizer } from '@/base';
+import {
+  expandAbbreviations,
+  removeThousandSeparator,
+  tokenizer,
+} from '@/base';
 import {
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
@@ -24,6 +28,17 @@ const toastOptions: UseToastOptions = {
   title: '문장 분석을 완료했습니다',
   status: 'success',
   duration: 4000,
+};
+
+/**
+ * Expands abbreviations and removes comma as a thousand separator from a sentence.
+ *
+ * @param {string} sentence - The sentence to be processed.
+ * @return {string} The processed sentence.
+ */
+export const processSentence = (sentence: string): string => {
+  const expanded = expandAbbreviations(sentence);
+  return removeThousandSeparator(expanded);
 };
 
 export const useAnalysisForm = () => {
@@ -65,7 +80,7 @@ export const useAnalysisForm = () => {
 
   const onSubmitConfirm = () => {
     const { model, sentence } = getValues();
-    const tokenized = tokenizer(expandAbbreviations(sentence));
+    const tokenized = tokenizer(processSentence(sentence));
     const payload = { model, sentence: tokenized };
     mutate(payload);
   };
