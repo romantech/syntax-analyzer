@@ -1,6 +1,6 @@
 import { Box, Flex, Stack } from '@chakra-ui/react';
 
-import { Notice } from '@/base';
+import { Notice, useBeforeUnload } from '@/base';
 import {
   ControlPanel,
   SyntaxParser,
@@ -12,6 +12,7 @@ import {
 export default function SyntaxEditor() {
   useSyntaxEditorInitializer({ resetOnUnmount: true });
   useAnalysisDataLoader();
+  useBeforeUnload();
 
   return (
     <Stack h="calc(100vh - 72px)" gap={8} pt={8}>
