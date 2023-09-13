@@ -6,22 +6,27 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 import { dependencies } from './package.json';
 
-const vendor = ['react', 'react-router-dom', 'react-dom'];
+/** Filter out React-related dependencies from the list */
+const reactDeps = Object.keys(dependencies).filter(
+  (key) => key === 'react' || key.startsWith('react-'),
+);
 
 /**
- * Generates chunks based on the given dependencies.
- * Skips over dependencies already included in the 'vendor' chunk.
- * For more on this approach, see {@link https://sambitsahoo.com/blog/vite-code-splitting-that-works.html Referenced Code}
- *
- * @param {Record<string, string>} deps - Dependencies to consider for chunk generation.
+ * Generates custom chunks for Rollup or Vite based on the dependencies provided.
+ * The 'vendor' chunk includes all React-related dependencies, while additional chunks
+ * are created for each remaining dependency not already included in 'vendor'.
+ * For more information on this approach, see the following article:
+ * {@link https://sambitsahoo.com/blog/vite-code-splitting-that-works.html Referenced Code}
  */
-const renderChunks = (deps: Record<string, string>) => {
-  const chunks = {};
-  Object.keys(deps).forEach((key) => {
-    if (vendor.includes(key)) return;
-    chunks[key] = [key];
-  });
-  return chunks;
+const manualChunks = {
+  // Include all React-related dependencies in a 'vendor' chunk
+  vendor: reactDeps,
+  // Generate additional chunks for remaining dependencies
+  ...Object.keys(dependencies).reduce((chunks, name) => {
+    // Skip dependencies already included in 'vendor'
+    if (!reactDeps.includes(name)) chunks[name] = [name];
+    return chunks;
+  }, {}),
 };
 
 // https://vitejs.dev/config/
@@ -63,16 +68,7 @@ export default defineConfig(({ mode }) => ({
     /** 배포 환경에서만 콘솔/디버거 비활성; 참고로 build.minify 기본값은 esbuild */
     pure: mode === 'production' ? ['console', 'debugger'] : [],
   },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor, // react, react-router-dom, react-dom 모듈은 vendor 이름의 청크로 분리
-          ...renderChunks(dependencies),
-        },
-      },
-    },
-  },
+  build: { rollupOptions: { output: { manualChunks } } },
   server: { open: true },
   define: {
     /** Jotai Devtools process is not defined 문제 해결
