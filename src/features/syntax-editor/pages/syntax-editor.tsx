@@ -1,8 +1,10 @@
 import { Box, Flex, Stack } from '@chakra-ui/react';
+import { useAtomValue } from 'jotai';
 
 import { Notice, useBeforeUnload } from '@/base';
 import {
   ControlPanel,
+  isSegmentTouchedAtom,
   SyntaxParser,
   TagListAccordion,
   useAnalysisDataLoader,
@@ -10,9 +12,11 @@ import {
 } from '@/features/syntax-editor';
 
 export default function SyntaxEditor() {
+  const isTouched = useAtomValue(isSegmentTouchedAtom);
+
   useSyntaxEditorInitializer({ resetOnUnmount: true });
   useAnalysisDataLoader();
-  useBeforeUnload();
+  useBeforeUnload(isTouched);
 
   return (
     <Stack h="calc(100vh - 72px)" gap={8} pt={8}>
