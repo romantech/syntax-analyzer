@@ -43,7 +43,7 @@ export default function ConfirmPopover({
   return (
     <Popover isOpen={isOpen} onClose={onClose} {...popoverProps}>
       <PopoverTrigger>
-        <Box>{children({ onOpen, isOpen })}</Box>
+        <Box as="button">{children({ onOpen, isOpen })}</Box>
       </PopoverTrigger>
       <Portal>
         <PopoverContent w="fit-content" minW={220}>
