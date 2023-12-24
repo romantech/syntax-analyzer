@@ -29,7 +29,13 @@ export const ConfiguredQueryProvider = ({ children }: PropsWithChildren) => {
 
   const queryClient = new QueryClient({
     defaultOptions,
-    mutationCache: new MutationCache({ onError: showErrorToast }),
+    mutationCache: new MutationCache({
+      onError: showErrorToast,
+      onSuccess: (_data, _variables, _context, mutation) => {
+        const invalidateQueries = mutation.meta?.invalidateQueries;
+        if (invalidateQueries) queryClient.invalidateQueries(invalidateQueries);
+      },
+    }),
     queryCache: new QueryCache({
       onError: (error, query) => {
         /**
@@ -38,7 +44,7 @@ export const ConfiguredQueryProvider = ({ children }: PropsWithChildren) => {
          * */
         if (query.state.data !== undefined) showErrorToast();
       },
-      onSuccess: (_, query) => {
+      onSuccess: (_data, query) => {
         const invalidateQueries = query.meta?.invalidateQueries;
         if (invalidateQueries) queryClient.invalidateQueries(invalidateQueries);
       },
