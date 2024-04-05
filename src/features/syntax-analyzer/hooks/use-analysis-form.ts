@@ -9,6 +9,7 @@ import {
   tokenizer,
 } from '@/base';
 import {
+  AnalysisModel,
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
   type RemainingCountResponse as PlaceholderData,
@@ -19,7 +20,6 @@ import {
 import { updateAnalysisMetaData } from '@/features/syntax-editor';
 import { getSyntaxEditorPath } from '@/routes';
 
-export type AnalysisModel = 'gpt-3.5-turbo' | 'gpt-4';
 export type AnalysisFormValues = { model: AnalysisModel; sentence: string };
 
 const placeholderData: PlaceholderData = { analysis: 0, random_sentence: 0 };

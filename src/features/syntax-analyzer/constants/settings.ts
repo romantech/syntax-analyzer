@@ -1,7 +1,7 @@
 export const DAILY_ANALYSIS_LIMIT = 10;
 
 export const GPT_4_DECREMENT_COUNT = 5;
-export const GPT_3_DECREMENT_COUNT = 1;
+export const GPT_3_5_DECREMENT_COUNT = 1;
 
 export const MAX_TOPIC_ADDITION = 3;
 export const DAILY_SENTENCE_LIMIT = 20;
@@ -15,3 +15,8 @@ export const DEFAULT_PICKER_COUNT = 3;
 
 export const MAX_SENTENCE_LENGTH = 80;
 export const MIN_SENTENCE_WORDS = 3;
+
+export enum AnalysisModel {
+  GPT_3_5_FT = 'gpt-3.5-ft',
+  GPT_4 = 'gpt-4',
+}

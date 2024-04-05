@@ -11,7 +11,7 @@ export const addSentenceFormSchema = yup.object({
 export const createAnalysisFormSchema = yup.object({
   model: yup
     .mixed<AnalysisModel>()
-    .oneOf(['gpt-3.5-turbo', 'gpt-4'])
-    .default('gpt-3.5-turbo'),
+    .oneOf(Object.values(AnalysisModel))
+    .default(AnalysisModel.GPT_3_5_FT),
   sentence: englishSentenceSchema.ensure(),
 });
