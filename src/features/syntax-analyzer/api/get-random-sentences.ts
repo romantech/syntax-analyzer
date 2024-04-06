@@ -23,7 +23,7 @@ export const getRandomSentences = async <
 export const RANDOM_SENTENCE_BASE_KEY = ['random-sentences'] as const;
 
 export const useRandomSentenceQuery = <T = RandomSentenceResponse, K = T>(
-  params: RandomSentenceParams,
+  params: RandomSentenceParams & { timeStamp: number },
   options?: Partial<UseQueryOptions<T, AxiosError, K>>,
 ) => {
   return useQuery({
