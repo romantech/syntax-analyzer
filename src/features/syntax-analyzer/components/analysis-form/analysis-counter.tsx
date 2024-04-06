@@ -21,7 +21,6 @@ import {
 
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
   const { data: count } = useRemainingCountQuery({
-    suspense: true,
     select: ({ analysis }) => analysis,
   });
 

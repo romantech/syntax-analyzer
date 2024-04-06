@@ -12,7 +12,6 @@ import {
   AnalysisModel,
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
-  type RemainingCountResponse as PlaceholderData,
   useCreateAnalysisMutation,
   useInjectAnalysis,
   useRemainingCountQuery,
@@ -21,8 +20,6 @@ import { updateAnalysisMetaData } from '@/features/syntax-editor';
 import { getSyntaxEditorPath } from '@/routes';
 
 export type AnalysisFormValues = { model: AnalysisModel; sentence: string };
-
-const placeholderData: PlaceholderData = { analysis: 0, random_sentence: 0 };
 
 const toastOptions: UseToastOptions = {
   title: '문장 분석을 완료했습니다',
@@ -54,8 +51,9 @@ export const useAnalysisForm = () => {
 
   const { data: remainingCount = 0 } = useRemainingCountQuery({
     select: ({ analysis }) => analysis,
-    suspense: true,
-    placeholderData, // observer 레벨에서 동작하는 가짜 데이터 / 캐시 저장 안함
+    // useSuspenseQuery는 placeholderData 미지원
+    // 참고로 placeholderData는 observer 레벨에서 동작하는 가짜 데이터로 캐시에 저장 안됨
+    // placeholderData: { analysis: 0, random_sentence: 0 },
   });
 
   const formResults = useForm<AnalysisFormValues>({

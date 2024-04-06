@@ -26,7 +26,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     control,
     register,
     remainingCount,
-    isLoading,
+    isPending, // mutation 진행중일 때 true
     onSubmit,
     isModalOpen,
     onSubmitConfirm,
@@ -46,7 +46,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
           <SentenceInput
             {...register('sentence')}
             errorMessage={errors.sentence?.message}
-            isDisabled={isLoading}
+            isDisabled={isPending}
             showHelperText
           />
           <UsageLimitTooltip isDisabled={!!remainingCount}>

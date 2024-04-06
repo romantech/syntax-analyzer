@@ -18,7 +18,7 @@ createRoot(rootElement!).render(
     <ChakraProvider theme={theme} toastOptions={toastOptions}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <ConfiguredQueryProvider>
-        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+        <ReactQueryDevtools initialIsOpen={false} position="bottom" />
         <RouterProvider router={router} />
       </ConfiguredQueryProvider>
     </ChakraProvider>
