@@ -14,7 +14,6 @@ export default function GenerateButton({
 }: ButtonProps) {
   const { data: count = 0 } = useRemainingCountQuery({
     select: (data) => data.random_sentence,
-    suspense: true,
   });
   const hasCount = count > 0;
 

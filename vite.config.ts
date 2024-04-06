@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
-import { defineConfig, type PluginOption } from 'vite';
+import { defineConfig, PluginOption } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -62,7 +62,56 @@ export default defineConfig(({ mode }) => ({
      * 오프라인 모드, 푸시, 백그라운드 데이터 동기화 등의 기능 지원
      * {@link https://vite-pwa-org.netlify.app/guide/}
      * */
-    VitePWA({ registerType: 'autoUpdate' }),
+    VitePWA({
+      registerType: 'autoUpdate',
+      devOptions: { enabled: true }, // enable the service worker on development
+      /**
+       * 명시한 manifest 속성을 기반으로 manifest.json 자동 생성되고, public 폴더에 추가됨
+       * index.html 파일에는 필요한 링크/스크립트도 자동으로 삽입됨
+       * 이미지, 아이콘, robots.txt 같은건 직접 public 폴더에 추가 필요
+       * */
+      manifest: {
+        short_name: '구문 분석기',
+        name: 'Syntax Analyzer',
+        description:
+          'Visual tool for English syntax analysis. Explore and edit sentence structures with a single click. Discover over 30 essential tags and generate tailored random sentences.',
+        lang: 'en',
+        categories: ['education', 'tools'],
+        icons: [
+          {
+            src: '/favicon-48.png',
+            sizes: '48x48',
+            type: 'image/png',
+          },
+          {
+            src: '/favicon-any.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+          },
+          {
+            src: '/icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+          {
+            src: '/icon-maskable-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+        ],
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#1a202b',
+        theme_color: '#1a202b',
+        orientation: 'portrait-primary',
+      },
+    }),
   ],
   esbuild: {
     /** 배포 환경에서만 콘솔/디버거 비활성; 참고로 build.minify 기본값은 esbuild */

@@ -7,7 +7,23 @@ import {
   QueryCache,
   QueryClient,
   QueryClientProvider,
+  QueryKey,
 } from '@tanstack/react-query';
+
+/**
+ * UseQueryOptions.meta 속성 타입 지정 (queryFn의 meta 파라미터 타입)
+ * {@link https://tanstack.com/query/latest/docs/framework/react/typescript#typing-meta 공식 문서}
+ * */
+interface CustomMeta extends Record<string, unknown> {
+  invalidateQueries?: QueryKey;
+}
+
+declare module '@tanstack/react-query' {
+  interface Register {
+    queryMeta: CustomMeta;
+    mutationMeta: CustomMeta;
+  }
+}
 
 const defaultOptions: DefaultOptions = {
   queries: {
@@ -32,8 +48,9 @@ export const ConfiguredQueryProvider = ({ children }: PropsWithChildren) => {
     mutationCache: new MutationCache({
       onError: showErrorToast,
       onSuccess: (_data, _variables, _context, mutation) => {
-        const invalidateQueries = mutation.meta?.invalidateQueries;
-        if (invalidateQueries) queryClient.invalidateQueries(invalidateQueries);
+        const { invalidateQueries = [] } = mutation.meta ?? {};
+        if (invalidateQueries.length === 0) return;
+        queryClient.invalidateQueries({ queryKey: invalidateQueries });
       },
     }),
     queryCache: new QueryCache({
@@ -45,8 +62,9 @@ export const ConfiguredQueryProvider = ({ children }: PropsWithChildren) => {
         if (query.state.data !== undefined) showErrorToast();
       },
       onSuccess: (_data, query) => {
-        const invalidateQueries = query.meta?.invalidateQueries;
-        if (invalidateQueries) queryClient.invalidateQueries(invalidateQueries);
+        const { invalidateQueries = [] } = query.meta ?? {};
+        if (invalidateQueries.length === 0) return;
+        queryClient.invalidateQueries({ queryKey: invalidateQueries });
       },
     }),
   });

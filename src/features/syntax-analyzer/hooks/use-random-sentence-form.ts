@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import { useBoolean } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
@@ -22,11 +21,9 @@ export type RandomSentenceFormValues = {
  * */
 const defaultValues = randomSentenceFormSchema.cast({});
 const { topics, sent_count } = defaultValues;
-const defaultParams = { topics, sent_count, timestamp: Date.now() };
 
 export const useRandomSentenceForm = () => {
-  const [params, setParams] = useState(defaultParams);
-  const [readyToFetch, setReadyToFetch] = useBoolean();
+  const [params, setParams] = useState({ topics, sent_count });
 
   const methods = useForm<RandomSentenceFormValues>({
     defaultValues,
@@ -34,22 +31,18 @@ export const useRandomSentenceForm = () => {
     reValidateMode: 'onSubmit',
   });
 
-  /** 매번 다른 랜덤 문장을 불러와야 하므로 캐시 비활성 */
-  const { data, isFetching } = useRandomSentenceQuery(params, {
-    enabled: readyToFetch,
-    cacheTime: 0,
+  // 쿼리가 비활성화 되자마자 캐시를 삭제하고 싶으면 gcTime 쿼리 옵션을 0으로 설정
+  // 캐시 데이터가 있다면 쿼리가 활성화 됐을 때(마운트 등) 캐시 데이터 사용(staleTime 초과됐다면 리패치)
+  const { data, isFetching, refetch } = useRandomSentenceQuery(params, {
+    enabled: false, // 생성 버튼을 클릭했을 때만 수동으로 데이터 조회하므로 false로 설정
+    staleTime: Infinity, // 데이터를 수동으로 조회하므로 자동 refetch 방지
     meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });
 
-  /**
-   * 요청할 때마다 새로운 랜덤 문장을 생성해야 하기 때문에,
-   * timestamp 속성을 추가해서 매번 다른 쿼리키를 받는 것처럼 작성
-   * */
-  const generateSentences = () => {
+  const generateSentences = async () => {
     const { topics, sent_count } = methods.getValues();
-    setParams({ topics, sent_count, timestamp: Date.now() });
-
-    if (!readyToFetch) setReadyToFetch.on();
+    setParams({ topics, sent_count });
+    await refetch();
   };
 
   return { methods, data, isFetching, generateSentences };

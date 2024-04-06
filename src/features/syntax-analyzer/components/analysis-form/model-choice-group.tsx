@@ -10,20 +10,21 @@ import { Control, Controller } from 'react-hook-form';
 
 import {
   AnalysisFormValues,
-  GPT_3_DECREMENT_COUNT,
+  AnalysisModel,
+  GPT_3_5_DECREMENT_COUNT,
   GPT_4_DECREMENT_COUNT,
 } from '@/features/syntax-analyzer';
 
 const MODEL_FIELDS = [
   {
-    value: 'gpt-3.5-turbo',
-    label: 'GPT-3.5 (Fine-tuned)',
+    value: AnalysisModel.GPT_3_5_FT,
+    label: 'GPT-3.5 (Fine-Tuned)',
     desc: '정확도는 GPT 4와 비슷하거나 다소 낮지만 속도가 빨라요',
-    count: GPT_3_DECREMENT_COUNT,
+    count: GPT_3_5_DECREMENT_COUNT,
     recommend: true,
   },
   {
-    value: 'gpt-4',
+    value: AnalysisModel.GPT_4,
     label: 'GPT-4',
     desc: '정확도는 높지만 속도가 느려요',
     count: GPT_4_DECREMENT_COUNT,

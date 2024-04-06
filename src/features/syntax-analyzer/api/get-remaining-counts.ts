@@ -1,4 +1,8 @@
-import { QueryClient, useQuery, UseQueryOptions } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useSuspenseQuery,
+  UseSuspenseQueryOptions,
+} from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 
 import { axios } from '@/lib';
@@ -23,9 +27,9 @@ export const useRemainingCountQuery = <
   TQueryFnData = RemainingCountResponse,
   TData = TQueryFnData,
 >(
-  options?: UseQueryOptions<TQueryFnData, AxiosError, TData>,
+  options?: Partial<UseSuspenseQueryOptions<TQueryFnData, AxiosError, TData>>,
 ) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: REMAINING_COUNT_BASE_KEY,
     queryFn: getRemainingCounts,
     ...options,
@@ -38,6 +42,9 @@ export const useRemainingCountQuery = <
  * */
 export const analysisCountLoader = (queryClient: QueryClient) => {
   return () => {
-    return queryClient.fetchQuery(REMAINING_COUNT_BASE_KEY, getRemainingCounts);
+    return queryClient.fetchQuery({
+      queryKey: REMAINING_COUNT_BASE_KEY,
+      queryFn: getRemainingCounts,
+    });
   };
 };
