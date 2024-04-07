@@ -45,3 +45,7 @@ export const addTopicSchema = randomSentenceFormSchema.pick([
   'keyword',
   'topics',
 ]);
+
+export type RandomSentenceFormValues = yup.InferType<
+  typeof randomSentenceFormSchema
+>;
