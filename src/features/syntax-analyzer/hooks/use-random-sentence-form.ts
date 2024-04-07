@@ -6,15 +6,10 @@ import { useForm } from 'react-hook-form';
 
 import {
   randomSentenceFormSchema,
+  RandomSentenceFormValues,
   REMAINING_COUNT_BASE_KEY,
 } from '@/features/syntax-analyzer';
 import { useRandomSentenceQuery } from '@/features/syntax-analyzer/api';
-
-export type RandomSentenceFormValues = {
-  sent_count: number; // 생성할 랜덤 문장 개수
-  topics: string[];
-  keyword: string;
-};
 
 /**
  * yup 스키마의 cast 기능을 이용해 기본값 설정
