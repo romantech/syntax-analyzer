@@ -21,7 +21,7 @@ export default function SyntaxEditor() {
   return (
     <Stack h="calc(100vh - 72px)" gap={8} pt={8}>
       <Stack>
-        <Notice text="태그를 선택한 후 단어를 드래그 혹은 클릭 해주세요" />
+        <Notice text="문법 요소를 선택한 후 단어를 클릭하거나 드래그하면 태깅할 수 있어요" />
         <Flex gap={6}>
           <TagListAccordion flexGrow={1} />
           <ControlPanel />
