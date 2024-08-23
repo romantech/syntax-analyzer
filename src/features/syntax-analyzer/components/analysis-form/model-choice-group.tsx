@@ -9,25 +9,24 @@ import {
 import { Control, Controller } from 'react-hook-form';
 
 import {
+  ANALYSIS_DECREMENT_COUNT,
   AnalysisFormValues,
   AnalysisModel,
-  GPT_3_5_DECREMENT_COUNT,
-  GPT_4_DECREMENT_COUNT,
 } from '@/features/syntax-analyzer';
 
 const MODEL_FIELDS = [
   {
-    value: AnalysisModel.GPT_3_5_FT,
-    label: 'GPT-3.5 (Fine-Tuned)',
-    desc: '정확도는 GPT 4와 비슷하거나 다소 낮지만 속도가 빨라요',
-    count: GPT_3_5_DECREMENT_COUNT,
+    value: AnalysisModel.GPT_4O_MINI_FT,
+    label: 'GPT-4o-mini',
+    desc: '대부분의 문장을 잘 분석해요',
+    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.GPT_4O_MINI_FT],
     recommend: true,
   },
   {
-    value: AnalysisModel.GPT_4,
-    label: 'GPT-4',
-    desc: '정확도는 높지만 속도가 느려요',
-    count: GPT_4_DECREMENT_COUNT,
+    value: AnalysisModel.GPT_4O_FT,
+    label: 'GPT-4o',
+    desc: '정확도가 조금 더 높아요',
+    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.GPT_4O_FT],
     recommend: false,
   },
 ];

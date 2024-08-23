@@ -12,6 +12,6 @@ export const createAnalysisFormSchema = yup.object({
   model: yup
     .mixed<AnalysisModel>()
     .oneOf(Object.values(AnalysisModel))
-    .default(AnalysisModel.GPT_3_5_FT),
+    .default(AnalysisModel.GPT_4O_MINI_FT),
   sentence: englishSentenceSchema.ensure(),
 });
