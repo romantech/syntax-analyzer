@@ -75,3 +75,13 @@ export const removeThousandSeparator = (sentence: string): string => {
     match.replace(/,/g, ''),
   );
 };
+
+/**
+ * Ensures that a sentence ends with a period.
+ *
+ * @param {string} sentence - The sentence to check.
+ * @return {string} The sentence with a period at the end.
+ */
+export const ensurePeriod = (sentence: string): string => {
+  return sentence.endsWith('.') ? sentence : `${sentence}.`;
+};

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 import {
+  ensurePeriod,
   expandAbbreviations,
   removeThousandSeparator,
   tokenizer,
@@ -34,7 +35,7 @@ const toastOptions: UseToastOptions = {
  * @return {string} The processed sentence.
  */
 export const processSentence = (sentence: string): string => {
-  const expanded = expandAbbreviations(sentence);
+  const expanded = expandAbbreviations(ensurePeriod(sentence));
   return removeThousandSeparator(expanded);
 };
 
