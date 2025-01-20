@@ -1,12 +1,14 @@
-import { IconButton, IconButtonProps } from '@chakra-ui/react';
-import { m } from 'framer-motion';
+import { ComponentProps } from 'react';
+
+import { IconButton } from '@chakra-ui/react';
+import { motion, Variants } from 'framer-motion';
 import { FaAnglesDown } from 'react-icons/fa6';
 
-const MotionIconButton = m(IconButton);
+const MotionIconButton = motion.create(IconButton);
 
-type ScrollDownButtonProps = Omit<IconButtonProps, 'aria-label'>;
+type ScrollDownButtonProps = ComponentProps<typeof MotionIconButton>;
 
-const motionVariants = {
+const motionVariants: Variants = {
   initial: { y: '0%' },
   bounce: {
     y: ['0%', '50%', '0%'],
