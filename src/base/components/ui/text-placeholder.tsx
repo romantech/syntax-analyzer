@@ -1,9 +1,10 @@
-import { As, Icon, Text, TextProps } from '@chakra-ui/react';
+import { Icon, Text, TextProps } from '@chakra-ui/react';
+import { IconType } from 'react-icons';
 
 interface TextPlaceholderProps extends TextProps {
   text: string;
-  startIcon?: As;
-  endIcon?: As;
+  startIcon?: IconType;
+  endIcon?: IconType;
 }
 
 export default function TextPlaceholder({
