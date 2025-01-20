@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 
 import { Box, BoxProps, HStack } from '@chakra-ui/react';
-import { m } from 'framer-motion';
+import { motion, Transition, Variants } from 'framer-motion';
 
-const DotGroup = m(HStack);
-const Dot = m(Box);
+const DotGroup = motion.create(HStack);
+const Dot = motion.create(Box);
 
-const dotVariants = {
+const dotVariants: Variants = {
   initial: { y: '0%' },
   animate: { y: '100%' },
 };
 
-const dotTransition = {
+const dotTransition: Transition = {
   duration: 0.5,
   repeat: Infinity,
   repeatType: 'reverse',

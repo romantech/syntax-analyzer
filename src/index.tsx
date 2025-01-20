@@ -21,7 +21,13 @@ createRoot(rootElement!).render(
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <ConfiguredQueryProvider>
         <ReactQueryDevtools initialIsOpen={false} position="bottom" />
-        <RouterProvider router={router} />
+        <RouterProvider
+          router={router}
+          future={{
+            /** @see https://reactrouter.com/en/6.28.2/upgrading/future#v7_starttransition */
+            v7_startTransition: true,
+          }}
+        />
       </ConfiguredQueryProvider>
     </ChakraProvider>
   </StrictMode>,
