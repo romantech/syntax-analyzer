@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { RouterProvider } from 'react-router-dom';
 
 import { ConfiguredQueryProvider } from '@/lib';
@@ -15,6 +16,7 @@ const rootElement = document.getElementById('root');
 createRoot(rootElement!).render(
   <StrictMode>
     <Analytics />
+    <SpeedInsights />
     <ChakraProvider theme={theme} toastOptions={toastOptions}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <ConfiguredQueryProvider>
