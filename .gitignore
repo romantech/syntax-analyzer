@@ -30,3 +30,5 @@ stats.*
 
 # ESLint cache file
 .eslintcache
+
+.qodo
