@@ -8,6 +8,9 @@ on:
 #    branches:
 #      - main
 
+permissions:
+  contents: read
+
 jobs:
   qodana:
     runs-on: ubuntu-latest
