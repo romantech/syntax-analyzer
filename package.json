@@ -45,7 +45,7 @@
     "@tsparticles/react": "^3.0.0",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
-    "axios": "^1.9.0",
+    "axios": "^1.12.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.18.2",
