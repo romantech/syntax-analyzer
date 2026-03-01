@@ -8,7 +8,7 @@ export default function SyntaxEditorRoot() {
   return (
     <Layout>
       <Provider store={analysisStore}>
-        <JotaiDevTools store={analysisStore} theme="dark" />
+        <JotaiDevTools />
         <Outlet />
       </Provider>
     </Layout>
