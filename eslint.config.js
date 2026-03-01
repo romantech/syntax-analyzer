@@ -11,7 +11,7 @@ import { fixupConfigRules } from '@eslint/compat';
 
 export default tseslint.config(
   // 1. ignores
-  { ignores: ['dist', 'eslint.config.js'] },
+  { ignores: ['dist/', 'build/', 'dev-dist', 'eslint.config.js'] },
   // 2. 기본 + TS 추천 설정
   js.configs.recommended,
   tseslint.configs.recommended,

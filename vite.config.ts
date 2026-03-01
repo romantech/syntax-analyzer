@@ -38,19 +38,18 @@ export default defineConfig(({ mode }) => ({
      * */
     react({
       babel: {
-        plugins: [
-          /**
-           * Jotai 아톰에 대한 React Refresh 지원 플러그인
-           * React Refresh 핫리로딩은 코드 변경사항을 반영하면서 상태는 유지하는 기능
-           * */
-          'jotai/babel/plugin-react-refresh',
-          /**
-           * Jotai 는 리코일 처럼 키(key)가 아닌 객체 참조 기반 작동 -> 아톰 식별자 없음
-           * 수동으로 debugLabel 을 추가할 수 있지만 번거로움.
-           * 아래 플러그인을 사용하면 모든 아톰에 debugLabel 추가해줌(개발자 도구에서 확인 可)
-           * */
-          'jotai/babel/plugin-debug-label',
-        ],
+        /**
+         * plugin-react-refresh + plugin-debug-label 둘 다 포함
+         * [jotai/babel/plugin-react-refresh]
+         * Jotai 아톰에 대한 React Refresh 지원 플러그인
+         * React Refresh 핫리로딩은 코드 변경사항을 반영하면서 상태는 유지하는 기능
+         *
+         * [jotai/babel/plugin-debug-label]
+         * Jotai 는 리코일 처럼 키(key)가 아닌 객체 참조 기반 작동 -> 아톰 식별자 없음
+         * 수동으로 debugLabel 을 추가할 수 있지만 번거로움.
+         * 아래 플러그인을 사용하면 모든 아톰에 debugLabel 추가해줌(개발자 도구에서 확인 可)
+         * */
+        presets: ['jotai-babel/preset'],
       },
     }),
     tsconfigPaths(),
@@ -115,7 +114,7 @@ export default defineConfig(({ mode }) => ({
   ],
   esbuild: {
     /** 배포 환경에서만 콘솔/디버거 비활성; 참고로 build.minify 기본값은 esbuild */
-    pure: mode === 'production' ? ['console', 'debugger'] : [],
+    drop: mode === 'production' ? ['console', 'debugger'] : [],
   },
   build: { rollupOptions: { output: { manualChunks } } },
   server: { open: true },
