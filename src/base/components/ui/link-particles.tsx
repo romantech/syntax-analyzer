@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useColorMode } from '@chakra-ui/react';
 import { type ISourceOptions } from '@tsparticles/engine';
 import { loadLinksPreset } from '@tsparticles/preset-links';
-// eslint-disable-next-line import/no-named-as-default
+// eslint-disable-next-line import-x/no-named-as-default
 import Particles, {
   initParticlesEngine,
   type IParticlesProps,

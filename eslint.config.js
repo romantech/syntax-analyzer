@@ -4,14 +4,14 @@ import tseslint from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefreshPlugin from 'eslint-plugin-react-refresh';
-import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import-x';
 import tanstackQueryPlugin from '@tanstack/eslint-plugin-query';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 import { fixupConfigRules } from '@eslint/compat';
 
 export default tseslint.config(
   // 1. ignores
-  { ignores: ['dist/', 'build/', 'dev-dist', 'eslint.config.js'] },
+  { ignores: ['dist/', 'build/', 'dev-dist/', 'eslint.config.js'] },
   // 2. 기본 + TS 추천 설정
   js.configs.recommended,
   tseslint.configs.recommended,
@@ -36,7 +36,7 @@ export default tseslint.config(
     },
     settings: {
       react: { version: 'detect' },
-      'import/resolver': { typescript: true, node: true },
+      'import-x/resolver': { typescript: true, node: true },
     },
     plugins: {
       'react-hooks': reactHooksPlugin,
@@ -78,8 +78,8 @@ export default tseslint.config(
       ],
 
       /** import 정렬 관련 설정 */
-      'import/no-unresolved': 'error',
-      'import/order': [
+      'import-x/no-unresolved': 'error',
+      'import-x/order': [
         'warn',
         {
           // 그룹 순서 지정

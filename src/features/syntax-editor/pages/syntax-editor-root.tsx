@@ -1,17 +1,14 @@
 import { Provider } from 'jotai';
-import { DevTools } from 'jotai-devtools';
 import { Outlet } from 'react-router-dom';
 
-import { Layout } from '@/base';
+import { JotaiDevTools, Layout } from '@/base';
 import { analysisStore } from '@/features/syntax-editor';
-
-if (import.meta.env.DEV) void import('jotai-devtools/styles.css');
 
 export default function SyntaxEditorRoot() {
   return (
     <Layout>
       <Provider store={analysisStore}>
-        <DevTools theme="dark" />
+        <JotaiDevTools store={analysisStore} theme="dark" />
         <Outlet />
       </Provider>
     </Layout>
