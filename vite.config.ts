@@ -4,29 +4,47 @@ import { defineConfig, PluginOption } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-import { dependencies } from './package.json';
-
-/** Filter out React-related dependencies from the list */
-const reactDeps = Object.keys(dependencies).filter(
-  (key) => key === 'react' || key.startsWith('react-'),
-);
-
 /**
- * Generates custom chunks for Rollup or Vite based on the dependencies provided.
- * The 'vendor' chunk includes all React-related dependencies, while additional chunks
- * are created for each remaining dependency not already included in 'vendor'.
- * For more information on this approach, see the following article:
- * {@link https://sambitsahoo.com/blog/vite-code-splitting-that-works.html Referenced Code}
+ * Vite(Rollup) 빌드 시 적용되는 커스텀 청크 분할(Code Splitting) 함수
+ * * package.json의 전체 의존성을 무조건 청크로 만들 때 발생하던 "Generated an empty chunk" 경고를 방지하기 위해,
+ * 빌드 파이프라인에 포함된 실제 `node_modules` 내부 모듈(`id`)만 대상으로 청크를 분리합니다.
+ * 사용 목적과 업데이트 주기가 비슷한 패키지들을 하나의 그룹(chunk)으로 묶어 브라우저 캐시 효율을 극대화합니다.
+ * * @param {string} id - Rollup이 현재 처리 중인 모듈의 절대 경로
+ * @returns {string | undefined} 묶어줄 청크 이름. 명시되지 않은 모듈은 Rollup의 기본 분할 전략에 위임(`undefined`)
  */
-const manualChunks = {
-  // Include all React-related dependencies in a 'vendor' chunk
-  vendor: reactDeps,
-  // Generate additional chunks for remaining dependencies
-  ...Object.keys(dependencies).reduce((chunks, name) => {
-    // Skip dependencies already included in 'vendor'
-    if (!reactDeps.includes(name)) chunks[name] = [name];
-    return chunks;
-  }, {}),
+const manualChunks = (id: string): string | undefined => {
+  if (!id.includes('node_modules')) return undefined;
+
+  // 경로 구분자 통일 (Windows 환경 호환성)
+  const p = id.replace(/\\/g, '/');
+
+  // pnpm 심볼릭 링크 구조 대응: .../.pnpm/pkg@ver/node_modules/pkg/...
+  const inPkg = (name: string) => p.includes(`/node_modules/${name}/`);
+
+  // 1. 코어 라이브러리 (React 생태계)
+  if (inPkg('react') || inPkg('react-dom') || inPkg('scheduler'))
+    return 'react';
+  if (inPkg('react-router') || inPkg('react-router-dom')) return 'router';
+
+  // 2. UI 및 스타일링 (Chakra UI는 Emotion을 강하게 의존)
+  if (inPkg('@chakra-ui') || inPkg('@emotion')) return 'chakra';
+
+  // 3. 상태 및 데이터 페칭
+  if (inPkg('@tanstack/react-query') || inPkg('@tanstack/query-core'))
+    return 'tanstack';
+  if (inPkg('jotai')) return 'jotai';
+
+  // 4. 애니메이션 및 미디어
+  if (inPkg('framer-motion')) return 'framer';
+  if (inPkg('@lottiefiles') || inPkg('lottie-web')) return 'lottie';
+
+  // 5. 유틸리티 (HTTP 통신, 폼 검증, 날짜)
+  if (inPkg('axios') || inPkg('qs')) return 'http';
+  if (inPkg('yup') || inPkg('@hookform')) return 'form';
+  if (inPkg('date-fns')) return 'date-fns';
+
+  // 6. 나머지는 Rollup의 기본 트리쉐이킹 및 청크 분할 알고리즘에 위임
+  return undefined;
 };
 
 // https://vitejs.dev/config/
@@ -38,23 +56,22 @@ export default defineConfig(({ mode }) => ({
      * */
     react({
       babel: {
-        plugins: [
-          /**
-           * Jotai 아톰에 대한 React Refresh 지원 플러그인
-           * React Refresh 핫리로딩은 코드 변경사항을 반영하면서 상태는 유지하는 기능
-           * */
-          'jotai/babel/plugin-react-refresh',
-          /**
-           * Jotai 는 리코일 처럼 키(key)가 아닌 객체 참조 기반 작동 -> 아톰 식별자 없음
-           * 수동으로 debugLabel 을 추가할 수 있지만 번거로움.
-           * 아래 플러그인을 사용하면 모든 아톰에 debugLabel 추가해줌(개발자 도구에서 확인 可)
-           * */
-          'jotai/babel/plugin-debug-label',
-        ],
+        /**
+         * plugin-react-refresh + plugin-debug-label 둘 다 포함
+         * [jotai/babel/plugin-react-refresh]
+         * Jotai 아톰에 대한 React Refresh 지원 플러그인
+         * React Refresh 핫리로딩은 코드 변경사항을 반영하면서 상태는 유지하는 기능
+         *
+         * [jotai/babel/plugin-debug-label]
+         * Jotai 는 리코일 처럼 키(key)가 아닌 객체 참조 기반 작동 -> 아톰 식별자 없음
+         * 수동으로 debugLabel 을 추가할 수 있지만 번거로움.
+         * 아래 플러그인을 사용하면 모든 아톰에 debugLabel 추가해줌(개발자 도구에서 확인 可)
+         * */
+        presets: ['jotai-babel/preset'],
       },
     }),
     tsconfigPaths(),
-    visualizer() as unknown as PluginOption,
+    mode === 'analyze' ? (visualizer() as unknown as PluginOption) : undefined,
 
     /**
      * vite-plugin-pwa 플러그인으로 서비스 워커 스크립트 자동 등록
@@ -115,7 +132,7 @@ export default defineConfig(({ mode }) => ({
   ],
   esbuild: {
     /** 배포 환경에서만 콘솔/디버거 비활성; 참고로 build.minify 기본값은 esbuild */
-    pure: mode === 'production' ? ['console', 'debugger'] : [],
+    drop: mode === 'production' ? ['console', 'debugger'] : [],
   },
   build: { rollupOptions: { output: { manualChunks } } },
   server: { open: true },

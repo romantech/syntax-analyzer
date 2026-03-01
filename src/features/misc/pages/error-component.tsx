@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import {
   Button,
   Heading,
@@ -34,12 +32,12 @@ export default function ErrorComponent({
   const [shouldRedirect, setShouldRedirect] = useBoolean(false);
 
   const isMounted = useIsMounted();
-  const errorMessage = useRef(error?.message ?? '문제가 발생했어요');
+  let errorMessage = error?.message ?? '문제가 발생했어요';
 
   const isRouteError = isRouteErrorResponse(routerError);
   if (isRouteError) {
     const { status, statusText } = routerError;
-    errorMessage.current = `${status} | ${statusText}`;
+    errorMessage = `${status} | ${statusText}`;
   }
 
   const onActionButtonClick = isRouteError
@@ -69,10 +67,10 @@ export default function ErrorComponent({
         <VStack>
           <Text fontSize="xl" textTransform="capitalize" maxW={500}>
             <Highlight
-              query={errorMessage.current.match(DIGITS_PATTERN) ?? []}
+              query={errorMessage.match(DIGITS_PATTERN) ?? []}
               styles={highlightStyles}
             >
-              {errorMessage.current}
+              {errorMessage}
             </Highlight>
           </Text>
           <Button mt={2} w="full" maxW={232} onClick={onActionButtonClick}>

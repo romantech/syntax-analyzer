@@ -9,9 +9,13 @@ export const useIsMounted = () => {
   const [isMounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    // 마운트 직후(다음 tick)에만 true로 바꿔서 "렌더 중 state 변경" ESLint 경고 대응
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
 
     return () => {
+      clearTimeout(timer);
       setMounted(false);
     };
   }, []);
