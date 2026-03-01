@@ -16,9 +16,6 @@ interface SelectionIndicesResult {
 export const getSelectionIndices = (
   qualifiedName: string,
 ): SelectionIndicesResult => {
-  let begin = 0;
-  let end = 0;
-
   const sel = window.getSelection();
   if (!sel?.rangeCount) {
     return { begin: 0, end: 0, startNode: null, endNode: null };
@@ -36,8 +33,8 @@ export const getSelectionIndices = (
   const startIndex = startElement.getAttribute(qualifiedName);
   const endIndex = endElement.getAttribute(qualifiedName);
 
-  begin = startIndex ? Number(startIndex) : 0;
-  end = endIndex ? Number(endIndex) + 1 : 0;
+  const begin = startIndex ? Number(startIndex) : 0;
+  const end = endIndex ? Number(endIndex) + 1 : 0;
 
   return { begin, end, startNode: startElement, endNode: endElement };
 };

@@ -17,7 +17,7 @@ const safeSetItem = <T>(key: string, value: T) => {
 
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
+  } catch {
     logError('setting', key);
   }
 };
@@ -28,7 +28,7 @@ const safeGetItem = <T>(key: string, defaultValue: T) => {
   try {
     const storedValue = window.localStorage.getItem(key);
     if (storedValue) return JSON.parse(storedValue) as T;
-  } catch (error) {
+  } catch {
     logError('getting', key);
   }
 

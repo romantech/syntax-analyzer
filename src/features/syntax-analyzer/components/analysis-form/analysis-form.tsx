@@ -84,11 +84,11 @@ const AnalysisFormBox = ({
   );
 };
 
-const AnalysisFormSkeleton = (stackProps: StackProps) => {
-  const ESkeleton = (props: SkeletonProps) => (
-    <Skeleton w="full" borderRadius="md" h={10} {...props} />
-  );
+const ESkeleton = (props: SkeletonProps) => (
+  <Skeleton w="full" borderRadius="md" h={10} {...props} />
+);
 
+const AnalysisFormSkeleton = (stackProps: StackProps) => {
   return (
     <AnalysisFormBox {...stackProps}>
       <Stack gap={5} mb={2}>

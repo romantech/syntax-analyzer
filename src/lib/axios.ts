@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axiosLib from 'axios';
 import { stringify } from 'qs';
 
 const baseURL = import.meta.env.DEV
@@ -9,4 +9,4 @@ export const paramsSerializer = <T>(params: T) => {
   return stringify(params, { arrayFormat: 'repeat' });
 };
 
-export const axios = Axios.create({ baseURL });
+export const axios = axiosLib.create({ baseURL });
