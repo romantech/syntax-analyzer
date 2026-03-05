@@ -15,11 +15,11 @@ export const MIN_SENTENCE_WORDS = 3;
 
 /** 서버 허용값과 일치 필요 */
 export enum AnalysisModel {
-  GPT_4O_MINI_FT = 'gpt-4o-mini-ft',
-  GPT_4O_FT = 'gpt-4o-ft',
+  PRIMARY = 'primary',
+  FAST = 'fast-ft',
 }
 
 export const ANALYSIS_DECREMENT_COUNT = {
-  [AnalysisModel.GPT_4O_MINI_FT]: 1,
-  [AnalysisModel.GPT_4O_FT]: 2,
+  [AnalysisModel.FAST]: 1,
+  [AnalysisModel.PRIMARY]: 2,
 };

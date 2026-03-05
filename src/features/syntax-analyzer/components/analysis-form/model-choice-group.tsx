@@ -16,17 +16,17 @@ import {
 
 const MODEL_FIELDS = [
   {
-    value: AnalysisModel.GPT_4O_MINI_FT,
-    label: 'GPT-4o-mini',
+    value: AnalysisModel.FAST,
+    label: '기본 모델',
     desc: '대부분의 문장을 잘 분석해요',
-    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.GPT_4O_MINI_FT],
+    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.FAST],
     recommend: true,
   },
   {
-    value: AnalysisModel.GPT_4O_FT,
-    label: 'GPT-4o',
+    value: AnalysisModel.PRIMARY,
+    label: '고급 모델',
     desc: '정확도가 조금 더 높아요',
-    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.GPT_4O_FT],
+    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY],
     recommend: false,
   },
 ];
