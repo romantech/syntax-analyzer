@@ -15,11 +15,13 @@ export const MIN_SENTENCE_WORDS = 3;
 
 /** 서버 허용값과 일치 필요 */
 export enum AnalysisModel {
-  FAST = 'fast-ft',
+  FAST_FT = 'fast-ft',
+  FAST = 'fast',
   PRIMARY = 'primary',
 }
 
 export const ANALYSIS_DECREMENT_COUNT = {
+  [AnalysisModel.FAST_FT]: 1,
   [AnalysisModel.FAST]: 1,
   [AnalysisModel.PRIMARY]: 2,
 };

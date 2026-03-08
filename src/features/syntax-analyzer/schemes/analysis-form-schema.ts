@@ -12,6 +12,6 @@ export const createAnalysisFormSchema = yup.object({
   model: yup
     .mixed<AnalysisModel>()
     .oneOf(Object.values(AnalysisModel))
-    .default(AnalysisModel.FAST),
+    .default(AnalysisModel.FAST_FT),
   sentence: englishSentenceSchema.ensure(),
 });

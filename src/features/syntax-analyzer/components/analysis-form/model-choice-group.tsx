@@ -16,10 +16,10 @@ import {
 
 const MODEL_FIELDS = [
   {
-    value: AnalysisModel.FAST,
+    value: AnalysisModel.FAST_FT,
     label: '기본 모델',
     desc: '대부분의 문장을 잘 분석해요',
-    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.FAST],
+    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.FAST_FT],
     recommend: true,
   },
   {
