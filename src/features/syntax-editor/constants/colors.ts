@@ -2,9 +2,7 @@ import type { ColorMode } from '@/base';
 import type { ConstituentColors } from '@/features/syntax-editor';
 
 export const DELETE_MODE_HOVER_COLOR_SCHEME = (mode: ColorMode) => {
-  return mode === 'dark'
-    ? 'var(--chakra-colors-gray-500)'
-    : 'var(--chakra-colors-gray-300)';
+  return mode === 'dark' ? 'var(--chakra-colors-gray-500)' : 'var(--chakra-colors-gray-300)';
 };
 
 export const CONSTITUENT_COLORS: ConstituentColors = {

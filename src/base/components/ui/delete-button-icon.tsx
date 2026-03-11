@@ -1,9 +1,4 @@
-import {
-  type ButtonProps,
-  Center,
-  Icon,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { type ButtonProps, Center, Icon, useColorModeValue } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 import { CgClose } from 'react-icons/cg';
 

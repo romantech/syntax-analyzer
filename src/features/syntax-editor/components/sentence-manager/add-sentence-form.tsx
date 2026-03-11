@@ -1,20 +1,10 @@
-import {
-  Box,
-  type BoxProps,
-  Button,
-  FormControl,
-  HStack,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, type BoxProps, Button, FormControl, HStack, useDisclosure } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSetAtom } from 'jotai';
 import { useForm } from 'react-hook-form';
 
 import { ConfirmModal, type VoidFunc } from '@/base';
-import {
-  addSentenceFormSchema,
-  SentenceInput,
-} from '@/features/syntax-analyzer';
+import { addSentenceFormSchema, SentenceInput } from '@/features/syntax-analyzer';
 import { addUserAnalysisActionAtom } from '@/features/syntax-editor';
 
 const defaultValues = addSentenceFormSchema.cast({});
@@ -25,10 +15,7 @@ interface AddSentenceProps extends BoxProps {
   onConfirmEffect?: VoidFunc;
 }
 
-export default function AddSentenceForm({
-  onConfirmEffect,
-  ...boxProps
-}: AddSentenceProps) {
+export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSentenceProps) {
   const { register, handleSubmit, getValues, reset, formState } =
     useForm<typeof defaultValues>(formProps);
 
@@ -48,10 +35,7 @@ export default function AddSentenceForm({
     <Box as="form" w="full" onSubmit={handleSubmit(onOpen)} {...boxProps}>
       <FormControl isInvalid={!!errors.sentence}>
         <HStack align="start">
-          <SentenceInput
-            {...register('sentence')}
-            errorMessage={errors.sentence?.message}
-          />
+          <SentenceInput {...register('sentence')} errorMessage={errors.sentence?.message} />
           <Button type="submit" isLoading={isSubmitting} size="lg">
             추가
           </Button>

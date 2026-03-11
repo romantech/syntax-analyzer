@@ -4,10 +4,7 @@ import { expandAbbreviations, generateNumberID, tokenizer } from '@/base';
 
 import type { AnalysisSource, TAnalysis } from '@/features/syntax-editor';
 
-export const generateAnalysis = (
-  sentence: string,
-  source: AnalysisSource,
-): TAnalysis => {
+export const generateAnalysis = (sentence: string, source: AnalysisSource): TAnalysis => {
   const expandedSentence = expandAbbreviations(sentence);
   const tokenizedSentence = tokenizer(expandedSentence);
 

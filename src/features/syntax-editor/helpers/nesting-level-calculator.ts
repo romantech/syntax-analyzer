@@ -18,10 +18,7 @@ const assignCalculatedLevel = (element: HTMLElement) => {
   const hasChild = element.children.length > 0;
   const currentLevel = hasChild ? maxChildLevel + 1 : maxChildLevel;
 
-  const classesToCheck = [
-    CONSTITUENT_CLASSES.TOKEN,
-    CONSTITUENT_CLASSES.TOKEN_GROUP,
-  ];
+  const classesToCheck = [CONSTITUENT_CLASSES.TOKEN, CONSTITUENT_CLASSES.TOKEN_GROUP];
 
   classesToCheck.forEach((className) => {
     if (element.classList.contains(className)) {

@@ -7,10 +7,7 @@ import { axios, paramsSerializer } from '@/lib';
 type RandomSentenceResponse = string[];
 type RandomSentenceParams = Omit<RandomSentenceFormValues, 'keyword'>;
 
-export const getRandomSentences = async <
-  T = RandomSentenceResponse,
-  K = RandomSentenceParams,
->(
+export const getRandomSentences = async <T = RandomSentenceResponse, K = RandomSentenceParams>(
   params: K,
 ) => {
   const { data } = await axios.get<T>('analyzer/random-sentences', {

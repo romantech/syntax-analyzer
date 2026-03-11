@@ -22,16 +22,14 @@ const manualChunks = (id: string): string | undefined => {
   const inPkg = (name: string) => p.includes(`/node_modules/${name}/`);
 
   // 1. 코어 라이브러리 (React 생태계)
-  if (inPkg('react') || inPkg('react-dom') || inPkg('scheduler'))
-    return 'react';
+  if (inPkg('react') || inPkg('react-dom') || inPkg('scheduler')) return 'react';
   if (inPkg('react-router') || inPkg('react-router-dom')) return 'router';
 
   // 2. UI 및 스타일링 (Chakra UI는 Emotion을 강하게 의존)
   if (inPkg('@chakra-ui') || inPkg('@emotion')) return 'chakra';
 
   // 3. 상태 및 데이터 페칭
-  if (inPkg('@tanstack/react-query') || inPkg('@tanstack/query-core'))
-    return 'tanstack';
+  if (inPkg('@tanstack/react-query') || inPkg('@tanstack/query-core')) return 'tanstack';
   if (inPkg('jotai')) return 'jotai';
 
   // 4. 애니메이션 및 미디어

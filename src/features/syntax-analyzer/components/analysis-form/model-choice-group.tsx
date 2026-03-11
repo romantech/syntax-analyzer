@@ -1,18 +1,10 @@
-import {
-  Badge,
-  HStack,
-  Radio,
-  RadioGroup,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Badge, HStack, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react';
 import { type Control, Controller } from 'react-hook-form';
-
 import {
   ANALYSIS_DECREMENT_COUNT,
-  type AnalysisFormValues,
   AnalysisModel,
-} from '@/features/syntax-analyzer';
+} from '@/features/syntax-analyzer/constants/settings';
+import type { AnalysisFormValues } from '@/features/syntax-analyzer/hooks/use-analysis-form';
 
 const MODEL_FIELDS = [
   {
@@ -36,22 +28,13 @@ interface ModelChoiceGroupProps {
   remainingCount: number;
 }
 
-export default function ModelChoiceGroup({
-  control,
-  remainingCount,
-}: ModelChoiceGroupProps) {
+export default function ModelChoiceGroup({ control, remainingCount }: ModelChoiceGroupProps) {
   return (
     <Controller
       name="model"
       control={control}
       render={({ field: { onChange, value } }) => (
-        <RadioGroup
-          onChange={onChange}
-          value={value}
-          display="flex"
-          flexDirection="column"
-          gap={2}
-        >
+        <RadioGroup onChange={onChange} value={value} display="flex" flexDirection="column" gap={2}>
           {MODEL_FIELDS.map((field) => (
             <Stack key={field.value}>
               <HStack align="center">

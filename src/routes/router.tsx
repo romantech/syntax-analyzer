@@ -8,9 +8,7 @@ const { App } = lazyImport(() => import('@/app'));
 
 const { ErrorComponent, Home } = lazyImport(() => import('@/features/misc'));
 
-const { SyntaxAnalyzer } = lazyImport(
-  () => import('@/features/syntax-analyzer'),
-);
+const { SyntaxAnalyzer } = lazyImport(() => import('@/features/syntax-analyzer'));
 
 const { SentenceManager, SyntaxEditor, SyntaxEditorRoot } = lazyImport(
   () => import('@/features/syntax-editor'),

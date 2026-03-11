@@ -14,10 +14,7 @@ export default function ResetButton() {
   const isTouched = useAtomValue(isSegmentTouchedAtom);
 
   return (
-    <ConfirmPopover
-      onConfirm={initializer}
-      headerText="저장 상태로 초기화 하시겠습니까?"
-    >
+    <ConfirmPopover onConfirm={initializer} headerText="저장 상태로 초기화 하시겠습니까?">
       {({ onOpen, isOpen }) => (
         <Tooltip
           label="저장 상태로 초기화"

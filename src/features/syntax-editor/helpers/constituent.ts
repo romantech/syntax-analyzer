@@ -1,8 +1,5 @@
 import { generateNumberID } from '@/base';
-import type {
-  ConstituentType,
-  ConstituentWithoutId,
-} from '@/features/syntax-editor';
+import type { ConstituentType, ConstituentWithoutId } from '@/features/syntax-editor';
 
 export const isMultipleTokensInRange = (begin: number, end: number) => {
   return Math.abs(begin - end) > 1;

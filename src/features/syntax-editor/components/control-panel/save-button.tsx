@@ -39,10 +39,7 @@ export default function SaveButton() {
   };
 
   return (
-    <ConfirmPopover
-      onConfirm={onSave}
-      headerText="현재 태깅 내용을 저장하시겠습니까?"
-    >
+    <ConfirmPopover onConfirm={onSave} headerText="현재 태깅 내용을 저장하시겠습니까?">
       {({ onOpen, isOpen }) => (
         <Tooltip
           label="태깅 저장"

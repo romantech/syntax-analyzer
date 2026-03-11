@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 
 import { getDisplayName } from '@/base';
-import type { ShowcaseTemplateProps } from '@/features/misc';
+import type { ShowcaseTemplateProps } from './showcase-template';
 
 export const withShowcase = (
   Component: ComponentType<ShowcaseTemplateProps>,

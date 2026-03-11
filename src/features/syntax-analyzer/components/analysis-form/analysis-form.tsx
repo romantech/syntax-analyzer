@@ -72,10 +72,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
   );
 }
 
-const AnalysisFormBox = ({
-  children,
-  ...stackProps
-}: PropsWithChildren<StackProps>) => {
+const AnalysisFormBox = ({ children, ...stackProps }: PropsWithChildren<StackProps>) => {
   return (
     <Stack w="full" maxW={660} gap={10} {...stackProps}>
       {children}

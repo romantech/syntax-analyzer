@@ -1,8 +1,5 @@
 import { getSelectionIndices } from '@/base';
-import {
-  CONSTITUENT_CLASSES,
-  CONSTITUENT_DATA_ATTRS,
-} from '@/features/syntax-editor';
+import { CONSTITUENT_CLASSES, CONSTITUENT_DATA_ATTRS } from '@/features/syntax-editor';
 
 const { INDEX, ID, BEGIN, END } = CONSTITUENT_DATA_ATTRS;
 const TOKEN_GROUP_SELECTOR = `.${CONSTITUENT_CLASSES.TOKEN_GROUP}`;
@@ -37,11 +34,7 @@ const isSelectionMatchingSegment = (
  * - [0, 1]을 포함하는 begin(base)가 0인 부모 요소를 탐색하여 가장 큰 end(target) 반환
  * - [1, 3]을 포함하는 end(base)가 3인 부모 요소를 탐색하여 가장 큰 begin(target) 반환
  */
-const computeMaxRange = (
-  element: HTMLElement,
-  targetAttr: string,
-  baseAttr: string,
-) => {
+const computeMaxRange = (element: HTMLElement, targetAttr: string, baseAttr: string) => {
   let curElem: HTMLElement | null = element;
 
   let target = getNumberAttr(element, targetAttr);
@@ -101,8 +94,7 @@ export const validateSelectionBounds = () => {
   const segmentBegin = getNumberAttr(beginGroup, BEGIN);
   const segmentEnd = getNumberAttr(endGroup, END);
 
-  if (isSelectionMatchingSegment(begin, end, segmentBegin, segmentEnd))
-    return getReturnValue(true);
+  if (isSelectionMatchingSegment(begin, end, segmentBegin, segmentEnd)) return getReturnValue(true);
 
   // 공통 부모 안에서 서로 다른 문장 성분을 걸쳐서 선택한 경우
   // 예: 부모 [0, 4], 자식 1 [0, 2], 자식 2 [2, 4] 일 때 자식 1~2 범위 선택

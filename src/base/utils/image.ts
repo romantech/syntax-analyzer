@@ -16,10 +16,7 @@ interface ImageOptions {
  * @param {ImageOptions} options - Optional parameters for the image transformation.
  * @return {string} - The transformed image URL with placeholder parameters.
  */
-export const getImageKitPlaceholder = (
-  originalSrc: string,
-  options: ImageOptions = {},
-): string => {
+export const getImageKitPlaceholder = (originalSrc: string, options: ImageOptions = {}): string => {
   const paramMapping: Record<keyof ImageOptions, string> = {
     width: 'w',
     blur: 'bl',

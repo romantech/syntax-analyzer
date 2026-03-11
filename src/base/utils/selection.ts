@@ -13,9 +13,7 @@ interface SelectionIndicesResult {
  * @param {string} qualifiedName - The qualified name to search for in the HTML elements.
  * @return {SelectionIndicesResult} - An object containing the beginning and ending indices of the selection, as well as the start and end nodes.
  */
-export const getSelectionIndices = (
-  qualifiedName: string,
-): SelectionIndicesResult => {
+export const getSelectionIndices = (qualifiedName: string): SelectionIndicesResult => {
   const sel = window.getSelection();
   if (!sel?.rangeCount) {
     return { begin: 0, end: 0, startNode: null, endNode: null };
@@ -25,13 +23,9 @@ export const getSelectionIndices = (
   const endNode = sel.getRangeAt(0).endContainer as Node;
 
   const startElement =
-    startNode.nodeType === Node.TEXT_NODE
-      ? startNode.parentElement
-      : (startNode as HTMLElement);
+    startNode.nodeType === Node.TEXT_NODE ? startNode.parentElement : (startNode as HTMLElement);
   const endElement =
-    endNode.nodeType === Node.TEXT_NODE
-      ? endNode.parentElement
-      : (endNode as HTMLElement);
+    endNode.nodeType === Node.TEXT_NODE ? endNode.parentElement : (endNode as HTMLElement);
 
   if (!startElement || !endElement) {
     return { begin: 0, end: 0, startNode: null, endNode: null };

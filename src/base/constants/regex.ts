@@ -28,10 +28,6 @@ export const PUNCTUATION_PATTERN = /([.,!?])/g;
  */
 export const THREE_WORDS_PATTERN = /(\b\w+\b[,\s]+){2,}\b\w+\b/;
 export const TWO_WORDS_PATTERN = /(\b\w+\b[,\s]+)\b\w+\b/;
-export const ENGLISH_INPUT_PATTERN =
-  /^[a-zA-Z0-9 .,!?'":;\-()/@#$%^&*_+=|<>{}[\]~`]*$/;
+export const ENGLISH_INPUT_PATTERN = /^[a-zA-Z0-9 .,!?'":;\-()/@#$%^&*_+=|<>{}[\]~`]*$/;
 
-export const ABBREVIATIONS_PATTERNS = new RegExp(
-  Object.keys(ABBREVIATIONS).join('|'),
-  'g',
-);
+export const ABBREVIATIONS_PATTERNS = new RegExp(Object.keys(ABBREVIATIONS).join('|'), 'g');

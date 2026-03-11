@@ -3,10 +3,7 @@ import type { TConstituent } from '@/features/syntax-editor';
 type EnglishLabels = Extract<TConstituent, { label: string }>['label'];
 type ConstituentTranslation = { ko: string; desc: string };
 
-export const CONSTITUENT_TRANSLATIONS: Record<
-  EnglishLabels,
-  ConstituentTranslation
-> = {
+export const CONSTITUENT_TRANSLATIONS: Record<EnglishLabels, ConstituentTranslation> = {
   subject: {
     ko: '주어',
     desc: '문장의 주체를 나타내는 단어나 구',

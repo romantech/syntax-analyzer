@@ -1,10 +1,4 @@
-import {
-  HStack,
-  type StackProps,
-  Tag,
-  TagCloseButton,
-  TagLabel,
-} from '@chakra-ui/react';
+import { HStack, type StackProps, Tag, TagCloseButton, TagLabel } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
@@ -24,13 +18,7 @@ export default function TopicTagList(stackProps: StackProps) {
   return (
     <HStack flexWrap="wrap" {...stackProps} ref={parent}>
       {topics.map((topic) => (
-        <Tag
-          size="sm"
-          key={topic}
-          borderRadius="md"
-          variant="solid"
-          colorScheme="teal"
-        >
+        <Tag size="sm" key={topic} borderRadius="md" variant="solid" colorScheme="teal">
           <TagLabel w="fit" textTransform="uppercase">
             {topic}
           </TagLabel>

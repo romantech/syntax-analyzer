@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardBody,
-  type CardProps,
-  HStack,
-  Icon,
-  Text,
-} from '@chakra-ui/react';
+import { Card, CardBody, type CardProps, HStack, Icon, Text } from '@chakra-ui/react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 
 interface NoticeProps extends CardProps {

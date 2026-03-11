@@ -9,11 +9,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import type { FallbackProps } from 'react-error-boundary';
-import {
-  isRouteErrorResponse,
-  Navigate,
-  useRouteError,
-} from 'react-router-dom';
+import { isRouteErrorResponse, Navigate, useRouteError } from 'react-router-dom';
 
 import { DIGITS_PATTERN, Layout, LinkParticles, useIsMounted } from '@/base';
 
@@ -24,10 +20,7 @@ const highlightStyles: SystemStyleObject = {
   fontWeight: 'bold',
 };
 
-export default function ErrorComponent({
-  resetErrorBoundary,
-  error,
-}: Partial<FallbackProps>) {
+export default function ErrorComponent({ resetErrorBoundary, error }: Partial<FallbackProps>) {
   const routerError = useRouteError() as Error;
   const [shouldRedirect, setShouldRedirect] = useBoolean(false);
 
@@ -40,9 +33,7 @@ export default function ErrorComponent({
     errorMessage = `${status} | ${statusText}`;
   }
 
-  const onActionButtonClick = isRouteError
-    ? () => setShouldRedirect.on()
-    : resetErrorBoundary;
+  const onActionButtonClick = isRouteError ? () => setShouldRedirect.on() : resetErrorBoundary;
 
   const buttonText = isRouteError ? '돌아가기' : '다시 시도하기';
 
@@ -66,10 +57,7 @@ export default function ErrorComponent({
       <ScaleFade initialScale={0.1} in={isMounted}>
         <VStack>
           <Text fontSize="xl" textTransform="capitalize" maxW={500}>
-            <Highlight
-              query={errorMessage.match(DIGITS_PATTERN) ?? []}
-              styles={highlightStyles}
-            >
+            <Highlight query={errorMessage.match(DIGITS_PATTERN) ?? []} styles={highlightStyles}>
               {errorMessage}
             </Highlight>
           </Text>

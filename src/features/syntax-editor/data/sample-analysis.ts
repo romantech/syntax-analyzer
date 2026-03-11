@@ -160,16 +160,7 @@ const sample1: TAnalysis = {
 const sample2: TAnalysis = {
   id: '06Y2m64EK_Ti554mgq8An',
   source: 'sample',
-  sentence: [
-    'The',
-    'idea',
-    'that',
-    'she',
-    'proposed',
-    'was',
-    'innovative',
-    '.',
-  ],
+  sentence: ['The', 'idea', 'that', 'she', 'proposed', 'was', 'innovative', '.'],
   createdAt: '2023-05-09T23:08:08.000Z',
   rootSegment: {
     id: 6274535247,
@@ -992,10 +983,4 @@ const sample5: TAnalysis = {
   isAnalyzedByGPT: false,
 };
 
-export const SAMPLE_ANALYSIS: TAnalysis[] = [
-  sample1,
-  sample2,
-  sample3,
-  sample4,
-  sample5,
-];
+export const SAMPLE_ANALYSIS: TAnalysis[] = [sample1, sample2, sample3, sample4, sample5];

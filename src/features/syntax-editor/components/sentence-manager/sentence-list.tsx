@@ -21,11 +21,7 @@ import {
   selectedAnalysisAtom,
 } from 'src/features/syntax-editor/store';
 import { ConfirmModal, TextPlaceholder } from '@/base';
-import {
-  type AnalysisSource,
-  DeletableSentence,
-  type TAnalysis,
-} from '@/features/syntax-editor';
+import { type AnalysisSource, DeletableSentence, type TAnalysis } from '@/features/syntax-editor';
 import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants';
 import { getSyntaxEditorPath } from '@/routes';
 
@@ -41,10 +37,7 @@ const TAB_LIST: { label: string; source: AnalysisSource }[] = [
   { label: '샘플 문장', source: 'sample' },
 ];
 
-export default function SentenceList({
-  tabIndex,
-  onTabChange,
-}: SentenceListProps) {
+export default function SentenceList({ tabIndex, onTabChange }: SentenceListProps) {
   const selectedAnalysis = useRef<AnalysisInfo>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
@@ -87,11 +80,7 @@ export default function SentenceList({
             <TabPanel p={0} key={label}>
               <Card variant="outline" maxH={460} overflowY="auto">
                 <CardBody p={2.5}>
-                  <Stack
-                    divider={<StackDivider />}
-                    ref={parent}
-                    overflowY="hidden"
-                  >
+                  <Stack divider={<StackDivider />} ref={parent} overflowY="hidden">
                     {!combinedAnalysisList[source].length && (
                       <TextPlaceholder
                         p={1.5}

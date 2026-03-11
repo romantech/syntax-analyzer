@@ -18,10 +18,7 @@ interface RandomSentenceListProps {
   query: string[];
 }
 
-export default function RandomSentenceList({
-  data,
-  query,
-}: RandomSentenceListProps) {
+export default function RandomSentenceList({ data, query }: RandomSentenceListProps) {
   const toast = useToast();
   const isFetching = useIsFetching({ queryKey: RANDOM_SENTENCE_BASE_KEY });
   const { onCopy, setValue, hasCopied } = useClipboard('', 1000);
@@ -52,10 +49,7 @@ export default function RandomSentenceList({
             onMouseEnter={() => setValue(sentence)}
             onClick={onCopy}
           >
-            <Highlight
-              query={query}
-              styles={{ color: 'teal.400', fontWeight: 'bold' }}
-            >
+            <Highlight query={query} styles={{ color: 'teal.400', fontWeight: 'bold' }}>
               {sentence}
             </Highlight>
           </Text>

@@ -50,10 +50,7 @@ export default function SyntaxParser() {
   return (
     <SlideFade in={isNestingLevelCalculated} offsetY={100}>
       <Sentence ref={sentenceRef}>
-        <SegmentList
-          segment={segment}
-          tokenElements={TokenList({ sentence })}
-        />
+        <SegmentList segment={segment} tokenElements={TokenList({ sentence })} />
       </Sentence>
     </SlideFade>
   );

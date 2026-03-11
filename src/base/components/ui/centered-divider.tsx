@@ -1,9 +1,4 @@
-import {
-  Center,
-  type CenterProps,
-  Divider,
-  type DividerProps,
-} from '@chakra-ui/react';
+import { Center, type CenterProps, Divider, type DividerProps } from '@chakra-ui/react';
 
 interface CenteredDividerProps extends CenterProps {
   orientation?: 'horizontal' | 'vertical';

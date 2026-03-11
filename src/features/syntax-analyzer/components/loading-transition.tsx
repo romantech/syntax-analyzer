@@ -12,8 +12,7 @@ export default function LoadingTransition({
   type,
   ...stackProps
 }: PropsWithChildren<LoadingFadeProps>) {
-  const getStyleFunc =
-    type === 'content' ? getContentFadeStyles : getLoadingFadeStyles;
+  const getStyleFunc = type === 'content' ? getContentFadeStyles : getLoadingFadeStyles;
 
   const props = { ...getStyleFunc(isLoading), ...stackProps };
 
@@ -38,8 +37,6 @@ const getLoadingFadeStyles = (isLoading: boolean): StackProps => {
     left: '45%',
     opacity: isLoading ? 1 : 0,
     transition: `transform ${TRANSFORM_DURATION}, opacity ${OPACITY_DURATION}`,
-    transform: `translate(-50%, -50%) ${
-      isLoading ? 'translateX(0)' : 'translateX(100%)'
-    }`,
+    transform: `translate(-50%, -50%) ${isLoading ? 'translateX(0)' : 'translateX(100%)'}`,
   };
 };

@@ -9,10 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 
-import {
-  CONSTITUENT_DATA_ATTRS,
-  invalidRangeIndexAtom,
-} from '@/features/syntax-editor';
+import { CONSTITUENT_DATA_ATTRS, invalidRangeIndexAtom } from '@/features/syntax-editor';
 
 interface TokenProps extends TextProps {
   token: string;
@@ -26,13 +23,7 @@ export default function Token({ token, index, ...textProps }: TokenProps) {
   return (
     <Popover isOpen={invalidIndex === index} isLazy>
       <PopoverAnchor>
-        <Text
-          position="relative"
-          as="span"
-          zIndex={1}
-          {...dataAttrs}
-          {...textProps}
-        >
+        <Text position="relative" as="span" zIndex={1} {...dataAttrs} {...textProps}>
           {token}
         </Text>
       </PopoverAnchor>

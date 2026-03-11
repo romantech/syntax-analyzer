@@ -1,16 +1,10 @@
 import { useColorMode } from '@chakra-ui/react';
 import type { ISourceOptions } from '@tsparticles/engine';
 import { loadLinksPreset } from '@tsparticles/preset-links';
-import Particles, {
-  type IParticlesProps,
-  initParticlesEngine,
-} from '@tsparticles/react';
+import Particles, { type IParticlesProps, initParticlesEngine } from '@tsparticles/react';
 import { useEffect, useState } from 'react';
 
-export default function LinkParticles({
-  options,
-  ...particlesProps
-}: IParticlesProps) {
+export default function LinkParticles({ options, ...particlesProps }: IParticlesProps) {
   const isLightMode = useColorMode().colorMode === 'light';
   const color = isLightMode ? '#5b5b5b' : '#b0b0b0';
 
@@ -36,10 +30,5 @@ export default function LinkParticles({
 
   if (!init) return null;
 
-  return (
-    <Particles
-      options={{ ...defaultOptions, ...options }}
-      {...particlesProps}
-    />
-  );
+  return <Particles options={{ ...defaultOptions, ...options }} {...particlesProps} />;
 }

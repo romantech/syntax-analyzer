@@ -35,9 +35,7 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
         color="teal.300"
         aria-label="Remaining analysis count"
       >
-        <CircularProgressLabel>
-          {`${remainingCountInPercent(count)}%`}
-        </CircularProgressLabel>
+        <CircularProgressLabel>{`${remainingCountInPercent(count)}%`}</CircularProgressLabel>
       </CircularProgress>
       <CenteredDivider orientation="vertical" height="40px" px={1} />
       <Box>
@@ -48,19 +46,9 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
   );
 }
 
-const AnalysisCounterBox = ({
-  children,
-  ...stackProps
-}: PropsWithChildren<StackProps>) => {
+const AnalysisCounterBox = ({ children, ...stackProps }: PropsWithChildren<StackProps>) => {
   return (
-    <HStack
-      w="full"
-      maxW={660}
-      borderWidth={1}
-      borderRadius="2xl"
-      p={4}
-      {...stackProps}
-    >
+    <HStack w="full" maxW={660} borderWidth={1} borderRadius="2xl" p={4} {...stackProps}>
       {children}
     </HStack>
   );
