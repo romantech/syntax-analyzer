@@ -38,7 +38,7 @@ const TAB_LIST: { label: string; source: AnalysisSource }[] = [
 ];
 
 export default function SentenceList({ tabIndex, onTabChange }: SentenceListProps) {
-  const selectedAnalysis = useRef<AnalysisInfo>();
+  const selectedAnalysis = useRef<AnalysisInfo | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 

@@ -29,7 +29,7 @@ const assignCalculatedLevel = (element: HTMLElement) => {
   return currentLevel;
 };
 
-export const calculateNestingLevel = (ref: RefObject<HTMLElement>) => {
+export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>) => {
   const childElements = ref.current?.children;
   if (!childElements) return;
 

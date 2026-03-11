@@ -4,7 +4,7 @@ import { type RefObject, useEffect } from 'react';
 import { calculateNestingLevel, type TSegment } from '@/features/syntax-editor';
 
 interface UseCalculateNestedLevelProps {
-  targetRef: RefObject<HTMLElement>;
+  targetRef: RefObject<HTMLElement | null>;
   segment: TSegment | null;
   isPending?: boolean;
 }
