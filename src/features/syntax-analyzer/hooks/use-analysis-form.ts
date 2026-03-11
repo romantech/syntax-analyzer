@@ -1,16 +1,11 @@
-import { useDisclosure, useToast, UseToastOptions } from '@chakra-ui/react';
+import { type UseToastOptions, useDisclosure, useToast } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { ensurePeriod, expandAbbreviations, removeThousandSeparator, tokenizer } from '@/base';
 import {
-  ensurePeriod,
-  expandAbbreviations,
-  removeThousandSeparator,
-  tokenizer,
-} from '@/base';
-import {
-  AnalysisModel,
+  type AnalysisModel,
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
   useCreateAnalysisMutation,
@@ -44,11 +39,7 @@ export const useAnalysisForm = () => {
   const toast = useToast();
   const { injectAnalysis } = useInjectAnalysis();
 
-  const {
-    isOpen: isModalOpen,
-    onClose: closeModal,
-    onOpen: openModal,
-  } = useDisclosure();
+  const { isOpen: isModalOpen, onClose: closeModal, onOpen: openModal } = useDisclosure();
 
   const { data: remainingCount = 0 } = useRemainingCountQuery({
     select: ({ analysis }) => analysis,

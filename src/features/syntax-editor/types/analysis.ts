@@ -1,5 +1,5 @@
-import { ISODateString } from '@/base';
-import { TConstituent } from '@/features/syntax-editor';
+import type { ISODateString } from '@/base';
+import type { TConstituent } from '@/features/syntax-editor';
 
 export type AnalysisSource = 'user' | 'sample';
 

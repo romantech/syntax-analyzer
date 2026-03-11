@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import {
   Highlight,
   SlideFade,
@@ -10,6 +8,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useIsFetching } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 import { RANDOM_SENTENCE_BASE_KEY } from '@/features/syntax-analyzer';
 import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor';
@@ -19,10 +18,7 @@ interface RandomSentenceListProps {
   query: string[];
 }
 
-export default function RandomSentenceList({
-  data,
-  query,
-}: RandomSentenceListProps) {
+export default function RandomSentenceList({ data, query }: RandomSentenceListProps) {
   const toast = useToast();
   const isFetching = useIsFetching({ queryKey: RANDOM_SENTENCE_BASE_KEY });
   const { onCopy, setValue, hasCopied } = useClipboard('', 1000);
@@ -53,10 +49,7 @@ export default function RandomSentenceList({
             onMouseEnter={() => setValue(sentence)}
             onClick={onCopy}
           >
-            <Highlight
-              query={query}
-              styles={{ color: 'teal.400', fontWeight: 'bold' }}
-            >
+            <Highlight query={query} styles={{ color: 'teal.400', fontWeight: 'bold' }}>
               {sentence}
             </Highlight>
           </Text>

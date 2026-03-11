@@ -1,6 +1,5 @@
-import { Fragment, useState } from 'react';
-
-import { AspectRatio, AspectRatioProps, Image } from '@chakra-ui/react';
+import { AspectRatio, type AspectRatioProps, Box, Image } from '@chakra-ui/react';
+import { useState } from 'react';
 
 export interface LazyImageProps extends AspectRatioProps {
   src: string;
@@ -28,15 +27,21 @@ export default function LazyImage({
       maxW={maxW}
       {...aspectRatioProps}
     >
-      <Fragment>
+      <Box position="relative" w="full" h="full">
         <Image
           position="absolute"
+          inset={0}
+          w="full"
+          h="full"
           fit="cover"
           src={placeholderSrc}
           alt={`${alt} (Placeholder)`}
         />
         <Image
           position="absolute"
+          inset={0}
+          w="full"
+          h="full"
           fit="cover"
           onLoad={() => setIsLoaded(true)}
           src={src}
@@ -45,7 +50,7 @@ export default function LazyImage({
           transition="opacity 0.7s ease-in-out"
           loading="lazy"
         />
-      </Fragment>
+      </Box>
     </AspectRatio>
   );
 }

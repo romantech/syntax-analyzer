@@ -1,4 +1,4 @@
-import { ComponentType, lazy } from 'react';
+import { type ComponentType, lazy } from 'react';
 
 type ComponentName = string;
 type Loader<T> = () => Promise<T>;

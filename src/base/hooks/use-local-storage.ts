@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 
 const logError = (operation: string, key: string) => {
   console.error(`Error ${operation} data to localStorage for key "${key}".`);

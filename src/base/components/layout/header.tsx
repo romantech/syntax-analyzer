@@ -103,11 +103,7 @@ export function Header() {
           >
             <Icon as={BsGithub} boxSize="1.2rem" />
           </Button>
-          <Button
-            onClick={toggleColorMode}
-            variant="ghost"
-            aria-label="Toggle color mode"
-          >
+          <Button onClick={toggleColorMode} variant="ghost" aria-label="Toggle color mode">
             <Icon as={ToggleIcon} boxSize="1.2rem" />
           </Button>
         </Flex>

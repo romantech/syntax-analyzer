@@ -1,5 +1,5 @@
-import { Icon, Text, TextProps } from '@chakra-ui/react';
-import { IconType } from 'react-icons';
+import { Icon, Text, type TextProps } from '@chakra-ui/react';
+import type { IconType } from 'react-icons';
 
 interface TextPlaceholderProps extends TextProps {
   text: string;

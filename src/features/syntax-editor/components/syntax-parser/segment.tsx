@@ -1,19 +1,12 @@
-import { Fragment, PropsWithChildren, ReactElement } from 'react';
+import { Fragment, type PropsWithChildren, type ReactElement } from 'react';
 
-import {
-  Constituent,
-  isMultipleTokensInRange,
-  TSegment,
-} from '@/features/syntax-editor';
+import { Constituent, isMultipleTokensInRange, type TSegment } from '@/features/syntax-editor';
 
 interface SegmentProps {
   segment: TSegment;
 }
 
-export default function Segment({
-  segment,
-  children,
-}: PropsWithChildren<SegmentProps>) {
+export default function Segment({ segment, children }: PropsWithChildren<SegmentProps>) {
   if (!segment.constituents.length) return <Fragment>{children}</Fragment>;
 
   const { begin, end } = segment;

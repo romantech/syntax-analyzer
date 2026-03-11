@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { Segment, TSegment } from '@/features/syntax-editor';
+import { Segment, type TSegment } from '@/features/syntax-editor';
 
 interface SegmentsProps {
   segment: TSegment;
@@ -16,11 +16,7 @@ export default function SegmentList({ segment, tokenElements }: SegmentsProps) {
 
     if (childSegment) {
       childrenWithSegment.push(
-        <SegmentList
-          segment={childSegment}
-          tokenElements={tokenElements}
-          key={childSegment.id}
-        />,
+        <SegmentList segment={childSegment} tokenElements={tokenElements} key={childSegment.id} />,
       );
       index = childSegment.end - 1; // 자식 파트가 끝나는 지점 이후부터 시작하도록 인덱스 조정
     } else {
@@ -28,11 +24,7 @@ export default function SegmentList({ segment, tokenElements }: SegmentsProps) {
     }
   }
 
-  return (
-    <Segment segment={segment}>
-      {childrenWithSegment.map((token) => token)}
-    </Segment>
-  );
+  return <Segment segment={segment}>{childrenWithSegment.map((token) => token)}</Segment>;
 }
 
 /**

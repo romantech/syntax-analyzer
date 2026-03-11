@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react';
+import type { MouseEventHandler } from 'react';
 
 type MouseEventKeys =
   | 'onClick' // 동일한 요소에서 마우스 버튼을 클릭할 때, 버블링 O

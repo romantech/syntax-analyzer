@@ -1,8 +1,8 @@
 import {
-  Colors,
+  type Colors,
   extendTheme,
-  ThemeConfig,
-  ToastProviderProps,
+  type ThemeConfig,
+  type ToastProviderProps,
 } from '@chakra-ui/react';
 
 export const toastOptions: ToastProviderProps = {

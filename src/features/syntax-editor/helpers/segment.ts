@@ -1,5 +1,5 @@
-import { generateNumberID, Nullable } from '@/base';
-import { TConstituent, TSegment } from '@/features/syntax-editor';
+import { generateNumberID, type Nullable } from '@/base';
+import type { TConstituent, TSegment } from '@/features/syntax-editor';
 
 export const cloneSegment = (segment: TSegment) => structuredClone(segment);
 
@@ -16,11 +16,7 @@ const generateSegment = (
   children,
 });
 
-const isSegmentMatchingRange = (
-  segment: TSegment,
-  begin: number,
-  end: number,
-) => {
+const isSegmentMatchingRange = (segment: TSegment, begin: number, end: number) => {
   return segment.begin === begin && segment.end === end;
 };
 
@@ -76,16 +72,8 @@ const generateAndConfigureSegment = (
   end: number,
 ): TSegment => {
   const segment = generateSegment(begin, end);
-  segment.constituents = pluckConstituentsInRange(
-    childSegments,
-    segment.begin,
-    segment.end,
-  );
-  segment.children = filterSegmentsWithinRange(
-    childSegments,
-    segment.begin,
-    segment.end,
-  );
+  segment.constituents = pluckConstituentsInRange(childSegments, segment.begin, segment.end);
+  segment.children = filterSegmentsWithinRange(childSegments, segment.begin, segment.end);
   return segment;
 };
 
@@ -161,41 +149,35 @@ export const addConstituent = (
    * 1. left/middle/right 범위와 일치하는 문장 성분을 찾아서 추출(pluck)
    * 2. left/middle/right 범위에 속하는 세그먼트를 찾아서 자식으로 이동
    * */
-  let left: Nullable<TSegment>;
   let middle: Nullable<TSegment> = null;
-  let right: Nullable<TSegment>;
+  const firstChild = clonedSegment.children.at(0);
+  const lastChild = clonedSegment.children.at(-1);
 
-  const firstChildBegin = clonedSegment.children.at(0)!.begin;
-  const lastChildEnd = clonedSegment.children.at(-1)!.end;
+  if (!firstChild || !lastChild) {
+    return clonedSegment;
+  }
+
+  const firstChildBegin = firstChild.begin;
+  const lastChildEnd = lastChild.end;
   /**
    * begin(0) === firstChildBegin(0) 참이면 case 4-1 이므로 end 값을 leftEnd 로 설정
    * begin(2) !== firstChildBegin(0) 참이면 case 4-2 이므로 begin 값을 leftEnd 로 설정
    * */
   const leftEnd = begin === firstChildBegin ? end : begin;
-  // eslint-disable-next-line prefer-const
-  left = generateAndConfigureSegment(
-    clonedSegment.children,
-    firstChildBegin,
-    leftEnd,
-  );
+  const left = generateAndConfigureSegment(clonedSegment.children, firstChildBegin, leftEnd);
 
   // left.begin === begin && left.end === end 참이면 case 4-1 이므로 middle 생성 안함
   if (!isSegmentMatchingRange(left, begin, end)) {
     middle = generateAndConfigureSegment(clonedSegment.children, begin, end);
   }
 
-  // eslint-disable-next-line prefer-const
-  right = generateAndConfigureSegment(
-    clonedSegment.children,
-    end,
-    lastChildEnd,
-  );
+  const right = generateAndConfigureSegment(clonedSegment.children, end, lastChildEnd);
 
   /**
    * 타입 가드는 런타임시 특정 타입이 보장되는지 확인할 때 사용
    * 즉, filter 함수 결과의 요소는 TSegment 타입만 남긴다는 것을 TS 컴파일러에게 알려줌 */
-  clonedSegment.children = [left, middle, right].filter(
-    (segment): segment is TSegment => Boolean(segment),
+  clonedSegment.children = [left, middle, right].filter((segment): segment is TSegment =>
+    Boolean(segment),
   );
 
   clonedSegment.children.forEach((child) => {
@@ -212,10 +194,7 @@ export const addConstituent = (
  * - 현재 레벨의 세그먼트에서 찾지 못하면,
  * - 다음 레벨을 탐색하는 너비 우선 탐색 방식 사용
  * */
-export const removeConstituent = (
-  segment: TSegment,
-  id: TConstituent['id'],
-) => {
+export const removeConstituent = (segment: TSegment, id: TConstituent['id']) => {
   const clonedSegment = cloneSegment(segment);
   const queue: TSegment[] = [clonedSegment];
   let found = false;
@@ -247,11 +226,7 @@ export const removeConstituent = (
   return clonedSegment;
 };
 
-const addNewSegmentToChild = (
-  child: TSegment[],
-  begin: number,
-  end: number,
-) => {
+const addNewSegmentToChild = (child: TSegment[], begin: number, end: number) => {
   const newSegment = generateSegment(begin, end);
   child.push(newSegment);
 };
@@ -262,10 +237,7 @@ const addNewSegmentToChild = (
  * - e.g. 부모 세그먼트 begin 0, end 4 / 자식 세그먼트 begin 1, end 2
  * - [[1, 2]] -> [[0, 1], [1, 2], [2, 4]]
  * */
-export const fillSegment = (
-  existingSegment: TSegment,
-  totalRangeEnd: number,
-) => {
+export const fillSegment = (existingSegment: TSegment, totalRangeEnd: number) => {
   const updatedSegment: TSegment = { ...existingSegment };
   const filledChild: TSegment[] = [];
 
@@ -292,9 +264,7 @@ export const fillSegment = (
     }
 
     // 현재 세그먼트의 자식에 대해 동일한 처리를 재귀적으로 수행
-    updatedSegment.children = filledChild.map((child) =>
-      fillSegment(child, updatedSegment.end),
-    );
+    updatedSegment.children = filledChild.map((child) => fillSegment(child, updatedSegment.end));
   }
 
   const endOfLastFilledSegment =

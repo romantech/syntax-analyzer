@@ -1,7 +1,4 @@
-import {
-  ConstituentType,
-  ConstituentWithoutId,
-} from '@/features/syntax-editor';
+import type { ConstituentType, ConstituentWithoutId } from '@/features/syntax-editor';
 
 export const SYNTAX_CONSTITUENTS: ConstituentWithoutId[] = [
   {
@@ -193,11 +190,8 @@ export const SYNTAX_CONSTITUENTS: ConstituentWithoutId[] = [
 ];
 
 type ConstituentGroup = { [key in ConstituentType]: ConstituentWithoutId[] };
-export const groupedConstituentsByType = SYNTAX_CONSTITUENTS.reduce(
-  (group, constituent) => {
-    if (!group[constituent.type]) group[constituent.type] = [];
-    group[constituent.type].push(constituent);
-    return group;
-  },
-  {} as ConstituentGroup,
-);
+export const groupedConstituentsByType = SYNTAX_CONSTITUENTS.reduce((group, constituent) => {
+  if (!group[constituent.type]) group[constituent.type] = [];
+  group[constituent.type].push(constituent);
+  return group;
+}, {} as ConstituentGroup);

@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import {
   Button,
   HStack,
@@ -11,28 +9,22 @@ import {
   PopoverArrow,
   PopoverBody,
   PopoverContent,
-  StackProps,
+  type StackProps,
 } from '@chakra-ui/react';
-import { SubmitHandler, useFormContext } from 'react-hook-form';
+import { useRef } from 'react';
+import { type SubmitHandler, useFormContext } from 'react-hook-form';
 import { CiShoppingTag } from 'react-icons/ci';
-import { ValidationError } from 'yup';
+import type { ValidationError } from 'yup';
 
 import {
   addTopicSchema,
   MAX_TOPIC_LENGTH,
-  RandomSentenceFormValues,
+  type RandomSentenceFormValues,
 } from '@/features/syntax-analyzer';
 
 export default function AddTopicForm(stackProps: StackProps) {
-  const {
-    register,
-    clearErrors,
-    handleSubmit,
-    setValue,
-    resetField,
-    setError,
-    formState,
-  } = useFormContext<RandomSentenceFormValues>();
+  const { register, clearErrors, handleSubmit, setValue, resetField, setError, formState } =
+    useFormContext<RandomSentenceFormValues>();
   /**
    * By default, Popover focus is to sent to PopoverContent when it opens.
    * Pass the keywordInputRef prop to send focus to a specific element instead.
@@ -60,11 +52,7 @@ export default function AddTopicForm(stackProps: StackProps) {
 
   return (
     <HStack as="form" onSubmit={handleSubmit(onAddTopic)} {...stackProps}>
-      <Popover
-        isOpen={!!errors.keyword}
-        placement="top"
-        initialFocusRef={keywordInputRef}
-      >
+      <Popover isOpen={!!errors.keyword} placement="top" initialFocusRef={keywordInputRef}>
         <PopoverAnchor>
           <InputGroup>
             <InputLeftElement pointerEvents="none">

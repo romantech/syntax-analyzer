@@ -1,7 +1,6 @@
-import { ComponentProps } from 'react';
-
 import { IconButton } from '@chakra-ui/react';
-import { motion, Variants } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
+import type { ComponentProps } from 'react';
 import { FaAnglesDown } from 'react-icons/fa6';
 
 const MotionIconButton = motion.create(IconButton);

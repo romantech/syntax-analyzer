@@ -1,5 +1,3 @@
-import { Fragment, useRef } from 'react';
-
 import {
   Card,
   CardBody,
@@ -14,22 +12,18 @@ import {
 } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { Fragment, useRef } from 'react';
 import { TbMoodEmpty } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
-
-import { ConfirmModal, TextPlaceholder } from '@/base';
-import {
-  AnalysisSource,
-  DeletableSentence,
-  TAnalysis,
-} from '@/features/syntax-editor';
-import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants';
-import { getSyntaxEditorPath } from '@/routes';
 import {
   analysisListBySourceAtom,
   removeUserAnalysisActionAtom,
   selectedAnalysisAtom,
 } from 'src/features/syntax-editor/store';
+import { ConfirmModal, TextPlaceholder } from '@/base';
+import { type AnalysisSource, DeletableSentence, type TAnalysis } from '@/features/syntax-editor';
+import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants';
+import { getSyntaxEditorPath } from '@/routes';
 
 type AnalysisInfo = { index: number; analysis: TAnalysis };
 
@@ -43,11 +37,8 @@ const TAB_LIST: { label: string; source: AnalysisSource }[] = [
   { label: '샘플 문장', source: 'sample' },
 ];
 
-export default function SentenceList({
-  tabIndex,
-  onTabChange,
-}: SentenceListProps) {
-  const selectedAnalysis = useRef<AnalysisInfo>();
+export default function SentenceList({ tabIndex, onTabChange }: SentenceListProps) {
+  const selectedAnalysis = useRef<AnalysisInfo | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
@@ -89,11 +80,7 @@ export default function SentenceList({
             <TabPanel p={0} key={label}>
               <Card variant="outline" maxH={460} overflowY="auto">
                 <CardBody p={2.5}>
-                  <Stack
-                    divider={<StackDivider />}
-                    ref={parent}
-                    overflowY="hidden"
-                  >
+                  <Stack divider={<StackDivider />} ref={parent} overflowY="hidden">
                     {!combinedAnalysisList[source].length && (
                       <TextPlaceholder
                         p={1.5}

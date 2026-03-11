@@ -1,2 +1,2 @@
-export * from './regex';
 export * from './abbreviations';
+export * from './regex';

@@ -1,25 +1,33 @@
+import { Heading, Stack, type StackProps, Text } from '@chakra-ui/react';
+import { type DotLottie, DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useEffect, useRef } from 'react';
 
-import { Heading, Stack, StackProps, Text } from '@chakra-ui/react';
-import { Player } from '@lottiefiles/react-lottie-player';
-
 import { loadingAnimation } from '@/assets/lottie';
-import { LoadingTransition } from '@/features/syntax-analyzer';
+import { LoadingTransition } from '@/features/syntax-analyzer/components/';
 
 interface AnalysisLoadingIndicatorProps extends StackProps {
   play: boolean;
 }
 
+const syncPlayback = (dotLottie: DotLottie | null, play: boolean) => {
+  if (!dotLottie) return;
+
+  if (play) dotLottie.play();
+  else dotLottie.stop();
+};
+
 export default function AnalysisLoadIndicator({
   play,
   ...stackProps
 }: AnalysisLoadingIndicatorProps) {
-  const playerRef = useRef<Player>(null);
+  const dotLottieRef = useRef<DotLottie | null>(null);
+  const handleDotLottieRef = (dotLottie: DotLottie | null) => {
+    dotLottieRef.current = dotLottie;
+    syncPlayback(dotLottie, play);
+  };
 
   useEffect(() => {
-    /** @see https://dev.to/franklin030601/how-to-use-lottie-animations-react-js-cn0 */
-    if (play) playerRef.current?.play();
-    else playerRef.current?.stop();
+    syncPlayback(dotLottieRef.current, play);
   }, [play]);
 
   return (
@@ -32,10 +40,10 @@ export default function AnalysisLoadIndicator({
       zIndex={-1}
       {...stackProps}
     >
-      <Player
+      <DotLottieReact
         loop
-        ref={playerRef}
-        src={loadingAnimation}
+        data={loadingAnimation}
+        dotLottieRefCallback={handleDotLottieRef}
         style={{ width: 350, height: 350 }}
       />
       <Stack spacing={5}>
@@ -44,14 +52,7 @@ export default function AnalysisLoadIndicator({
         </Heading>
         <Text fontSize="2xl">
           최대
-          <Text
-            as="span"
-            borderRadius="md"
-            bg="teal.200"
-            color="gray.800"
-            mx={1}
-            px={1}
-          >
+          <Text as="span" borderRadius="md" bg="teal.200" color="gray.800" mx={1} px={1}>
             1분
           </Text>
           까지 소요될 수 있어요

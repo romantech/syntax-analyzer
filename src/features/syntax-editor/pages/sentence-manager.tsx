@@ -1,17 +1,9 @@
+import { Box, HStack, ScaleFade, Stack } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import { Box, HStack, ScaleFade, Stack } from '@chakra-ui/react';
-
 import { CenteredDivider, Notice, useIsMounted } from '@/base';
-import {
-  FieldGroupHeader,
-  RandomSentenceForm,
-} from '@/features/syntax-analyzer';
-import {
-  AddSentenceForm,
-  DEFAULT_SENTENCE_LIST_TAB,
-  SentenceList,
-} from '@/features/syntax-editor';
+import { FieldGroupHeader, RandomSentenceForm } from '@/features/syntax-analyzer';
+import { AddSentenceForm, DEFAULT_SENTENCE_LIST_TAB, SentenceList } from '@/features/syntax-editor';
 
 export default function SentenceManager() {
   const isMounted = useIsMounted();
@@ -35,10 +27,7 @@ export default function SentenceManager() {
       </Stack>
       <Box borderRadius="lg" borderWidth={1} w="full" maxW="container.md" p={4}>
         <ScaleFade in={isMounted}>
-          <SentenceList
-            tabIndex={tabIndex}
-            onTabChange={(i) => setTabIndex(i)}
-          />
+          <SentenceList tabIndex={tabIndex} onTabChange={(i) => setTabIndex(i)} />
         </ScaleFade>
       </Box>
     </HStack>

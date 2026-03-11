@@ -3,10 +3,7 @@ import { useAtom } from 'jotai';
 import { ImRedo } from 'react-icons/im';
 
 import { clearSelection } from '@/base';
-import {
-  CONTROL_OPEN_POPUP_DELAY,
-  undoRedoActionAtom,
-} from '@/features/syntax-editor';
+import { CONTROL_OPEN_POPUP_DELAY, undoRedoActionAtom } from '@/features/syntax-editor';
 
 export default function RedoButton() {
   const [actionable, action] = useAtom(undoRedoActionAtom);

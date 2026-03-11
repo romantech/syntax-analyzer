@@ -1,7 +1,7 @@
 import { format, isValid, parseISO } from 'date-fns';
 import * as locale from 'date-fns/locale';
 
-import { ISODateString } from '@/base/types';
+import type { ISODateString } from '@/base/types';
 
 /**
  * Formats an ISO date string into a formatted Korean date string.
@@ -22,10 +22,7 @@ export const getFormattedKoDate = (isoString: ISODateString): string => {
  * @param {number} offsetInSeconds - The offset in seconds.
  * @return {boolean} True if the targetDate is less than or equal to the offsetInSeconds ago, false otherwise.
  */
-export const isLessThanAgo = (
-  targetDate: ISODateString,
-  offsetInSeconds: number,
-): boolean => {
+export const isLessThanAgo = (targetDate: ISODateString, offsetInSeconds: number): boolean => {
   const currentTime = Date.now();
   const targetTime = parseISO(targetDate).getTime();
   const diffInSeconds = (currentTime - targetTime) / 1000;

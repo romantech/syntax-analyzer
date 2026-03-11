@@ -7,10 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import {
-  MAX_PICKER_SENTENCE,
-  MIN_PICKER_SENTENCE,
-} from '@/features/syntax-analyzer';
+import { MAX_PICKER_SENTENCE, MIN_PICKER_SENTENCE } from '@/features/syntax-analyzer';
 
 export default function SentenceCountPicker() {
   const { control } = useFormContext();

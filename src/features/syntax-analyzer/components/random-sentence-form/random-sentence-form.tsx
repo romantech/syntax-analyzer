@@ -1,6 +1,5 @@
+import { HStack, Input, Stack, type StackProps } from '@chakra-ui/react';
 import { Suspense } from 'react';
-
-import { HStack, Input, Stack, StackProps } from '@chakra-ui/react';
 import { FormProvider } from 'react-hook-form';
 
 import { CenteredDivider } from '@/base';
@@ -22,8 +21,7 @@ export default function RandomSentenceForm({
   showInstructions = true,
   ...stackProps
 }: RandomSentenceFormProps) {
-  const { methods, isFetching, data, generateSentences } =
-    useRandomSentenceForm();
+  const { methods, isFetching, data, generateSentences } = useRandomSentenceForm();
 
   const { register, getValues } = methods;
 
@@ -37,10 +35,7 @@ export default function RandomSentenceForm({
           <HStack>
             <SentenceCountPicker />
             <Suspense fallback={<GenerateButton.Skeleton />}>
-              <GenerateButton
-                onClick={generateSentences}
-                isLoading={isFetching}
-              />
+              <GenerateButton onClick={generateSentences} isLoading={isFetching} />
             </Suspense>
           </HStack>
           <Input {...register('topics')} hidden />

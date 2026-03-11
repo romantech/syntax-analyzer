@@ -1,4 +1,4 @@
-import { Entries } from '@/base';
+import type { Entries } from '@/base';
 
 /**
  * {@link https://docs.imagekit.io/features/image-transformations/resize-crop-and-other-transformations More transform options}
@@ -16,10 +16,7 @@ interface ImageOptions {
  * @param {ImageOptions} options - Optional parameters for the image transformation.
  * @return {string} - The transformed image URL with placeholder parameters.
  */
-export const getImageKitPlaceholder = (
-  originalSrc: string,
-  options: ImageOptions = {},
-): string => {
+export const getImageKitPlaceholder = (originalSrc: string, options: ImageOptions = {}): string => {
   const paramMapping: Record<keyof ImageOptions, string> = {
     width: 'w',
     blur: 'bl',

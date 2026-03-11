@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Skeleton, Text } from '@chakra-ui/react';
+import { Button, type ButtonProps, Skeleton, Text } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
 
 import {
@@ -7,11 +7,7 @@ import {
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 
-export default function GenerateButton({
-  onClick,
-  isLoading,
-  ...buttonProps
-}: ButtonProps) {
+export default function GenerateButton({ onClick, isLoading, ...buttonProps }: ButtonProps) {
   const { data: count = 0 } = useRemainingCountQuery({
     select: (data) => data.random_sentence,
   });

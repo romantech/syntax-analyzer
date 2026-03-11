@@ -1,15 +1,14 @@
-import { PropsWithChildren } from 'react';
-
 import {
   Box,
   Button,
   FormControl,
   HStack,
   Skeleton,
-  SkeletonProps,
+  type SkeletonProps,
   Stack,
   type StackProps,
 } from '@chakra-ui/react';
+import type { PropsWithChildren } from 'react';
 import { GiMagicLamp } from 'react-icons/gi';
 
 import { ConfirmModal } from '@/base';
@@ -73,10 +72,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
   );
 }
 
-const AnalysisFormBox = ({
-  children,
-  ...stackProps
-}: PropsWithChildren<StackProps>) => {
+const AnalysisFormBox = ({ children, ...stackProps }: PropsWithChildren<StackProps>) => {
   return (
     <Stack w="full" maxW={660} gap={10} {...stackProps}>
       {children}

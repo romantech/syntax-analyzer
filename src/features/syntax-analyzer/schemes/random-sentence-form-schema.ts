@@ -21,10 +21,7 @@ const topicsSchema = yup
   .array()
   .required()
   .of(keywordSchema.required())
-  .max(
-    MAX_TOPIC_ADDITION,
-    `키워드는 최대 ${MAX_TOPIC_ADDITION}개까지 추가할 수 있어요`,
-  )
+  .max(MAX_TOPIC_ADDITION, `키워드는 최대 ${MAX_TOPIC_ADDITION}개까지 추가할 수 있어요`)
   .test('unique', '키워드는 중복될 수 없어요', (list) => {
     return list.length === new Set(list).size;
   })
@@ -41,11 +38,6 @@ export const randomSentenceFormSchema = yup.object({
   keyword: keywordSchema,
 });
 
-export const addTopicSchema = randomSentenceFormSchema.pick([
-  'keyword',
-  'topics',
-]);
+export const addTopicSchema = randomSentenceFormSchema.pick(['keyword', 'topics']);
 
-export type RandomSentenceFormValues = yup.InferType<
-  typeof randomSentenceFormSchema
->;
+export type RandomSentenceFormValues = yup.InferType<typeof randomSentenceFormSchema>;

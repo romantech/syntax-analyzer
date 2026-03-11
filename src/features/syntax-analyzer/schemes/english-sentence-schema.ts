@@ -1,10 +1,7 @@
 import * as yup from 'yup';
 
 import { ENGLISH_INPUT_PATTERN, THREE_WORDS_PATTERN } from '@/base';
-import {
-  MAX_SENTENCE_LENGTH,
-  MIN_SENTENCE_WORDS,
-} from '@/features/syntax-analyzer';
+import { MAX_SENTENCE_LENGTH, MIN_SENTENCE_WORDS } from '@/features/syntax-analyzer';
 
 export const HELPER_MESSAGES = {
   ENGLISH_OR_SYMBOL: '영어 혹은 문장 부호만 입력할 수 있어요',

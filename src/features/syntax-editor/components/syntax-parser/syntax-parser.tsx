@@ -1,6 +1,5 @@
-import { useRef } from 'react';
-
 import { SlideFade } from '@chakra-ui/react';
+import { useRef } from 'react';
 import { TbMoodEmpty } from 'react-icons/tb';
 
 import { TextPlaceholder, ThreeDotsWave, useTransitionLoading } from '@/base';
@@ -30,7 +29,8 @@ export default function SyntaxParser() {
   const isLoading = useTransitionLoading([segment, sentence]);
   const isNestingLevelCalculated = useCalculateNestingLevel({
     targetRef: sentenceRef,
-    trigger: isLoading,
+    segment,
+    isPending: isLoading,
   });
 
   if (isLoading) return <ThreeDotsWave delay={300} />;
@@ -50,10 +50,7 @@ export default function SyntaxParser() {
   return (
     <SlideFade in={isNestingLevelCalculated} offsetY={100}>
       <Sentence ref={sentenceRef}>
-        <SegmentList
-          segment={segment}
-          tokenElements={TokenList({ sentence })}
-        />
+        <SegmentList segment={segment} tokenElements={TokenList({ sentence })} />
       </Sentence>
     </SlideFade>
   );

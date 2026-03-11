@@ -1,4 +1,4 @@
-import { FormLabel, HStack, StackProps, Switch } from '@chakra-ui/react';
+import { FormLabel, HStack, type StackProps, Switch } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
 
 import { tagInfoModeAtom } from '@/features/syntax-editor';

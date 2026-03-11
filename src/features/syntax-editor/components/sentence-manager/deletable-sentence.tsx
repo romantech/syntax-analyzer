@@ -1,12 +1,6 @@
-import { Badge, HStack, StackProps, Text, VStack } from '@chakra-ui/react';
+import { Badge, HStack, type StackProps, Text, VStack } from '@chakra-ui/react';
 
-import {
-  ConfirmPopover,
-  DateChip,
-  DeleteButtonIcon,
-  isLessThanAgo,
-  tokenJoiner,
-} from '@/base';
+import { ConfirmPopover, DateChip, DeleteButtonIcon, isLessThanAgo, tokenJoiner } from '@/base';
 import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor';
 
 interface DeletableSentenceProps extends StackProps {
@@ -48,17 +42,10 @@ export default function DeletableSentence({
           onConfirm={onDelete}
           confirmText="삭제"
         >
-          {({ onOpen }) => (
-            <DeleteButtonIcon onClick={onOpen} hidden={hideDeleteButton} />
-          )}
+          {({ onOpen }) => <DeleteButtonIcon onClick={onOpen} hidden={hideDeleteButton} />}
         </ConfirmPopover>
       </HStack>
-      <Text
-        noOfLines={1}
-        cursor="pointer"
-        _hover={{ color: 'teal.300' }}
-        onClick={onClick}
-      >
+      <Text noOfLines={1} cursor="pointer" _hover={{ color: 'teal.300' }} onClick={onClick}>
         {typeof sentence === 'string' ? sentence : tokenJoiner(sentence)}
       </Text>
     </VStack>

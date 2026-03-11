@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import type { RefObject } from 'react';
 
 import { kebabToCamel } from '@/base';
 import {
@@ -18,10 +18,7 @@ const assignCalculatedLevel = (element: HTMLElement) => {
   const hasChild = element.children.length > 0;
   const currentLevel = hasChild ? maxChildLevel + 1 : maxChildLevel;
 
-  const classesToCheck = [
-    CONSTITUENT_CLASSES.TOKEN,
-    CONSTITUENT_CLASSES.TOKEN_GROUP,
-  ];
+  const classesToCheck = [CONSTITUENT_CLASSES.TOKEN, CONSTITUENT_CLASSES.TOKEN_GROUP];
 
   classesToCheck.forEach((className) => {
     if (element.classList.contains(className)) {
@@ -32,7 +29,7 @@ const assignCalculatedLevel = (element: HTMLElement) => {
   return currentLevel;
 };
 
-export const calculateNestingLevel = (ref: RefObject<HTMLElement>) => {
+export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>) => {
   const childElements = ref.current?.children;
   if (!childElements) return;
 

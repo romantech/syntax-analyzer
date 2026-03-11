@@ -1,4 +1,4 @@
-import { ColorMode } from '@/base';
+import type { ColorMode } from '@/base';
 
 export type ConstituentType = 'clause' | 'phrase' | 'token' | 'token-group';
 

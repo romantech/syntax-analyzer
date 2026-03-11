@@ -17,10 +17,7 @@ export const isPunctuation = (token?: string): boolean =>
 
 /** split(/\s+/) : 1개 이상의 연속된 공백을 기준으로 분리 */
 export const tokenizer = (text: string) => {
-  return text
-    .replace(NON_WORD_CHAR_PATTERN, ' $1 ')
-    .split(/\s+/)
-    .filter(Boolean);
+  return text.replace(NON_WORD_CHAR_PATTERN, ' $1 ').split(/\s+/).filter(Boolean);
 };
 
 /**
@@ -32,7 +29,7 @@ export const tokenizer = (text: string) => {
 export const tokenJoiner = (tokens: ReturnType<typeof tokenizer>): string => {
   return tokens.reduce((prev, cur) => {
     if (cur.match(NON_WORD_CHAR_PATTERN)) return prev + cur;
-    else return prev + ' ' + cur;
+    else return `${prev} ${cur}`;
   }, '');
 };
 
@@ -58,10 +55,7 @@ export const kebabToCamel = (str: string): string => {
  * @return {string} The sentence with abbreviations expanded.
  */
 export const expandAbbreviations = (sentence: string): string => {
-  return sentence.replace(
-    ABBREVIATIONS_PATTERNS,
-    (match) => ABBREVIATIONS[match],
-  );
+  return sentence.replace(ABBREVIATIONS_PATTERNS, (match) => ABBREVIATIONS[match]);
 };
 
 /**
@@ -71,9 +65,7 @@ export const expandAbbreviations = (sentence: string): string => {
  * @return {string} The sentence without a thousand separator.
  */
 export const removeThousandSeparator = (sentence: string): string => {
-  return sentence.replace(NUM_WITH_COMMAS_REGEX, (match) =>
-    match.replace(/,/g, ''),
-  );
+  return sentence.replace(NUM_WITH_COMMAS_REGEX, (match) => match.replace(/,/g, ''));
 };
 
 /**
