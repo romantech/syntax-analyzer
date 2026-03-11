@@ -1,5 +1,5 @@
 import { Heading, Stack, type StackProps, Text } from '@chakra-ui/react';
-import { Player } from '@lottiefiles/react-lottie-player';
+import { type DotLottie, DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useEffect, useRef } from 'react';
 
 import { loadingAnimation } from '@/assets/lottie';
@@ -9,16 +9,27 @@ interface AnalysisLoadingIndicatorProps extends StackProps {
   play: boolean;
 }
 
+const loadingAnimationData = JSON.stringify(loadingAnimation);
+
+const syncPlayback = (dotLottie: DotLottie | null, play: boolean) => {
+  if (!dotLottie) return;
+
+  if (play) dotLottie.play();
+  else dotLottie.stop();
+};
+
 export default function AnalysisLoadIndicator({
   play,
   ...stackProps
 }: AnalysisLoadingIndicatorProps) {
-  const playerRef = useRef<Player>(null);
+  const dotLottieRef = useRef<DotLottie | null>(null);
+  const handleDotLottieRef = (dotLottie: DotLottie | null) => {
+    dotLottieRef.current = dotLottie;
+    syncPlayback(dotLottie, play);
+  };
 
   useEffect(() => {
-    /** @see https://dev.to/franklin030601/how-to-use-lottie-animations-react-js-cn0 */
-    if (play) playerRef.current?.play();
-    else playerRef.current?.stop();
+    syncPlayback(dotLottieRef.current, play);
   }, [play]);
 
   return (
@@ -31,7 +42,12 @@ export default function AnalysisLoadIndicator({
       zIndex={-1}
       {...stackProps}
     >
-      <Player loop ref={playerRef} src={loadingAnimation} style={{ width: 350, height: 350 }} />
+      <DotLottieReact
+        loop
+        data={loadingAnimationData}
+        dotLottieRefCallback={handleDotLottieRef}
+        style={{ width: 350, height: 350 }}
+      />
       <Stack spacing={5}>
         <Heading size="3xl" fontWeight="bold">
           문장 분석 중
