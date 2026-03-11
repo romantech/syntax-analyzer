@@ -1,10 +1,9 @@
-import { PropsWithChildren } from 'react';
-
 import { Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import { clsx } from 'clsx';
 import { useAtomValue } from 'jotai';
+import type { PropsWithChildren } from 'react';
 
-import { NumberTuple } from '@/base';
+import type { NumberTuple } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_COLORS,

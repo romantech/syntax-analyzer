@@ -1,4 +1,4 @@
-import { AnalysisSource } from '@/features/syntax-editor';
+import type { AnalysisSource } from '@/features/syntax-editor';
 
 export const SITE_URLS = {
   ROOT: '/',

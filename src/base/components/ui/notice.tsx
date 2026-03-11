@@ -1,7 +1,7 @@
 import {
   Card,
   CardBody,
-  CardProps,
+  type CardProps,
   HStack,
   Icon,
   Text,

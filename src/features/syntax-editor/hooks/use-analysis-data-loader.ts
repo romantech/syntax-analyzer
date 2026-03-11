@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useRef } from 'react';
-
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useCallback, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
+  type AnalysisPathParams,
   analysisListBySourceAtom,
-  AnalysisPathParams,
   selectedAnalysisAtom,
 } from '@/features/syntax-editor';
 

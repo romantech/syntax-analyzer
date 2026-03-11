@@ -1,4 +1,4 @@
-import { TAnalysis } from '@/features/syntax-editor';
+import type { TAnalysis } from '@/features/syntax-editor';
 
 const sample1: TAnalysis = {
   id: 'mLy10VtmbT_JLzCK-G5-I',

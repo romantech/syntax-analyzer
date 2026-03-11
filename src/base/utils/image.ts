@@ -1,4 +1,4 @@
-import { Entries } from '@/base';
+import type { Entries } from '@/base';
 
 /**
  * {@link https://docs.imagekit.io/features/image-transformations/resize-crop-and-other-transformations More transform options}

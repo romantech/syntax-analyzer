@@ -1,9 +1,9 @@
 import {
-  QueryClient,
+  type QueryClient,
+  type UseSuspenseQueryOptions,
   useSuspenseQuery,
-  UseSuspenseQueryOptions,
 } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 import { axios } from '@/lib';
 

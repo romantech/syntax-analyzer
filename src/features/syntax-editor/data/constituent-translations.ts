@@ -1,4 +1,4 @@
-import { TConstituent } from '@/features/syntax-editor';
+import type { TConstituent } from '@/features/syntax-editor';
 
 type EnglishLabels = Extract<TConstituent, { label: string }>['label'];
 type ConstituentTranslation = { ko: string; desc: string };

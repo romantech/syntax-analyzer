@@ -1,17 +1,16 @@
-import { FunctionComponent } from 'react';
-
 import {
   Flex,
-  FlexProps,
+  type FlexProps,
   Heading,
   HStack,
   Link,
   Stack,
   Text,
 } from '@chakra-ui/react';
+import type { FunctionComponent } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { LazyImage, LazyImageProps } from '@/base';
+import { LazyImage, type LazyImageProps } from '@/base';
 import { ScrollDownButton } from '@/features/misc';
 
 export interface ShowcaseTemplateProps extends FlexProps {
@@ -67,8 +66,8 @@ export const ShowcaseTemplate = ({
       {...flexProps}
     >
       <HStack flexGrow={1} justify="center" align="start" gap={12}>
-        {Contents.map((Content, i) => (
-          <Content key={i} />
+        {Contents.map((Content) => (
+          <Content key={Content.name} />
         ))}
       </HStack>
       <ScrollDownButton onClick={onScrollDown} hidden={!onScrollDown} />

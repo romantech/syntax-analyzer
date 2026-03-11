@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Skeleton, Text } from '@chakra-ui/react';
+import { Button, type ButtonProps, Skeleton, Text } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
 
 import {

@@ -1,12 +1,12 @@
-import { atom, Getter, Setter } from 'jotai';
+import { atom, type Getter, type Setter } from 'jotai';
 import { atomWithDefault, atomWithStorage } from 'jotai/utils';
 
-import { debounce, Nullable } from '@/base';
+import { debounce, type Nullable } from '@/base';
 import {
-  AnalysisSource,
-  CombinedAnalysisList,
+  type AnalysisSource,
+  type CombinedAnalysisList,
   generateAnalysis,
-  TAnalysis,
+  type TAnalysis,
 } from '@/features/syntax-editor';
 import { INVALID_POPUP_DELAY } from '@/features/syntax-editor/constants';
 import { SAMPLE_ANALYSIS } from '@/features/syntax-editor/data';

@@ -1,5 +1,5 @@
-import { ColorMode } from '@/base';
-import { ConstituentColors } from '@/features/syntax-editor';
+import type { ColorMode } from '@/base';
+import type { ConstituentColors } from '@/features/syntax-editor';
 
 export const DELETE_MODE_HOVER_COLOR_SCHEME = (mode: ColorMode) => {
   return mode === 'dark'

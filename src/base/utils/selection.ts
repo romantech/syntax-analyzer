@@ -1,4 +1,4 @@
-import { Nullable } from '@/base';
+import type { Nullable } from '@/base';
 
 interface SelectionIndicesResult {
   begin: number;
@@ -21,14 +21,21 @@ export const getSelectionIndices = (
     return { begin: 0, end: 0, startNode: null, endNode: null };
   }
 
-  let startNode = sel.getRangeAt(0).startContainer as Node;
-  let endNode = sel.getRangeAt(0).endContainer as Node;
+  const startNode = sel.getRangeAt(0).startContainer as Node;
+  const endNode = sel.getRangeAt(0).endContainer as Node;
 
-  if (startNode.nodeType === Node.TEXT_NODE) startNode = startNode.parentNode!;
-  if (endNode.nodeType === Node.TEXT_NODE) endNode = endNode.parentNode!;
+  const startElement =
+    startNode.nodeType === Node.TEXT_NODE
+      ? startNode.parentElement
+      : (startNode as HTMLElement);
+  const endElement =
+    endNode.nodeType === Node.TEXT_NODE
+      ? endNode.parentElement
+      : (endNode as HTMLElement);
 
-  const startElement = startNode as HTMLElement;
-  const endElement = endNode as HTMLElement;
+  if (!startElement || !endElement) {
+    return { begin: 0, end: 0, startNode: null, endNode: null };
+  }
 
   const startIndex = startElement.getAttribute(qualifiedName);
   const endIndex = endElement.getAttribute(qualifiedName);

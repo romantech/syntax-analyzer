@@ -1,7 +1,6 @@
+import { Box, type BoxProps, HStack } from '@chakra-ui/react';
+import { motion, type Transition, type Variants } from 'framer-motion';
 import { useEffect, useState } from 'react';
-
-import { Box, BoxProps, HStack } from '@chakra-ui/react';
-import { motion, Transition, Variants } from 'framer-motion';
 
 const DotGroup = motion.create(HStack);
 const Dot = motion.create(Box);
@@ -23,7 +22,7 @@ const containerVariants = {
   animate: { transition: { staggerChildren: 0.2 } },
 };
 
-const DOT_COUNT = 3;
+const DOT_IDS = [0, 1, 2] as const;
 
 interface ThreeDotsLoadingProps {
   size?: number;
@@ -60,9 +59,9 @@ export const ThreeDotsWave = ({
       w="fit-content"
       gap={gap ?? Math.max(size / 2, 3)}
     >
-      {Array.from({ length: DOT_COUNT }).map((_, i) => (
+      {DOT_IDS.map((dotId) => (
         <Dot
-          key={i}
+          key={dotId}
           w={size}
           h={size}
           bg={color}

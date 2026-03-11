@@ -1,6 +1,6 @@
 import {
   Box,
-  BoxProps,
+  type BoxProps,
   Button,
   FormControl,
   HStack,
@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useSetAtom } from 'jotai';
 import { useForm } from 'react-hook-form';
 
-import { ConfirmModal, VoidFunc } from '@/base';
+import { ConfirmModal, type VoidFunc } from '@/base';
 import {
   addSentenceFormSchema,
   SentenceInput,

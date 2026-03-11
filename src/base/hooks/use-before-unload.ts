@@ -22,7 +22,8 @@ export const useBeforeUnload = (isEnabled: boolean = true): void => {
        * setting event.returnValue to an empty string will prompt the user for confirmation.
        * @see https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event#compatibility_notes
        */
-      return (event.returnValue = '');
+      event.returnValue = '';
+      return '';
     },
     [isEnabled],
   );

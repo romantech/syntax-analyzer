@@ -1,5 +1,3 @@
-import { PropsWithChildren } from 'react';
-
 import {
   Box,
   CircularProgress,
@@ -11,6 +9,7 @@ import {
   type StackProps,
   Text,
 } from '@chakra-ui/react';
+import type { PropsWithChildren } from 'react';
 
 import { CenteredDivider } from '@/base';
 import {
@@ -37,7 +36,7 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
         aria-label="Remaining analysis count"
       >
         <CircularProgressLabel>
-          {remainingCountInPercent(count) + '%'}
+          {`${remainingCountInPercent(count)}%`}
         </CircularProgressLabel>
       </CircularProgress>
       <CenteredDivider orientation="vertical" height="40px" px={1} />

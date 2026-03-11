@@ -1,5 +1,3 @@
-import { MouseEventHandler, ReactNode } from 'react';
-
 import {
   Box,
   Button,
@@ -9,13 +7,14 @@ import {
   PopoverContent,
   PopoverFooter,
   PopoverHeader,
-  PopoverProps,
+  type PopoverProps,
   PopoverTrigger,
   Portal,
   useDisclosure,
 } from '@chakra-ui/react';
+import type { MouseEventHandler, ReactNode } from 'react';
 
-import { VoidFunc } from '@/base';
+import type { VoidFunc } from '@/base';
 
 type ChildrenProps = { onOpen: MouseEventHandler; isOpen: boolean };
 interface ConfirmPopoverProps extends Omit<PopoverProps, 'children'> {

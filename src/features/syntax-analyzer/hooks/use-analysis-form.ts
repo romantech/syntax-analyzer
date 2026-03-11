@@ -1,4 +1,8 @@
-import { useDisclosure, useToast, UseToastOptions } from '@chakra-ui/react';
+import {
+  type UseToastOptions,
+  useDisclosure,
+  useToast,
+} from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +14,7 @@ import {
   tokenizer,
 } from '@/base';
 import {
-  AnalysisModel,
+  type AnalysisModel,
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
   useCreateAnalysisMutation,

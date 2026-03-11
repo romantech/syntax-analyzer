@@ -1,4 +1,4 @@
-import { Heading, Stack, StackProps, Text } from '@chakra-ui/react';
+import { Heading, Stack, type StackProps, Text } from '@chakra-ui/react';
 
 import { ScrollDownButton } from '@/features/misc/components';
 

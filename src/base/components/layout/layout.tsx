@@ -1,6 +1,5 @@
-import { PropsWithChildren } from 'react';
-
-import { Container, ContainerProps, VStack } from '@chakra-ui/react';
+import { Container, type ContainerProps, VStack } from '@chakra-ui/react';
+import type { PropsWithChildren } from 'react';
 
 import { Header } from '@/base/components';
 

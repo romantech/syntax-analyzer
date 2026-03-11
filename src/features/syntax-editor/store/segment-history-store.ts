@@ -1,15 +1,15 @@
 import { atom } from 'jotai';
 import { atomWithDefault, atomWithReset, RESET } from 'jotai/utils';
 
-import { Nullable } from '@/base';
+import type { Nullable } from '@/base';
 import {
-  AnalysisPathParams,
+  type AnalysisPathParams,
   fillSegment,
   removeEmptySegment,
   resetControlPanelAtom,
   sampleAnalysisListAtom,
   selectedAnalysisAtom,
-  TSegment,
+  type TSegment,
   userAnalysisListAtom,
 } from '@/features/syntax-editor';
 

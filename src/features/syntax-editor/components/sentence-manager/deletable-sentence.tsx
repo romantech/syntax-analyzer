@@ -1,4 +1,4 @@
-import { Badge, HStack, StackProps, Text, VStack } from '@chakra-ui/react';
+import { Badge, HStack, type StackProps, Text, VStack } from '@chakra-ui/react';
 
 import {
   ConfirmPopover,

@@ -1,4 +1,4 @@
-import {
+import type {
   ConstituentType,
   ConstituentWithoutId,
 } from '@/features/syntax-editor';

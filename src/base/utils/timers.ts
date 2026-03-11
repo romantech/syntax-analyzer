@@ -1,4 +1,4 @@
-import { Nullable } from '@/base';
+import type { Nullable } from '@/base';
 
 /**
  * Debounce a callback function by delaying its execution until a specified

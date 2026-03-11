@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useLocalStorage } from '@/base';
 import {
   analysisStore,
-  TAnalysis,
+  type TAnalysis,
   userAnalysisListAtom,
 } from '@/features/syntax-editor';
 

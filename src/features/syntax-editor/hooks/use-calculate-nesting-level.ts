@@ -1,7 +1,6 @@
-import { RefObject, useEffect } from 'react';
-
 import { useBoolean } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
+import { type RefObject, useEffect } from 'react';
 
 import {
   calculateNestingLevel,
@@ -20,6 +19,7 @@ export const useCalculateNestingLevel = ({
   const [isNestingLevelCalculated, setNestingLevelCalculated] = useBoolean();
   const segmentHistoryIndex = useAtomValue(segmentHistoryIndexAtom);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger and segmentHistoryIndex are used only to force recalculation timing.
   useEffect(() => {
     if (targetRef.current) {
       calculateNestingLevel(targetRef);

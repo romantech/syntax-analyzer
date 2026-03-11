@@ -21,9 +21,6 @@ stats.*
 !.env.example
 *.local
 
-# Cache
-.eslintcache
-
 # Editor / OS
 .vscode/*
 !.vscode/extensions.json

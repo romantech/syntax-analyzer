@@ -1,13 +1,12 @@
-import { useState } from 'react';
-
 import { useBoolean } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import {
-  randomSentenceFormSchema,
-  RandomSentenceFormValues,
+  type RandomSentenceFormValues,
   REMAINING_COUNT_BASE_KEY,
+  randomSentenceFormSchema,
 } from '@/features/syntax-analyzer';
 import { useRandomSentenceQuery } from '@/features/syntax-analyzer/api';
 

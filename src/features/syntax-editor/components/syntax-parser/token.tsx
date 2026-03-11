@@ -5,7 +5,7 @@ import {
   PopoverContent,
   Portal,
   Text,
-  TextProps,
+  type TextProps,
 } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 

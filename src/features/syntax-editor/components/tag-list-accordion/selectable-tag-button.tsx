@@ -3,7 +3,7 @@ import { useAtom, useAtomValue } from 'jotai';
 
 import {
   CONSTITUENT_TRANSLATIONS,
-  ConstituentWithoutId,
+  type ConstituentWithoutId,
   selectedTagActionAtom,
   tagInfoModeAtom,
 } from '@/features/syntax-editor';

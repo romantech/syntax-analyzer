@@ -1,6 +1,5 @@
-import { useRef } from 'react';
-
 import { SlideFade } from '@chakra-ui/react';
+import { useRef } from 'react';
 import { TbMoodEmpty } from 'react-icons/tb';
 
 import { TextPlaceholder, ThreeDotsWave, useTransitionLoading } from '@/base';

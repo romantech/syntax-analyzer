@@ -1,6 +1,5 @@
-import { PropsWithChildren } from 'react';
-
-import { Tooltip, TooltipProps } from '@chakra-ui/react';
+import { Tooltip, type TooltipProps } from '@chakra-ui/react';
+import type { PropsWithChildren } from 'react';
 
 export default function UsageLimitTooltip({
   children,

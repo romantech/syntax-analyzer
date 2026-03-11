@@ -1,6 +1,6 @@
 import {
   HStack,
-  StackProps,
+  type StackProps,
   Tag,
   TagCloseButton,
   TagLabel,
@@ -8,7 +8,7 @@ import {
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-import { RandomSentenceFormValues } from '@/features/syntax-analyzer';
+import type { RandomSentenceFormValues } from '@/features/syntax-analyzer';
 
 export default function TopicTagList(stackProps: StackProps) {
   const { control, setValue } = useFormContext<RandomSentenceFormValues>();

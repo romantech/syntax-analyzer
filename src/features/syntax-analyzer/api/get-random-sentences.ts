@@ -1,7 +1,7 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { type UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 
-import { RandomSentenceFormValues } from '@/features/syntax-analyzer';
+import type { RandomSentenceFormValues } from '@/features/syntax-analyzer';
 import { axios, paramsSerializer } from '@/lib';
 
 type RandomSentenceResponse = string[];

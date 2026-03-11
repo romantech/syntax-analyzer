@@ -1,5 +1,5 @@
-import { generateNumberID, Nullable } from '@/base';
-import { TConstituent, TSegment } from '@/features/syntax-editor';
+import { generateNumberID, type Nullable } from '@/base';
+import type { TConstituent, TSegment } from '@/features/syntax-editor';
 
 export const cloneSegment = (segment: TSegment) => structuredClone(segment);
 
@@ -161,19 +161,22 @@ export const addConstituent = (
    * 1. left/middle/right 범위와 일치하는 문장 성분을 찾아서 추출(pluck)
    * 2. left/middle/right 범위에 속하는 세그먼트를 찾아서 자식으로 이동
    * */
-  let left: Nullable<TSegment>;
   let middle: Nullable<TSegment> = null;
-  let right: Nullable<TSegment>;
+  const firstChild = clonedSegment.children.at(0);
+  const lastChild = clonedSegment.children.at(-1);
 
-  const firstChildBegin = clonedSegment.children.at(0)!.begin;
-  const lastChildEnd = clonedSegment.children.at(-1)!.end;
+  if (!firstChild || !lastChild) {
+    return clonedSegment;
+  }
+
+  const firstChildBegin = firstChild.begin;
+  const lastChildEnd = lastChild.end;
   /**
    * begin(0) === firstChildBegin(0) 참이면 case 4-1 이므로 end 값을 leftEnd 로 설정
    * begin(2) !== firstChildBegin(0) 참이면 case 4-2 이므로 begin 값을 leftEnd 로 설정
    * */
   const leftEnd = begin === firstChildBegin ? end : begin;
-  // eslint-disable-next-line prefer-const
-  left = generateAndConfigureSegment(
+  const left = generateAndConfigureSegment(
     clonedSegment.children,
     firstChildBegin,
     leftEnd,
@@ -184,8 +187,7 @@ export const addConstituent = (
     middle = generateAndConfigureSegment(clonedSegment.children, begin, end);
   }
 
-  // eslint-disable-next-line prefer-const
-  right = generateAndConfigureSegment(
+  const right = generateAndConfigureSegment(
     clonedSegment.children,
     end,
     lastChildEnd,

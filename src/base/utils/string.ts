@@ -32,7 +32,7 @@ export const tokenizer = (text: string) => {
 export const tokenJoiner = (tokens: ReturnType<typeof tokenizer>): string => {
   return tokens.reduce((prev, cur) => {
     if (cur.match(NON_WORD_CHAR_PATTERN)) return prev + cur;
-    else return prev + ' ' + cur;
+    else return `${prev} ${cur}`;
   }, '');
 };
 

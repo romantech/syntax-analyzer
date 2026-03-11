@@ -1,11 +1,10 @@
-import { MouseEvent, useRef, useState } from 'react';
-
 import { useColorMode } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
+import { type MouseEvent, useRef, useState } from 'react';
 
 import { getNearestElementByClass } from '@/base';
 import {
-  ConstituentDataSet,
+  type ConstituentDataSet,
   DELETE_MODE_HOVER_COLOR_SCHEME,
   deleteModeAtom,
 } from '@/features/syntax-editor';

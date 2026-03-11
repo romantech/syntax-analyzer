@@ -1,14 +1,13 @@
-import { PropsWithChildren } from 'react';
-
 import { useToast } from '@chakra-ui/react';
 import {
-  DefaultOptions,
+  type DefaultOptions,
   MutationCache,
   QueryCache,
   QueryClient,
   QueryClientProvider,
-  QueryKey,
+  type QueryKey,
 } from '@tanstack/react-query';
+import type { PropsWithChildren } from 'react';
 
 /**
  * UseQueryOptions.meta 속성 타입 지정 (queryFn의 meta 파라미터 타입)
@@ -54,7 +53,7 @@ export const ConfiguredQueryProvider = ({ children }: PropsWithChildren) => {
       },
     }),
     queryCache: new QueryCache({
-      onError: (error, query) => {
+      onError: (_error, query) => {
         /**
          * 백그라운드 업데이트 실패시에만 Toast 표시, 나머진 ErrorBoundary 에서 처리
          * @see https://tkdodo.eu/blog/react-query-error-handling

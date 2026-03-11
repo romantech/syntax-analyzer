@@ -1,7 +1,6 @@
-import { useEffect, useRef } from 'react';
-
-import { Heading, Stack, StackProps, Text } from '@chakra-ui/react';
+import { Heading, Stack, type StackProps, Text } from '@chakra-ui/react';
 import { Player } from '@lottiefiles/react-lottie-player';
+import { useEffect, useRef } from 'react';
 
 import { loadingAnimation } from '@/assets/lottie';
 import { LoadingTransition } from '@/features/syntax-analyzer';

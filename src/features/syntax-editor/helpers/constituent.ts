@@ -1,5 +1,5 @@
 import { generateNumberID } from '@/base';
-import {
+import type {
   ConstituentType,
   ConstituentWithoutId,
 } from '@/features/syntax-editor';

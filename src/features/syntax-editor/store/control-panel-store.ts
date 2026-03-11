@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { atomWithReset, atomWithStorage, RESET } from 'jotai/utils';
 
 import {
-  ConstituentWithoutId,
+  type ConstituentWithoutId,
   hasAddedTagAtom,
 } from '@/features/syntax-editor';
 import {

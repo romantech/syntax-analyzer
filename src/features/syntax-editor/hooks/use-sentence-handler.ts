@@ -1,8 +1,7 @@
-import { MouseEvent } from 'react';
-
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import type { MouseEvent } from 'react';
 
-import { clearSelection, MouseEventHandlers } from '@/base';
+import { clearSelection, type MouseEventHandlers } from '@/base';
 import {
   addConstituent,
   deleteModeAtom,

@@ -1,9 +1,8 @@
-import { MouseEvent } from 'react';
-
 import { useAtomValue, useSetAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
+import type { MouseEvent } from 'react';
 
-import { getNearestElementByClass, MouseEventHandlers } from '@/base';
+import { getNearestElementByClass, type MouseEventHandlers } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   hoveredConstituentAtom,

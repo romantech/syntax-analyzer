@@ -6,11 +6,11 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { Control, Controller } from 'react-hook-form';
+import { type Control, Controller } from 'react-hook-form';
 
 import {
   ANALYSIS_DECREMENT_COUNT,
-  AnalysisFormValues,
+  type AnalysisFormValues,
   AnalysisModel,
 } from '@/features/syntax-analyzer';
 

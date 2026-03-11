@@ -1,7 +1,7 @@
 import { format, isValid, parseISO } from 'date-fns';
 import * as locale from 'date-fns/locale';
 
-import { ISODateString } from '@/base/types';
+import type { ISODateString } from '@/base/types';
 
 /**
  * Formats an ISO date string into a formatted Korean date string.

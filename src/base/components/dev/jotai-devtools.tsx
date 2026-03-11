@@ -1,4 +1,4 @@
-import { DevTools, DevToolsProps } from 'jotai-devtools';
+import { DevTools, type DevToolsProps } from 'jotai-devtools';
 
 if (import.meta.env.DEV) import('jotai-devtools/styles.css');
 

@@ -1,5 +1,3 @@
-import { forwardRef } from 'react';
-
 import {
   Box,
   FormErrorMessage,
@@ -7,12 +5,13 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  InputProps,
+  type InputProps,
   List,
   ListIcon,
   ListItem,
 } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { forwardRef } from 'react';
 import { BsMagic } from 'react-icons/bs';
 import { PiNotePencil, PiTextTBold } from 'react-icons/pi';
 import { RiEnglishInput } from 'react-icons/ri';
@@ -52,8 +51,8 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(
         <FormErrorMessage>{errorMessage}</FormErrorMessage>
         <FormHelperText color="description" pt={1} hidden={!showHelperText}>
           <List spacing={1.5}>
-            {HELPER_TEXTS.map(({ icon, text }, i) => (
-              <ListItem key={i}>
+            {HELPER_TEXTS.map(({ icon, text }) => (
+              <ListItem key={text}>
                 <ListIcon as={icon} />
                 {text}
               </ListItem>

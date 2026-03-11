@@ -3,12 +3,12 @@ import {
   Heading,
   Highlight,
   ScaleFade,
-  SystemStyleObject,
+  type SystemStyleObject,
   Text,
   useBoolean,
   VStack,
 } from '@chakra-ui/react';
-import { FallbackProps } from 'react-error-boundary';
+import type { FallbackProps } from 'react-error-boundary';
 import {
   isRouteErrorResponse,
   Navigate,

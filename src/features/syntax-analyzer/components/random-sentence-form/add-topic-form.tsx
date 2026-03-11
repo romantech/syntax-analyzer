@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 import {
   Button,
   HStack,
@@ -11,16 +9,17 @@ import {
   PopoverArrow,
   PopoverBody,
   PopoverContent,
-  StackProps,
+  type StackProps,
 } from '@chakra-ui/react';
-import { SubmitHandler, useFormContext } from 'react-hook-form';
+import { useRef } from 'react';
+import { type SubmitHandler, useFormContext } from 'react-hook-form';
 import { CiShoppingTag } from 'react-icons/ci';
-import { ValidationError } from 'yup';
+import type { ValidationError } from 'yup';
 
 import {
   addTopicSchema,
   MAX_TOPIC_LENGTH,
-  RandomSentenceFormValues,
+  type RandomSentenceFormValues,
 } from '@/features/syntax-analyzer';
 
 export default function AddTopicForm(stackProps: StackProps) {

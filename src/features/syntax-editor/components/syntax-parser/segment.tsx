@@ -1,9 +1,9 @@
-import { Fragment, PropsWithChildren, ReactElement } from 'react';
+import { Fragment, type PropsWithChildren, type ReactElement } from 'react';
 
 import {
   Constituent,
   isMultipleTokensInRange,
-  TSegment,
+  type TSegment,
 } from '@/features/syntax-editor';
 
 interface SegmentProps {

@@ -1,13 +1,12 @@
-import { useState } from 'react';
-
 import { IconButton, Tooltip, useToast } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useState } from 'react';
 import { IoSaveSharp } from 'react-icons/io5';
 import { useParams } from 'react-router-dom';
 
 import { ConfirmPopover } from '@/base';
 import {
-  AnalysisPathParams,
+  type AnalysisPathParams,
   CONTROL_OPEN_POPUP_DELAY,
   isSegmentTouchedAtom,
   SAVE_SEGMENT_DELAY,

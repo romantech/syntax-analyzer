@@ -5,7 +5,7 @@ import {
 } from '@/features/syntax-editor';
 
 const { INDEX, ID, BEGIN, END } = CONSTITUENT_DATA_ATTRS;
-const TOKEN_GROUP_SELECTOR = '.' + CONSTITUENT_CLASSES.TOKEN_GROUP;
+const TOKEN_GROUP_SELECTOR = `.${CONSTITUENT_CLASSES.TOKEN_GROUP}`;
 
 export const getNumberAttr = (element: HTMLElement, key: string) => {
   return Number(element.getAttribute(key));

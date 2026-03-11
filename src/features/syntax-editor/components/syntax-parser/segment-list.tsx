@@ -1,6 +1,6 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import { Segment, TSegment } from '@/features/syntax-editor';
+import { Segment, type TSegment } from '@/features/syntax-editor';
 
 interface SegmentsProps {
   segment: TSegment;
