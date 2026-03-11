@@ -29,7 +29,8 @@ export default function SyntaxParser() {
   const isLoading = useTransitionLoading([segment, sentence]);
   const isNestingLevelCalculated = useCalculateNestingLevel({
     targetRef: sentenceRef,
-    trigger: isLoading,
+    segment,
+    isPending: isLoading,
   });
 
   if (isLoading) return <ThreeDotsWave delay={300} />;

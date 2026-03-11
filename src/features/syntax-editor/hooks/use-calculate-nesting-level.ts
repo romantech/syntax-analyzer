@@ -1,31 +1,27 @@
 import { useBoolean } from '@chakra-ui/react';
-import { useAtomValue } from 'jotai';
 import { type RefObject, useEffect } from 'react';
 
-import {
-  calculateNestingLevel,
-  segmentHistoryIndexAtom,
-} from '@/features/syntax-editor';
+import { calculateNestingLevel, type TSegment } from '@/features/syntax-editor';
 
 interface UseCalculateNestedLevelProps {
   targetRef: RefObject<HTMLElement>;
-  trigger?: unknown;
+  segment: TSegment | null;
+  isPending?: boolean;
 }
 
 export const useCalculateNestingLevel = ({
   targetRef,
-  trigger,
+  segment,
+  isPending = false,
 }: UseCalculateNestedLevelProps) => {
   const [isNestingLevelCalculated, setNestingLevelCalculated] = useBoolean();
-  const segmentHistoryIndex = useAtomValue(segmentHistoryIndexAtom);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: trigger and segmentHistoryIndex are used only to force recalculation timing.
   useEffect(() => {
-    if (targetRef.current) {
-      calculateNestingLevel(targetRef);
-      setNestingLevelCalculated.on();
-    }
-  }, [targetRef, trigger, segmentHistoryIndex, setNestingLevelCalculated]);
+    if (isPending || !segment || !targetRef.current) return;
+
+    calculateNestingLevel(targetRef);
+    setNestingLevelCalculated.on();
+  }, [isPending, segment, setNestingLevelCalculated, targetRef]);
 
   return isNestingLevelCalculated;
 };
