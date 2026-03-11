@@ -3,13 +3,11 @@ import { type DotLottie, DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useEffect, useRef } from 'react';
 
 import { loadingAnimation } from '@/assets/lottie';
-import { LoadingTransition } from '@/features/syntax-analyzer';
+import { LoadingTransition } from '@/features/syntax-analyzer/components/';
 
 interface AnalysisLoadingIndicatorProps extends StackProps {
   play: boolean;
 }
-
-const loadingAnimationData = JSON.stringify(loadingAnimation);
 
 const syncPlayback = (dotLottie: DotLottie | null, play: boolean) => {
   if (!dotLottie) return;
@@ -44,7 +42,7 @@ export default function AnalysisLoadIndicator({
     >
       <DotLottieReact
         loop
-        data={loadingAnimationData}
+        data={loadingAnimation}
         dotLottieRefCallback={handleDotLottieRef}
         style={{ width: 350, height: 350 }}
       />
