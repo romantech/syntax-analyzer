@@ -20,6 +20,11 @@
   "bugs": {
     "url": "https://github.com/romantech/syntax-analyzer/issues"
   },
+  "pnpm": {
+    "overrides": {
+      "serialize-javascript": "7.0.5"
+    }
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": "biome check --write"
   },
