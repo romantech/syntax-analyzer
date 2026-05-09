@@ -23,6 +23,7 @@
   },
   "pnpm": {
     "overrides": {
+      "jsondiffpatch": "0.7.3",
       "serialize-javascript": "7.0.5"
     }
   },
