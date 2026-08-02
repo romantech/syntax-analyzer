@@ -1,5 +1,5 @@
 import { Provider } from 'jotai';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 import { JotaiDevTools, Layout } from '@/base';
 import { analysisStore } from '@/features/syntax-editor';

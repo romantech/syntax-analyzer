@@ -14,7 +14,7 @@ import {
 import { BsGithub } from 'react-icons/bs';
 import { FiCoffee } from 'react-icons/fi';
 import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
-import { matchPath, NavLink, useLocation } from 'react-router-dom';
+import { matchPath, NavLink, useLocation } from 'react-router';
 
 import { SITE_URLS } from '@/routes/paths';
 

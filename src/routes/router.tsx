@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router';
 
 import { lazyImport } from '@/base';
 
@@ -14,42 +14,34 @@ const { SentenceManager, SyntaxEditor, SyntaxEditorRoot } = lazyImport(
   () => import('@/features/syntax-editor'),
 );
 
-export const router = createBrowserRouter(
-  [
-    {
-      path: SITE_URLS.ROOT,
-      element: <App />,
-      errorElement: <ErrorComponent />,
-      children: [
-        {
-          index: true,
-          element: <Home />,
-        },
-        {
-          path: SITE_URLS.ANALYZER.ROOT,
-          element: <SyntaxAnalyzer />,
-        },
-        {
-          path: SITE_URLS.EDITOR.ROOT,
-          element: <SyntaxEditorRoot />,
-          children: [
-            {
-              index: true,
-              element: <SentenceManager />,
-            },
-            {
-              path: SITE_URLS.EDITOR.EDIT,
-              element: <SyntaxEditor />,
-            },
-          ],
-        },
-      ],
-    },
-  ],
+export const router = createBrowserRouter([
   {
-    future: {
-      /** @see https://reactrouter.com/en/6.28.2/upgrading/future#v7_relativesplatpath */
-      v7_relativeSplatPath: true,
-    },
+    path: SITE_URLS.ROOT,
+    element: <App />,
+    errorElement: <ErrorComponent />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: SITE_URLS.ANALYZER.ROOT,
+        element: <SyntaxAnalyzer />,
+      },
+      {
+        path: SITE_URLS.EDITOR.ROOT,
+        element: <SyntaxEditorRoot />,
+        children: [
+          {
+            index: true,
+            element: <SentenceManager />,
+          },
+          {
+            path: SITE_URLS.EDITOR.EDIT,
+            element: <SyntaxEditor />,
+          },
+        ],
+      },
+    ],
   },
-);
+]);

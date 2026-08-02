@@ -2,7 +2,7 @@ import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { LazyMotion } from 'framer-motion';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 import { Layout, ThreeDotsWave, useRemoveBodyBgColor } from '@/base';
 import { ErrorComponent } from '@/features/misc';

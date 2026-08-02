@@ -9,7 +9,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import type { FallbackProps } from 'react-error-boundary';
-import { isRouteErrorResponse, Navigate, useRouteError } from 'react-router-dom';
+import { isRouteErrorResponse, Navigate, useRouteError } from 'react-router';
 
 import { DIGITS_PATTERN, Layout, LinkParticles, useIsMounted } from '@/base';
 
