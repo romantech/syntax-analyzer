@@ -14,7 +14,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Fragment, useRef } from 'react';
 import { TbMoodEmpty } from 'react-icons/tb';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import {
   analysisListBySourceAtom,
   removeUserAnalysisActionAtom,

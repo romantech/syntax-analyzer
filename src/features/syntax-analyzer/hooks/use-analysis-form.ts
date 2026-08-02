@@ -1,7 +1,7 @@
 import { type UseToastOptions, useDisclosure, useToast } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { ensurePeriod, expandAbbreviations, removeThousandSeparator, tokenizer } from '@/base';
 import {
