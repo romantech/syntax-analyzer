@@ -7,6 +7,6 @@ overrides:
   'brace-expansion@>=2.0.0 <2.1.4': 2.1.4
   esbuild: 0.28.1
   form-data: 4.0.6
-  jsondiffpatch: 0.7.3
+  jsondiffpatch: 0.7.6
   serialize-javascript: 7.0.5
   uuid: 11.1.1
