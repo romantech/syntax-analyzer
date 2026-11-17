@@ -1,5 +1,5 @@
 name: Sweep Slow Issue
-title: 'Sweep (slow): '
+title: "Sweep (slow): "
 description: For larger bugs, features, refactors, and tests to be handled by Sweep, an AI-powered junior developer. Sweep will perform a deeper search and more self-reviews but will take longer.
 labels: sweep
 body:

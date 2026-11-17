@@ -13,56 +13,6 @@ $token-spacing: 2rem; // 토큰과 토큰 사이의 간격
 $token-top: 2.5rem; // 토큰 상단 여백
 $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮을수록 간격 벌어짐)
 
-@for $i from 1 through $max-styling-count {
-  $offset: $constituent-height * ($i - $constituent-initial-pos-factor);
-
-  .constituent.token-group[data-token-group-lv='#{$i}'] {
-    margin: 0 $constituent-margin;
-    padding: 0 $constituent-margin $offset;
-
-    // 문장 성분 라벨
-    &:after {
-      top: $offset + $constituent-label-y-pos;
-    }
-
-    // 좌/우/하단 점선
-    &:before {
-      content: '';
-      position: absolute;
-      top: $constituent-dashed-border-start;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      border-left: $constituent-dashed-border;
-      border-right: $constituent-dashed-border;
-      border-bottom: $constituent-dashed-border;
-    }
-  }
-}
-
-@for $i from 1 through $max-styling-count {
-  $offset: $token-spacing * ($i - $token-initial-pos-factor);
-
-  .constituent.token[data-token-lv='#{$i}'] {
-    // 문장 성분 라벨
-    &:after {
-      top: $token-top + $offset;
-    }
-  }
-}
-
-html[data-theme='light'] {
-  .constituent:after {
-    background-color: var(--chakra-colors-gray-100);
-  }
-}
-
-html[data-theme='dark'] {
-  .constituent:after {
-    background-color: var(--chakra-colors-gray-900);
-  }
-}
-
 .constituent {
   position: relative;
 
@@ -82,5 +32,55 @@ html[data-theme='dark'] {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+  }
+}
+
+@for $i from 1 through $max-styling-count {
+  $offset: $constituent-height * ($i - $constituent-initial-pos-factor);
+
+  .constituent.token-group[data-token-group-lv="#{$i}"] {
+    margin: 0 $constituent-margin;
+    padding: 0 $constituent-margin $offset;
+
+    // 문장 성분 라벨
+    &:after {
+      top: $offset + $constituent-label-y-pos;
+    }
+
+    // 좌/우/하단 점선
+    &:before {
+      content: "";
+      position: absolute;
+      top: $constituent-dashed-border-start;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      border-left: $constituent-dashed-border;
+      border-right: $constituent-dashed-border;
+      border-bottom: $constituent-dashed-border;
+    }
+  }
+}
+
+@for $i from 1 through $max-styling-count {
+  $offset: $token-spacing * ($i - $token-initial-pos-factor);
+
+  .constituent.token[data-token-lv="#{$i}"] {
+    // 문장 성분 라벨
+    &:after {
+      top: $token-top + $offset;
+    }
+  }
+}
+
+html[data-theme="light"] {
+  .constituent:after {
+    background-color: var(--chakra-colors-gray-100);
+  }
+}
+
+html[data-theme="dark"] {
+  .constituent:after {
+    background-color: var(--chakra-colors-gray-900);
   }
 }

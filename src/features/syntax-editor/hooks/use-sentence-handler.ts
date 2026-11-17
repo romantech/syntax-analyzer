@@ -4,6 +4,7 @@ import type { MouseEvent } from 'react';
 import { clearSelection, type MouseEventHandlers } from '@/base';
 import {
   addConstituent,
+  CONSTITUENT_DATA_ATTRS,
   deleteModeAtom,
   generateConstituent,
   removeConstituent,
@@ -29,20 +30,24 @@ export const useSentenceHandler = (): MouseEventHandlers => {
 
   /** 문장 성분 추가 */
   const onMouseUp = (e: MouseEvent) => {
-    /** 더블 클릭이 아니고, 태그를 선택했을 때만 실행 */
-    if (selectedTag && segment && !isDoubleClicked(e)) {
-      const { begin, end, isValid } = validateSelectionBounds();
-      if (!isValid) {
-        setAndClearInvalidIndex(end - 1);
-        clearSelection();
-        return;
-      }
+    if (!selectedTag || !segment || isDoubleClicked(e)) return;
 
-      const constituent = generateConstituent(selectedTag, begin, end);
-      const updatedSegment = addConstituent(segment, begin, end, constituent);
+    // 라벨이나 점선을 눌러도 브라우저가 주변 단어에 캐럿을 둘 수 있다.
+    const clickedToken =
+      e.target instanceof Element && e.target.closest(`[${CONSTITUENT_DATA_ATTRS.INDEX}]`);
+    if (!clickedToken && window.getSelection()?.isCollapsed) return;
 
-      updateSegment(updatedSegment);
+    const { begin, end, isValid } = validateSelectionBounds();
+    if (!isValid) {
+      setAndClearInvalidIndex(end - 1);
+      clearSelection();
+      return;
     }
+
+    const constituent = generateConstituent(selectedTag, begin, end);
+    const updatedSegment = addConstituent(segment, begin, end, constituent);
+
+    updateSegment(updatedSegment);
   };
 
   /** 문장 요소 삭제 */

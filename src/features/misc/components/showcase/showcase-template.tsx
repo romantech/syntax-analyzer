@@ -1,5 +1,4 @@
 import { Flex, type FlexProps, Heading, HStack, Link, Stack, Text } from '@chakra-ui/react';
-import type { FunctionComponent } from 'react';
 import { NavLink } from 'react-router';
 
 import { LazyImage, type LazyImageProps } from '@/base';
@@ -23,10 +22,8 @@ export const ShowcaseTemplate = ({
   imageFirst = true,
   ...flexProps
 }: ShowcaseTemplateProps) => {
-  const Contents: FunctionComponent[] = [];
-
-  const Description = () => (
-    <Stack maxW={400} gap={8}>
+  const descriptionContent = (
+    <Stack key="description" maxW={400} gap={8}>
       <Heading
         bgGradient="linear(to-r, teal.300, yellow.400 70%)"
         bgClip="text"
@@ -43,10 +40,7 @@ export const ShowcaseTemplate = ({
     </Stack>
   );
 
-  const Image = () => <LazyImage {...imageProps} maxW={540} />;
-
-  if (imageFirst) Contents.push(Image, Description);
-  else Contents.push(Description, Image);
+  const image = <LazyImage key="image" {...imageProps} maxW={540} />;
 
   return (
     <Flex
@@ -58,9 +52,7 @@ export const ShowcaseTemplate = ({
       {...flexProps}
     >
       <HStack flexGrow={1} justify="center" align="start" gap={12}>
-        {Contents.map((Content) => (
-          <Content key={Content.name} />
-        ))}
+        {imageFirst ? [image, descriptionContent] : [descriptionContent, image]}
       </HStack>
       <ScrollDownButton onClick={onScrollDown} hidden={!onScrollDown} />
     </Flex>
