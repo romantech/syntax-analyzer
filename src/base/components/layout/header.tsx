@@ -139,7 +139,10 @@ export function Header() {
               boxSize="44px"
             />
             <Portal>
-              <MenuList zIndex="dropdown">
+              <MenuList
+                zIndex="dropdown"
+                motionProps={{ variants: { enter: { opacity: 1 }, exit: { opacity: 0 } } }}
+              >
                 {EXTERNAL_LINKS.map(({ label, href, icon: LinkIcon }) => (
                   <MenuItem
                     key={href}
