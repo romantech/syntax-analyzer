@@ -1,5 +1,5 @@
 name: Sweep Fast Issue
-title: 'Sweep (fast): '
+title: "Sweep (fast): "
 description: For few-line fixes to be handled by Sweep, an AI-powered junior developer. Sweep will use GPT-3.5 to quickly create a PR for very small changes.
 labels: sweep
 body:

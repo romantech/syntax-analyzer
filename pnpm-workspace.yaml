@@ -1,9 +1,9 @@
 packages:
-  - '.'
+  - "."
 
 #minimumReleaseAge: 10080
 
 allowBuilds:
-  '@parcel/watcher': true
-  '@tsparticles/engine': true
+  "@parcel/watcher": true
+  "@tsparticles/engine": true
   esbuild: true
