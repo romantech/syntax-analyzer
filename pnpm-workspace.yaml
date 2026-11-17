@@ -3,7 +3,14 @@ packages:
 
 #minimumReleaseAge: 10080
 
+overrides:
+  # shortcut: jotai-devtools 0.14 requires react-json-tree 0.18, remove when upgrading to Jotai 3.
+  "jotai-devtools@0.14.0>react-json-tree": "0.20.1"
+  # shortcut: Workbox 7.4.1 still declares glob 11; remove when Workbox upgrades glob.
+  "workbox-build@7.4.1>glob": "14.0.6"
+
 allowBuilds:
   "@parcel/watcher": true
-  "@tsparticles/engine": true
+  # The install script only checks dependencies and logs a TypeError in 4.6.0.
+  "@tsparticles/engine@4.6.0": false
   esbuild: true

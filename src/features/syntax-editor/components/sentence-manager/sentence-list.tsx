@@ -15,14 +15,14 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { Fragment, useRef } from 'react';
 import { TbMoodEmpty } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
+import { ConfirmModal, TextPlaceholder } from '@/base';
+import { type AnalysisSource, DeletableSentence, type TAnalysis } from '@/features/syntax-editor';
+import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants';
 import {
   analysisListBySourceAtom,
   removeUserAnalysisActionAtom,
   selectedAnalysisAtom,
-} from 'src/features/syntax-editor/store';
-import { ConfirmModal, TextPlaceholder } from '@/base';
-import { type AnalysisSource, DeletableSentence, type TAnalysis } from '@/features/syntax-editor';
-import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants';
+} from '@/features/syntax-editor/store';
 import { getSyntaxEditorPath } from '@/routes';
 
 type AnalysisInfo = { index: number; analysis: TAnalysis };
