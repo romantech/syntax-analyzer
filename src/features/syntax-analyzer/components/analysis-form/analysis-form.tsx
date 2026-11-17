@@ -7,16 +7,20 @@ import {
   type SkeletonProps,
   Stack,
   type StackProps,
+  Text,
 } from '@chakra-ui/react';
 import type { PropsWithChildren } from 'react';
+import { useWatch } from 'react-hook-form';
 import { GiMagicLamp } from 'react-icons/gi';
 
 import { ConfirmModal } from '@/base';
 import {
+  ANALYSIS_DECREMENT_COUNT,
+  AnalysisModel,
   FieldGroupHeader,
   ModelChoiceGroup,
   SentenceInput,
-  UsageLimitTooltip,
+  UsageLimitMessage,
   useAnalysisForm,
 } from '@/features/syntax-analyzer';
 
@@ -25,41 +29,48 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     control,
     register,
     remainingCount,
-    isPending, // mutation 진행중일 때 true
+    isPending,
     onSubmit,
     isModalOpen,
     onSubmitConfirm,
     closeModal,
     formState: { errors },
   } = useAnalysisForm();
+  const model = useWatch({ control, name: 'model' });
+  const canAnalyze = remainingCount >= ANALYSIS_DECREMENT_COUNT[model];
 
   return (
     <AnalysisFormBox as="form" onSubmit={onSubmit} {...stackProps}>
       <Box>
         <FieldGroupHeader>ai 모델 선택</FieldGroupHeader>
         <ModelChoiceGroup control={control} remainingCount={remainingCount} />
+        {remainingCount > 0 && remainingCount < ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY] && (
+          <Text mt={2} color="description" fontSize="sm">
+            고급 모델은 분석 횟수가 {ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY]}회 필요해요.
+          </Text>
+        )}
       </Box>
       <FormControl isInvalid={!!errors.sentence}>
         <FieldGroupHeader>영어 문장 입력</FieldGroupHeader>
-        <HStack align="start">
+        <Stack direction={{ base: 'column', sm: 'row' }} align={{ base: 'stretch', sm: 'start' }}>
           <SentenceInput
             {...register('sentence')}
             errorMessage={errors.sentence?.message}
             isDisabled={isPending}
             showHelperText
           />
-          <UsageLimitTooltip isDisabled={!!remainingCount}>
-            <Button
-              type="submit"
-              isDisabled={!remainingCount}
-              size="lg"
-              leftIcon={<GiMagicLamp fontSize="24px" />}
-              loadingText="분석중"
-            >
-              분석
-            </Button>
-          </UsageLimitTooltip>
-        </HStack>
+          <Button
+            type="submit"
+            isDisabled={!canAnalyze || isPending}
+            flexShrink={0}
+            alignSelf={{ base: 'end', sm: 'start' }}
+            size="lg"
+            leftIcon={<GiMagicLamp fontSize="24px" />}
+          >
+            분석
+          </Button>
+        </Stack>
+        {remainingCount === 0 && <UsageLimitMessage />}
       </FormControl>
       <ConfirmModal
         isOpen={isModalOpen}
@@ -74,7 +85,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
 
 const AnalysisFormBox = ({ children, ...stackProps }: PropsWithChildren<StackProps>) => {
   return (
-    <Stack w="full" maxW={660} gap={10} {...stackProps}>
+    <Stack w="full" maxW={660} gap={{ base: 6, lg: 10 }} {...stackProps}>
       {children}
     </Stack>
   );

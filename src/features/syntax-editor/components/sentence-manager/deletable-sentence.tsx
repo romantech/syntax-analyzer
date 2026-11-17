@@ -1,6 +1,14 @@
-import { Badge, HStack, type StackProps, Text, VStack } from '@chakra-ui/react';
+import {
+  Badge,
+  Button,
+  HStack,
+  type StackProps,
+  Text,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
 
-import { ConfirmPopover, DateChip, DeleteButtonIcon, isLessThanAgo, tokenJoiner } from '@/base';
+import { ConfirmModal, DateChip, DeleteButtonIcon, isLessThanAgo, tokenJoiner } from '@/base';
 import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor';
 
 interface DeletableSentenceProps extends StackProps {
@@ -21,6 +29,9 @@ export default function DeletableSentence({
   hideDeleteButton = false,
   ...stackProps
 }: DeletableSentenceProps) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const sentenceText = typeof sentence === 'string' ? sentence : tokenJoiner(sentence);
+
   return (
     <VStack align="start" gap={0.5} p={1.5} {...stackProps}>
       <HStack w="full" justify="space-between">
@@ -37,17 +48,39 @@ export default function DeletableSentence({
             </Badge>
           )}
         </HStack>
-        <ConfirmPopover
-          headerText="선택한 문장을 삭제하시겠습니까?"
-          onConfirm={onDelete}
-          confirmText="삭제"
-        >
-          {({ onOpen }) => <DeleteButtonIcon onClick={onOpen} hidden={hideDeleteButton} />}
-        </ConfirmPopover>
+        {!hideDeleteButton && (
+          <DeleteButtonIcon
+            aria-label={`문장 삭제: ${sentenceText}`}
+            onClick={onOpen}
+            boxSize={{ base: 11, lg: 8 }}
+          />
+        )}
       </HStack>
-      <Text noOfLines={1} cursor="pointer" _hover={{ color: 'teal.300' }} onClick={onClick}>
-        {typeof sentence === 'string' ? sentence : tokenJoiner(sentence)}
-      </Text>
+      <Button
+        variant="unstyled"
+        display="block"
+        w="full"
+        minH={{ base: 11, lg: 8 }}
+        textAlign="start"
+        fontWeight="normal"
+        _hover={{ textDecoration: 'underline' }}
+        _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
+        onClick={onClick}
+      >
+        <Text as="span" noOfLines={1}>
+          {sentenceText}
+        </Text>
+      </Button>
+      <ConfirmModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={() => {
+          onClose();
+          onDelete();
+        }}
+        headerContent="문장 삭제"
+        bodyContent="선택한 문장을 삭제하시겠습니까?"
+      />
     </VStack>
   );
 }

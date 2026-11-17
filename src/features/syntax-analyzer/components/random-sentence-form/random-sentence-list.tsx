@@ -1,14 +1,5 @@
-import {
-  Highlight,
-  SlideFade,
-  StackDivider,
-  Text,
-  useClipboard,
-  useToast,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, Highlight, SlideFade, StackDivider, useToast, VStack } from '@chakra-ui/react';
 import { useIsFetching } from '@tanstack/react-query';
-import { useEffect } from 'react';
 
 import { RANDOM_SENTENCE_BASE_KEY } from '@/features/syntax-analyzer';
 import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor';
@@ -21,17 +12,18 @@ interface RandomSentenceListProps {
 export default function RandomSentenceList({ data, query }: RandomSentenceListProps) {
   const toast = useToast();
   const isFetching = useIsFetching({ queryKey: RANDOM_SENTENCE_BASE_KEY });
-  const { onCopy, setValue, hasCopied } = useClipboard('', 1000);
-
-  useEffect(() => {
-    if (hasCopied) {
+  const copySentence = async (sentence: string) => {
+    try {
+      await navigator.clipboard.writeText(sentence);
       toast({
         title: '클립보드에 복사되었습니다',
         status: 'success',
         duration: COPY_SENTENCE_SUCCESS_TOAST_DURATION,
       });
+    } catch {
+      toast({ title: '문장을 복사할 수 없어요', status: 'error' });
     }
-  }, [hasCopied, toast]);
+  };
 
   return (
     <SlideFade in={Boolean(data) && !isFetching} offsetY="20px">
@@ -42,17 +34,29 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
         divider={<StackDivider borderColor="gray.700" />}
       >
         {data?.map((sentence) => (
-          <Text
-            as="i"
-            cursor="pointer"
+          <Button
             key={sentence}
-            onMouseEnter={() => setValue(sentence)}
-            onClick={onCopy}
+            aria-label={`문장 복사: ${sentence}`}
+            variant="unstyled"
+            display="block"
+            h="auto"
+            minH={11}
+            px={2}
+            py={1}
+            textAlign="start"
+            whiteSpace="normal"
+            overflowWrap="anywhere"
+            fontWeight="normal"
+            fontStyle="italic"
+            lineHeight="tall"
+            _hover={{ textDecoration: 'underline' }}
+            _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
+            onClick={() => copySentence(sentence)}
           >
             <Highlight query={query} styles={{ color: 'teal.400', fontWeight: 'bold' }}>
               {sentence}
             </Highlight>
-          </Text>
+          </Button>
         ))}
       </VStack>
     </SlideFade>

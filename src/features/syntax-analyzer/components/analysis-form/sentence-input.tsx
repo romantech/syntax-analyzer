@@ -33,12 +33,14 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
   const [parent] = useAutoAnimate({ duration: 180 });
 
   return (
-    <Box flexGrow={1} ref={parent}>
+    <Box flexGrow={1} minW={0} ref={parent}>
       <InputGroup size={size}>
         <InputLeftElement pointerEvents="none">
           <PiTextTBold />
         </InputLeftElement>
         <Input
+          aria-label="영어 문장"
+          enterKeyHint="done"
           placeholder={`${MAX_SENTENCE_LENGTH}자 미만의 영어 문장을 입력해 주세요`}
           maxLength={MAX_SENTENCE_LENGTH}
           variant="filled"

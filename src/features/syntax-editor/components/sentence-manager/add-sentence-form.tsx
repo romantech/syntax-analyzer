@@ -36,7 +36,7 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
       <FormControl isInvalid={!!errors.sentence}>
         <HStack align="start">
           <SentenceInput {...register('sentence')} errorMessage={errors.sentence?.message} />
-          <Button type="submit" isLoading={isSubmitting} size="lg">
+          <Button type="submit" isLoading={isSubmitting} flexShrink={0} size="lg">
             추가
           </Button>
         </HStack>
@@ -46,7 +46,7 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
         onClose={onClose}
         onConfirm={onConfirm}
         headerContent="영어 문장 추가"
-        bodyContent="입력한 영어 문장을 추가 하시겠습니까?"
+        bodyContent="입력한 영어 문장을 추가하시겠습니까?"
       />
     </Box>
   );

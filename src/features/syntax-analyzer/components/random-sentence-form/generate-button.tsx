@@ -1,9 +1,9 @@
-import { Button, type ButtonProps, Skeleton, Text } from '@chakra-ui/react';
+import { Button, type ButtonProps, Skeleton, Stack, Text } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
 
 import {
   DAILY_SENTENCE_LIMIT,
-  UsageLimitTooltip,
+  UsageLimitMessage,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 
@@ -14,7 +14,7 @@ export default function GenerateButton({ onClick, isLoading, ...buttonProps }: B
   const hasCount = count > 0;
 
   return (
-    <UsageLimitTooltip isDisabled={hasCount}>
+    <Stack align="start" maxW={190}>
       <Button
         minW={170}
         onClick={onClick}
@@ -32,7 +32,8 @@ export default function GenerateButton({ onClick, isLoading, ...buttonProps }: B
           fontSize="sm"
         >{`(${count}/${DAILY_SENTENCE_LIMIT})`}</Text>
       </Button>
-    </UsageLimitTooltip>
+      {!hasCount && <UsageLimitMessage />}
+    </Stack>
   );
 }
 

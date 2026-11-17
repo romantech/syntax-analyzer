@@ -1,4 +1,4 @@
-import { Heading, Stack, type StackProps, Text } from '@chakra-ui/react';
+import { Box, Heading, Stack, type StackProps, Text } from '@chakra-ui/react';
 import { type DotLottie, DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useEffect, useRef } from 'react';
 
@@ -33,24 +33,29 @@ export default function AnalysisLoadIndicator({
   return (
     <LoadingTransition
       type="indicator"
-      display="flex"
-      direction="row"
+      role="status"
+      direction={{ base: 'column', lg: 'row' }}
       align="center"
       isLoading={play}
-      zIndex={-1}
+      w="max-content"
+      maxW="calc(100% - 32px)"
+      textAlign={{ base: 'center', lg: 'start' }}
+      pointerEvents="none"
       {...stackProps}
     >
-      <DotLottieReact
-        loop
-        data={loadingAnimation}
-        dotLottieRefCallback={handleDotLottieRef}
-        style={{ width: 350, height: 350 }}
-      />
-      <Stack spacing={5}>
-        <Heading size="3xl" fontWeight="bold">
+      <Box w={{ base: 32, lg: 350 }} aspectRatio={1}>
+        <DotLottieReact
+          loop
+          data={loadingAnimation}
+          dotLottieRefCallback={handleDotLottieRef}
+          style={{ width: '100%', height: '100%' }}
+        />
+      </Box>
+      <Stack gap={{ base: 2, lg: 5 }}>
+        <Heading size={{ base: 'lg', lg: '3xl' }} fontWeight="bold">
           문장 분석 중
         </Heading>
-        <Text fontSize="2xl">
+        <Text fontSize={{ base: 'md', lg: '2xl' }}>
           최대
           <Text as="span" borderRadius="md" bg="teal.200" color="gray.800" mx={1} px={1}>
             1분
