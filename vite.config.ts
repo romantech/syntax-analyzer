@@ -1,8 +1,8 @@
+import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, type PluginOption } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 /**
  * Vite(Rollup) 빌드 시 적용되는 커스텀 청크 분할(Code Splitting) 함수
@@ -47,6 +47,7 @@ const manualChunks = (id: string): string | undefined => {
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   plugins: [
     /**
      * react() 는 vitejs/plugin-react 플러그인의 메인 함수
@@ -68,7 +69,6 @@ export default defineConfig(({ mode }) => ({
         presets: ['jotai-babel/preset'],
       },
     }),
-    tsconfigPaths(),
     mode === 'analyze' ? (visualizer() as unknown as PluginOption) : undefined,
 
     /**
