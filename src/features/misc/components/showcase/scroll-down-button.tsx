@@ -1,11 +1,10 @@
-import { IconButton } from '@chakra-ui/react';
+import { IconButton, type IconButtonProps, usePrefersReducedMotion } from '@chakra-ui/react';
 import { motion, type Variants } from 'framer-motion';
-import type { ComponentProps } from 'react';
 import { FaAnglesDown } from 'react-icons/fa6';
 
 const MotionIconButton = motion.create(IconButton);
 
-type ScrollDownButtonProps = ComponentProps<typeof MotionIconButton>;
+type ScrollDownButtonProps = Pick<IconButtonProps, 'hidden' | 'onClick'>;
 
 const motionVariants: Variants = {
   initial: { y: '0%' },
@@ -22,19 +21,25 @@ const motionVariants: Variants = {
 };
 
 export default function ScrollDownButton(buttonProps: ScrollDownButtonProps) {
+  const prefersReducedMotion = usePrefersReducedMotion({ ssr: false });
+
   return (
     <MotionIconButton
       isRound
-      position="absolute"
+      position={{ base: 'static', lg: 'absolute' }}
+      alignSelf="center"
+      mt={{ base: 6, lg: 0 }}
       left="50%"
       bottom="6%"
+      minW={{ base: '44px', lg: 10 }}
+      minH={{ base: '44px', lg: 10 }}
       fontSize="xl"
       icon={<FaAnglesDown />}
       aria-label="Scroll down"
-      transform="translateX(-50%)"
+      sx={{ translate: { lg: '-50% 0' } }}
       variants={motionVariants}
       initial="initial"
-      animate="bounce"
+      animate={prefersReducedMotion ? 'initial' : 'bounce'}
       {...buttonProps}
     />
   );
