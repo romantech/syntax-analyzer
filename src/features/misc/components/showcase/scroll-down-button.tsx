@@ -2,6 +2,8 @@ import { IconButton, type IconButtonProps, usePrefersReducedMotion } from '@chak
 import { motion, type Variants } from 'framer-motion';
 import { FaAnglesDown } from 'react-icons/fa6';
 
+const MotionIconButton = motion.create(IconButton);
+
 type ScrollDownButtonProps = Pick<IconButtonProps, 'hidden' | 'onClick'>;
 
 const motionVariants: Variants = {
@@ -22,7 +24,7 @@ export default function ScrollDownButton(buttonProps: ScrollDownButtonProps) {
   const prefersReducedMotion = usePrefersReducedMotion({ ssr: false });
 
   return (
-    <IconButton
+    <MotionIconButton
       isRound
       position={{ base: 'static', lg: 'absolute' }}
       alignSelf="center"
@@ -32,17 +34,12 @@ export default function ScrollDownButton(buttonProps: ScrollDownButtonProps) {
       minW={{ base: '44px', lg: 10 }}
       minH={{ base: '44px', lg: 10 }}
       fontSize="xl"
-      icon={
-        <motion.span
-          variants={motionVariants}
-          initial="initial"
-          animate={prefersReducedMotion ? 'initial' : 'bounce'}
-        >
-          <FaAnglesDown />
-        </motion.span>
-      }
+      icon={<FaAnglesDown />}
       aria-label="Scroll down"
       sx={{ translate: { lg: '-50% 0' } }}
+      variants={motionVariants}
+      initial="initial"
+      animate={prefersReducedMotion ? 'initial' : 'bounce'}
       {...buttonProps}
     />
   );
