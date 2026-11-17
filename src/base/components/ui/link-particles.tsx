@@ -1,11 +1,14 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useBreakpointValue, useColorModeValue, usePrefersReducedMotion } from '@chakra-ui/react';
 import type { ISourceOptions } from '@tsparticles/engine';
 import { loadLinksPreset } from '@tsparticles/preset-links';
 import Particles, { type IParticlesProps, ParticlesProvider } from '@tsparticles/react';
 
 export default function LinkParticles({ options, ...particlesProps }: IParticlesProps) {
-  const isLightMode = useColorMode().colorMode === 'light';
-  const color = isLightMode ? '#5b5b5b' : '#b0b0b0';
+  const color = useColorModeValue('#5b5b5b', '#b0b0b0');
+  const isCompact = useBreakpointValue({ base: true, lg: false }, { ssr: false });
+  const prefersReducedMotion = usePrefersReducedMotion({ ssr: false });
+
+  if (prefersReducedMotion) return null;
 
   const defaultOptions: ISourceOptions = {
     preset: 'links',
@@ -14,7 +17,12 @@ export default function LinkParticles({ options, ...particlesProps }: IParticles
     particles: {
       paint: { fill: { color: { value: color } } },
       opacity: { value: 0.3 },
-      links: { opacity: 0.3, color },
+      number: isCompact ? { value: 24 } : undefined,
+      links: {
+        color,
+        distance: isCompact ? 80 : undefined,
+        opacity: isCompact ? 0.2 : 0.3,
+      },
     },
   };
 

@@ -1,4 +1,4 @@
-import { Stack } from '@chakra-ui/react';
+import { Stack, usePrefersReducedMotion } from '@chakra-ui/react';
 
 import { Layout, LinkParticles } from '@/base';
 import {
@@ -15,11 +15,6 @@ enum ShowCaseID {
   GENERATOR = 'generator-showcase',
 }
 
-const getScrollHandler = (nextSectionId: ShowCaseID) => () => {
-  const nextSection = document.querySelector(`#${nextSectionId}`);
-  nextSection?.scrollIntoView({ behavior: 'smooth' });
-};
-
 const showCases = [
   { id: ShowCaseID.HERO, Component: HeroShowcase },
   { id: ShowCaseID.ANALYZER, Component: AnalyzerShowcase },
@@ -28,13 +23,15 @@ const showCases = [
 ];
 
 export default function Home() {
+  const prefersReducedMotion = usePrefersReducedMotion({ ssr: false });
+
   return (
     <Layout
       position="relative"
       maxW="full"
-      h="100vh"
-      overflowY="auto"
-      scrollSnapType="y mandatory"
+      h={{ lg: '100vh' }}
+      overflowY={{ lg: 'auto' }}
+      scrollSnapType={{ lg: 'y mandatory' }}
       sx={{
         '&::-webkit-scrollbar': { display: 'none' },
         scrollbarWidth: 'none',
@@ -44,8 +41,20 @@ export default function Home() {
       <Stack maxW="8xl" mx="auto">
         {showCases.map(({ id, Component }, i) => {
           const nextId = showCases[i + 1]?.id;
-          const scrollHandler = nextId ? getScrollHandler(nextId) : undefined;
-          return <Component key={id} id={id} onScrollDown={scrollHandler} />;
+          const onScrollDown = nextId
+            ? () =>
+                document
+                  .getElementById(nextId)
+                  ?.scrollIntoView({ behavior: prefersReducedMotion ? 'instant' : 'smooth' })
+            : undefined;
+          return (
+            <Component
+              key={id}
+              id={id}
+              scrollMarginTop={{ base: 16, lg: 0 }}
+              onScrollDown={onScrollDown}
+            />
+          );
         })}
       </Stack>
     </Layout>

@@ -1,4 +1,12 @@
-import { Flex, type FlexProps, Heading, HStack, Link, Stack, Text } from '@chakra-ui/react';
+import {
+  Flex,
+  type FlexProps,
+  Heading,
+  Link,
+  Stack,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { NavLink } from 'react-router';
 
 import { LazyImage, type LazyImageProps } from '@/base';
@@ -22,38 +30,56 @@ export const ShowcaseTemplate = ({
   imageFirst = true,
   ...flexProps
 }: ShowcaseTemplateProps) => {
-  const descriptionContent = (
-    <Stack key="description" maxW={400} gap={8}>
-      <Heading
-        bgGradient="linear(to-r, teal.300, yellow.400 70%)"
-        bgClip="text"
-        whiteSpace="pre-line"
-      >
-        {title}
-      </Heading>
-      <Stack gap={4}>
-        <Text fontSize="xl">{description}</Text>
-        <Link as={NavLink} color="teal.300" to={linkUrl} w="fit-content">
-          Try it now
-        </Link>
-      </Stack>
-    </Stack>
+  const gradient = useColorModeValue(
+    'linear(to-r, teal.700, yellow.800 70%)',
+    'linear(to-r, teal.300, yellow.400 70%)',
   );
-
-  const image = <LazyImage key="image" {...imageProps} maxW={540} />;
+  const linkColor = useColorModeValue('teal.700', 'teal.300');
 
   return (
     <Flex
-      h="100vh"
+      direction="column"
+      minH={{ lg: '100vh' }}
+      py={{ base: 8, lg: 0 }}
       align="center"
       justify="center"
       scrollSnapAlign="start"
       position="relative"
       {...flexProps}
     >
-      <HStack flexGrow={1} justify="center" align="start" gap={12}>
-        {imageFirst ? [image, descriptionContent] : [descriptionContent, image]}
-      </HStack>
+      <Stack
+        w="full"
+        direction={{ base: 'column', lg: imageFirst ? 'row-reverse' : 'row' }}
+        justify="center"
+        align={{ base: 'center', lg: 'start' }}
+        gap={{ base: 6, lg: 12 }}
+      >
+        <Stack w="full" maxW={{ base: 540, lg: 400 }} gap={{ base: 3, lg: 8 }}>
+          <Heading
+            size={{ base: 'lg', lg: 'xl' }}
+            bgGradient={gradient}
+            bgClip="text"
+            whiteSpace="pre-line"
+          >
+            {title}
+          </Heading>
+          <Stack gap={4}>
+            <Text fontSize={{ base: 'md', lg: 'xl' }}>{description}</Text>
+            <Link
+              as={NavLink}
+              color={linkColor}
+              to={linkUrl}
+              w="fit-content"
+              display="inline-flex"
+              alignItems="center"
+              minH={{ base: '44px', lg: 'auto' }}
+            >
+              Try it now
+            </Link>
+          </Stack>
+        </Stack>
+        <LazyImage {...imageProps} maxW={540} />
+      </Stack>
       <ScrollDownButton onClick={onScrollDown} hidden={!onScrollDown} />
     </Flex>
   );
