@@ -32,11 +32,12 @@ const getContentFadeStyles = (isLoading: boolean): StackProps => {
 
 const getLoadingFadeStyles = (isLoading: boolean): StackProps => {
   return {
-    position: 'absolute',
-    top: '45%',
-    left: '45%',
+    position: { base: 'fixed', lg: 'absolute' },
+    top: '50%',
+    left: '50%',
+    visibility: isLoading ? 'visible' : 'hidden',
     opacity: isLoading ? 1 : 0,
-    transition: `transform ${TRANSFORM_DURATION}, opacity ${OPACITY_DURATION}`,
-    transform: `translate(-50%, -50%) ${isLoading ? 'translateX(0)' : 'translateX(100%)'}`,
+    transform: 'translate(-50%, -50%)',
+    transition: `opacity ${OPACITY_DURATION}`,
   };
 };

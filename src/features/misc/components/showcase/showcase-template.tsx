@@ -37,16 +37,7 @@ export const ShowcaseTemplate = ({
   const linkColor = useColorModeValue('teal.700', 'teal.300');
 
   return (
-    <Flex
-      direction="column"
-      minH={{ lg: '100vh' }}
-      py={{ base: 8, lg: 0 }}
-      align="center"
-      justify="center"
-      scrollSnapAlign="start"
-      position="relative"
-      {...flexProps}
-    >
+    <Flex direction="column" align="center" justify="center" scrollSnapAlign="start" {...flexProps}>
       <Stack
         w="full"
         direction={{ base: 'column', lg: imageFirst ? 'row-reverse' : 'row' }}
@@ -56,7 +47,8 @@ export const ShowcaseTemplate = ({
       >
         <Stack w="full" maxW={{ base: 540, lg: 400 }} gap={{ base: 3, lg: 8 }}>
           <Heading
-            size={{ base: 'lg', lg: 'xl' }}
+            fontSize={{ base: '1.75rem', lg: '4xl' }}
+            lineHeight={{ base: 1.33, md: 1.2 }}
             bgGradient={gradient}
             bgClip="text"
             whiteSpace="pre-line"
@@ -64,7 +56,12 @@ export const ShowcaseTemplate = ({
             {title}
           </Heading>
           <Stack gap={4}>
-            <Text fontSize={{ base: 'md', lg: 'xl' }}>{description}</Text>
+            <Text
+              fontSize={{ base: '1.0625rem', lg: 'xl' }}
+              lineHeight={{ base: '1.6875rem', lg: 'base' }}
+            >
+              {description}
+            </Text>
             <Link
               as={NavLink}
               color={linkColor}

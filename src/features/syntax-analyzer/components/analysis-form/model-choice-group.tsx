@@ -34,27 +34,42 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
       name="model"
       control={control}
       render={({ field: { onChange, value } }) => (
-        <RadioGroup onChange={onChange} value={value} display="flex" flexDirection="column" gap={2}>
+        <RadioGroup
+          aria-label="AI 모델 선택"
+          onChange={onChange}
+          value={value}
+          display="flex"
+          flexDirection="column"
+          alignItems="start"
+          gap={2}
+        >
           {MODEL_FIELDS.map((field) => (
-            <Stack key={field.value}>
-              <HStack align="center">
+            <Stack key={field.value} gap={1} align="start">
+              <HStack>
                 <Radio
                   colorScheme="teal"
                   value={field.value}
                   isDisabled={remainingCount < field.count}
+                  aria-describedby={`model-description-${field.value}`}
                 >
-                  <Text as="span">{field.label}</Text>
+                  {field.label}
                 </Radio>
                 <Badge
-                  fontSize={10}
-                  variant="outline"
-                  colorScheme="orange"
+                  fontSize="xs"
+                  fontWeight="semibold"
+                  variant="subtle"
+                  colorScheme="teal"
                   hidden={!field.recommend}
                 >
                   recommended
                 </Badge>
               </HStack>
-              <Text ml={6} fontSize={14} color="description" mt={-1}>
+              <Text
+                id={`model-description-${field.value}`}
+                ml={6}
+                fontSize={14}
+                color="description"
+              >
                 {field.desc}
               </Text>
             </Stack>

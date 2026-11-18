@@ -66,9 +66,13 @@ export function Header() {
 
   const ToggleIcon = colorMode === 'light' ? MdModeNight : MdOutlineLightMode;
 
-  const bg = useColorModeValue('whiteAlpha.800', 'grayAlpha.800');
+  const bg = useColorModeValue(
+    { base: 'white', lg: 'whiteAlpha.800' },
+    { base: 'gray.800', lg: 'grayAlpha.800' },
+  );
   const boxShadow = useColorModeValue('sm', 'lg');
   const hoverColor = useColorModeValue('gray.400', 'gray.100');
+  const focusRingColor = useColorModeValue('teal-600', 'teal-300');
 
   return (
     <Box
@@ -85,7 +89,7 @@ export function Header() {
     >
       <HStack maxW="8xl" mx="auto" spacing={{ base: 0, sm: 2 }}>
         <Tabs variant="soft-rounded" index={tabIndex} colorScheme="gray">
-          <TabList>
+          <TabList gap={{ base: 1, sm: 2 }}>
             {NAV_TABS.map((tab, i) => (
               <Tab
                 as={NavLink}
@@ -93,18 +97,36 @@ export function Header() {
                 to={tab.path}
                 transition="all 0.3s"
                 color="description"
-                px={{ base: 2, sm: 4 }}
+                px={{ base: 0, lg: 4 }}
+                py={{ base: 0, lg: 2 }}
                 minH={{ base: '44px', lg: 10 }}
+                borderRadius="xl"
+                _focusVisible={{
+                  boxShadow: `inset 0 0 0 2px color-mix(in srgb, var(--chakra-colors-${tabIndex === i ? 'teal-600' : focusRingColor}) 80%, var(--chakra-colors-gray-500))`,
+                }}
+                fontSize={{ base: '0.9375rem', lg: 'md' }}
+                lineHeight={{ base: '1.25rem', lg: 'base' }}
                 textTransform="capitalize"
                 _hover={{ color: tabIndex !== i ? hoverColor : '' }}
+                _selected={{ bg: { base: 'transparent', lg: 'gray.100' }, color: 'gray.800' }}
               >
-                {tab.label}
+                <Box
+                  as="span"
+                  display="flex"
+                  alignItems="center"
+                  h={{ base: 10, lg: 'auto' }}
+                  px={{ base: 2.5, sm: 4, lg: 0 }}
+                  borderRadius="xl"
+                  bg={{ base: tabIndex === i ? 'gray.100' : 'transparent', lg: 'transparent' }}
+                >
+                  {tab.label}
+                </Box>
               </Tab>
             ))}
           </TabList>
         </Tabs>
         <Spacer />
-        <Flex align="center">
+        <Flex align="center" gap={{ base: 1, lg: 0 }}>
           <Flex display={{ base: 'none', sm: 'flex' }}>
             {EXTERNAL_LINKS.map(({ label, href, icon }) => (
               <Button

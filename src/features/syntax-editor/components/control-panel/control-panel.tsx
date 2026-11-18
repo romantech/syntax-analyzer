@@ -22,7 +22,14 @@ export default function ControlPanel() {
   const isMounted = useIsMounted();
 
   return (
-    <Skeleton h={175} w="20%" fitContent isLoaded={isMounted} borderRadius={6}>
+    <Skeleton
+      h={175}
+      w={{ base: 'full', lg: 288 }}
+      flexShrink={0}
+      fitContent
+      isLoaded={isMounted}
+      borderRadius={6}
+    >
       <Card h="full" p={4} variant="outline">
         <VStack align="stretch" h="full" justify="space-between">
           <VStack>
@@ -35,6 +42,10 @@ export default function ControlPanel() {
             overflowX="scroll"
             sx={{
               '::-webkit-scrollbar': { display: 'none' },
+              button: {
+                minW: { base: '44px', lg: 10 },
+                minH: { base: '44px', lg: 10 },
+              },
             }}
             justify="space-between"
           >

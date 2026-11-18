@@ -1,6 +1,15 @@
-import { Badge, HStack, type StackProps, Text, VStack } from '@chakra-ui/react';
+import {
+  Badge,
+  Button,
+  HStack,
+  type StackProps,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
 
-import { ConfirmPopover, DateChip, DeleteButtonIcon, isLessThanAgo, tokenJoiner } from '@/base';
+import { ConfirmModal, DateChip, DeleteButtonIcon, isLessThanAgo, tokenJoiner } from '@/base';
 import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor';
 
 interface DeletableSentenceProps extends StackProps {
@@ -21,9 +30,13 @@ export default function DeletableSentence({
   hideDeleteButton = false,
   ...stackProps
 }: DeletableSentenceProps) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const hoverColor = useColorModeValue('teal.700', 'teal.300');
+  const sentenceText = typeof sentence === 'string' ? sentence : tokenJoiner(sentence);
+
   return (
-    <VStack align="start" gap={0.5} p={1.5} {...stackProps}>
-      <HStack w="full" justify="space-between">
+    <HStack align="start" p={1.5} {...stackProps}>
+      <VStack align="stretch" flex={1} minW={0} gap={0.5}>
         <HStack gap={1.5}>
           <DateChip date={createdAt} h={5} />
           {isLessThanAgo(createdAt, NEW_BADGE_DISPLAY_DURATION) && (
@@ -37,17 +50,44 @@ export default function DeletableSentence({
             </Badge>
           )}
         </HStack>
-        <ConfirmPopover
-          headerText="선택한 문장을 삭제하시겠습니까?"
-          onConfirm={onDelete}
-          confirmText="삭제"
+        <Button
+          variant="unstyled"
+          display="block"
+          w="fit-content"
+          maxW="full"
+          minW={0}
+          h="auto"
+          minH={6}
+          textAlign="start"
+          fontWeight="normal"
+          lineHeight="base"
+          _hover={{ color: hoverColor }}
+          _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
+          onClick={onClick}
         >
-          {({ onOpen }) => <DeleteButtonIcon onClick={onOpen} hidden={hideDeleteButton} />}
-        </ConfirmPopover>
-      </HStack>
-      <Text noOfLines={1} cursor="pointer" _hover={{ color: 'teal.300' }} onClick={onClick}>
-        {typeof sentence === 'string' ? sentence : tokenJoiner(sentence)}
-      </Text>
-    </VStack>
+          <Text as="span" noOfLines={1}>
+            {sentenceText}
+          </Text>
+        </Button>
+      </VStack>
+      {!hideDeleteButton && (
+        <DeleteButtonIcon
+          aria-label={`문장 삭제: ${sentenceText}`}
+          onClick={onOpen}
+          boxSize={{ base: '2.75rem', lg: 8 }}
+          flexShrink={0}
+        />
+      )}
+      <ConfirmModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirm={() => {
+          onClose();
+          onDelete();
+        }}
+        headerContent="문장 삭제"
+        bodyContent="선택한 문장을 삭제하시겠습니까?"
+      />
+    </HStack>
   );
 }

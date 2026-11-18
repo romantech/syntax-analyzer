@@ -1,4 +1,4 @@
-import { Box, HStack } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 import { useIsMutating } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
@@ -17,21 +17,31 @@ export default function SyntaxAnalyzer() {
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
 
   return (
-    <Layout position="relative" overflow="hidden" pt={8}>
-      <LoadingTransition gap={10} isLoading={!!isMutating} type="content">
+    <Layout position="relative" overflow="hidden" py={8}>
+      <LoadingTransition
+        gap={{ base: 8, lg: 10 }}
+        isLoading={!!isMutating}
+        inert={!!isMutating}
+        type="content"
+      >
         <Suspense fallback={<AnalysisCounter.Skeleton />}>
           <AnalysisCounter />
         </Suspense>
-        <HStack align="start" justify="space-between">
+        <Stack
+          direction={{ base: 'column', lg: 'row' }}
+          gap={{ base: 12, lg: 10 }}
+          align="start"
+          justify="space-between"
+        >
           <Suspense fallback={<AnalysisForm.Skeleton />}>
             <AnalysisForm />
           </Suspense>
-          <CenteredDivider h={395} orientation="vertical" pt={1.5} px={12} />
+          <CenteredDivider display={{ base: 'none', lg: 'flex' }} h={395} orientation="vertical" />
           <Box w="full" maxW={630}>
             <FieldGroupHeader>랜덤 문장 생성</FieldGroupHeader>
             <RandomSentenceForm />
           </Box>
-        </HStack>
+        </Stack>
       </LoadingTransition>
       <AnalysisLoadIndicator play={!!isMutating} />
     </Layout>

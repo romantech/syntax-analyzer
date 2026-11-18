@@ -38,7 +38,7 @@ export default function Home() {
       }}
     >
       <LinkParticles />
-      <Stack maxW="8xl" mx="auto">
+      <Stack maxW="8xl" mx="auto" gap={0}>
         {showCases.map(({ id, Component }, i) => {
           const nextId = showCases[i + 1]?.id;
           const onScrollDown = nextId
@@ -51,7 +51,11 @@ export default function Home() {
             <Component
               key={id}
               id={id}
-              scrollMarginTop={{ base: 16, lg: 0 }}
+              position="relative"
+              minH={{ base: 'calc(100dvh - 60px)', lg: '100vh' }}
+              pt={{ base: 8, lg: 0 }}
+              pb={{ base: 'calc(112px + env(safe-area-inset-bottom, 0px))', lg: 0 }}
+              scrollMarginTop={{ base: '60px', lg: 0 }}
               onScrollDown={onScrollDown}
             />
           );

@@ -2,64 +2,100 @@ import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   HStack,
+  Icon,
+  List,
+  ListIcon,
+  ListItem,
   Skeleton,
   type SkeletonProps,
   Stack,
   type StackProps,
+  Text,
 } from '@chakra-ui/react';
 import type { PropsWithChildren } from 'react';
+import { useWatch } from 'react-hook-form';
+import { BsMagic } from 'react-icons/bs';
 import { GiMagicLamp } from 'react-icons/gi';
+import { PiNotePencil } from 'react-icons/pi';
+import { RiEnglishInput } from 'react-icons/ri';
+import { TbArrowAutofitWidth } from 'react-icons/tb';
 
 import { ConfirmModal } from '@/base';
 import {
+  ANALYSIS_DECREMENT_COUNT,
+  AnalysisModel,
   FieldGroupHeader,
   ModelChoiceGroup,
   SentenceInput,
-  UsageLimitTooltip,
+  UsageLimitMessage,
   useAnalysisForm,
 } from '@/features/syntax-analyzer';
+import { HELPER_MESSAGES } from '@/features/syntax-analyzer/schemes';
 
 export default function AnalysisForm({ ...stackProps }: StackProps) {
   const {
     control,
     register,
     remainingCount,
-    isPending, // mutation 진행중일 때 true
+    isPending,
     onSubmit,
     isModalOpen,
     onSubmitConfirm,
     closeModal,
     formState: { errors },
   } = useAnalysisForm();
+  const model = useWatch({ control, name: 'model' });
+  const canAnalyze = remainingCount >= ANALYSIS_DECREMENT_COUNT[model];
 
   return (
     <AnalysisFormBox as="form" onSubmit={onSubmit} {...stackProps}>
       <Box>
         <FieldGroupHeader>ai 모델 선택</FieldGroupHeader>
         <ModelChoiceGroup control={control} remainingCount={remainingCount} />
+        {remainingCount > 0 && remainingCount < ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY] && (
+          <Text mt={2} color="description" fontSize="sm">
+            고급 모델은 분석 횟수가 {ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY]}회 필요해요.
+          </Text>
+        )}
       </Box>
       <FormControl isInvalid={!!errors.sentence}>
         <FieldGroupHeader>영어 문장 입력</FieldGroupHeader>
-        <HStack align="start">
+        <Stack
+          direction={{ base: 'column', sm: 'row' }}
+          align={{ base: 'stretch', sm: 'start' }}
+          gap={3}
+        >
           <SentenceInput
             {...register('sentence')}
             errorMessage={errors.sentence?.message}
             isDisabled={isPending}
-            showHelperText
           />
-          <UsageLimitTooltip isDisabled={!!remainingCount}>
-            <Button
-              type="submit"
-              isDisabled={!remainingCount}
-              size="lg"
-              leftIcon={<GiMagicLamp fontSize="24px" />}
-              loadingText="분석중"
-            >
-              분석
-            </Button>
-          </UsageLimitTooltip>
-        </HStack>
+          <Button
+            type="submit"
+            isDisabled={!canAnalyze || isPending}
+            flexShrink={0}
+            alignSelf="start"
+            size="lg"
+            h={{ base: '2.75rem', lg: 12 }}
+            fontSize="md"
+            leftIcon={<Icon as={GiMagicLamp} boxSize={5} />}
+          >
+            분석
+          </Button>
+        </Stack>
+        {remainingCount === 0 && <UsageLimitMessage />}
+        <FormHelperText color="description" mt={4}>
+          <List spacing={1.5}>
+            {HELPER_TEXTS.map(({ icon, text }) => (
+              <ListItem key={text}>
+                <ListIcon as={icon} />
+                {text}
+              </ListItem>
+            ))}
+          </List>
+        </FormHelperText>
       </FormControl>
       <ConfirmModal
         isOpen={isModalOpen}
@@ -74,7 +110,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
 
 const AnalysisFormBox = ({ children, ...stackProps }: PropsWithChildren<StackProps>) => {
   return (
-    <Stack w="full" maxW={660} gap={10} {...stackProps}>
+    <Stack w="full" maxW={660} gap={{ base: 12, lg: 10 }} {...stackProps}>
       {children}
     </Stack>
   );
@@ -107,3 +143,22 @@ const AnalysisFormSkeleton = (stackProps: StackProps) => {
 };
 
 AnalysisForm.Skeleton = AnalysisFormSkeleton;
+
+const HELPER_TEXTS = [
+  {
+    icon: BsMagic,
+    text: `축약 표현은 자동으로 풀어져요 (I'll → I will)`,
+  },
+  {
+    icon: RiEnglishInput,
+    text: HELPER_MESSAGES.ENGLISH_OR_SYMBOL,
+  },
+  {
+    icon: TbArrowAutofitWidth,
+    text: HELPER_MESSAGES.MAX_LENGTH,
+  },
+  {
+    icon: PiNotePencil,
+    text: HELPER_MESSAGES.MIN_WORDS,
+  },
+];
