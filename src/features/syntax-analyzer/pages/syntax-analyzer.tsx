@@ -29,7 +29,7 @@ export default function SyntaxAnalyzer() {
         </Suspense>
         <Stack
           direction={{ base: 'column', lg: 'row' }}
-          gap={{ base: 8, lg: 10 }}
+          gap={{ base: 12, lg: 10 }}
           align="start"
           justify="space-between"
         >
