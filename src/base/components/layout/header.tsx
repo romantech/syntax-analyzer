@@ -99,15 +99,19 @@ export function Header() {
                 px={{ base: 0, lg: 4 }}
                 py={{ base: 0, lg: 2 }}
                 minH={{ base: '44px', lg: 10 }}
+                fontSize={{ base: '0.9375rem', lg: 'md' }}
+                lineHeight={{ base: '1.25rem', lg: 'base' }}
                 textTransform="capitalize"
                 _hover={{ color: tabIndex !== i ? hoverColor : '' }}
                 _selected={{ bg: { base: 'transparent', lg: 'gray.100' }, color: 'gray.800' }}
               >
                 <Box
                   as="span"
-                  px={{ base: 2, sm: 4, lg: 0 }}
-                  py={{ base: 2.5, lg: 0 }}
-                  borderRadius="full"
+                  display="flex"
+                  alignItems="center"
+                  h={{ base: 10, lg: 'auto' }}
+                  px={{ base: 2.5, sm: 4, lg: 0 }}
+                  borderRadius={{ base: 'xl', lg: 'full' }}
                   bg={{ base: tabIndex === i ? 'gray.100' : 'transparent', lg: 'transparent' }}
                 >
                   {tab.label}
@@ -117,7 +121,7 @@ export function Header() {
           </TabList>
         </Tabs>
         <Spacer />
-        <Flex align="center">
+        <Flex align="center" gap={{ base: 1, lg: 0 }}>
           <Flex display={{ base: 'none', sm: 'flex' }}>
             {EXTERNAL_LINKS.map(({ label, href, icon }) => (
               <Button
