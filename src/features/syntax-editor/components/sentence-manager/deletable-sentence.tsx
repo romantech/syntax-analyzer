@@ -1,4 +1,13 @@
-import { Badge, Button, HStack, type StackProps, Text, useDisclosure } from '@chakra-ui/react';
+import {
+  Badge,
+  Button,
+  HStack,
+  type StackProps,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react';
 
 import { ConfirmModal, DateChip, DeleteButtonIcon, isLessThanAgo, tokenJoiner } from '@/base';
 import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor';
@@ -22,27 +31,13 @@ export default function DeletableSentence({
   ...stackProps
 }: DeletableSentenceProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const hoverColor = useColorModeValue('teal.700', 'teal.300');
   const sentenceText = typeof sentence === 'string' ? sentence : tokenJoiner(sentence);
 
   return (
     <HStack align="start" p={1.5} {...stackProps}>
-      <Button
-        variant="unstyled"
-        display="flex"
-        flexDirection="column"
-        alignItems="start"
-        gap={0.5}
-        w="full"
-        minW={0}
-        h="auto"
-        minH="2.75rem"
-        textAlign="start"
-        fontWeight="normal"
-        _hover={{ textDecoration: 'underline' }}
-        _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
-        onClick={onClick}
-      >
-        <HStack as="span" gap={1.5}>
+      <VStack align="stretch" flex={1} minW={0} gap={0.5}>
+        <HStack gap={1.5}>
           <DateChip date={createdAt} h={5} />
           {isLessThanAgo(createdAt, NEW_BADGE_DISPLAY_DURATION) && (
             <Badge fontSize="8px" colorScheme="teal">
@@ -55,10 +50,26 @@ export default function DeletableSentence({
             </Badge>
           )}
         </HStack>
-        <Text as="span" w="full" noOfLines={1}>
-          {sentenceText}
-        </Text>
-      </Button>
+        <Button
+          variant="unstyled"
+          display="block"
+          w="fit-content"
+          maxW="full"
+          minW={0}
+          h="auto"
+          minH={6}
+          textAlign="start"
+          fontWeight="normal"
+          lineHeight="base"
+          _hover={{ color: hoverColor }}
+          _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
+          onClick={onClick}
+        >
+          <Text as="span" noOfLines={1}>
+            {sentenceText}
+          </Text>
+        </Button>
+      </VStack>
       {!hideDeleteButton && (
         <DeleteButtonIcon
           aria-label={`문장 삭제: ${sentenceText}`}
