@@ -57,9 +57,9 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
                   <Badge
                     fontSize="xs"
                     variant="outline"
-                    colorScheme="orange"
-                    color="orange.700"
-                    _dark={{ color: 'orange.300' }}
+                    colorScheme="teal"
+                    color="teal.700"
+                    _dark={{ color: 'teal.300' }}
                     hidden={!field.recommend}
                   >
                     recommended
