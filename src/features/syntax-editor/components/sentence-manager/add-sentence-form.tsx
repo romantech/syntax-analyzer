@@ -36,7 +36,14 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
       <FormControl isInvalid={!!errors.sentence}>
         <HStack align="start">
           <SentenceInput {...register('sentence')} errorMessage={errors.sentence?.message} />
-          <Button type="submit" isLoading={isSubmitting} flexShrink={0} size="lg">
+          <Button
+            type="submit"
+            isLoading={isSubmitting}
+            flexShrink={0}
+            size="lg"
+            h={{ base: '2.75rem', lg: 12 }}
+            fontSize={{ base: 'md', lg: 'lg' }}
+          >
             추가
           </Button>
         </HStack>

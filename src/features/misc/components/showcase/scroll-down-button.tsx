@@ -29,11 +29,10 @@ export default function ScrollDownButton(buttonProps: ScrollDownButtonProps) {
       position="absolute"
       alignSelf="center"
       left="50%"
-      bottom={{ base: 'calc(32px + env(safe-area-inset-bottom, 0px))', lg: '6%' }}
+      bottom={{ base: 'calc(48px + env(safe-area-inset-bottom, 0px))', lg: '6%' }}
       minW={{ base: '44px', lg: 10 }}
       minH={{ base: '44px', lg: 10 }}
       fontSize="xl"
-      transitionProperty="background-color, color"
       icon={<FaAnglesDown />}
       aria-label="Scroll down"
       sx={{ translate: '-50% 0' }}

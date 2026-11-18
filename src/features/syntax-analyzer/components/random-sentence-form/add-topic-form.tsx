@@ -43,8 +43,8 @@ export default function AddTopicForm(stackProps: StackProps) {
     <HStack as="form" align="start" onSubmit={handleSubmit(onAddTopic)} {...stackProps}>
       <FormControl minW={0} isInvalid={!!errors.keyword}>
         <InputGroup>
-          <InputLeftElement pointerEvents="none">
-            <CiShoppingTag fontSize={18} />
+          <InputLeftElement boxSize={{ base: '2.75rem', lg: 10 }} pointerEvents="none">
+            <CiShoppingTag fontSize={20} />
           </InputLeftElement>
           <Input
             {...keywordField}
@@ -53,6 +53,8 @@ export default function AddTopicForm(stackProps: StackProps) {
               if (errors.keyword) clearErrors('keyword');
             }}
             variant="filled"
+            h={{ base: '2.75rem', lg: 10 }}
+            pl={{ base: '2.75rem', lg: 10 }}
             maxLength={MAX_TOPIC_LENGTH}
             focusBorderColor="teal.300"
             aria-label="영문 키워드"
@@ -62,7 +64,7 @@ export default function AddTopicForm(stackProps: StackProps) {
         </InputGroup>
         <FormErrorMessage>{errors.keyword?.message}</FormErrorMessage>
       </FormControl>
-      <Button flexShrink={0} variant="outline" type="submit">
+      <Button flexShrink={0} h={{ base: '2.75rem', lg: 10 }} variant="outline" type="submit">
         토픽 등록
       </Button>
     </HStack>

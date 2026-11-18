@@ -4,6 +4,7 @@ import {
   FormControl,
   FormHelperText,
   HStack,
+  Icon,
   List,
   ListIcon,
   ListItem,
@@ -77,7 +78,9 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
             flexShrink={0}
             alignSelf="start"
             size="lg"
-            leftIcon={<GiMagicLamp fontSize="24px" />}
+            h={{ base: '2.75rem', lg: 12 }}
+            fontSize={{ base: 'md', lg: 'lg' }}
+            leftIcon={<Icon as={GiMagicLamp} boxSize={{ base: 5, lg: 6 }} />}
           >
             분석
           </Button>

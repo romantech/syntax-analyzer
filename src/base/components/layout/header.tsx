@@ -88,7 +88,7 @@ export function Header() {
     >
       <HStack maxW="8xl" mx="auto" spacing={{ base: 0, sm: 2 }}>
         <Tabs variant="soft-rounded" index={tabIndex} colorScheme="gray">
-          <TabList>
+          <TabList gap={{ base: 1, sm: 2, lg: 0 }}>
             {NAV_TABS.map((tab, i) => (
               <Tab
                 as={NavLink}
@@ -106,7 +106,7 @@ export function Header() {
                 <Box
                   as="span"
                   px={{ base: 2, sm: 4, lg: 0 }}
-                  py={{ base: 1, lg: 0 }}
+                  py={{ base: 2.5, lg: 0 }}
                   borderRadius="full"
                   bg={{ base: tabIndex === i ? 'gray.100' : 'transparent', lg: 'transparent' }}
                 >

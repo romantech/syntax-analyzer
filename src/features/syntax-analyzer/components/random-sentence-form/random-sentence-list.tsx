@@ -40,7 +40,7 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             variant="unstyled"
             display="block"
             h="auto"
-            minH={11}
+            minH="2.75rem"
             px={2}
             py={1}
             textAlign="start"

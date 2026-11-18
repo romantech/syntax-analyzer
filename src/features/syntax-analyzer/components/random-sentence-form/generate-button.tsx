@@ -17,8 +17,9 @@ export default function GenerateButton({ onClick, isLoading, ...buttonProps }: B
     <Stack align="start" maxW={190}>
       <Button
         minW={170}
+        h={{ base: '2.75rem', lg: 10 }}
         onClick={onClick}
-        leftIcon={<RiAiGenerate />}
+        leftIcon={<RiAiGenerate size={20} />}
         textTransform="uppercase"
         isLoading={isLoading}
         isDisabled={!hasCount}
@@ -38,7 +39,7 @@ export default function GenerateButton({ onClick, isLoading, ...buttonProps }: B
 }
 
 const GenerateButtonSkeleton = () => {
-  return <Skeleton minW={170} h={39} borderRadius="md" />;
+  return <Skeleton minW={170} h={{ base: '2.75rem', lg: 10 }} borderRadius="md" />;
 };
 
 GenerateButton.Skeleton = GenerateButtonSkeleton;

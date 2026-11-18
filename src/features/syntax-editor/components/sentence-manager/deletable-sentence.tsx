@@ -52,7 +52,7 @@ export default function DeletableSentence({
           <DeleteButtonIcon
             aria-label={`문장 삭제: ${sentenceText}`}
             onClick={onOpen}
-            boxSize={{ base: 11, lg: 8 }}
+            boxSize={{ base: '2.75rem', lg: 8 }}
           />
         )}
       </HStack>
@@ -60,7 +60,7 @@ export default function DeletableSentence({
         variant="unstyled"
         display="block"
         w="full"
-        minH={{ base: 11, lg: 8 }}
+        minH={{ base: '2.75rem', lg: 8 }}
         textAlign="start"
         fontWeight="normal"
         _hover={{ textDecoration: 'underline' }}

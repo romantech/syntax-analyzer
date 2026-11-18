@@ -26,13 +26,16 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
   return (
     <Box flexGrow={1} minW={0} ref={parent}>
       <InputGroup size={size}>
-        <InputLeftElement pointerEvents="none">
+        <InputLeftElement boxSize={{ base: '2.75rem', lg: 12 }} pointerEvents="none" fontSize="xl">
           <PiTextTBold />
         </InputLeftElement>
         <Input
           aria-label="영어 문장"
           enterKeyHint="done"
-          placeholder={`${MAX_SENTENCE_LENGTH}자 미만의 영어 문장을 입력해 주세요`}
+          placeholder="영어 문장 입력"
+          h={{ base: '2.75rem', lg: 12 }}
+          pl={{ base: '2.75rem', lg: 12 }}
+          fontSize={{ base: 'md', lg: 'lg' }}
           maxLength={MAX_SENTENCE_LENGTH}
           variant="filled"
           focusBorderColor="teal.300"
