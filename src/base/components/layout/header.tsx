@@ -100,6 +100,7 @@ export function Header() {
                 py={{ base: 0, lg: 2 }}
                 minH={{ base: '44px', lg: 10 }}
                 borderRadius="xl"
+                _focusVisible={{ boxShadow: 'inset 0 0 0 2px var(--chakra-colors-blue-500)' }}
                 fontSize={{ base: '0.9375rem', lg: 'md' }}
                 lineHeight={{ base: '1.25rem', lg: 'base' }}
                 textTransform="capitalize"

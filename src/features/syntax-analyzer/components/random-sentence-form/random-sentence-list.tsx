@@ -29,6 +29,7 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
     <SlideFade in={Boolean(data) && !isFetching} offsetY="20px">
       <VStack
         align="stretch"
+        spacing={0}
         maxH="190px"
         overflowY="auto"
         divider={<StackDivider borderColor="gray.700" />}
