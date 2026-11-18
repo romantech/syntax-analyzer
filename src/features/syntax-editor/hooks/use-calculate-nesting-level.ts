@@ -7,21 +7,23 @@ interface UseCalculateNestedLevelProps {
   targetRef: RefObject<HTMLElement | null>;
   segment: TSegment | null;
   isPending?: boolean;
+  isTapMode?: boolean;
 }
 
 export const useCalculateNestingLevel = ({
   targetRef,
   segment,
   isPending = false,
+  isTapMode = false,
 }: UseCalculateNestedLevelProps) => {
   const [isNestingLevelCalculated, setNestingLevelCalculated] = useBoolean();
 
   useEffect(() => {
     if (isPending || !segment || !targetRef.current) return;
 
-    calculateNestingLevel(targetRef);
+    calculateNestingLevel(targetRef, isTapMode);
     setNestingLevelCalculated.on();
-  }, [isPending, segment, setNestingLevelCalculated, targetRef]);
+  }, [isPending, segment, setNestingLevelCalculated, targetRef, isTapMode]);
 
   return isNestingLevelCalculated;
 };

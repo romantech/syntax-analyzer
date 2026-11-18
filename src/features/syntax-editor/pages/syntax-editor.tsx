@@ -1,4 +1,4 @@
-import { Box, Flex, Stack } from '@chakra-ui/react';
+import { Box, Grid, useMediaQuery } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 
 import { Notice, useBeforeUnload } from '@/base';
@@ -7,35 +7,61 @@ import {
   isSegmentTouchedAtom,
   SyntaxParser,
   TagListAccordion,
+  TapSelectionControls,
   useAnalysisDataLoader,
   useSyntaxEditorInitializer,
 } from '@/features/syntax-editor';
 
 export default function SyntaxEditor() {
   const isTouched = useAtomValue(isSegmentTouchedAtom);
+  const [isTapMode] = useMediaQuery('(max-width: 61.99em), (pointer: coarse)');
 
   useSyntaxEditorInitializer({ resetOnUnmount: true });
   useAnalysisDataLoader();
   useBeforeUnload(isTouched);
 
   return (
-    <Stack
-      h={{ lg: 'calc(100dvh - 72px)' }}
-      minH={{ base: 'calc(100dvh - 60px)', lg: 0 }}
-      gap={8}
-      pt={8}
-      pb={{ base: 8, lg: 0 }}
+    <Grid
+      templateColumns={{ base: 'minmax(0, 1fr)', lg: 'minmax(0, 1fr) 288px' }}
+      alignItems="start"
+      gap={5}
+      py={5}
     >
-      <Stack>
-        <Notice text="문법 요소를 선택한 후 단어를 클릭하거나 드래그하면 태깅할 수 있어요" />
-        <Flex direction={{ base: 'column', lg: 'row' }} gap={6}>
-          <TagListAccordion flexGrow={1} minW={0} />
-          <ControlPanel />
-        </Flex>
-      </Stack>
-      <Box maxW="full" overflowX="auto" flexGrow={1}>
-        <SyntaxParser />
+      <Notice
+        gridColumn="1 / -1"
+        order={1}
+        text={
+          isTapMode
+            ? '태그 선택 → 단어 탭 → 적용. 여러 단어는 끝 단어도 탭하세요.'
+            : '문법 요소를 선택한 후 단어를 클릭하거나 드래그하면 태깅할 수 있어요'
+        }
+      />
+      <Box order={{ base: 2, lg: 3 }}>
+        <ControlPanel />
       </Box>
-    </Stack>
+      <TagListAccordion minW={0} order={{ base: 3, lg: 2 }} />
+      {isTapMode && (
+        <Box gridColumn="1 / -1" order={4}>
+          <TapSelectionControls />
+        </Box>
+      )}
+
+      <Box
+        gridColumn="1 / -1"
+        order={5}
+        maxW="full"
+        minW={0}
+        overflowX="auto"
+        pb={4}
+        px={4}
+        pt={2}
+        tabIndex={0}
+        role="region"
+        aria-label="구문 문장 (가로 스크롤)"
+        _focusVisible={{ outline: '2px solid', outlineColor: 'teal.300', outlineOffset: '-2px' }}
+      >
+        <SyntaxParser isTapMode={isTapMode} />
+      </Box>
+    </Grid>
   );
 }

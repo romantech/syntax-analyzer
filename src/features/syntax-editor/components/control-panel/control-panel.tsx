@@ -23,31 +23,32 @@ export default function ControlPanel() {
 
   return (
     <Skeleton
-      h={175}
+      h={129}
       w={{ base: 'full', lg: 288 }}
+      maxW="full"
       flexShrink={0}
       fitContent
       isLoaded={isMounted}
       borderRadius={6}
     >
-      <Card h="full" p={4} variant="outline">
-        <VStack align="stretch" h="full" justify="space-between">
-          <VStack>
-            <TagInfoSwitch />
-            <AbbrInfoSwitch />
-          </VStack>
+      <Card p={3} variant="outline">
+        <VStack align="stretch" gap={2}>
+          <HStack gap={4} flexWrap="wrap">
+            <TagInfoSwitch w="auto" justify="start" gap={2} />
+            <AbbrInfoSwitch w="auto" justify="start" gap={2} />
+          </HStack>
           <Divider />
           <HStack
             overflowY="hidden"
-            overflowX="scroll"
+            overflowX="auto"
             sx={{
-              '::-webkit-scrollbar': { display: 'none' },
               button: {
                 minW: { base: '44px', lg: 10 },
                 minH: { base: '44px', lg: 10 },
               },
             }}
-            justify="space-between"
+            justify="start"
+            gap={2}
           >
             <DeleteButton />
             <ResetButton />

@@ -1,20 +1,15 @@
 import { useColorMode } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { type MouseEvent, useRef, useState } from 'react';
+import { type MouseEvent, useRef } from 'react';
 
 import { getNearestElementByClass } from '@/base';
-import {
-  type ConstituentDataSet,
-  DELETE_MODE_HOVER_COLOR_SCHEME,
-  deleteModeAtom,
-} from '@/features/syntax-editor';
+import { DELETE_MODE_HOVER_COLOR_SCHEME, deleteModeAtom } from '@/features/syntax-editor';
 import { CONSTITUENT_CLASSES } from '@/features/syntax-editor/constants';
 
 const { CONSTITUENT } = CONSTITUENT_CLASSES;
 
 export const useSegmentMouseEvent = () => {
   const hoverRef = useRef<HTMLElement | null>(null);
-  const [targetInfo, setTargetInfo] = useState<ConstituentDataSet | null>(null);
   const { colorMode } = useColorMode();
   const isDeleteMode = useAtomValue(deleteModeAtom);
 
@@ -22,7 +17,6 @@ export const useSegmentMouseEvent = () => {
     if (hoverRef.current && isDeleteMode) {
       hoverRef.current.style.removeProperty('color');
       hoverRef.current = null;
-      setTargetInfo(null);
     }
   };
 
@@ -31,9 +25,6 @@ export const useSegmentMouseEvent = () => {
 
     hoverRef.current = element;
     hoverRef.current.style.color = DELETE_MODE_HOVER_COLOR_SCHEME(colorMode);
-
-    const { constituentLabel, constituentId } = hoverRef.current.dataset;
-    setTargetInfo({ constituentLabel, constituentId });
   };
 
   const onMouseOver = (event: MouseEvent<HTMLElement>) => {
@@ -49,6 +40,5 @@ export const useSegmentMouseEvent = () => {
   return {
     onMouseOver,
     onMouseLeave: restoreOriginalColor,
-    targetInfo,
   };
 };

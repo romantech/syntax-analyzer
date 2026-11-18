@@ -3,9 +3,10 @@ import { Token } from '@/features/syntax-editor';
 
 interface TokensProps {
   sentence: string[];
+  isTapMode: boolean;
 }
 
-export default function TokenList({ sentence }: TokensProps) {
+export default function TokenList({ sentence, isTapMode }: TokensProps) {
   const tokenCount = new Map<string, number>();
 
   return sentence.map((token, i) => {
@@ -26,6 +27,7 @@ export default function TokenList({ sentence }: TokensProps) {
         paddingRight={spaceAfter}
         paddingLeft={spaceBefore}
         index={i}
+        isTapMode={isTapMode}
       />
     );
   });

@@ -22,7 +22,7 @@ import '@/features/syntax-editor/styles/constituent.scss';
  * 진행중이던 isLoading 상태 업데이트가 중단됨. 이런식으로 항상 isLoading 상태가 데이터를
  * 완전히 불러온 후에만 false 로 변경되도록 보장할 수 있음.
  * */
-export default function SyntaxParser() {
+export default function SyntaxParser({ isTapMode = false }: { isTapMode?: boolean }) {
   const sentenceRef = useRef<HTMLParagraphElement>(null);
 
   const { segment, sentence } = useSyntaxParserAnalysis();
@@ -31,6 +31,7 @@ export default function SyntaxParser() {
     targetRef: sentenceRef,
     segment,
     isPending: isLoading,
+    isTapMode,
   });
 
   if (isLoading) return <ThreeDotsWave delay={300} />;
@@ -49,8 +50,8 @@ export default function SyntaxParser() {
 
   return (
     <SlideFade in={isNestingLevelCalculated} offsetY={100}>
-      <Sentence ref={sentenceRef}>
-        <SegmentList segment={segment} tokenElements={TokenList({ sentence })} />
+      <Sentence ref={sentenceRef} isTapMode={isTapMode}>
+        <SegmentList segment={segment} tokenElements={TokenList({ sentence, isTapMode })} />
       </Sentence>
     </SlideFade>
   );

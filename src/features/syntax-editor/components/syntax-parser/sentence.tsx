@@ -1,30 +1,40 @@
 import { Text, useColorModeValue } from '@chakra-ui/react';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { forwardRef, type PropsWithChildren } from 'react';
 
-import { deleteModeAtom, useSentenceHandler } from '@/features/syntax-editor';
+import {
+  deleteModeAtom,
+  selectedTokenRangeAtom,
+  useSentenceHandler,
+} from '@/features/syntax-editor';
 
-const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren>(function Sentence(
-  { children },
-  ref,
-) {
-  const isDeleteMode = useAtomValue(deleteModeAtom);
-  const handlers = useSentenceHandler();
-  const textColor = useColorModeValue('gray.700', 'gray.300');
+const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren<{ isTapMode: boolean }>>(
+  function Sentence({ children, isTapMode }, ref) {
+    const isDeleteMode = useAtomValue(deleteModeAtom);
+    const setRange = useSetAtom(selectedTokenRangeAtom);
+    const handlers = useSentenceHandler(isTapMode);
+    const textColor = useColorModeValue('gray.700', 'gray.300');
 
-  return (
-    <Text
-      ref={ref}
-      fontSize="3xl"
-      fontWeight="bold"
-      whiteSpace="nowrap"
-      color={textColor}
-      cursor={isDeleteMode ? 'pointer' : 'auto'}
-      {...handlers}
-    >
-      {children}
-    </Text>
-  );
-});
+    return (
+      <Text
+        ref={ref}
+        fontSize="3xl"
+        fontWeight="bold"
+        whiteSpace="nowrap"
+        w="max-content"
+        minW="full"
+        userSelect={isTapMode ? 'none' : 'auto'}
+        color={textColor}
+        cursor={isDeleteMode ? 'pointer' : 'auto'}
+        {...handlers}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') setRange(null);
+        }}
+      >
+        {children}
+      </Text>
+    );
+  },
+);
 
 export default Sentence;
