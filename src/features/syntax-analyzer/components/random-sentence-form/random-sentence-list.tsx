@@ -40,10 +40,11 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             aria-label={`문장 복사: ${sentence}`}
             variant="unstyled"
             display="block"
+            flexShrink={0}
             h="auto"
             minH="2.75rem"
             px={2}
-            py={1}
+            py={{ base: 2.5, lg: 1 }}
             textAlign="start"
             whiteSpace="normal"
             overflowWrap="anywhere"
