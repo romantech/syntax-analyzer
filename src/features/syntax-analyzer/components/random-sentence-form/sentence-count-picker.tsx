@@ -26,7 +26,7 @@ export default function SentenceCountPicker() {
           min={MIN_PICKER_SENTENCE}
           max={MAX_PICKER_SENTENCE}
         >
-          <NumberInputField h={{ base: '2.75rem', lg: 10 }} />
+          <NumberInputField h={{ base: '2.75rem', lg: 12 }} />
           <NumberInputStepper>
             <NumberIncrementStepper />
             <NumberDecrementStepper />
