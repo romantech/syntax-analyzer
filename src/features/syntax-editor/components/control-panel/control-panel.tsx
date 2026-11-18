@@ -24,7 +24,7 @@ export default function ControlPanel() {
   return (
     <Skeleton
       h={129}
-      w={288}
+      w={{ base: 'full', lg: 288 }}
       maxW="full"
       flexShrink={0}
       fitContent
