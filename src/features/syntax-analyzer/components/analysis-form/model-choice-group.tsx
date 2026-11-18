@@ -42,36 +42,39 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
           flexDirection="column"
           alignItems="start"
           gap={2}
-          sx={{ '.chakra-radio__control': { mt: 1 } }}
         >
           {MODEL_FIELDS.map((field) => (
-            <Radio
-              key={field.value}
-              colorScheme="teal"
-              value={field.value}
-              isDisabled={remainingCount < field.count}
-              alignItems="start"
-            >
-              <Stack as="span" gap={1}>
-                <HStack as="span">
-                  <Text as="span">{field.label}</Text>
-                  <Badge
-                    fontSize="xs"
-                    fontWeight="semibold"
-                    variant="outline"
-                    colorScheme="yellow"
-                    color="#786644"
-                    _dark={{ color: '#C7B68B' }}
-                    hidden={!field.recommend}
-                  >
-                    recommended
-                  </Badge>
-                </HStack>
-                <Text as="span" fontSize={14} color="description">
-                  {field.desc}
-                </Text>
-              </Stack>
-            </Radio>
+            <Stack key={field.value} gap={1} align="start">
+              <HStack>
+                <Radio
+                  colorScheme="teal"
+                  value={field.value}
+                  isDisabled={remainingCount < field.count}
+                  aria-describedby={`model-description-${field.value}`}
+                >
+                  {field.label}
+                </Radio>
+                <Badge
+                  fontSize="xs"
+                  fontWeight="semibold"
+                  variant="outline"
+                  colorScheme="yellow"
+                  color="yellow.700"
+                  _dark={{ color: 'yellow.300' }}
+                  hidden={!field.recommend}
+                >
+                  recommended
+                </Badge>
+              </HStack>
+              <Text
+                id={`model-description-${field.value}`}
+                ml={6}
+                fontSize={14}
+                color="description"
+              >
+                {field.desc}
+              </Text>
+            </Stack>
           ))}
         </RadioGroup>
       )}
