@@ -22,12 +22,13 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
     z-index: 2;
     min-width: 2rem;
     min-height: 2rem;
+    background: transparent;
     color: inherit;
     cursor: pointer;
     user-select: none;
     width: fit-content;
     left: 50%;
-    padding: 0 0.5rem 0.15rem 0.5rem;
+    padding: 0;
     transform: translateX(-50%);
     border-radius: 0.5rem;
 
@@ -37,6 +38,12 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+
+    > span {
+      display: inline-block;
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.3rem;
+    }
   }
 }
 
@@ -81,21 +88,21 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 }
 
 html[data-theme="light"] {
-  .constituent > .constituent-label {
+  .constituent > .constituent-label > span {
     background-color: var(--chakra-colors-gray-100);
   }
 }
 
 html[data-theme="dark"] {
-  .constituent > .constituent-label {
+  .constituent > .constituent-label > span {
     background-color: var(--chakra-colors-gray-900);
   }
 }
 
 @media (max-width: 61.99em), (pointer: coarse) {
   .constituent {
-    --constituent-height: 3rem;
-    --token-spacing: 3rem;
+    --constituent-height: 2.75rem;
+    --token-spacing: 2.75rem;
   }
   .constituent > .constituent-label {
     min-width: 44px;

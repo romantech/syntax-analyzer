@@ -23,16 +23,17 @@ export default function ControlPanel() {
 
   return (
     <Skeleton
-      h={175}
-      w={{ base: 'full', lg: 288 }}
+      minH={144}
+      w={288}
+      maxW="full"
       flexShrink={0}
       fitContent
       isLoaded={isMounted}
       borderRadius={6}
     >
-      <Card h="full" p={4} variant="outline">
-        <VStack align="stretch" h="full" justify="space-between">
-          <VStack>
+      <Card p={3} variant="outline">
+        <VStack align="stretch" gap={3}>
+          <VStack gap={1}>
             <TagInfoSwitch />
             <AbbrInfoSwitch />
           </VStack>
@@ -47,7 +48,8 @@ export default function ControlPanel() {
                 minH: { base: '44px', lg: 10 },
               },
             }}
-            justify="space-between"
+            justify="start"
+            gap={2}
           >
             <DeleteButton />
             <ResetButton />

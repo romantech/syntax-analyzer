@@ -73,7 +73,7 @@ export default function Constituent({
           aria-label={`${constituent.abbreviation}: ${koLabel ?? constituent.label} (${begin + 1}~${end} 단어)`}
           _focusVisible={{ outline: '2px solid', outlineOffset: '2px' }}
         >
-          {constituent.abbreviation}
+          <span>{constituent.abbreviation}</span>
         </Box>
       </Tooltip>
     </Text>

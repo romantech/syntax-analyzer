@@ -1,4 +1,4 @@
-import { Box, Flex, Stack, useMediaQuery } from '@chakra-ui/react';
+import { Box, Grid, useMediaQuery } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 
 import { Notice, useBeforeUnload } from '@/base';
@@ -21,32 +21,34 @@ export default function SyntaxEditor() {
   useBeforeUnload(isTouched);
 
   return (
-    <Stack
-      h={{ lg: 'calc(100dvh - 72px)' }}
-      minH={{ base: 'calc(100dvh - 60px)', lg: 0 }}
-      gap={8}
-      pt={8}
-      pb={{ base: 8, lg: 0 }}
+    <Grid
+      templateColumns={{ base: 'minmax(0, 1fr)', lg: 'minmax(0, 1fr) 288px' }}
+      alignItems="start"
+      gap={5}
+      py={5}
     >
-      <Stack>
-        <Notice
-          text={
-            isTapMode
-              ? '태그를 고르고 시작·끝 단어를 탭한 뒤 적용하세요. 삭제할 태그는 약어를 누르세요.'
-              : '문법 요소를 선택한 후 단어를 클릭하거나 드래그하면 태깅할 수 있어요'
-          }
-        />
-        <Flex direction={{ base: 'column', lg: 'row' }} gap={6}>
-          <TagListAccordion flexGrow={1} minW={0} />
-          <ControlPanel />
-        </Flex>
-        {isTapMode && <TapSelectionControls />}
-      </Stack>
+      <Notice
+        gridColumn="1 / -1"
+        order={1}
+        text={
+          isTapMode
+            ? '태그 선택 → 단어 탭 → 적용. 여러 단어는 끝 단어도 탭하세요.'
+            : '문법 요소를 선택한 후 단어를 클릭하거나 드래그하면 태깅할 수 있어요'
+        }
+      />
+      <TagListAccordion minW={0} order={2} />
+      {isTapMode && (
+        <Box gridColumn="1 / -1" order={3}>
+          <TapSelectionControls />
+        </Box>
+      )}
+
       <Box
+        gridColumn="1 / -1"
+        order={{ base: 4, lg: 5 }}
         maxW="full"
         minW={0}
         overflowX="auto"
-        flexGrow={1}
         pb={4}
         px={4}
         pt={2}
@@ -57,6 +59,9 @@ export default function SyntaxEditor() {
       >
         <SyntaxParser isTapMode={isTapMode} />
       </Box>
-    </Stack>
+      <Box order={{ base: 5, lg: 3 }}>
+        <ControlPanel />
+      </Box>
+    </Grid>
   );
 }

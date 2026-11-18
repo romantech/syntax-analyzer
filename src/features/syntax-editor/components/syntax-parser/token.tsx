@@ -45,7 +45,6 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
           zIndex={1}
           display={isTapMode ? 'inline-block' : undefined}
           minH={isTapMode ? '44px' : undefined}
-          minW={isTapMode ? '44px' : undefined}
           role={canSelect ? 'button' : undefined}
           tabIndex={canSelect ? 0 : undefined}
           aria-label={canSelect ? `${index + 1}번째 단어: ${token}` : undefined}
