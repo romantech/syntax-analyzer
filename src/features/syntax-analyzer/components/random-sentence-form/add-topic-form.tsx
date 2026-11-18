@@ -67,7 +67,7 @@ export default function AddTopicForm(stackProps: StackProps) {
       <Button
         flexShrink={0}
         h={{ base: '2.75rem', lg: 12 }}
-        fontSize={{ base: 'md', lg: 'lg' }}
+        fontSize="md"
         variant="outline"
         type="submit"
       >

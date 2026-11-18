@@ -45,4 +45,17 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 };
 
-export const theme = extendTheme({ config, colors, semanticTokens });
+export const theme = extendTheme({
+  config,
+  colors,
+  semanticTokens,
+  components: {
+    Input: {
+      baseStyle: {
+        field: {
+          _placeholder: { color: 'description', opacity: 1 },
+        },
+      },
+    },
+  },
+});

@@ -42,7 +42,7 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
             flexShrink={0}
             size="lg"
             h={{ base: '2.75rem', lg: 12 }}
-            fontSize={{ base: 'md', lg: 'lg' }}
+            fontSize="md"
           >
             추가
           </Button>

@@ -1,4 +1,12 @@
-import { Button, Highlight, SlideFade, StackDivider, useToast, VStack } from '@chakra-ui/react';
+import {
+  Button,
+  Highlight,
+  SlideFade,
+  StackDivider,
+  useColorModeValue,
+  useToast,
+  VStack,
+} from '@chakra-ui/react';
 import { useIsFetching } from '@tanstack/react-query';
 
 import { RANDOM_SENTENCE_BASE_KEY } from '@/features/syntax-analyzer';
@@ -11,6 +19,7 @@ interface RandomSentenceListProps {
 
 export default function RandomSentenceList({ data, query }: RandomSentenceListProps) {
   const toast = useToast();
+  const highlightColor = useColorModeValue('teal.700', 'teal.300');
   const isFetching = useIsFetching({ queryKey: RANDOM_SENTENCE_BASE_KEY });
   const copySentence = async (sentence: string) => {
     try {
@@ -27,13 +36,7 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
 
   return (
     <SlideFade in={Boolean(data) && !isFetching} offsetY="20px">
-      <VStack
-        align="stretch"
-        spacing={0}
-        maxH="190px"
-        overflowY="auto"
-        divider={<StackDivider borderColor="gray.700" />}
-      >
+      <VStack align="stretch" spacing={0} maxH="190px" overflowY="auto" divider={<StackDivider />}>
         {data?.map((sentence) => (
           <Button
             key={sentence}
@@ -55,7 +58,7 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
             onClick={() => copySentence(sentence)}
           >
-            <Highlight query={query} styles={{ color: 'teal.400', fontWeight: 'bold' }}>
+            <Highlight query={query} styles={{ color: highlightColor, fontWeight: 'bold' }}>
               {sentence}
             </Highlight>
           </Button>

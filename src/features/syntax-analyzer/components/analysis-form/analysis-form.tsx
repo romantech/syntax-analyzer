@@ -79,8 +79,8 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
             alignSelf="start"
             size="lg"
             h={{ base: '2.75rem', lg: 12 }}
-            fontSize={{ base: 'md', lg: 'lg' }}
-            leftIcon={<Icon as={GiMagicLamp} boxSize={{ base: 5, lg: 6 }} />}
+            fontSize="md"
+            leftIcon={<Icon as={GiMagicLamp} boxSize={5} />}
           >
             분석
           </Button>

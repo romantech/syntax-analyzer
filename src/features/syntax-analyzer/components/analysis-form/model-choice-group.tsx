@@ -34,30 +34,42 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
       name="model"
       control={control}
       render={({ field: { onChange, value } }) => (
-        <RadioGroup onChange={onChange} value={value} display="flex" flexDirection="column" gap={2}>
+        <RadioGroup
+          aria-label="AI 모델 선택"
+          onChange={onChange}
+          value={value}
+          display="flex"
+          flexDirection="column"
+          gap={2}
+        >
           {MODEL_FIELDS.map((field) => (
-            <Stack key={field.value}>
-              <HStack align="center">
-                <Radio
-                  colorScheme="teal"
-                  value={field.value}
-                  isDisabled={remainingCount < field.count}
-                >
+            <Radio
+              key={field.value}
+              colorScheme="teal"
+              value={field.value}
+              isDisabled={remainingCount < field.count}
+              alignItems="start"
+              sx={{ '.chakra-radio__control': { mt: 1 } }}
+            >
+              <Stack as="span" gap={1}>
+                <HStack as="span">
                   <Text as="span">{field.label}</Text>
-                </Radio>
-                <Badge
-                  fontSize={10}
-                  variant="outline"
-                  colorScheme="orange"
-                  hidden={!field.recommend}
-                >
-                  recommended
-                </Badge>
-              </HStack>
-              <Text ml={6} fontSize={14} color="description" mt={-1}>
-                {field.desc}
-              </Text>
-            </Stack>
+                  <Badge
+                    fontSize="xs"
+                    variant="outline"
+                    colorScheme="orange"
+                    color="orange.700"
+                    _dark={{ color: 'orange.300' }}
+                    hidden={!field.recommend}
+                  >
+                    recommended
+                  </Badge>
+                </HStack>
+                <Text as="span" fontSize={14} color="description">
+                  {field.desc}
+                </Text>
+              </Stack>
+            </Radio>
           ))}
         </RadioGroup>
       )}

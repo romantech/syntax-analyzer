@@ -18,7 +18,7 @@ export default function GenerateButton({ onClick, isLoading, ...buttonProps }: B
       <Button
         minW={170}
         h={{ base: '2.75rem', lg: 12 }}
-        fontSize={{ base: 'md', lg: 'lg' }}
+        fontSize="md"
         onClick={onClick}
         leftIcon={<RiAiGenerate size={20} />}
         textTransform="uppercase"

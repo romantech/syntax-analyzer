@@ -18,11 +18,24 @@ export default function TopicTagList(stackProps: StackProps) {
   return (
     <HStack flexWrap="wrap" {...stackProps} ref={parent}>
       {topics.map((topic) => (
-        <Tag size="sm" key={topic} borderRadius="md" variant="solid" colorScheme="teal">
+        <Tag
+          size="md"
+          key={topic}
+          pl={3}
+          pr={0}
+          borderRadius="md"
+          variant="subtle"
+          colorScheme="teal"
+        >
           <TagLabel w="fit" textTransform="uppercase">
             {topic}
           </TagLabel>
-          <TagCloseButton onClick={() => onTagClick(topic)} />
+          <TagCloseButton
+            aria-label={`${topic} 토픽 삭제`}
+            boxSize={{ base: '2.75rem', lg: 8 }}
+            m={0}
+            onClick={() => onTagClick(topic)}
+          />
         </Tag>
       ))}
     </HStack>
