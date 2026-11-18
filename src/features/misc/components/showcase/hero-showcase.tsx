@@ -33,7 +33,12 @@ export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSecti
           {`english syntax\nanalyzer`}
         </Heading>
       </Stack>
-      <Text maxW="3xl" fontWeight={500} fontSize={{ base: 'md', lg: 'xl' }}>
+      <Text
+        maxW="3xl"
+        fontWeight={500}
+        fontSize={{ base: '1.0625rem', lg: 'xl' }}
+        lineHeight={{ base: '1.6875rem', lg: 'base' }}
+      >
         Dive into the elegance of language as AI-analyzed English sentences unfold in a clear
         hierarchical visualization. Grasp the intricacies at a glance, and harness the freedom to
         directly edit and adapt as you see fit.
