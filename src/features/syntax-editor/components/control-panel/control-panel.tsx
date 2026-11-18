@@ -40,9 +40,8 @@ export default function ControlPanel() {
           <Divider />
           <HStack
             overflowY="hidden"
-            overflowX="scroll"
+            overflowX="auto"
             sx={{
-              '::-webkit-scrollbar': { display: 'none' },
               button: {
                 minW: { base: '44px', lg: 10 },
                 minH: { base: '44px', lg: 10 },

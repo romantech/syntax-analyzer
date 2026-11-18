@@ -49,6 +49,20 @@ export const theme = extendTheme({
   config,
   colors,
   semanticTokens,
+  styles: {
+    global: {
+      '*::-webkit-scrollbar': { width: '6px', height: '6px' },
+      '*::-webkit-scrollbar-track': { background: 'transparent' },
+      '*::-webkit-scrollbar-thumb': { backgroundColor: 'gray.500', borderRadius: 'full' },
+      '*::-webkit-scrollbar-thumb:hover': { backgroundColor: 'description' },
+      '@supports not selector(::-webkit-scrollbar)': {
+        '*': {
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'var(--chakra-colors-gray-500) transparent',
+        },
+      },
+    },
+  },
   components: {
     Input: {
       baseStyle: {
