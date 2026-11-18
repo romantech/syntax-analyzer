@@ -1,12 +1,4 @@
-import {
-  Badge,
-  Button,
-  HStack,
-  type StackProps,
-  Text,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react';
+import { Badge, Button, HStack, type StackProps, Text, useDisclosure } from '@chakra-ui/react';
 
 import { ConfirmModal, DateChip, DeleteButtonIcon, isLessThanAgo, tokenJoiner } from '@/base';
 import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor';
@@ -33,9 +25,24 @@ export default function DeletableSentence({
   const sentenceText = typeof sentence === 'string' ? sentence : tokenJoiner(sentence);
 
   return (
-    <VStack align="start" gap={0.5} p={1.5} {...stackProps}>
-      <HStack w="full" justify="space-between">
-        <HStack gap={1.5}>
+    <HStack align="start" p={1.5} {...stackProps}>
+      <Button
+        variant="unstyled"
+        display="flex"
+        flexDirection="column"
+        alignItems="start"
+        gap={0.5}
+        w="full"
+        minW={0}
+        h="auto"
+        minH="2.75rem"
+        textAlign="start"
+        fontWeight="normal"
+        _hover={{ textDecoration: 'underline' }}
+        _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
+        onClick={onClick}
+      >
+        <HStack as="span" gap={1.5}>
           <DateChip date={createdAt} h={5} />
           {isLessThanAgo(createdAt, NEW_BADGE_DISPLAY_DURATION) && (
             <Badge fontSize="8px" colorScheme="teal">
@@ -48,29 +55,18 @@ export default function DeletableSentence({
             </Badge>
           )}
         </HStack>
-        {!hideDeleteButton && (
-          <DeleteButtonIcon
-            aria-label={`문장 삭제: ${sentenceText}`}
-            onClick={onOpen}
-            boxSize={{ base: '2.75rem', lg: 8 }}
-          />
-        )}
-      </HStack>
-      <Button
-        variant="unstyled"
-        display="block"
-        w="full"
-        minH={{ base: '2.75rem', lg: 8 }}
-        textAlign="start"
-        fontWeight="normal"
-        _hover={{ textDecoration: 'underline' }}
-        _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
-        onClick={onClick}
-      >
-        <Text as="span" noOfLines={1}>
+        <Text as="span" w="full" noOfLines={1}>
           {sentenceText}
         </Text>
       </Button>
+      {!hideDeleteButton && (
+        <DeleteButtonIcon
+          aria-label={`문장 삭제: ${sentenceText}`}
+          onClick={onOpen}
+          boxSize={{ base: '2.75rem', lg: 8 }}
+          flexShrink={0}
+        />
+      )}
       <ConfirmModal
         isOpen={isOpen}
         onClose={onClose}
@@ -81,6 +77,6 @@ export default function DeletableSentence({
         headerContent="문장 삭제"
         bodyContent="선택한 문장을 삭제하시겠습니까?"
       />
-    </VStack>
+    </HStack>
   );
 }
