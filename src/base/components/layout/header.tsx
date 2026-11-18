@@ -72,6 +72,7 @@ export function Header() {
   );
   const boxShadow = useColorModeValue('sm', 'lg');
   const hoverColor = useColorModeValue('gray.400', 'gray.100');
+  const focusRingColor = useColorModeValue('teal-600', 'teal-300');
 
   return (
     <Box
@@ -100,7 +101,9 @@ export function Header() {
                 py={{ base: 0, lg: 2 }}
                 minH={{ base: '44px', lg: 10 }}
                 borderRadius="xl"
-                _focusVisible={{ boxShadow: 'inset 0 0 0 2px var(--chakra-colors-blue-500)' }}
+                _focusVisible={{
+                  boxShadow: `inset 0 0 0 2px var(--chakra-colors-${tabIndex === i ? 'teal-600' : focusRingColor})`,
+                }}
                 fontSize={{ base: '0.9375rem', lg: 'md' }}
                 lineHeight={{ base: '1.25rem', lg: 'base' }}
                 textTransform="capitalize"
