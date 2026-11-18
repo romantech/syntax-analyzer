@@ -1,4 +1,4 @@
-import { Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import { Box, Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import { clsx } from 'clsx';
 import { useAtomValue } from 'jotai';
 import type { PropsWithChildren } from 'react';
@@ -49,24 +49,33 @@ export default function Constituent({
   };
 
   return (
-    <Tooltip
-      label={koLabel ?? constituent.label}
-      textTransform="capitalize"
-      offset={tooltipOffset}
-      isOpen={isAbbrTooltipVisible && isCurrentHovered}
+    <Text
+      as="span"
+      color={textColor}
+      className={clsx(CONSTITUENT_CLASSES.CONSTITUENT, {
+        [CONSTITUENT_CLASSES.TOKEN_GROUP]: isMultipleTokenRange,
+        [CONSTITUENT_CLASSES.TOKEN]: !isMultipleTokenRange,
+      })}
+      {...dataAttrs}
+      {...handlers}
     >
-      <Text
-        as="span"
-        color={textColor}
-        className={clsx(CONSTITUENT_CLASSES.CONSTITUENT, {
-          [CONSTITUENT_CLASSES.TOKEN_GROUP]: isMultipleTokenRange,
-          [CONSTITUENT_CLASSES.TOKEN]: !isMultipleTokenRange,
-        })}
-        {...dataAttrs}
-        {...handlers}
+      {children}
+      <Tooltip
+        label={koLabel ?? constituent.label}
+        textTransform="capitalize"
+        offset={tooltipOffset}
+        isOpen={isAbbrTooltipVisible && isCurrentHovered}
       >
-        {children}
-      </Text>
-    </Tooltip>
+        <Box
+          as="button"
+          type="button"
+          className="constituent-label"
+          aria-label={`${constituent.abbreviation}: ${koLabel ?? constituent.label} (${begin + 1}~${end} 단어)`}
+          _focusVisible={{ outline: '2px solid', outlineOffset: '2px' }}
+        >
+          {constituent.abbreviation}
+        </Box>
+      </Tooltip>
+    </Text>
   );
 }

@@ -29,14 +29,26 @@ const assignCalculatedLevel = (element: HTMLElement) => {
   return currentLevel;
 };
 
-export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>) => {
-  const childElements = ref.current?.children;
-  if (!childElements) return;
+export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapMode = false) => {
+  const sentence = ref.current;
+  if (!sentence) return;
 
-  Array.from(childElements).forEach((span) => {
+  Array.from(sentence.children).forEach((span) => {
     const spanElement = span as HTMLElement;
     if (getNumberAttr(spanElement, CONSTITUENT_DATA_ATTRS.ID)) {
       assignCalculatedLevel(spanElement);
     }
   });
+
+  // 절대 위치 라벨도 모바일 문장 스크롤 영역의 높이에 포함한다.
+  sentence.style.paddingBottom = '0px';
+  const bottom = sentence.getBoundingClientRect().bottom;
+  const labelBottom = Math.max(
+    bottom,
+    ...Array.from(
+      sentence.querySelectorAll('.constituent-label'),
+      (label) => label.getBoundingClientRect().bottom,
+    ),
+  );
+  sentence.style.paddingBottom = `${labelBottom - bottom + (isTapMode ? 16 : 8)}px`;
 };

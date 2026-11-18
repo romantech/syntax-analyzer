@@ -17,8 +17,14 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   position: relative;
 
   // 문장 성분 라벨
-  &:after {
+  > .constituent-label {
     position: absolute;
+    z-index: 2;
+    min-width: 2rem;
+    min-height: 2rem;
+    color: inherit;
+    cursor: pointer;
+    user-select: none;
     width: fit-content;
     left: 50%;
     padding: 0 0.5rem 0.15rem 0.5rem;
@@ -27,7 +33,6 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
     font-size: 1rem;
     font-style: italic;
-    content: attr(data-constituent-abbr);
 
     text-overflow: ellipsis;
     overflow: hidden;
@@ -36,15 +41,17 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 }
 
 @for $i from 1 through $max-styling-count {
-  $offset: $constituent-height * ($i - $constituent-initial-pos-factor);
+  $offset: calc(
+    var(--constituent-height, #{$constituent-height}) * #{$i - $constituent-initial-pos-factor}
+  );
 
   .constituent.token-group[data-token-group-lv="#{$i}"] {
     margin: 0 $constituent-margin;
     padding: 0 $constituent-margin $offset;
 
     // 문장 성분 라벨
-    &:after {
-      top: $offset + $constituent-label-y-pos;
+    > .constituent-label {
+      top: calc(#{$offset} + #{$constituent-label-y-pos});
     }
 
     // 좌/우/하단 점선
@@ -63,24 +70,35 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 }
 
 @for $i from 1 through $max-styling-count {
-  $offset: $token-spacing * ($i - $token-initial-pos-factor);
+  $offset: calc(var(--token-spacing, #{$token-spacing}) * #{$i - $token-initial-pos-factor});
 
   .constituent.token[data-token-lv="#{$i}"] {
     // 문장 성분 라벨
-    &:after {
-      top: $token-top + $offset;
+    > .constituent-label {
+      top: calc(#{$token-top} + #{$offset});
     }
   }
 }
 
 html[data-theme="light"] {
-  .constituent:after {
+  .constituent > .constituent-label {
     background-color: var(--chakra-colors-gray-100);
   }
 }
 
 html[data-theme="dark"] {
-  .constituent:after {
+  .constituent > .constituent-label {
     background-color: var(--chakra-colors-gray-900);
+  }
+}
+
+@media (max-width: 61.99em), (pointer: coarse) {
+  .constituent {
+    --constituent-height: 3rem;
+    --token-spacing: 3rem;
+  }
+  .constituent > .constituent-label {
+    min-width: 44px;
+    min-height: 44px;
   }
 }

@@ -18,6 +18,7 @@ export default function DeleteButton() {
         variant="solid"
         colorScheme={isDeleteMode ? 'teal' : 'gray'}
         aria-label="Delete Tag"
+        aria-pressed={isDeleteMode}
         icon={<BsFillEraserFill />}
         onClick={toggleDeleteMode}
         isDisabled={isDisableDeleteButton}
