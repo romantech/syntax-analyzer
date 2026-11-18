@@ -40,7 +40,9 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
           value={value}
           display="flex"
           flexDirection="column"
+          alignItems="start"
           gap={2}
+          sx={{ '.chakra-radio__control': { mt: 1 } }}
         >
           {MODEL_FIELDS.map((field) => (
             <Radio
@@ -49,7 +51,6 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
               value={field.value}
               isDisabled={remainingCount < field.count}
               alignItems="start"
-              sx={{ '.chakra-radio__control': { mt: 1 } }}
             >
               <Stack as="span" gap={1}>
                 <HStack as="span">
