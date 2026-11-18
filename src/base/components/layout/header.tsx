@@ -89,7 +89,7 @@ export function Header() {
     >
       <HStack maxW="8xl" mx="auto" spacing={{ base: 0, sm: 2 }}>
         <Tabs variant="soft-rounded" index={tabIndex} colorScheme="gray">
-          <TabList gap={{ base: 1, sm: 2, lg: 0 }}>
+          <TabList gap={{ base: 1, sm: 2 }}>
             {NAV_TABS.map((tab, i) => (
               <Tab
                 as={NavLink}
@@ -102,7 +102,7 @@ export function Header() {
                 minH={{ base: '44px', lg: 10 }}
                 borderRadius="xl"
                 _focusVisible={{
-                  boxShadow: `inset 0 0 0 2px var(--chakra-colors-${tabIndex === i ? 'teal-600' : focusRingColor})`,
+                  boxShadow: `inset 0 0 0 2px color-mix(in srgb, var(--chakra-colors-${tabIndex === i ? 'teal-600' : focusRingColor}) 80%, var(--chakra-colors-gray-500))`,
                 }}
                 fontSize={{ base: '0.9375rem', lg: 'md' }}
                 lineHeight={{ base: '1.25rem', lg: 'base' }}
