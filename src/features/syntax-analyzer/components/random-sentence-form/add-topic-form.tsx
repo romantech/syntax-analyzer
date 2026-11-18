@@ -64,7 +64,13 @@ export default function AddTopicForm(stackProps: StackProps) {
         </InputGroup>
         <FormErrorMessage>{errors.keyword?.message}</FormErrorMessage>
       </FormControl>
-      <Button flexShrink={0} h={{ base: '2.75rem', lg: 12 }} variant="outline" type="submit">
+      <Button
+        flexShrink={0}
+        h={{ base: '2.75rem', lg: 12 }}
+        fontSize={{ base: 'md', lg: 'lg' }}
+        variant="outline"
+        type="submit"
+      >
         토픽 등록
       </Button>
     </HStack>
