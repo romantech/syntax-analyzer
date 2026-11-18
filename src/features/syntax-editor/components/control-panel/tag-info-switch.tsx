@@ -12,7 +12,7 @@ export default function TagInfoSwitch({
   return (
     <HStack {...stackProps} w={w} justify={justify}>
       <FormLabel id="tag-information" noOfLines={1} m={0} fontSize="sm">
-        태그 정보 툴팁
+        태그 설명
       </FormLabel>
       <Switch
         minH="44px"

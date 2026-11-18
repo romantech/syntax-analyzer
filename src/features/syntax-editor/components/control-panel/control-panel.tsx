@@ -23,7 +23,7 @@ export default function ControlPanel() {
 
   return (
     <Skeleton
-      minH={144}
+      h={129}
       w={288}
       maxW="full"
       flexShrink={0}
@@ -32,11 +32,11 @@ export default function ControlPanel() {
       borderRadius={6}
     >
       <Card p={3} variant="outline">
-        <VStack align="stretch" gap={3}>
-          <VStack gap={1}>
-            <TagInfoSwitch />
-            <AbbrInfoSwitch />
-          </VStack>
+        <VStack align="stretch" gap={2}>
+          <HStack gap={4} flexWrap="wrap">
+            <TagInfoSwitch w="auto" justify="start" gap={2} />
+            <AbbrInfoSwitch w="auto" justify="start" gap={2} />
+          </HStack>
           <Divider />
           <HStack
             overflowY="hidden"
