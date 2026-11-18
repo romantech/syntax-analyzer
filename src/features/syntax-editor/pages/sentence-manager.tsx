@@ -32,7 +32,7 @@ export default function SentenceManager() {
           <SentenceList tabIndex={tabIndex} onTabChange={(i) => setTabIndex(i)} />
         </ScaleFade>
       </Box>
-      <Box gridArea="generator">
+      <Box gridArea="generator" mt={{ base: 8, lg: 0 }}>
         <FieldGroupHeader>랜덤 문장 생성</FieldGroupHeader>
         <RandomSentenceForm />
       </Box>

@@ -37,16 +37,7 @@ export const ShowcaseTemplate = ({
   const linkColor = useColorModeValue('teal.700', 'teal.300');
 
   return (
-    <Flex
-      direction="column"
-      minH={{ lg: '100vh' }}
-      py={{ base: 8, lg: 0 }}
-      align="center"
-      justify="center"
-      scrollSnapAlign="start"
-      position="relative"
-      {...flexProps}
-    >
+    <Flex direction="column" align="center" justify="center" scrollSnapAlign="start" {...flexProps}>
       <Stack
         w="full"
         direction={{ base: 'column', lg: imageFirst ? 'row-reverse' : 'row' }}

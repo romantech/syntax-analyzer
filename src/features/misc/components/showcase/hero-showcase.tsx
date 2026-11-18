@@ -12,13 +12,7 @@ export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSecti
   );
 
   return (
-    <Stack
-      justify="center"
-      minH={{ base: 'calc(100svh - 60px)', lg: '100vh' }}
-      py={{ base: 8, lg: 0 }}
-      scrollSnapAlign="start"
-      {...stackProps}
-    >
+    <Stack justify="center" scrollSnapAlign="start" {...stackProps}>
       <Stack>
         <Heading as="p" size={{ base: 'md', lg: 'lg' }} bgGradient={gradient} bgClip="text">
           Interpreting English Structure with AI

@@ -2,7 +2,11 @@ import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   HStack,
+  List,
+  ListIcon,
+  ListItem,
   Skeleton,
   type SkeletonProps,
   Stack,
@@ -11,7 +15,11 @@ import {
 } from '@chakra-ui/react';
 import type { PropsWithChildren } from 'react';
 import { useWatch } from 'react-hook-form';
+import { BsMagic } from 'react-icons/bs';
 import { GiMagicLamp } from 'react-icons/gi';
+import { PiNotePencil } from 'react-icons/pi';
+import { RiEnglishInput } from 'react-icons/ri';
+import { TbArrowAutofitWidth } from 'react-icons/tb';
 
 import { ConfirmModal } from '@/base';
 import {
@@ -23,6 +31,7 @@ import {
   UsageLimitMessage,
   useAnalysisForm,
 } from '@/features/syntax-analyzer';
+import { HELPER_MESSAGES } from '@/features/syntax-analyzer/schemes';
 
 export default function AnalysisForm({ ...stackProps }: StackProps) {
   const {
@@ -52,18 +61,21 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
       </Box>
       <FormControl isInvalid={!!errors.sentence}>
         <FieldGroupHeader>영어 문장 입력</FieldGroupHeader>
-        <Stack direction={{ base: 'column', sm: 'row' }} align={{ base: 'stretch', sm: 'start' }}>
+        <Stack
+          direction={{ base: 'column', sm: 'row' }}
+          align={{ base: 'stretch', sm: 'start' }}
+          gap={3}
+        >
           <SentenceInput
             {...register('sentence')}
             errorMessage={errors.sentence?.message}
             isDisabled={isPending}
-            showHelperText
           />
           <Button
             type="submit"
             isDisabled={!canAnalyze || isPending}
             flexShrink={0}
-            alignSelf={{ base: 'end', sm: 'start' }}
+            alignSelf="start"
             size="lg"
             leftIcon={<GiMagicLamp fontSize="24px" />}
           >
@@ -71,6 +83,16 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
           </Button>
         </Stack>
         {remainingCount === 0 && <UsageLimitMessage />}
+        <FormHelperText color="description" mt={4}>
+          <List spacing={1.5}>
+            {HELPER_TEXTS.map(({ icon, text }) => (
+              <ListItem key={text}>
+                <ListIcon as={icon} />
+                {text}
+              </ListItem>
+            ))}
+          </List>
+        </FormHelperText>
       </FormControl>
       <ConfirmModal
         isOpen={isModalOpen}
@@ -118,3 +140,22 @@ const AnalysisFormSkeleton = (stackProps: StackProps) => {
 };
 
 AnalysisForm.Skeleton = AnalysisFormSkeleton;
+
+const HELPER_TEXTS = [
+  {
+    icon: BsMagic,
+    text: `축약 표현은 자동으로 풀어져요 (I'll → I will)`,
+  },
+  {
+    icon: RiEnglishInput,
+    text: HELPER_MESSAGES.ENGLISH_OR_SYMBOL,
+  },
+  {
+    icon: TbArrowAutofitWidth,
+    text: HELPER_MESSAGES.MAX_LENGTH,
+  },
+  {
+    icon: PiNotePencil,
+    text: HELPER_MESSAGES.MIN_WORDS,
+  },
+];

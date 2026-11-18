@@ -26,17 +26,17 @@ export default function ScrollDownButton(buttonProps: ScrollDownButtonProps) {
   return (
     <MotionIconButton
       isRound
-      position={{ base: 'static', lg: 'absolute' }}
+      position="absolute"
       alignSelf="center"
-      mt={{ base: 6, lg: 0 }}
       left="50%"
-      bottom="6%"
+      bottom={{ base: 'calc(32px + env(safe-area-inset-bottom, 0px))', lg: '6%' }}
       minW={{ base: '44px', lg: 10 }}
       minH={{ base: '44px', lg: 10 }}
       fontSize="xl"
+      transitionProperty="background-color, color"
       icon={<FaAnglesDown />}
       aria-label="Scroll down"
-      sx={{ translate: { lg: '-50% 0' } }}
+      sx={{ translate: '-50% 0' }}
       variants={motionVariants}
       initial="initial"
       animate={prefersReducedMotion ? 'initial' : 'bounce'}

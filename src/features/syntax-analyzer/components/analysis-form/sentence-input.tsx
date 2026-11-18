@@ -1,33 +1,24 @@
 import {
   Box,
   FormErrorMessage,
-  FormHelperText,
   Input,
   InputGroup,
   InputLeftElement,
   type InputProps,
-  List,
-  ListIcon,
-  ListItem,
 } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { forwardRef } from 'react';
-import { BsMagic } from 'react-icons/bs';
-import { PiNotePencil, PiTextTBold } from 'react-icons/pi';
-import { RiEnglishInput } from 'react-icons/ri';
-import { TbArrowAutofitWidth } from 'react-icons/tb';
+import { PiTextTBold } from 'react-icons/pi';
 
 import { MAX_SENTENCE_LENGTH } from '@/features/syntax-analyzer/constants';
-import { HELPER_MESSAGES } from '@/features/syntax-analyzer/schemes';
 
 interface SentenceInputProps extends InputProps {
   errorMessage?: string;
   helperMessage?: string;
-  showHelperText?: boolean;
 }
 
 const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function SentenceInput(
-  { errorMessage, size = 'lg', showHelperText = false, ...inputProps },
+  { errorMessage, size = 'lg', ...inputProps },
   ref,
 ) {
   const [parent] = useAutoAnimate({ duration: 180 });
@@ -50,37 +41,8 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
         />
       </InputGroup>
       <FormErrorMessage>{errorMessage}</FormErrorMessage>
-      <FormHelperText color="description" pt={1} hidden={!showHelperText}>
-        <List spacing={1.5}>
-          {HELPER_TEXTS.map(({ icon, text }) => (
-            <ListItem key={text}>
-              <ListIcon as={icon} />
-              {text}
-            </ListItem>
-          ))}
-        </List>
-      </FormHelperText>
     </Box>
   );
 });
-
-const HELPER_TEXTS = [
-  {
-    icon: BsMagic,
-    text: `축약 표현은 자동으로 풀어져요 (I'll → I will)`,
-  },
-  {
-    icon: RiEnglishInput,
-    text: HELPER_MESSAGES.ENGLISH_OR_SYMBOL,
-  },
-  {
-    icon: TbArrowAutofitWidth,
-    text: HELPER_MESSAGES.MAX_LENGTH,
-  },
-  {
-    icon: PiNotePencil,
-    text: HELPER_MESSAGES.MIN_WORDS,
-  },
-];
 
 export default SentenceInput;

@@ -66,7 +66,10 @@ export function Header() {
 
   const ToggleIcon = colorMode === 'light' ? MdModeNight : MdOutlineLightMode;
 
-  const bg = useColorModeValue('whiteAlpha.800', 'grayAlpha.800');
+  const bg = useColorModeValue(
+    { base: 'white', lg: 'whiteAlpha.800' },
+    { base: 'gray.800', lg: 'grayAlpha.800' },
+  );
   const boxShadow = useColorModeValue('sm', 'lg');
   const hoverColor = useColorModeValue('gray.400', 'gray.100');
 
@@ -93,12 +96,22 @@ export function Header() {
                 to={tab.path}
                 transition="all 0.3s"
                 color="description"
-                px={{ base: 2, sm: 4 }}
+                px={{ base: 0, lg: 4 }}
+                py={{ base: 0, lg: 2 }}
                 minH={{ base: '44px', lg: 10 }}
                 textTransform="capitalize"
                 _hover={{ color: tabIndex !== i ? hoverColor : '' }}
+                _selected={{ bg: { base: 'transparent', lg: 'gray.100' }, color: 'gray.800' }}
               >
-                {tab.label}
+                <Box
+                  as="span"
+                  px={{ base: 2, sm: 4, lg: 0 }}
+                  py={{ base: 1, lg: 0 }}
+                  borderRadius="full"
+                  bg={{ base: tabIndex === i ? 'gray.100' : 'transparent', lg: 'transparent' }}
+                >
+                  {tab.label}
+                </Box>
               </Tab>
             ))}
           </TabList>
