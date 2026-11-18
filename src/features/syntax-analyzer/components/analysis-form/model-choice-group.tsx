@@ -60,8 +60,8 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
                     fontWeight="semibold"
                     variant="outline"
                     colorScheme="yellow"
-                    color="yellow.700"
-                    _dark={{ color: 'yellow.300' }}
+                    color="#786644"
+                    _dark={{ color: '#C7B68B' }}
                     hidden={!field.recommend}
                   >
                     recommended
