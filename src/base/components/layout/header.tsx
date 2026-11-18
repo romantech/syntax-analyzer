@@ -99,6 +99,7 @@ export function Header() {
                 px={{ base: 0, lg: 4 }}
                 py={{ base: 0, lg: 2 }}
                 minH={{ base: '44px', lg: 10 }}
+                borderRadius="xl"
                 fontSize={{ base: '0.9375rem', lg: 'md' }}
                 lineHeight={{ base: '1.25rem', lg: 'base' }}
                 textTransform="capitalize"
@@ -111,7 +112,7 @@ export function Header() {
                   alignItems="center"
                   h={{ base: 10, lg: 'auto' }}
                   px={{ base: 2.5, sm: 4, lg: 0 }}
-                  borderRadius={{ base: 'xl', lg: 'full' }}
+                  borderRadius="xl"
                   bg={{ base: tabIndex === i ? 'gray.100' : 'transparent', lg: 'transparent' }}
                 >
                   {tab.label}
