@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/romantech/syntax-analyzer/compare/v1.1.0...v1.1.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* center syntax tag labels ([#133](https://github.com/romantech/syntax-analyzer/issues/133)) ([efa55ae](https://github.com/romantech/syntax-analyzer/commit/efa55aee019e9919766398e754d0757492278cb1))
+
 ## [1.1.0](https://github.com/romantech/syntax-analyzer/compare/v1.0.0...v1.1.0) (2026-11-19)
 
 
