@@ -4,13 +4,13 @@ import {
   SlideFade,
   StackDivider,
   useColorModeValue,
-  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { useIsFetching } from '@tanstack/react-query';
 
 import { RANDOM_SENTENCE_BASE_KEY } from '@/features/syntax-analyzer';
 import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor';
+import { useAppToast } from '@/lib';
 
 interface RandomSentenceListProps {
   data?: string[];
@@ -18,7 +18,7 @@ interface RandomSentenceListProps {
 }
 
 export default function RandomSentenceList({ data, query }: RandomSentenceListProps) {
-  const toast = useToast();
+  const toast = useAppToast();
   const highlightColor = useColorModeValue('teal.700', 'teal.300');
   const isFetching = useIsFetching({ queryKey: RANDOM_SENTENCE_BASE_KEY });
   const copySentence = async (sentence: string) => {

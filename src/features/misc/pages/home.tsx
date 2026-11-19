@@ -1,6 +1,6 @@
-import { Stack, usePrefersReducedMotion } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 
-import { Layout, LinkParticles } from '@/base';
+import { Layout, LinkParticles, usePrefersReducedMotion } from '@/base';
 import {
   AnalyzerShowcase,
   EditorShowcase,
@@ -23,7 +23,7 @@ const showCases = [
 ];
 
 export default function Home() {
-  const prefersReducedMotion = usePrefersReducedMotion({ ssr: false });
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <Layout

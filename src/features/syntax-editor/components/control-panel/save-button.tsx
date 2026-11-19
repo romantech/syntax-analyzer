@@ -1,4 +1,4 @@
-import { IconButton, Tooltip, useToast } from '@chakra-ui/react';
+import { IconButton, Tooltip } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
 import { IoSaveSharp } from 'react-icons/io5';
@@ -13,9 +13,10 @@ import {
   SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
   saveHistorySegmentAtom,
 } from '@/features/syntax-editor';
+import { useAppToast } from '@/lib';
 
 export default function SaveButton() {
-  const toast = useToast();
+  const toast = useAppToast();
   const { source, index } = useParams<AnalysisPathParams>();
 
   const isTouched = useAtomValue(isSegmentTouchedAtom);

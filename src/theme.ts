@@ -1,20 +1,4 @@
-import {
-  type Colors,
-  extendTheme,
-  type ThemeConfig,
-  type ToastProviderProps,
-} from '@chakra-ui/react';
-
-export const toastOptions: ToastProviderProps = {
-  defaultOptions: {
-    duration: 3000,
-    isClosable: true,
-    containerStyle: {
-      position: 'relative',
-      bottom: 5,
-    },
-  },
-};
+import { type Colors, extendTheme, type ThemeConfig } from '@chakra-ui/react';
 
 const semanticTokens: Colors = {
   colors: {

@@ -7,9 +7,9 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 
 import '@/lib/configure-dotlottie';
-import { ConfiguredQueryProvider } from '@/lib';
+import { ConfiguredQueryProvider, toastOptions } from '@/lib';
 import { router } from '@/routes';
-import { theme, toastOptions } from '@/theme';
+import { theme } from '@/theme';
 
 const rootElement = document.getElementById('root');
 

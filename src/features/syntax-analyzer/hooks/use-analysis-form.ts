@@ -1,4 +1,4 @@
-import { type UseToastOptions, useDisclosure, useToast } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -13,15 +13,10 @@ import {
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 import { updateAnalysisMetaData } from '@/features/syntax-editor';
+import { useAppToast } from '@/lib';
 import { getSyntaxEditorPath } from '@/routes';
 
 export type AnalysisFormValues = InferType<typeof createAnalysisFormSchema>;
-
-const toastOptions: UseToastOptions = {
-  title: '문장 분석을 완료했습니다',
-  status: 'success',
-  duration: 4000,
-};
 
 /**
  * Expands abbreviations and removes comma as a thousand separator from a sentence.
@@ -36,7 +31,7 @@ export const processSentence = (sentence: string): string => {
 
 export const useAnalysisForm = () => {
   const navigate = useNavigate();
-  const toast = useToast();
+  const toast = useAppToast();
   const { injectAnalysis } = useInjectAnalysis();
 
   const { isOpen: isModalOpen, onClose: closeModal, onOpen: openModal } = useDisclosure();
@@ -60,7 +55,7 @@ export const useAnalysisForm = () => {
       injectAnalysis(analysis);
 
       navigate(getSyntaxEditorPath('user', 0));
-      toast(toastOptions);
+      toast({ title: '문장 분석을 완료했습니다', status: 'success', duration: 4000 });
     },
     meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });

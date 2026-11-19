@@ -1,4 +1,3 @@
-import { useToast } from '@chakra-ui/react';
 import {
   type DefaultOptions,
   MutationCache,
@@ -8,6 +7,8 @@ import {
   type QueryKey,
 } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
+
+import { useAppToast } from './toast';
 
 /**
  * UseQueryOptions.meta 속성 타입 지정 (queryFn의 meta 파라미터 타입)
@@ -33,7 +34,7 @@ const defaultOptions: DefaultOptions = {
 };
 
 export const ConfiguredQueryProvider = ({ children }: PropsWithChildren) => {
-  const toast = useToast();
+  const toast = useAppToast();
 
   const showErrorToast = () => {
     toast({

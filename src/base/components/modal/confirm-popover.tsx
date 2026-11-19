@@ -7,32 +7,22 @@ import {
   PopoverContent,
   PopoverFooter,
   PopoverHeader,
-  type PopoverProps,
   PopoverTrigger,
   Portal,
   useDisclosure,
 } from '@chakra-ui/react';
-import type { MouseEventHandler, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import type { VoidFunc } from '@/base';
 
-type ChildrenProps = { onOpen: MouseEventHandler; isOpen: boolean };
-interface ConfirmPopoverProps extends Omit<PopoverProps, 'children'> {
+type ChildrenProps = { onOpen: () => void; isOpen: boolean };
+interface ConfirmPopoverProps {
   onConfirm: VoidFunc;
-  headerText?: ReactNode;
-  cancelText?: string;
-  confirmText?: string;
-  children: ({ onOpen }: ChildrenProps) => ReactNode;
+  headerText: string;
+  children: (props: ChildrenProps) => ReactNode;
 }
 
-export default function ConfirmPopover({
-  onConfirm,
-  children,
-  headerText,
-  cancelText = '취소',
-  confirmText = '확인',
-  ...popoverProps
-}: ConfirmPopoverProps) {
+export default function ConfirmPopover({ onConfirm, children, headerText }: ConfirmPopoverProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const onConfirmButtonClick = () => {
     onConfirm();
@@ -40,7 +30,7 @@ export default function ConfirmPopover({
   };
 
   return (
-    <Popover isOpen={isOpen} onClose={onClose} {...popoverProps}>
+    <Popover isOpen={isOpen} onClose={onClose}>
       <PopoverTrigger>
         <Box role="button">{children({ onOpen, isOpen })}</Box>
       </PopoverTrigger>
@@ -52,9 +42,9 @@ export default function ConfirmPopover({
           </PopoverHeader>
           <PopoverFooter display="flex" justifyContent="flex-end" border="0">
             <ButtonGroup size="sm">
-              <Button onClick={onClose}>{cancelText}</Button>
+              <Button onClick={onClose}>취소</Button>
               <Button colorScheme="teal" onClick={onConfirmButtonClick}>
-                {confirmText}
+                확인
               </Button>
             </ButtonGroup>
           </PopoverFooter>
