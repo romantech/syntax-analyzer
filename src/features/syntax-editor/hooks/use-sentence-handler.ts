@@ -52,6 +52,7 @@ export const useSentenceHandler = (isTapMode: boolean) => {
     wasTap.current = false;
     const target = event.target as HTMLElement;
     if (isDeleteMode && segment) {
+      if (isTapMode && !target.closest('.constituent-label')) return;
       const constituent = target.closest(`.${CONSTITUENT_CLASSES.CONSTITUENT}`);
       if (!constituent) return;
       const id = Number(constituent.getAttribute(CONSTITUENT_DATA_ATTRS.ID));

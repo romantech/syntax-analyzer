@@ -5,7 +5,8 @@ $constituent-margin: 0.15rem; // 문장 성분 좌우 여백
 $constituent-label-y-pos: 1.4rem; // 문장 성분 라벨의 y축 위치
 $constituent-height: 2.2rem; // 문장 성분 전체 영역 높이
 $constituent-initial-pos-factor: 0.48; // 첫번째 문장 성분과 글자 사이 간격 (낮을수록 간격 벌어짐)
-$constituent-dashed-border: 2px dashed;
+$constituent-border-width: 2px;
+$constituent-dashed-border: $constituent-border-width dashed;
 $constituent-dashed-border-start: 10px; // 점선 상단 길이 (글자 상단을 기준으로 높을수록 짧아짐)
 
 // 토큰
@@ -14,14 +15,15 @@ $token-top: 2.5rem; // 토큰 상단 여백
 $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮을수록 간격 벌어짐)
 
 .constituent {
+  --constituent-label-size: 2rem;
   position: relative;
 
   // 문장 성분 라벨
   > .constituent-label {
     position: absolute;
     z-index: 2;
-    min-width: 2rem;
-    min-height: 2rem;
+    min-width: var(--constituent-label-size);
+    min-height: var(--constituent-label-size);
     background: transparent;
     color: inherit;
     cursor: pointer;
@@ -34,6 +36,7 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
     font-size: 1rem;
     font-style: italic;
+    font-weight: 500;
 
     text-overflow: ellipsis;
     overflow: hidden;
@@ -51,14 +54,16 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   $offset: calc(
     var(--constituent-height, #{$constituent-height}) * #{$i - $constituent-initial-pos-factor}
   );
+  $line-center: calc(#{$offset} + #{$constituent-label-y-pos} + var(--constituent-label-size) / 2);
 
   .constituent.token-group[data-token-group-lv="#{$i}"] {
-    margin: 0 $constituent-margin;
-    padding: 0 $constituent-margin $offset;
+    margin-inline: var(--constituent-inline-margin, #{$constituent-margin});
+    padding: 0 var(--constituent-inline-padding, #{$constituent-margin}) $offset;
 
     // 문장 성분 라벨
     > .constituent-label {
-      top: calc(#{$offset} + #{$constituent-label-y-pos});
+      top: $line-center;
+      transform: translate(-50%, calc(-50% + 1px));
     }
 
     // 좌/우/하단 점선
@@ -66,7 +71,9 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
       content: "";
       position: absolute;
       top: $constituent-dashed-border-start;
-      bottom: 0;
+      height: calc(
+        #{$line-center} - #{$constituent-dashed-border-start} + #{$constituent-border-width} / 2
+      );
       right: 0;
       left: 0;
       border-left: $constituent-dashed-border;
@@ -101,11 +108,13 @@ html[data-theme="dark"] {
 
 @media (max-width: 61.99em), (pointer: coarse) {
   .constituent {
+    --constituent-label-size: 44px;
     --constituent-height: 2.75rem;
     --token-spacing: 2.75rem;
+    --constituent-inline-margin: 0px;
+    --constituent-inline-padding: 3px;
   }
-  .constituent > .constituent-label {
-    min-width: 44px;
-    min-height: 44px;
+  .constituent.token-group::before {
+    pointer-events: none;
   }
 }

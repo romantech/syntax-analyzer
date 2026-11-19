@@ -51,6 +51,10 @@ export const theme = extendTheme({
   semanticTokens,
   styles: {
     global: {
+      body: {
+        paddingLeft: 'env(safe-area-inset-left, 0px)',
+        paddingRight: 'env(safe-area-inset-right, 0px)',
+      },
       '*::-webkit-scrollbar': { width: '6px', height: '6px' },
       '*::-webkit-scrollbar-track': { background: 'transparent' },
       '*::-webkit-scrollbar-thumb': { backgroundColor: 'gray.500', borderRadius: 'full' },

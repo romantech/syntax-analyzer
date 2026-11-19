@@ -82,6 +82,10 @@ export function Header() {
       w="full"
       top={0}
       p={{ base: 2, lg: 4 }}
+      pt={{
+        base: 'calc(var(--chakra-space-2) + env(safe-area-inset-top, 0px))',
+        lg: 'calc(var(--chakra-space-4) + env(safe-area-inset-top, 0px))',
+      }}
       zIndex={10}
       backdropFilter="blur(10px)"
       bg={bg}

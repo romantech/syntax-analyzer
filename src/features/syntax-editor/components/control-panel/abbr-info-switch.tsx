@@ -12,7 +12,7 @@ export default function AbbrInfoSwitch({
   return (
     <HStack {...stackProps} w={w} justify={justify}>
       <FormLabel id="tag-abbreviations" noOfLines={1} m={0} fontSize="sm">
-        약어 설명
+        약어 툴팁
       </FormLabel>
       <Switch
         minH="44px"
