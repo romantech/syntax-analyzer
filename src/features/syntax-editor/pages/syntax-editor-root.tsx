@@ -1,15 +1,26 @@
+import { useMediaQuery } from '@chakra-ui/react';
 import { Provider } from 'jotai';
-import { Outlet } from 'react-router';
+import { Outlet, useMatch } from 'react-router';
 
 import { JotaiDevTools, Layout } from '@/base';
 import { analysisStore } from '@/features/syntax-editor';
+import { SITE_URLS } from '@/routes/paths';
 
 export default function SyntaxEditorRoot() {
+  const [isTapMode] = useMediaQuery('(max-width: 61.99em), (pointer: coarse)');
+  const editRoute = useMatch(SITE_URLS.EDITOR.EDIT);
+  const fitViewport = isTapMode && !!editRoute;
+
   return (
-    <Layout display="flex" flexDirection="column">
+    <Layout
+      fitViewport={fitViewport}
+      display="flex"
+      flexDirection="column"
+      minH={fitViewport ? 0 : undefined}
+    >
       <Provider store={analysisStore}>
         <JotaiDevTools />
-        <Outlet />
+        <Outlet context={isTapMode} />
       </Provider>
     </Layout>
   );

@@ -1,6 +1,7 @@
-import { Box, Flex, Grid, HStack, useMediaQuery } from '@chakra-ui/react';
+import { Box, Flex, Grid, HStack } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 import { useRef } from 'react';
+import { useOutletContext } from 'react-router';
 
 import { Notice, useBeforeUnload } from '@/base';
 import {
@@ -17,7 +18,7 @@ import {
 
 export default function SyntaxEditor() {
   const isTouched = useAtomValue(isSegmentTouchedAtom);
-  const [isTapMode] = useMediaQuery('(max-width: 61.99em), (pointer: coarse)');
+  const isTapMode = useOutletContext<boolean>();
   const sentenceRegionRef = useRef<HTMLDivElement>(null);
 
   useSyntaxEditorInitializer({ resetOnUnmount: true });
@@ -25,12 +26,15 @@ export default function SyntaxEditor() {
   useBeforeUnload(isTouched);
 
   return (
-    <Flex direction="column" flex={1}>
+    <Flex direction="column" flex={1} minH={isTapMode ? 0 : undefined}>
       <Grid
         templateColumns={isTapMode ? 'minmax(0, 1fr)' : 'minmax(0, 1fr) 288px'}
+        templateRows={isTapMode ? 'auto auto minmax(4rem, 1fr)' : undefined}
         flex={1}
         alignContent="start"
         alignItems="start"
+        overflowY={isTapMode ? 'auto' : undefined}
+        overscrollBehaviorY={isTapMode ? 'contain' : undefined}
         gap={isTapMode ? 2 : 5}
         pt={isTapMode ? 4 : 5}
         pb={isTapMode ? 2 : 5}
@@ -58,13 +62,14 @@ export default function SyntaxEditor() {
           ref={sentenceRegionRef}
           gridColumn="1 / -1"
           minW={0}
-          overflowX="auto"
+          maxH={isTapMode ? 'full' : undefined}
+          overflow="auto"
           pb={4}
           px={4}
           pt={2}
           tabIndex={0}
           role="region"
-          aria-label="구문 문장 (가로 스크롤)"
+          aria-label="구문 문장"
           _focusVisible={{ outline: '2px solid', outlineColor: 'teal.300', outlineOffset: '-2px' }}
         >
           <SyntaxParser isTapMode={isTapMode} />
