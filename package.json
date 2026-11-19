@@ -1,7 +1,7 @@
 {
   "name": "syntax-analyzer",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "packageManager": "pnpm@12.22.0",
   "engines": {
