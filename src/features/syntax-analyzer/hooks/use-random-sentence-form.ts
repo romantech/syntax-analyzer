@@ -3,11 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import {
-  type RandomSentenceFormValues,
-  REMAINING_COUNT_BASE_KEY,
-  randomSentenceFormSchema,
-} from '@/features/syntax-analyzer';
+import { REMAINING_COUNT_BASE_KEY, randomSentenceFormSchema } from '@/features/syntax-analyzer';
 import { useRandomSentenceQuery } from '@/features/syntax-analyzer/api';
 
 /**
@@ -22,7 +18,7 @@ export const useRandomSentenceForm = () => {
   const [readyToFetch, setReadyToFetch] = useBoolean();
   const [params, setParams] = useState(defaultParams);
 
-  const methods = useForm<RandomSentenceFormValues>({
+  const methods = useForm({
     defaultValues,
     resolver: yupResolver(randomSentenceFormSchema),
     reValidateMode: 'onSubmit', // 유효성 검사 시점

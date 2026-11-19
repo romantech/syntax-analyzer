@@ -16,8 +16,7 @@ interface AddSentenceProps extends BoxProps {
 }
 
 export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSentenceProps) {
-  const { register, handleSubmit, getValues, reset, formState } =
-    useForm<typeof defaultValues>(formProps);
+  const { register, handleSubmit, getValues, reset, formState } = useForm(formProps);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const addAnalysis = useSetAtom(addUserAnalysisActionAtom);
