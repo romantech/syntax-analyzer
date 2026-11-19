@@ -33,7 +33,7 @@ export default function Home() {
       minH={0}
       overflowY="auto"
       scrollSnapType="y mandatory"
-      sx={{
+      css={{
         '&::-webkit-scrollbar': { display: 'none' },
         scrollbarWidth: 'none',
       }}

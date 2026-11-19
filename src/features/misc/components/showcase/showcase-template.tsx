@@ -1,12 +1,4 @@
-import {
-  Flex,
-  type FlexProps,
-  Heading,
-  Link,
-  Stack,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Flex, type FlexProps, Heading, Link, Stack, Text } from '@chakra-ui/react';
 import { NavLink } from 'react-router';
 
 import { LazyImage, type LazyImageProps } from '@/base';
@@ -30,12 +22,6 @@ export const ShowcaseTemplate = ({
   imageFirst = true,
   ...flexProps
 }: ShowcaseTemplateProps) => {
-  const gradient = useColorModeValue(
-    'linear(to-r, teal.700, yellow.800 70%)',
-    'linear(to-r, teal.300, yellow.400 70%)',
-  );
-  const linkColor = useColorModeValue('teal.700', 'teal.300');
-
   return (
     <Flex direction="column" align="center" justify="center" scrollSnapAlign="start" {...flexProps}>
       <Stack
@@ -49,8 +35,13 @@ export const ShowcaseTemplate = ({
           <Heading
             fontSize={{ base: '1.75rem', lg: '4xl' }}
             lineHeight={{ base: 1.33, md: 1.2 }}
-            bgGradient={gradient}
+            bgImage="linear-gradient(to right, var(--chakra-colors-teal-700), var(--chakra-colors-yellow-800) 70%)"
             bgClip="text"
+            color="transparent"
+            _dark={{
+              bgImage:
+                'linear-gradient(to right, var(--chakra-colors-teal-300), var(--chakra-colors-yellow-400) 70%)',
+            }}
             whiteSpace="pre-line"
           >
             {title}
@@ -63,15 +54,15 @@ export const ShowcaseTemplate = ({
               {description}
             </Text>
             <Link
-              as={NavLink}
-              color={linkColor}
-              to={linkUrl}
+              asChild
+              color="teal.700"
+              _dark={{ color: 'teal.300' }}
               w="fit-content"
               display="inline-flex"
               alignItems="center"
               minH={{ base: '44px', lg: 'auto' }}
             >
-              Try it now
+              <NavLink to={linkUrl}>Try it now</NavLink>
             </Link>
           </Stack>
         </Stack>

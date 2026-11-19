@@ -13,7 +13,7 @@ import {
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 import { updateAnalysisMetaData } from '@/features/syntax-editor';
-import { useAppToast } from '@/lib';
+import { showToast } from '@/lib';
 import { getSyntaxEditorPath } from '@/routes';
 
 export type AnalysisFormValues = InferType<typeof createAnalysisFormSchema>;
@@ -31,7 +31,6 @@ export const processSentence = (sentence: string): string => {
 
 export const useAnalysisForm = () => {
   const navigate = useNavigate();
-  const toast = useAppToast();
   const { injectAnalysis } = useInjectAnalysis();
 
   const { isOpen: isModalOpen, onClose: closeModal, onOpen: openModal } = useDisclosure();
@@ -55,7 +54,7 @@ export const useAnalysisForm = () => {
       injectAnalysis(analysis);
 
       navigate(getSyntaxEditorPath('user', 0));
-      toast({ title: '문장 분석을 완료했습니다', status: 'success', duration: 4000 });
+      showToast({ title: '문장 분석을 완료했습니다', status: 'success', duration: 4000 });
     },
     meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });

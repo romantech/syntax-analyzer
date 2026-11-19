@@ -1,4 +1,4 @@
-import { Heading, Stack, type StackProps, Text, useColorModeValue } from '@chakra-ui/react';
+import { Heading, Stack, type StackProps, Text } from '@chakra-ui/react';
 import ScrollDownButton from './scroll-down-button';
 
 interface TitleSectionProps extends StackProps {
@@ -6,20 +6,27 @@ interface TitleSectionProps extends StackProps {
 }
 
 export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSectionProps) {
-  const gradient = useColorModeValue(
-    'linear(to-r, teal.700, yellow.800 60%)',
-    'linear(to-r, teal.300, yellow.400 60%)',
-  );
-
   return (
     <Stack justify="center" scrollSnapAlign="start" {...stackProps}>
       <Stack>
-        <Heading as="p" size={{ base: 'md', lg: 'lg' }} bgGradient={gradient} bgClip="text">
+        <Heading
+          as="p"
+          fontSize={{ base: 'xl', lg: '2xl' }}
+          lineHeight={1.2}
+          bgImage="linear-gradient(to right, var(--chakra-colors-teal-700), var(--chakra-colors-yellow-800) 60%)"
+          bgClip="text"
+          color="transparent"
+          _dark={{
+            bgImage:
+              'linear-gradient(to right, var(--chakra-colors-teal-300), var(--chakra-colors-yellow-400) 60%)',
+          }}
+        >
           Interpreting English Structure with AI
         </Heading>
         <Heading
           as="h1"
-          size={{ base: '2xl', sm: '3xl', lg: '4xl' }}
+          fontSize={{ base: '4xl', sm: '5xl', lg: '6xl' }}
+          lineHeight={1.2}
           textTransform="uppercase"
           whiteSpace="pre-line"
           fontWeight="extrabold"

@@ -1,55 +1,63 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Popover,
-  PopoverArrow,
-  PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
-  PopoverTrigger,
-  Portal,
-  useDisclosure,
-} from '@chakra-ui/react';
-import type { ReactNode } from 'react';
+import { Button, ButtonGroup, Popover, Portal, Tooltip } from '@chakra-ui/react';
+import { type ReactElement, useState } from 'react';
 
-import type { VoidFunc } from '@/base';
-
-type ChildrenProps = { onOpen: () => void; isOpen: boolean };
 interface ConfirmPopoverProps {
-  onConfirm: VoidFunc;
+  onConfirm: () => void;
   headerText: string;
-  children: (props: ChildrenProps) => ReactNode;
+  tooltipLabel: string;
+  tooltipDelay: number;
+  children: ReactElement;
 }
 
-export default function ConfirmPopover({ onConfirm, children, headerText }: ConfirmPopoverProps) {
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const onConfirmButtonClick = () => {
-    onConfirm();
-    onClose();
-  };
+export default function ConfirmPopover({
+  onConfirm,
+  headerText,
+  tooltipLabel,
+  tooltipDelay,
+  children,
+}: ConfirmPopoverProps) {
+  const [open, setOpen] = useState(false);
 
   return (
-    <Popover isOpen={isOpen} onClose={onClose}>
-      <PopoverTrigger>
-        <Box role="button">{children({ onOpen, isOpen })}</Box>
-      </PopoverTrigger>
+    <Popover.Root open={open} onOpenChange={(event) => setOpen(event.open)}>
+      <Tooltip.Root disabled={open} openDelay={tooltipDelay} closeOnPointerDown>
+        <Popover.Trigger asChild>
+          <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
+        </Popover.Trigger>
+        <Portal>
+          <Tooltip.Positioner>
+            <Tooltip.Content>{tooltipLabel}</Tooltip.Content>
+          </Tooltip.Positioner>
+        </Portal>
+      </Tooltip.Root>
       <Portal>
-        <PopoverContent w="fit-content" minW={220}>
-          <PopoverArrow />
-          <PopoverHeader border="0" p={4}>
-            {headerText}
-          </PopoverHeader>
-          <PopoverFooter display="flex" justifyContent="flex-end" border="0">
-            <ButtonGroup size="sm">
-              <Button onClick={onClose}>취소</Button>
-              <Button colorScheme="teal" onClick={onConfirmButtonClick}>
-                확인
-              </Button>
-            </ButtonGroup>
-          </PopoverFooter>
-        </PopoverContent>
+        <Popover.Positioner>
+          <Popover.Content w="fit-content" minW={220}>
+            <Popover.Arrow>
+              <Popover.ArrowTip />
+            </Popover.Arrow>
+            <Popover.Header border="0" p={4}>
+              <Popover.Title>{headerText}</Popover.Title>
+            </Popover.Header>
+            <Popover.Footer justifyContent="flex-end" border="0">
+              <ButtonGroup size="sm">
+                <Popover.CloseTrigger asChild>
+                  <Button variant="subtle">취소</Button>
+                </Popover.CloseTrigger>
+                <Button
+                  colorPalette="teal"
+                  onClick={() => {
+                    onConfirm();
+                    setOpen(false);
+                  }}
+                >
+                  확인
+                </Button>
+              </ButtonGroup>
+            </Popover.Footer>
+          </Popover.Content>
+        </Popover.Positioner>
       </Portal>
-    </Popover>
+    </Popover.Root>
   );
 }

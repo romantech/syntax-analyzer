@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
 
-import { useAppToast } from './toast';
+import { showToast } from './toast';
 
 /**
  * UseQueryOptions.meta 속성 타입 지정 (queryFn의 meta 파라미터 타입)
@@ -34,10 +34,8 @@ const defaultOptions: DefaultOptions = {
 };
 
 export const ConfiguredQueryProvider = ({ children }: PropsWithChildren) => {
-  const toast = useAppToast();
-
   const showErrorToast = () => {
-    toast({
+    showToast({
       title: '에러가 발생했어요, 잠시 후 다시 시도해주세요',
       status: 'error',
     });

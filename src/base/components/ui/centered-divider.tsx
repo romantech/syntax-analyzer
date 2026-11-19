@@ -1,9 +1,9 @@
-import { Center, type CenterProps, Divider, type DividerProps } from '@chakra-ui/react';
+import { Center, type CenterProps, Separator, type SeparatorProps } from '@chakra-ui/react';
 
 interface CenteredDividerProps extends CenterProps {
   orientation?: 'horizontal' | 'vertical';
-  dividerH?: DividerProps['h'];
-  dividerW?: DividerProps['w'];
+  dividerH?: SeparatorProps['h'];
+  dividerW?: SeparatorProps['w'];
 }
 
 export default function CenteredDivider({
@@ -14,7 +14,11 @@ export default function CenteredDivider({
 }: CenteredDividerProps) {
   return (
     <Center {...centerProps}>
-      <Divider h={dividerH} w={dividerW} orientation={orientation} />
+      <Separator
+        h={dividerH ?? (orientation === 'vertical' ? 'full' : undefined)}
+        w={dividerW ?? (orientation === 'horizontal' ? 'full' : undefined)}
+        orientation={orientation}
+      />
     </Center>
   );
 }

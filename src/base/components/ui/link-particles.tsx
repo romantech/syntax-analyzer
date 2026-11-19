@@ -1,9 +1,8 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import type { ISourceOptions } from '@tsparticles/engine';
 import { loadLinksPreset } from '@tsparticles/preset-links';
 import Particles, { type IParticlesProps, ParticlesProvider } from '@tsparticles/react';
 
-import { usePrefersReducedMotion } from '@/base/hooks';
+import { useColorModeValue, usePrefersReducedMotion } from '@/base/hooks';
 
 export default function LinkParticles({ options, ...particlesProps }: IParticlesProps) {
   const color = useColorModeValue('#5b5b5b', '#b0b0b0');

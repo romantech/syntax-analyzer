@@ -1,15 +1,16 @@
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { ThemeProvider } from 'next-themes';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router';
 
 import '@/lib/configure-dotlottie';
-import { ConfiguredQueryProvider, toastOptions } from '@/lib';
+import { AppToaster, ConfiguredQueryProvider } from '@/lib';
 import { router } from '@/routes';
-import { theme } from '@/theme';
+import { system } from '@/theme';
 
 const rootElement = document.getElementById('root');
 
@@ -21,12 +22,19 @@ createRoot(rootElement).render(
   <StrictMode>
     <Analytics />
     <SpeedInsights />
-    <ChakraProvider theme={theme} toastOptions={toastOptions}>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-      <ConfiguredQueryProvider>
-        <ReactQueryDevtools initialIsOpen={false} position="bottom" />
-        <RouterProvider router={router} />
-      </ConfiguredQueryProvider>
+    <ChakraProvider value={system}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="dark"
+        enableSystem={false}
+        storageKey="chakra-ui-color-mode"
+      >
+        <ConfiguredQueryProvider>
+          <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+          <RouterProvider router={router} />
+        </ConfiguredQueryProvider>
+        <AppToaster />
+      </ThemeProvider>
     </ChakraProvider>
   </StrictMode>,
 );
