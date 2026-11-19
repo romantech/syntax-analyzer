@@ -43,7 +43,7 @@ export const ShowcaseTemplate = ({
         direction={{ base: 'column', lg: imageFirst ? 'row-reverse' : 'row' }}
         justify="center"
         align={{ base: 'center', lg: 'start' }}
-        gap={{ base: 6, lg: 12 }}
+        gap={{ base: 4, lg: 12 }}
       >
         <Stack w="full" maxW={{ base: 540, lg: 400 }} gap={{ base: 3, lg: 8 }}>
           <Heading
