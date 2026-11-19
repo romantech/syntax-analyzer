@@ -11,6 +11,7 @@
   },
   "formatter": {
     "enabled": true,
+    "includes": ["**", "!CHANGELOG.md"],
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
