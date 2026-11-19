@@ -55,8 +55,8 @@ export default function Home() {
               position="relative"
               minH="full"
               flexShrink={0}
-              pt={{ base: 8, lg: 0 }}
-              pb={{ base: 'calc(112px + env(safe-area-inset-bottom, 0px))', lg: 0 }}
+              pt={{ base: 4, lg: 0 }}
+              pb={{ base: 'calc(100px + env(safe-area-inset-bottom, 0px))', lg: 0 }}
               onScrollDown={onScrollDown}
             />
           );
