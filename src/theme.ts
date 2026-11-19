@@ -45,10 +45,14 @@ const config: ThemeConfig = {
   useSystemColorMode: false,
 };
 
+const fontFamily =
+  '"Pretendard Variable", system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+
 export const theme = extendTheme({
   config,
   colors,
   semanticTokens,
+  fonts: { body: fontFamily, heading: fontFamily },
   styles: {
     global: {
       body: {
