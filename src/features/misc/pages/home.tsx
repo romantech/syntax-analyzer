@@ -27,18 +27,19 @@ export default function Home() {
 
   return (
     <Layout
+      fitViewport
       position="relative"
       maxW="full"
-      h={{ lg: '100vh' }}
-      overflowY={{ lg: 'auto' }}
-      scrollSnapType={{ lg: 'y mandatory' }}
+      minH={0}
+      overflowY="auto"
+      scrollSnapType="y mandatory"
       sx={{
         '&::-webkit-scrollbar': { display: 'none' },
         scrollbarWidth: 'none',
       }}
     >
       <LinkParticles />
-      <Stack maxW="8xl" mx="auto" gap={0}>
+      <Stack h="full" maxW="8xl" mx="auto" gap={0}>
         {showCases.map(({ id, Component }, i) => {
           const nextId = showCases[i + 1]?.id;
           const onScrollDown = nextId
@@ -52,10 +53,10 @@ export default function Home() {
               key={id}
               id={id}
               position="relative"
-              minH={{ base: 'calc(100dvh - 60px)', lg: '100vh' }}
+              minH="full"
+              flexShrink={0}
               pt={{ base: 8, lg: 0 }}
               pb={{ base: 'calc(112px + env(safe-area-inset-bottom, 0px))', lg: 0 }}
-              scrollMarginTop={{ base: '60px', lg: 0 }}
               onScrollDown={onScrollDown}
             />
           );
