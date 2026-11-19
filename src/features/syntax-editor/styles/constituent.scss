@@ -44,7 +44,9 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
     > span {
       display: inline-block;
-      padding: 0.15rem 0.4rem;
+      // 이탤릭 글자가 오른쪽 아래로 치우쳐 보이는 정도를 보정한다.
+      padding-block: 0.1rem 0.2rem;
+      padding-inline: 0.3rem 0.5rem;
       border-radius: 0.3rem;
     }
   }
