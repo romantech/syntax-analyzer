@@ -13,7 +13,7 @@ export const debounce = <T extends unknown[]>(
   callback: (...args: T) => void,
   delay: number,
 ): ((...args: T) => void) => {
-  let timeoutId: Nullable<NodeJS.Timeout> = null;
+  let timeoutId: Nullable<ReturnType<typeof setTimeout>> = null;
 
   return (...args: T) => {
     if (timeoutId) clearTimeout(timeoutId);
