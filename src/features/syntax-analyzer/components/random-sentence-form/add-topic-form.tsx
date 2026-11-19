@@ -1,13 +1,4 @@
-import {
-  Button,
-  FormControl,
-  FormErrorMessage,
-  HStack,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  type StackProps,
-} from '@chakra-ui/react';
+import { Button, Field, HStack, Input, InputGroup, type StackProps } from '@chakra-ui/react';
 import { type SubmitHandler, useFormContext } from 'react-hook-form';
 import { CiShoppingTag } from 'react-icons/ci';
 import type { ValidationError } from 'yup';
@@ -41,29 +32,29 @@ export default function AddTopicForm(stackProps: StackProps) {
 
   return (
     <HStack as="form" align="start" onSubmit={handleSubmit(onAddTopic)} {...stackProps}>
-      <FormControl minW={0} isInvalid={!!errors.keyword}>
-        <InputGroup>
-          <InputLeftElement boxSize={{ base: '2.75rem', lg: 12 }} pointerEvents="none">
-            <CiShoppingTag fontSize={20} />
-          </InputLeftElement>
+      <Field.Root minW={0} invalid={!!errors.keyword}>
+        <InputGroup
+          startElement={<CiShoppingTag fontSize={20} />}
+          startElementProps={{ boxSize: { base: '2.75rem', lg: 12 }, p: 0 }}
+        >
           <Input
             {...keywordField}
             onChange={async (event) => {
               await keywordField.onChange(event);
               if (errors.keyword) clearErrors('keyword');
             }}
-            variant="filled"
+            variant="subtle"
             h={{ base: '2.75rem', lg: 12 }}
-            pl={{ base: '2.75rem', lg: 12 }}
+            ps={{ base: '2.75rem', lg: 12 }}
             maxLength={MAX_TOPIC_LENGTH}
-            focusBorderColor="teal.300"
+            css={{ '--focus-color': 'colors.teal.300' }}
             aria-label="영문 키워드"
             placeholder="영문 키워드"
             enterKeyHint="done"
           />
         </InputGroup>
-        <FormErrorMessage>{errors.keyword?.message}</FormErrorMessage>
-      </FormControl>
+        <Field.ErrorText aria-live="polite">{errors.keyword?.message}</Field.ErrorText>
+      </Field.Root>
       <Button
         flexShrink={0}
         h={{ base: '2.75rem', lg: 12 }}

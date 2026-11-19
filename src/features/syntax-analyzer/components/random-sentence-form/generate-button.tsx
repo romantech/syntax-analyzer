@@ -7,7 +7,7 @@ import {
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 
-export default function GenerateButton({ onClick, isLoading, ...buttonProps }: ButtonProps) {
+export default function GenerateButton({ onClick, loading, ...buttonProps }: ButtonProps) {
   const { data: count = 0 } = useRemainingCountQuery({
     select: (data) => data.random_sentence,
   });
@@ -20,12 +20,13 @@ export default function GenerateButton({ onClick, isLoading, ...buttonProps }: B
         h={{ base: '2.75rem', lg: 12 }}
         fontSize="md"
         onClick={onClick}
-        leftIcon={<RiAiGenerate size={20} />}
         textTransform="uppercase"
-        isLoading={isLoading}
-        isDisabled={!hasCount}
+        loading={loading}
+        disabled={!hasCount}
+        variant="subtle"
         {...buttonProps}
       >
+        <RiAiGenerate />
         <Text as="span">문장 생성</Text>
         <Text
           pl={1}

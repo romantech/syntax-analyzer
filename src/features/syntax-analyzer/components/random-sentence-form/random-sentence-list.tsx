@@ -1,15 +1,8 @@
-import {
-  Button,
-  Highlight,
-  SlideFade,
-  StackDivider,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, Highlight, Presence, StackSeparator, VStack } from '@chakra-ui/react';
 import { useIsFetching } from '@tanstack/react-query';
 
 import { RANDOM_SENTENCE_BASE_KEY } from '@/features/syntax-analyzer';
-import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor';
+import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor/constants/settings';
 import { showToast } from '@/lib';
 
 interface RandomSentenceListProps {
@@ -18,7 +11,6 @@ interface RandomSentenceListProps {
 }
 
 export default function RandomSentenceList({ data, query }: RandomSentenceListProps) {
-  const highlightColor = useColorModeValue('teal.700', 'teal.300');
   const isFetching = useIsFetching({ queryKey: RANDOM_SENTENCE_BASE_KEY });
   const copySentence = async (sentence: string) => {
     try {
@@ -34,13 +26,19 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
   };
 
   return (
-    <SlideFade in={Boolean(data) && !isFetching} offsetY="20px">
-      <VStack align="stretch" spacing={0} maxH="190px" overflowY="auto" divider={<StackDivider />}>
+    <Presence
+      present={Boolean(data) && !isFetching}
+      animationName={{ _open: 'fade-in, slide-from-bottom', _closed: 'fade-out, slide-to-bottom' }}
+      animationDuration="moderate"
+      css={{ '--slide-from-bottom-distance': '20px', '--slide-to-bottom-distance': '20px' }}
+      _motionReduce={{ animationName: 'none' }}
+    >
+      <VStack align="stretch" gap={0} maxH="190px" overflowY="auto" separator={<StackSeparator />}>
         {data?.map((sentence) => (
           <Button
             key={sentence}
             aria-label={`문장 복사: ${sentence}`}
-            variant="unstyled"
+            variant="plain"
             display="block"
             flexShrink={0}
             h="auto"
@@ -57,12 +55,15 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
             onClick={() => copySentence(sentence)}
           >
-            <Highlight query={query} styles={{ color: highlightColor, fontWeight: 'bold' }}>
+            <Highlight
+              query={query}
+              styles={{ color: 'teal.700', fontWeight: 'bold', _dark: { color: 'teal.300' } }}
+            >
               {sentence}
             </Highlight>
           </Button>
         ))}
       </VStack>
-    </SlideFade>
+    </Presence>
   );
 }

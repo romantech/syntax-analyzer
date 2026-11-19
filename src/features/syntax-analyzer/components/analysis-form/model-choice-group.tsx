@@ -1,4 +1,4 @@
-import { Badge, HStack, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react';
+import { Badge, HStack, RadioGroup, Stack, Text } from '@chakra-ui/react';
 import { type Control, Controller } from 'react-hook-form';
 import {
   ANALYSIS_DECREMENT_COUNT,
@@ -33,10 +33,11 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
     <Controller
       name="model"
       control={control}
-      render={({ field: { onChange, value } }) => (
-        <RadioGroup
+      render={({ field: { name, onBlur, onChange, ref, value } }) => (
+        <RadioGroup.Root
           aria-label="AI 모델 선택"
-          onChange={onChange}
+          name={name}
+          onValueChange={({ value }) => onChange(value)}
           value={value}
           display="flex"
           flexDirection="column"
@@ -46,19 +47,24 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
           {MODEL_FIELDS.map((field) => (
             <Stack key={field.value} gap={1} align="start">
               <HStack>
-                <Radio
-                  colorScheme="teal"
+                <RadioGroup.Item
+                  colorPalette="teal"
                   value={field.value}
-                  isDisabled={remainingCount < field.count}
-                  aria-describedby={`model-description-${field.value}`}
+                  disabled={remainingCount < field.count}
                 >
-                  {field.label}
-                </Radio>
+                  <RadioGroup.ItemHiddenInput
+                    aria-describedby={`model-description-${field.value}`}
+                    onBlur={onBlur}
+                    ref={value === field.value ? ref : undefined}
+                  />
+                  <RadioGroup.ItemIndicator />
+                  <RadioGroup.ItemText>{field.label}</RadioGroup.ItemText>
+                </RadioGroup.Item>
                 <Badge
                   fontSize="xs"
                   fontWeight="semibold"
                   variant="subtle"
-                  colorScheme="teal"
+                  colorPalette="teal"
                   hidden={!field.recommend}
                 >
                   recommended
@@ -74,7 +80,7 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
               </Text>
             </Stack>
           ))}
-        </RadioGroup>
+        </RadioGroup.Root>
       )}
     />
   );

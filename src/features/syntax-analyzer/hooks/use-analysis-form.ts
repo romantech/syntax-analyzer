@@ -12,7 +12,7 @@ import {
   useInjectAnalysis,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
-import { updateAnalysisMetaData } from '@/features/syntax-editor';
+import { updateAnalysisMetaData } from '@/features/syntax-editor/helpers/analysis';
 import { showToast } from '@/lib';
 import { getSyntaxEditorPath } from '@/routes';
 
@@ -33,7 +33,7 @@ export const useAnalysisForm = () => {
   const navigate = useNavigate();
   const { injectAnalysis } = useInjectAnalysis();
 
-  const { isOpen: isModalOpen, onClose: closeModal, onOpen: openModal } = useDisclosure();
+  const { open: isModalOpen, onClose: closeModal, onOpen: openModal } = useDisclosure();
 
   const { data: remainingCount = 0 } = useRemainingCountQuery({
     select: ({ analysis }) => analysis,

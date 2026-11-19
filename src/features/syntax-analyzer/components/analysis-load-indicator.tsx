@@ -52,7 +52,7 @@ export default function AnalysisLoadIndicator({
         />
       </Box>
       <Stack gap={{ base: 2, lg: 5 }}>
-        <Heading size={{ base: 'lg', lg: '3xl' }} fontWeight="bold">
+        <Heading fontSize={{ base: '2xl', lg: '5xl' }} lineHeight={1.2} fontWeight="bold">
           문장 분석 중
         </Heading>
         <Text fontSize={{ base: 'md', lg: '2xl' }}>
