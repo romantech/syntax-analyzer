@@ -8,7 +8,7 @@ import {
   useBoolean,
   VStack,
 } from '@chakra-ui/react';
-import type { FallbackProps } from 'react-error-boundary';
+import { type FallbackProps, getErrorMessage } from 'react-error-boundary';
 import { isRouteErrorResponse, Navigate, useRouteError } from 'react-router';
 
 import { DIGITS_PATTERN, Layout, LinkParticles, useIsMounted } from '@/base';
@@ -25,7 +25,7 @@ export default function ErrorComponent({ resetErrorBoundary, error }: Partial<Fa
   const [shouldRedirect, setShouldRedirect] = useBoolean(false);
 
   const isMounted = useIsMounted();
-  let errorMessage = error?.message ?? '문제가 발생했어요';
+  let errorMessage = getErrorMessage(error) ?? '문제가 발생했어요';
 
   const isRouteError = isRouteErrorResponse(routerError);
   if (isRouteError) {

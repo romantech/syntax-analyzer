@@ -243,8 +243,8 @@ importers:
         specifier: ^19.3.1
         version: 19.3.1(react@19.3.1)
       react-error-boundary:
-        specifier: ^4.1.2
-        version: 4.1.2(react@19.3.1)
+        specifier: ^6.1.6
+        version: 6.1.6(@types/react@19.3.0)(react@19.3.1)
       react-hook-form:
         specifier: ^7.92.0
         version: 7.92.0(@types/react@19.3.0)(react@19.3.1)
@@ -3162,15 +3162,19 @@ packages:
     peerDependencies:
       react: ^19.3.1
 
-  react-error-boundary@4.1.2:
-    resolution: {integrity: sha512-GQDxZ5Jd+Aq/qUxbCm1UtzmL/s++V7zKgE8yMktJiCQXCCFZnMZh9ng+6/Ne6PjNSXH0L9CjeOEREfRnq6Duag==}
-    peerDependencies:
-      react: '>=16.13.1'
-
   react-error-boundary@5.0.0:
     resolution: {integrity: sha512-tnjAxG+IkpLephNcePNA7v6F/QpWLH8He65+DmedchDwg162JZqx4NmbXj0mlAYVVEd81OW7aFhmbsScYfiAFQ==}
     peerDependencies:
       react: '>=16.13.1'
+
+  react-error-boundary@6.1.6:
+    resolution: {integrity: sha512-CDXPnXDGyFIbkwaaJ6u+xgsRmJhSi6YdgUDW1vnyKHfXp1a9pfAlM+ZET2CDu80/A+8iRcmXN0NSY9BCCoWP5A==}
+    peerDependencies:
+      '@types/react': ^18.0.0 || ^19.0.0
+      react: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
@@ -6653,15 +6657,16 @@ snapshots:
       react: 19.3.1
       scheduler: 0.28.0
 
-  react-error-boundary@4.1.2(react@19.3.1):
-    dependencies:
-      '@babel/runtime': 7.29.14
-      react: 19.3.1
-
   react-error-boundary@5.0.0(react@19.3.1):
     dependencies:
       '@babel/runtime': 7.29.14
       react: 19.3.1
+
+  react-error-boundary@6.1.6(@types/react@19.3.0)(react@19.3.1):
+    dependencies:
+      react: 19.3.1
+    optionalDependencies:
+      '@types/react': 19.3.0
 
   react-fast-compare@3.2.2: {}
 
