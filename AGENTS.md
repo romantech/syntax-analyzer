@@ -12,9 +12,11 @@
 - 서버는 별도 저장소 [romantech/project-server](https://github.com/romantech/project-server). 계약, 환경 변수, 배포 순서는 [API 변경 가이드](docs/api-integration.md) 참고.
 - 태깅 변경은 `/editor` 샘플에서 포함·교차 선택 확인. [태깅 제약 조건](README.md#태깅-제약-조건)
 - 저장 형식 변경은 `localStorage`의 기존 `userAnalysisList` 호환성과 저장 후 다시 열기 확인.
-- Node.js와 pnpm 버전은 `package.json` 기준. 개발은 `pnpm dev`, 코드 검증은 `pnpm lint`와 `pnpm build`.
+- Node.js와 pnpm 버전은 `package.json` 기준. 개발은 `pnpm dev`, 코드 검증은 `pnpm lint`, `pnpm test`, `pnpm build`.
 
 ## GitHub 이슈와 PR
 
 - PR은 `변경 사항`과 `검증`으로 구성. 불릿 하나에 한 가지씩 짧게 작성. 필요하면 관련 이슈와 남은 검증 추가.
 - 이슈·PR에서 요청 흐름, 상태 전이, 세그먼트 중첩은 필요에 따라 `mermaid`로 표현.
+- `main`에 들어가는 커밋은 Conventional Commits 형식을 사용. Release Please가 릴리스 PR을 갱신하고, 릴리스 PR을 머지하면 버전·변경 내역 반영과 GitHub Release 생성이 완료된다.
+- 릴리스 PR의 `Validate` 실행이 승인을 기다리면 PR에서 `Approve workflows to run`을 눌러 실행한다.
