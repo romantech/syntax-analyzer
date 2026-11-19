@@ -2,10 +2,10 @@ import { type UseToastOptions, useDisclosure, useToast } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import type { InferType } from 'yup';
 
 import { ensurePeriod, expandAbbreviations, removeThousandSeparator, tokenizer } from '@/base';
 import {
-  type AnalysisModel,
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
   useCreateAnalysisMutation,
@@ -15,7 +15,7 @@ import {
 import { updateAnalysisMetaData } from '@/features/syntax-editor';
 import { getSyntaxEditorPath } from '@/routes';
 
-export type AnalysisFormValues = { model: AnalysisModel; sentence: string };
+export type AnalysisFormValues = InferType<typeof createAnalysisFormSchema>;
 
 const toastOptions: UseToastOptions = {
   title: '문장 분석을 완료했습니다',
@@ -48,7 +48,7 @@ export const useAnalysisForm = () => {
     // placeholderData: { analysis: 0, random_sentence: 0 },
   });
 
-  const formResults = useForm<AnalysisFormValues>({
+  const formResults = useForm({
     resolver: yupResolver(createAnalysisFormSchema),
     defaultValues: createAnalysisFormSchema.cast({}),
   });
