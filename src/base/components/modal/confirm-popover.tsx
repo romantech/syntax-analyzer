@@ -41,7 +41,7 @@ export default function ConfirmPopover({
             </Popover.Header>
             <Popover.Footer justifyContent="flex-end" border="0">
               <ButtonGroup size="sm">
-                <Popover.CloseTrigger asChild>
+                <Popover.CloseTrigger asChild aria-label="취소">
                   <Button variant="subtle">취소</Button>
                 </Popover.CloseTrigger>
                 <Button

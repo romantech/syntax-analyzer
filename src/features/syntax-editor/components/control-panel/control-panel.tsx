@@ -1,4 +1,4 @@
-import { Card, Divider, HStack, Skeleton, VStack } from '@chakra-ui/react';
+import { Card, HStack, Separator, Skeleton, VStack } from '@chakra-ui/react';
 
 import { useIsMounted } from '@/base';
 import {
@@ -17,8 +17,8 @@ export function EditorActions({ isTapMode = false }: { isTapMode?: boolean }) {
       justify="start"
       flexWrap={isTapMode ? 'wrap' : undefined}
       overflow={isTapMode ? undefined : 'auto hidden'}
-      sx={{
-        button: {
+      css={{
+        '& button': {
           minW: isTapMode ? '44px' : 10,
           minH: isTapMode ? '44px' : 10,
         },
@@ -49,20 +49,19 @@ export default function ControlPanel() {
       w={{ base: 'full', lg: 288 }}
       maxW="full"
       flexShrink={0}
-      fitContent
-      isLoaded={isMounted}
+      loading={!isMounted}
       borderRadius={6}
     >
-      <Card p={3} variant="outline">
+      <Card.Root p={3} variant="outline">
         <VStack align="stretch" gap={2}>
           <HStack gap={4} flexWrap="wrap">
-            <TagInfoSwitch w="auto" justify="start" gap={2} />
-            <AbbrInfoSwitch w="auto" justify="start" gap={2} />
+            <TagInfoSwitch w="auto" justifyContent="start" gap={2} />
+            <AbbrInfoSwitch w="auto" justifyContent="start" gap={2} />
           </HStack>
-          <Divider />
+          <Separator />
           <EditorActions />
         </VStack>
-      </Card>
+      </Card.Root>
     </Skeleton>
   );
 }

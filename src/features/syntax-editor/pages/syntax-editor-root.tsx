@@ -7,7 +7,7 @@ import { analysisStore } from '@/features/syntax-editor';
 import { SITE_URLS } from '@/routes/paths';
 
 export default function SyntaxEditorRoot() {
-  const [isTapMode] = useMediaQuery('(max-width: 61.99em), (pointer: coarse)');
+  const [isTapMode] = useMediaQuery(['(max-width: 61.99em), (pointer: coarse)'], { ssr: false });
   const editRoute = useMatch(SITE_URLS.EDITOR.EDIT);
   const fitViewport = isTapMode && !!editRoute;
 

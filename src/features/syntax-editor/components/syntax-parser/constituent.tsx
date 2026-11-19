@@ -1,8 +1,9 @@
-import { Box, Text, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import { Box, chakra, Text } from '@chakra-ui/react';
 import { clsx } from 'clsx';
 import { useAtomValue } from 'jotai';
 import type { PropsWithChildren } from 'react';
 
+import { Tooltip } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_COLORS,
@@ -21,21 +22,6 @@ interface ConstituentProps {
   end: number;
 }
 
-const abbrTooltipModifiers = [
-  {
-    name: 'offset',
-    options: {
-      offset: ({
-        reference,
-        popper,
-      }: {
-        reference: { height: number };
-        popper: { height: number };
-      }) => [0, -(reference.height + popper.height) / 2],
-    },
-  },
-];
-
 export default function Constituent({
   children,
   constituent,
@@ -44,7 +30,6 @@ export default function Constituent({
   isMultipleTokenRange,
 }: PropsWithChildren<ConstituentProps>) {
   const { dark, light } = CONSTITUENT_COLORS[constituent.type];
-  const textColor = useColorModeValue(light, dark);
 
   const isAbbrTooltipVisible = useAtomValue(isAbbrTooltipVisibleAtom);
   const hoveredConstituent = useAtomValue(hoveredConstituentAtom);
@@ -63,7 +48,8 @@ export default function Constituent({
   return (
     <Text
       as="span"
-      color={textColor}
+      color={light}
+      _dark={{ color: dark }}
       className={clsx(CONSTITUENT_CLASSES.CONSTITUENT, {
         [CONSTITUENT_CLASSES.TOKEN_GROUP]: isMultipleTokenRange,
         [CONSTITUENT_CLASSES.TOKEN]: !isMultipleTokenRange,
@@ -74,13 +60,25 @@ export default function Constituent({
       {children}
       <Tooltip
         label={koLabel ?? constituent.label}
-        fontWeight="semibold"
-        textTransform="capitalize"
-        modifiers={abbrTooltipModifiers}
-        isOpen={isTooltipOpen}
+        open={isTooltipOpen}
+        positioning={{
+          placement: 'top',
+          gutter: 0,
+          flip: false,
+          getAnchorRect: (anchor) => {
+            const rect = anchor?.getBoundingClientRect();
+            return rect
+              ? { x: rect.x, y: rect.y + rect.height / 2, width: rect.width, height: 0 }
+              : null;
+          },
+        }}
+        contentProps={{
+          fontWeight: 'semibold',
+          textTransform: 'capitalize',
+          css: { translate: '0 50%' },
+        }}
       >
-        <Box
-          as="button"
+        <chakra.button
           type="button"
           className="constituent-label"
           aria-label={`${constituent.abbreviation}: ${koLabel ?? constituent.label} (${begin + 1}~${end} 단어)`}
@@ -89,7 +87,7 @@ export default function Constituent({
           <Box as="span" visibility={isTooltipOpen ? 'hidden' : undefined}>
             {constituent.abbreviation}
           </Box>
-        </Box>
+        </chakra.button>
       </Tooltip>
     </Text>
   );

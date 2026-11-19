@@ -49,8 +49,8 @@ export default function SyntaxEditor() {
         />
         {isTapMode ? (
           <HStack gap={4} flexWrap="wrap">
-            <TagInfoSwitch w="auto" justify="start" />
-            <AbbrInfoSwitch w="auto" justify="start" />
+            <TagInfoSwitch w="auto" justifyContent="start" />
+            <AbbrInfoSwitch w="auto" justifyContent="start" />
           </HStack>
         ) : (
           <>

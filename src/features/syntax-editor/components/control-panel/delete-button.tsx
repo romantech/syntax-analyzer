@@ -1,7 +1,8 @@
-import { IconButton, Tooltip } from '@chakra-ui/react';
+import { IconButton } from '@chakra-ui/react';
 import { useAtom, useAtomValue } from 'jotai';
 import { BsFillEraserFill } from 'react-icons/bs';
 
+import { Tooltip } from '@/base';
 import {
   CONTROL_OPEN_POPUP_DELAY,
   isDisableDeleteButtonAtom,
@@ -15,14 +16,15 @@ export default function DeleteButton() {
   return (
     <Tooltip label="태그 삭제" openDelay={CONTROL_OPEN_POPUP_DELAY}>
       <IconButton
-        variant="solid"
-        colorScheme={isDeleteMode ? 'teal' : 'gray'}
+        variant={isDeleteMode ? 'solid' : 'subtle'}
+        colorPalette={isDeleteMode ? 'teal' : 'gray'}
         aria-label="Delete Tag"
         aria-pressed={isDeleteMode}
-        icon={<BsFillEraserFill />}
         onClick={toggleDeleteMode}
-        isDisabled={isDisableDeleteButton}
-      />
+        disabled={isDisableDeleteButton}
+      >
+        <BsFillEraserFill />
+      </IconButton>
     </Tooltip>
   );
 }

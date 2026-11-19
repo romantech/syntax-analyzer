@@ -5,6 +5,7 @@ const fontFamily =
 
 const config = defineConfig({
   theme: {
+    breakpoints: { lg: '62em' },
     tokens: {
       fonts: { body: { value: fontFamily }, heading: { value: fontFamily } },
       colors: {

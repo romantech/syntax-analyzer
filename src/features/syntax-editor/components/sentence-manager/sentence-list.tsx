@@ -1,15 +1,4 @@
-import {
-  Card,
-  CardBody,
-  Stack,
-  StackDivider,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Card, Stack, StackSeparator, Tabs, useDisclosure } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Fragment, useRef } from 'react';
@@ -17,7 +6,6 @@ import { TbMoodEmpty } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { ConfirmModal, TextPlaceholder } from '@/base';
 import { type AnalysisSource, DeletableSentence, type TAnalysis } from '@/features/syntax-editor';
-import { DEFAULT_SENTENCE_LIST_TAB } from '@/features/syntax-editor/constants';
 import {
   analysisListBySourceAtom,
   removeUserAnalysisActionAtom,
@@ -28,8 +16,8 @@ import { getSyntaxEditorPath } from '@/routes';
 type AnalysisInfo = { index: number; analysis: TAnalysis };
 
 interface SentenceListProps {
-  tabIndex?: number;
-  onTabChange?: (index: number) => void;
+  activeTab: string;
+  onTabChange: (value: string) => void;
 }
 
 const TAB_LIST: { label: string; source: AnalysisSource }[] = [
@@ -37,9 +25,9 @@ const TAB_LIST: { label: string; source: AnalysisSource }[] = [
   { label: '샘플 문장', source: 'sample' },
 ];
 
-export default function SentenceList({ tabIndex, onTabChange }: SentenceListProps) {
+export default function SentenceList({ activeTab, onTabChange }: SentenceListProps) {
   const selectedAnalysis = useRef<AnalysisInfo | null>(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
   const combinedAnalysisList = useAtomValue(analysisListBySourceAtom);
@@ -63,51 +51,54 @@ export default function SentenceList({ tabIndex, onTabChange }: SentenceListProp
 
   return (
     <Fragment>
-      <Tabs
-        defaultIndex={DEFAULT_SENTENCE_LIST_TAB}
-        index={tabIndex}
-        onChange={onTabChange}
-        colorScheme="teal"
+      <Tabs.Root
+        value={activeTab}
+        onValueChange={({ value }) => onTabChange(value)}
+        colorPalette="teal"
       >
-        <TabList>
-          {TAB_LIST.map(({ label }) => (
-            <Tab key={label}>{label}</Tab>
+        <Tabs.List aria-label="문장 목록">
+          {TAB_LIST.map(({ label, source }) => (
+            <Tabs.Trigger value={source} key={source}>
+              {label}
+            </Tabs.Trigger>
           ))}
-        </TabList>
+        </Tabs.List>
 
-        <TabPanels pt={4}>
-          {TAB_LIST.map(({ source, label }) => (
-            <TabPanel p={0} key={label}>
-              <Card variant="outline" maxH={460} overflowY="auto">
-                <CardBody p={2.5}>
-                  <Stack divider={<StackDivider />} ref={parent} overflowY="hidden">
-                    {!combinedAnalysisList[source].length && (
-                      <TextPlaceholder
-                        p={1.5}
-                        text="아직 추가한 문장이 없어요"
-                        endIcon={TbMoodEmpty}
-                      />
-                    )}
-                    {combinedAnalysisList[source].map((analysis, index) => (
-                      <DeletableSentence
-                        key={analysis.id}
-                        createdAt={analysis.createdAt}
-                        sentence={analysis.sentence}
-                        hideDeleteButton={source === 'sample'}
-                        onClick={() => onSentenceClick({ analysis, index })}
-                        onDelete={() => removeUserAnalysis(analysis.id)}
-                        showGPTBadge={analysis.isAnalyzedByGPT}
-                      />
-                    ))}
-                  </Stack>
-                </CardBody>
-              </Card>
-            </TabPanel>
-          ))}
-        </TabPanels>
-      </Tabs>
+        {TAB_LIST.map(({ source }) => (
+          <Tabs.Content value={source} pt={4} px={0} pb={0} key={source}>
+            <Card.Root variant="outline" maxH={460} overflowY="auto">
+              <Card.Body p={2.5}>
+                <Stack
+                  separator={<StackSeparator />}
+                  ref={source === 'user' ? parent : undefined}
+                  overflowY="hidden"
+                >
+                  {!combinedAnalysisList[source].length && (
+                    <TextPlaceholder
+                      p={1.5}
+                      text="아직 추가한 문장이 없어요"
+                      endIcon={TbMoodEmpty}
+                    />
+                  )}
+                  {combinedAnalysisList[source].map((analysis, index) => (
+                    <DeletableSentence
+                      key={analysis.id}
+                      createdAt={analysis.createdAt}
+                      sentence={analysis.sentence}
+                      hideDeleteButton={source === 'sample'}
+                      onClick={() => onSentenceClick({ analysis, index })}
+                      onDelete={() => removeUserAnalysis(analysis.id)}
+                      showGPTBadge={analysis.isAnalyzedByGPT}
+                    />
+                  ))}
+                </Stack>
+              </Card.Body>
+            </Card.Root>
+          </Tabs.Content>
+        ))}
+      </Tabs.Root>
       <ConfirmModal
-        isOpen={isOpen}
+        isOpen={open}
         onClose={onClose}
         onConfirm={onSelectSentenceConfirm}
         headerContent="영어 문장 선택"
