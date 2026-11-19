@@ -11,6 +11,28 @@ import {
   UndoButton,
 } from '@/features/syntax-editor';
 
+export function EditorActions({ isTapMode = false }: { isTapMode?: boolean }) {
+  return (
+    <HStack
+      justify="start"
+      flexWrap={isTapMode ? 'wrap' : undefined}
+      overflow={isTapMode ? undefined : 'auto hidden'}
+      sx={{
+        button: {
+          minW: isTapMode ? '44px' : 10,
+          minH: isTapMode ? '44px' : 10,
+        },
+      }}
+    >
+      <DeleteButton />
+      <ResetButton />
+      <UndoButton />
+      <RedoButton />
+      <SaveButton />
+    </HStack>
+  );
+}
+
 /**
  * atomWithStorage를 사용했을 때. Jotai는 초기값을 로컬 스토리지 값을 기준으로함
  * 예를들어 atomWithStorage('user', false) 상태의 초기값을 false로 명시했지만,
@@ -38,24 +60,7 @@ export default function ControlPanel() {
             <AbbrInfoSwitch w="auto" justify="start" gap={2} />
           </HStack>
           <Divider />
-          <HStack
-            overflowY="hidden"
-            overflowX="auto"
-            sx={{
-              button: {
-                minW: { base: '44px', lg: 10 },
-                minH: { base: '44px', lg: 10 },
-              },
-            }}
-            justify="start"
-            gap={2}
-          >
-            <DeleteButton />
-            <ResetButton />
-            <UndoButton />
-            <RedoButton />
-            <SaveButton />
-          </HStack>
+          <EditorActions />
         </VStack>
       </Card>
     </Skeleton>

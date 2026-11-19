@@ -6,7 +6,7 @@ import { analysisStore } from '@/features/syntax-editor';
 
 export default function SyntaxEditorRoot() {
   return (
-    <Layout>
+    <Layout display="flex" flexDirection="column">
       <Provider store={analysisStore}>
         <JotaiDevTools />
         <Outlet />

@@ -12,7 +12,11 @@ import {
   WrapItem,
 } from '@chakra-ui/react';
 
-import { SelectableTagButton, TAG_LIST_DEFAULT_INDEX } from '@/features/syntax-editor';
+import {
+  type ConstituentWithoutId,
+  SelectableTagButton,
+  TAG_LIST_DEFAULT_INDEX,
+} from '@/features/syntax-editor';
 import { groupedConstituentsByType } from '@/features/syntax-editor/data';
 
 const CONSTITUENT_CATEGORIES = [
@@ -33,13 +37,20 @@ const CONSTITUENT_CATEGORIES = [
   },
 ];
 
-export default function TagListAccordion({ ...accordionProps }: AccordionProps) {
+interface TagListAccordionProps extends AccordionProps {
+  onTagSelect?: (tag: ConstituentWithoutId) => void;
+}
+
+export default function TagListAccordion({
+  onTagSelect,
+  ...accordionProps
+}: TagListAccordionProps) {
   return (
     <Accordion defaultIndex={TAG_LIST_DEFAULT_INDEX} allowToggle {...accordionProps}>
       {CONSTITUENT_CATEGORIES.map((category) => (
         <AccordionItem key={category.label}>
-          <AccordionButton>
-            <HStack flex="1" textAlign="left" textTransform="uppercase" py={2}>
+          <AccordionButton minH={onTagSelect ? '44px' : undefined}>
+            <HStack flex="1" textAlign="left" textTransform="uppercase" py={2} flexWrap="wrap">
               <Heading as="h2" size="md">
                 {category.label}
               </Heading>
@@ -52,7 +63,7 @@ export default function TagListAccordion({ ...accordionProps }: AccordionProps) 
             <Wrap spacing={2}>
               {category.constituents.map((constituent) => (
                 <WrapItem key={constituent.label}>
-                  <SelectableTagButton constituent={constituent} />
+                  <SelectableTagButton constituent={constituent} onSelect={onTagSelect} />
                 </WrapItem>
               ))}
             </Wrap>

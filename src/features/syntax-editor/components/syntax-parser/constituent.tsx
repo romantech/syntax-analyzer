@@ -3,7 +3,6 @@ import { clsx } from 'clsx';
 import { useAtomValue } from 'jotai';
 import type { PropsWithChildren } from 'react';
 
-import type { NumberTuple } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_COLORS,
@@ -22,6 +21,21 @@ interface ConstituentProps {
   end: number;
 }
 
+const abbrTooltipModifiers = [
+  {
+    name: 'offset',
+    options: {
+      offset: ({
+        reference,
+        popper,
+      }: {
+        reference: { height: number };
+        popper: { height: number };
+      }) => [0, -(reference.height + popper.height) / 2],
+    },
+  },
+];
+
 export default function Constituent({
   children,
   constituent,
@@ -35,10 +49,8 @@ export default function Constituent({
   const isAbbrTooltipVisible = useAtomValue(isAbbrTooltipVisibleAtom);
   const hoveredConstituent = useAtomValue(hoveredConstituentAtom);
   const handlers = useConstituentHover();
-
-  const tooltipOffset: NumberTuple = isMultipleTokenRange ? [0, -10] : [0, 5];
   const koLabel = CONSTITUENT_TRANSLATIONS[constituent.label]?.ko;
-  const isCurrentHovered = hoveredConstituent === constituent.id;
+  const isTooltipOpen = isAbbrTooltipVisible && hoveredConstituent === constituent.id;
 
   const dataAttrs = {
     [CONSTITUENT_DATA_ATTRS.ID]: constituent.id,
@@ -62,9 +74,10 @@ export default function Constituent({
       {children}
       <Tooltip
         label={koLabel ?? constituent.label}
+        fontWeight="semibold"
         textTransform="capitalize"
-        offset={tooltipOffset}
-        isOpen={isAbbrTooltipVisible && isCurrentHovered}
+        modifiers={abbrTooltipModifiers}
+        isOpen={isTooltipOpen}
       >
         <Box
           as="button"
@@ -73,7 +86,9 @@ export default function Constituent({
           aria-label={`${constituent.abbreviation}: ${koLabel ?? constituent.label} (${begin + 1}~${end} 단어)`}
           _focusVisible={{ outline: '2px solid', outlineOffset: '2px' }}
         >
-          <span>{constituent.abbreviation}</span>
+          <Box as="span" visibility={isTooltipOpen ? 'hidden' : undefined}>
+            {constituent.abbreviation}
+          </Box>
         </Box>
       </Tooltip>
     </Text>

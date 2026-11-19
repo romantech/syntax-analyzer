@@ -11,9 +11,10 @@ import {
 
 interface TagButtonProps {
   constituent: ConstituentWithoutId;
+  onSelect?: (tag: ConstituentWithoutId) => void;
 }
 
-export default function SelectableTagButton({ constituent }: TagButtonProps) {
+export default function SelectableTagButton({ constituent, onSelect }: TagButtonProps) {
   const [isInfoOpen, setInfoOpen] = useState(false);
   const isTagInfoMode = useAtomValue(tagInfoModeAtom);
   const [selectedTag, setSelectedTag] = useAtom(selectedTagActionAtom);
@@ -32,13 +33,17 @@ export default function SelectableTagButton({ constituent }: TagButtonProps) {
     <Tooltip label={desc} isOpen={isTagInfoMode && isInfoOpen}>
       <Button
         size="sm"
-        minH={{ base: '44px', lg: 8 }}
+        minH={onSelect ? '44px' : { base: '44px', lg: 8 }}
         aria-pressed={isSelected}
         onMouseEnter={() => setInfoOpen(true)}
         onMouseLeave={() => setInfoOpen(false)}
         onFocus={() => setInfoOpen(true)}
         onBlur={() => setInfoOpen(false)}
         onClick={() => {
+          if (onSelect) {
+            onSelect(constituent);
+            return;
+          }
           onTagClick(constituent);
           setInfoOpen(true);
         }}

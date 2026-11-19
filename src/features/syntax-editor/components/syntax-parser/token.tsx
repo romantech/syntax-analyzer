@@ -37,7 +37,7 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
   const dataAttrs = { [CONSTITUENT_DATA_ATTRS.INDEX]: index };
 
   return (
-    <Popover isOpen={invalidIndex === index} isLazy>
+    <Popover isOpen={!isTapMode && invalidIndex === index} isLazy>
       <PopoverAnchor>
         <Text
           position="relative"
