@@ -23,4 +23,4 @@
 - 이슈와 PR에서 요청 흐름, 상태 전이, 세그먼트 중첩을 설명할 때는 필요에 따라 Mermaid 등으로 시각화한다.
 - `main`에 들어가는 커밋은 Conventional Commits 형식 사용.
 - `fix:`나 `feat:` 등 릴리스 대상 커밋이 `main`에 들어오면 Release Please가 릴리스 PR을 생성하거나 갱신한다. 릴리스 PR을 머지하면 버전과 변경 내역이 반영되고 GitHub Release가 생성된다.
-- 릴리스 PR의 `Validate` 실행이 승인을 기다리면 PR에서 `Approve workflows to run`을 눌러 실행한다.
+- Release Please는 `RELEASE_PLEASE_TOKEN` 저장소 Secret을 사용해 릴리스 PR의 `Validate`를 자동으로 시작한다. 토큰은 이 저장소의 `Contents`와 `Pull requests`에 읽기·쓰기 권한을 부여하고 만료 전에 교체한다.
