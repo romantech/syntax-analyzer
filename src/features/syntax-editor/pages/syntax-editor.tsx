@@ -73,11 +73,14 @@ export default function SyntaxEditor() {
           css={
             isTapMode
               ? {
+                  '--scroll-hint-color': 'var(--chakra-colors-gray-alpha-200)',
+                  _dark: { '--scroll-hint-color': 'var(--chakra-colors-black-alpha-500)' },
                   // 문장 끝에 붙은 배경이 오른쪽 가장자리에 닿으면 안내를 가린다.
                   background: `
-                    linear-gradient(var(--chakra-colors-bg), var(--chakra-colors-bg)) right / 20px 100% no-repeat local,
-                    linear-gradient(to left, var(--chakra-colors-gray-muted), transparent) right / 20px 100% no-repeat scroll
+                    linear-gradient(var(--chakra-colors-bg), var(--chakra-colors-bg)) right top / 16px 100% no-repeat local,
+                    radial-gradient(16px 50% at right center, var(--scroll-hint-color), transparent) right top / 16px 3.5rem no-repeat scroll
                   `,
+                  '&::-webkit-scrollbar-track': { bg: 'bg' },
                 }
               : undefined
           }
