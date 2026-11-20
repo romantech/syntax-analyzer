@@ -26,6 +26,7 @@ export default function TopicTagList(stackProps: StackProps) {
           borderRadius="md"
           variant="subtle"
           colorPalette="teal"
+          _dark={{ bg: '#286769', color: '#cce3eb' }}
         >
           <Tag.Label w="fit" textTransform="uppercase">
             {topic}
@@ -34,6 +35,7 @@ export default function TopicTagList(stackProps: StackProps) {
             aria-label={`${topic} 토픽 삭제`}
             boxSize={{ base: '2.75rem', lg: 8 }}
             flexShrink={0}
+            cursor="pointer"
             _icon={{ boxSize: 3.5 }}
             onClick={() => onTagClick(topic)}
           />
