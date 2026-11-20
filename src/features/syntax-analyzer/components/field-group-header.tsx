@@ -6,7 +6,13 @@ export default function FieldGroupHeader({
   ...headingProps
 }: PropsWithChildren<HeadingProps>) {
   return (
-    <Heading fontSize="2xl" lineHeight={1.2} pb={4} textTransform="uppercase" {...headingProps}>
+    <Heading
+      fontSize={{ base: '2xl', md: '3xl' }}
+      lineHeight={{ base: 1.33, md: 1.2 }}
+      pb={4}
+      textTransform="uppercase"
+      {...headingProps}
+    >
       {children}
     </Heading>
   );

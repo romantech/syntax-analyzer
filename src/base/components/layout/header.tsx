@@ -8,33 +8,20 @@ import {
   Menu,
   Portal,
   Spacer,
-  Tabs,
 } from '@chakra-ui/react';
 import { useTheme } from 'next-themes';
 import { BsGithub } from 'react-icons/bs';
 import { FiCoffee, FiMoreHorizontal } from 'react-icons/fi';
 import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
-import { matchPath, NavLink, useLocation, useNavigate } from 'react-router';
+import { NavLink, useLocation } from 'react-router';
 
 import { useColorModeValue } from '@/base/hooks';
 import { SITE_URLS } from '@/routes/paths';
 
-const NAV_TABS = [
-  {
-    label: 'home',
-    path: '/',
-    matchPath: '/',
-  },
-  {
-    label: 'analyzer',
-    path: SITE_URLS.ANALYZER.ROOT,
-    matchPath: `${SITE_URLS.ANALYZER.ROOT}/*`,
-  },
-  {
-    label: 'editor',
-    path: SITE_URLS.EDITOR.ROOT,
-    matchPath: `${SITE_URLS.EDITOR.ROOT}/*`,
-  },
+const NAV_LINKS = [
+  { label: 'Home', path: SITE_URLS.ROOT },
+  { label: 'Analyzer', path: SITE_URLS.ANALYZER.ROOT },
+  { label: 'Editor', path: SITE_URLS.EDITOR.ROOT },
 ] as const;
 
 const EXTERNAL_LINKS = [
@@ -52,8 +39,6 @@ const EXTERNAL_LINKS = [
 
 export function Header() {
   const { pathname } = useLocation();
-  const activePath = NAV_TABS.find((tab) => matchPath(tab.matchPath, pathname))?.path ?? null;
-  const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
 
   const ToggleIcon = theme === 'light' ? MdModeNight : MdOutlineLightMode;
@@ -64,13 +49,13 @@ export function Header() {
   );
   const boxShadow = useColorModeValue('sm', 'lg');
   const hoverColor = useColorModeValue('gray.400', 'gray.100');
-  const focusRingColor = useColorModeValue('teal-600', 'teal-300');
+  const focusRingColor = useColorModeValue('teal.600', 'teal.300');
 
   return (
     <Box
       as="nav"
       aria-label="Main navigation"
-      position={{ base: 'sticky', lg: activePath === '/' ? 'fixed' : 'sticky' }}
+      position={{ base: 'sticky', lg: pathname === SITE_URLS.ROOT ? 'fixed' : 'sticky' }}
       w="full"
       top={0}
       p={{ base: 2, lg: 4 }}
@@ -84,48 +69,53 @@ export function Header() {
       boxShadow={boxShadow}
     >
       <HStack maxW="8xl" mx="auto" gap={{ base: 0, sm: 2 }}>
-        <Tabs.Root variant="plain" value={activePath} navigate={({ value }) => navigate(value)}>
-          <Tabs.List gap={{ base: 1, sm: 2 }}>
-            {NAV_TABS.map((tab) => (
-              <Tabs.Trigger
-                asChild
-                key={tab.label}
-                value={tab.path}
-                transition="all 0.3s"
-                color="description"
-                px={{ base: 0, lg: 4 }}
-                py={{ base: 0, lg: 2 }}
-                minH={{ base: '44px', lg: 10 }}
-                borderRadius="xl"
-                _focusVisible={{
-                  boxShadow: `inset 0 0 0 2px color-mix(in srgb, var(--chakra-colors-${activePath === tab.path ? 'teal-600' : focusRingColor}) 80%, var(--chakra-colors-gray-500))`,
-                }}
-                fontSize={{ base: '0.9375rem', lg: 'md' }}
-                lineHeight={{ base: '1.25rem', lg: 'base' }}
-                textTransform="capitalize"
-                _hover={{ color: activePath !== tab.path ? hoverColor : undefined }}
-                _selected={{ bg: { base: 'transparent', lg: 'gray.100' }, color: 'gray.800' }}
-              >
-                <NavLink to={tab.path} end={tab.path === '/'}>
-                  <Box
-                    as="span"
-                    display="flex"
-                    alignItems="center"
-                    h={{ base: 10, lg: 'auto' }}
-                    px={{ base: 2.5, sm: 4, lg: 0 }}
-                    borderRadius="xl"
-                    bg={{
-                      base: activePath === tab.path ? 'gray.100' : 'transparent',
-                      lg: 'transparent',
-                    }}
-                  >
-                    {tab.label}
-                  </Box>
-                </NavLink>
-              </Tabs.Trigger>
-            ))}
-          </Tabs.List>
-        </Tabs.Root>
+        <HStack gap={{ base: 1, sm: 2 }}>
+          {NAV_LINKS.map(({ label, path }) => (
+            <Flex
+              asChild
+              key={path}
+              align="center"
+              transitionProperty="background-color, color"
+              transitionDuration="0.3s"
+              color="description"
+              px={{ base: 0, lg: 4 }}
+              py={{ base: 0, lg: 2 }}
+              minH={{ base: '44px', lg: 10 }}
+              borderRadius="xl"
+              fontWeight="semibold"
+              fontSize={{ base: '0.9375rem', lg: 'md' }}
+              lineHeight={{ base: '1.25rem', lg: 'base' }}
+              focusRingColor={focusRingColor}
+              _focusVisible={{
+                outline: '2px solid',
+                outlineOffset: '-2px',
+                outlineColor:
+                  'color-mix(in srgb, var(--focus-ring-color) 80%, var(--chakra-colors-gray-500))',
+              }}
+              _hover={{ color: hoverColor }}
+              _currentPage={{
+                color: 'gray.800',
+                bg: { lg: 'gray.100' },
+                focusRingColor: 'teal.600',
+                _hover: { color: 'gray.800' },
+                '& > span': { bg: { base: 'gray.100', lg: 'transparent' } },
+              }}
+            >
+              <NavLink to={path} end={path === SITE_URLS.ROOT}>
+                <Box
+                  as="span"
+                  display="flex"
+                  alignItems="center"
+                  h={{ base: 10, lg: 'auto' }}
+                  px={{ base: 2.5, sm: 4, lg: 0 }}
+                  borderRadius="xl"
+                >
+                  {label}
+                </Box>
+              </NavLink>
+            </Flex>
+          ))}
+        </HStack>
         <Spacer />
         <Flex align="center" gap={{ base: 1, lg: 0 }}>
           <Flex display={{ base: 'none', sm: 'flex' }}>

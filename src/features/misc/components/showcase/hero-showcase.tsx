@@ -11,7 +11,7 @@ export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSecti
       <Stack>
         <Heading
           as="p"
-          fontSize={{ base: 'xl', lg: '2xl' }}
+          fontSize={{ base: 'xl', lg: '3xl' }}
           lineHeight={1.2}
           bgImage="linear-gradient(to right, var(--chakra-colors-teal-700), var(--chakra-colors-yellow-800) 60%)"
           bgClip="text"
@@ -25,8 +25,8 @@ export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSecti
         </Heading>
         <Heading
           as="h1"
-          fontSize={{ base: '4xl', sm: '5xl', lg: '6xl' }}
-          lineHeight={1.2}
+          fontSize={{ base: '4xl', sm: '5xl', md: '6xl', lg: '7xl' }}
+          lineHeight={{ base: 1.2, sm: 1 }}
           textTransform="uppercase"
           whiteSpace="pre-line"
           fontWeight="extrabold"

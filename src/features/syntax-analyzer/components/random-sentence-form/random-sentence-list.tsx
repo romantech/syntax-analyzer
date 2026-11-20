@@ -51,7 +51,8 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             fontWeight="normal"
             fontStyle="italic"
             lineHeight="tall"
-            _hover={{ textDecoration: 'underline' }}
+            _hover={{ color: 'teal.600' }}
+            _dark={{ _hover: { color: 'teal.200' } }}
             _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
             onClick={() => copySentence(sentence)}
           >

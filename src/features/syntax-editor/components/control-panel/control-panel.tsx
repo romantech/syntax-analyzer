@@ -21,6 +21,7 @@ export function EditorActions({ isTapMode = false }: { isTapMode?: boolean }) {
         '& button': {
           minW: isTapMode ? '44px' : 10,
           minH: isTapMode ? '44px' : 10,
+          _icon: { fontSize: 'inherit', boxSize: '1em' },
         },
       }}
     >

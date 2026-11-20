@@ -42,7 +42,12 @@ export default function ErrorComponent({ resetErrorBoundary, error }: Partial<Fa
     >
       <LinkParticles />
       <motion.div initial={{ opacity: 0, scale: 0.1 }} animate={{ opacity: 1, scale: 1 }}>
-        <Heading as="h1" fontSize="6xl" fontWeight="extrabold" lineHeight={1.2}>
+        <Heading
+          as="h1"
+          fontSize={{ base: '6xl', md: '7xl' }}
+          fontWeight="extrabold"
+          lineHeight={1}
+        >
           Ooops!
         </Heading>
       </motion.div>

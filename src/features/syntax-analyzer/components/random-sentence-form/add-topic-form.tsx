@@ -34,8 +34,8 @@ export default function AddTopicForm(stackProps: StackProps) {
     <HStack as="form" align="start" onSubmit={handleSubmit(onAddTopic)} {...stackProps}>
       <Field.Root minW={0} invalid={!!errors.keyword}>
         <InputGroup
-          startElement={<CiShoppingTag fontSize={20} />}
-          startElementProps={{ boxSize: { base: '2.75rem', lg: 12 }, p: 0 }}
+          startElement={<CiShoppingTag size={20} />}
+          startElementProps={{ boxSize: { base: '2.75rem', lg: 12 }, p: 0, color: 'fg' }}
         >
           <Input
             {...keywordField}

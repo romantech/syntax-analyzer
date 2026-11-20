@@ -86,7 +86,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
         </Stack>
         {remainingCount === 0 && <UsageLimitMessage />}
         <Field.HelperText color="description" mt={4} asChild>
-          <List.Root variant="plain" gap={1.5}>
+          <List.Root variant="plain" alignSelf="stretch" fontSize="sm" gap={1.5}>
             {HELPER_TEXTS.map(({ icon, text }) => (
               <List.Item key={text}>
                 <List.Indicator asChild>

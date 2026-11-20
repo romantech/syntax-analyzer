@@ -1,4 +1,4 @@
-import { Button, type ButtonProps, Skeleton, Stack, Text } from '@chakra-ui/react';
+import { Button, type ButtonProps, Icon, Skeleton, Stack, Text } from '@chakra-ui/react';
 import { RiAiGenerate } from 'react-icons/ri';
 
 import {
@@ -17,6 +17,7 @@ export default function GenerateButton({ onClick, loading, ...buttonProps }: But
     <Stack align="start" maxW={190}>
       <Button
         minW={170}
+        gap={0}
         h={{ base: '2.75rem', lg: 12 }}
         fontSize="md"
         onClick={onClick}
@@ -26,7 +27,7 @@ export default function GenerateButton({ onClick, loading, ...buttonProps }: But
         variant="subtle"
         {...buttonProps}
       >
-        <RiAiGenerate />
+        <Icon as={RiAiGenerate} me={2} />
         <Text as="span">문장 생성</Text>
         <Text
           pl={1}

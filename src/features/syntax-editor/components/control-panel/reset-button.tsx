@@ -20,7 +20,12 @@ export default function ResetButton() {
       tooltipLabel="저장 상태로 초기화"
       tooltipDelay={CONTROL_OPEN_POPUP_DELAY}
     >
-      <IconButton variant="subtle" aria-label="Reset to saved state" disabled={!isTouched}>
+      <IconButton
+        variant="subtle"
+        aria-label="Reset to saved state"
+        disabled={!isTouched}
+        fontSize="22px"
+      >
         <MdOutlineRestore />
       </IconButton>
     </ConfirmPopover>
