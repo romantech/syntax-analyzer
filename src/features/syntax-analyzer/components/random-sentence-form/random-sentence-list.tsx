@@ -54,14 +54,12 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             _hover={{ color: 'teal.600' }}
             _dark={{ _hover: { color: 'teal.200' } }}
             _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
+            css={{
+              '& > mark': { color: 'teal.700', fontWeight: 'bold', _dark: { color: 'teal.300' } },
+            }}
             onClick={() => copySentence(sentence)}
           >
-            <Highlight
-              query={query}
-              styles={{ color: 'teal.700', fontWeight: 'bold', _dark: { color: 'teal.300' } }}
-            >
-              {sentence}
-            </Highlight>
+            <Highlight query={query}>{sentence}</Highlight>
           </Button>
         ))}
       </VStack>
