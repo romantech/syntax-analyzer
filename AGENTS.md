@@ -10,7 +10,8 @@
 ## 코드와 검증
 
 - 서버는 별도 저장소에서 관리한다. API 변경 시 계약, 환경 변수, 배포 순서 확인. [romantech/project-server](https://github.com/romantech/project-server) · [API 변경 가이드](docs/api-integration.md)
-- 로컬 브라우저 검증 시 `project-server`에서 `pnpm start:dev`, `syntax-analyzer`에서 `pnpm dev`를 실행하고 `http://localhost:5173/`에서 확인한다. 이미 실행 중인 서버는 재사용한다.
+- 백엔드 없이 화면을 검증할 때는 `pnpm dev:mock`을 실행하고 `http://localhost:5173/analyzer`에서 확인한다. 지연·오류·소진은 [목 모드 실행 방법](docs/api-integration.md#로컬-목-모드)을 따른다.
+- 실제 API 연동을 검증할 때는 `project-server`에서 `pnpm start:dev`, `syntax-analyzer`에서 `pnpm dev`를 실행하고 `http://localhost:5173/`에서 확인한다. 실행 중인 개발 서버가 같은 모드라면 재사용한다.
 - 태깅 변경 시 `/editor` 샘플에서 포함 범위 허용과 교차 범위 거부 확인. [태깅 제약 조건](README.md#태깅-제약-조건)
 - 저장 형식 변경 시 `localStorage`의 기존 `userAnalysisList` 데이터 호환성과 저장 후 다시 열기 확인.
 - 사용법, API 계약, 검증 절차가 바뀌면 관련 문서도 함께 갱신한다.
