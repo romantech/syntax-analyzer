@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0](https://github.com/romantech/syntax-analyzer/compare/v1.2.0...v1.3.0) (2026-11-20)
+
+
+### Features
+
+* return a tagged mock analysis sample ([#160](https://github.com/romantech/syntax-analyzer/issues/160)) ([26bb9bc](https://github.com/romantech/syntax-analyzer/commit/26bb9bca045a7e266e7335776f12cce666afdc97)), closes [#158](https://github.com/romantech/syntax-analyzer/issues/158)
+
+
+### Bug Fixes
+
+* recover editor loading and prevent scrollbar flicker ([#162](https://github.com/romantech/syntax-analyzer/issues/162)) ([201afb7](https://github.com/romantech/syntax-analyzer/commit/201afb7aaf226deaa6b3ae5422f359853c324a57))
+
 ## [1.2.0](https://github.com/romantech/syntax-analyzer/compare/v1.1.2...v1.2.0) (2026-11-20)
 
 
