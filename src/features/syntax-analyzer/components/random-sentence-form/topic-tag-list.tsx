@@ -21,23 +21,33 @@ export default function TopicTagList(stackProps: StackProps) {
         <Tag.Root
           size="md"
           key={topic}
+          h={6}
+          my={{ base: 2.5, lg: 0 }}
           pl={3}
           pr={0}
           borderRadius="md"
           variant="subtle"
           colorPalette="teal"
+          _dark={{ bg: '#286769', color: '#cce3eb' }}
         >
-          <Tag.Label w="fit" textTransform="uppercase">
+          <Tag.Label
+            maxW="5.5rem"
+            truncate
+            title={topic}
+            fontWeight="semibold"
+            textTransform="uppercase"
+          >
             {topic}
           </Tag.Label>
-          <Tag.EndElement>
-            <Tag.CloseTrigger
-              aria-label={`${topic} 토픽 삭제`}
-              boxSize={{ base: '2.75rem', lg: 8 }}
-              m={0}
-              onClick={() => onTagClick(topic)}
-            />
-          </Tag.EndElement>
+          <Tag.CloseTrigger
+            aria-label={`${topic} 토픽 삭제`}
+            w={{ base: '2.75rem', lg: 8 }}
+            h={{ base: '2.75rem', lg: 6 }}
+            flexShrink={0}
+            cursor="pointer"
+            _icon={{ boxSize: 3.5 }}
+            onClick={() => onTagClick(topic)}
+          />
         </Tag.Root>
       ))}
     </HStack>
