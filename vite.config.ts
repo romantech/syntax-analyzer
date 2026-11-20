@@ -25,6 +25,21 @@ export default defineConfig(({ command, mode }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: { enabled: true }, // enable the service worker on development
+      workbox:
+        command === 'build'
+          ? {
+              // 온라인에서 새로고침하면 최신 앱을 받고, 오프라인에서는 저장된 앱을 연다.
+              directoryIndex: null,
+              navigateFallback: null,
+              runtimeCaching: [
+                {
+                  urlPattern: ({ request }) => request.mode === 'navigate',
+                  handler: 'NetworkOnly',
+                  options: { precacheFallback: { fallbackURL: '/index.html' } },
+                },
+              ],
+            }
+          : undefined,
       /**
        * 명시한 manifest 속성을 기반으로 manifest.json 자동 생성되고, public 폴더에 추가됨
        * index.html 파일에는 필요한 링크/스크립트도 자동으로 삽입됨

@@ -6,6 +6,13 @@ import { isRouteErrorResponse, Navigate, useRouteError } from 'react-router';
 
 import { DIGITS_PATTERN, Layout, LinkParticles } from '@/base';
 
+const preloadErrors = new WeakSet<Error>();
+
+window.addEventListener('vite:preloadError', (event) => {
+  const { payload } = event as Event & { payload: unknown };
+  if (payload instanceof Error) preloadErrors.add(payload);
+});
+
 const highlightStyles: SystemStyleObject = {
   p: '1',
   bg: 'teal.100',
@@ -14,20 +21,26 @@ const highlightStyles: SystemStyleObject = {
 };
 
 export default function ErrorComponent({ resetErrorBoundary, error }: Partial<FallbackProps>) {
-  const routerError = useRouteError() as Error;
+  const routerError = useRouteError();
   const [shouldRedirect, setShouldRedirect] = useState(false);
+  const caughtError = error ?? routerError;
+  const isPreloadError = caughtError instanceof Error && preloadErrors.has(caughtError);
+  const isRouteError = isRouteErrorResponse(routerError);
 
   let errorMessage = getErrorMessage(error) ?? '문제가 발생했어요';
+  let onActionButtonClick = resetErrorBoundary;
+  let buttonText = '다시 시도하기';
 
-  const isRouteError = isRouteErrorResponse(routerError);
-  if (isRouteError) {
+  if (isPreloadError) {
+    errorMessage = '화면을 불러오지 못했어요. 새로고침해 주세요.';
+    onActionButtonClick = () => window.location.reload();
+    buttonText = '새로고침';
+  } else if (isRouteError) {
     const { status, statusText } = routerError;
     errorMessage = `${status} | ${statusText}`;
+    onActionButtonClick = () => setShouldRedirect(true);
+    buttonText = '돌아가기';
   }
-
-  const onActionButtonClick = isRouteError ? () => setShouldRedirect(true) : resetErrorBoundary;
-
-  const buttonText = isRouteError ? '돌아가기' : '다시 시도하기';
 
   if (shouldRedirect) return <Navigate to=".." replace />;
 
