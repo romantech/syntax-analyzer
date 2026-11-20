@@ -42,7 +42,6 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
           color={isSelected ? 'gray.800' : undefined}
           _dark={isSelected ? { bg: 'teal.800', color: 'gray.50' } : undefined}
           borderRadius="sm"
-          _focusVisible={{ outline: '2px solid', outlineOffset: '2px' }}
           onPointerDown={(event) => {
             if (canSelect) event.currentTarget.focus({ preventScroll: true });
           }}

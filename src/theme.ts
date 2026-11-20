@@ -99,6 +99,12 @@ const config = defineConfig({
         },
       },
       colors: {
+        focusRing: {
+          value: {
+            _light: 'color-mix(in srgb, {colors.teal.600} 75%, {colors.teal.500})',
+            _dark: 'color-mix(in srgb, {colors.teal.300} 75%, {colors.teal.200})',
+          },
+        },
         bg: {
           DEFAULT: { value: { _light: '{colors.white}', _dark: '{colors.gray.800}' } },
           panel: { value: { _light: '{colors.white}', _dark: '{colors.gray.700}' } },
@@ -112,12 +118,14 @@ const config = defineConfig({
           error: { value: { _light: '{colors.red.500}', _dark: '{colors.red.300}' } },
         },
         gray: {
+          focusRing: { value: '{colors.focusRing}' },
           fg: { value: { _light: '{colors.gray.800}', _dark: '{colors.whiteAlpha.900}' } },
           subtle: { value: { _light: '{colors.gray.100}', _dark: '{colors.whiteAlpha.200}' } },
           muted: { value: { _light: '{colors.gray.200}', _dark: '{colors.whiteAlpha.300}' } },
           border: { value: { _light: '{colors.gray.200}', _dark: '{colors.whiteAlpha.300}' } },
         },
         teal: {
+          focusRing: { value: '{colors.focusRing}' },
           solid: { value: { _light: '{colors.teal.500}', _dark: '{colors.teal.200}' } },
           contrast: { value: { _light: '{colors.white}', _dark: '{colors.gray.800}' } },
         },
@@ -170,7 +178,7 @@ const config = defineConfig({
               borderWidth: 2,
               focusVisibleRing: 'none',
               _hover: { bg: 'gray.200' },
-              _focusVisible: {
+              _focus: {
                 bg: 'transparent',
                 borderColor: 'var(--focus-color)',
                 _invalid: { borderColor: 'var(--error-color)' },
@@ -179,7 +187,7 @@ const config = defineConfig({
               _dark: {
                 bg: 'whiteAlpha.50',
                 _hover: { bg: 'whiteAlpha.100' },
-                _focusVisible: { bg: 'transparent' },
+                _focus: { bg: 'transparent' },
               },
             },
           },
@@ -319,6 +327,11 @@ const config = defineConfig({
     body: {
       paddingLeft: 'env(safe-area-inset-left, 0px)',
       paddingRight: 'env(safe-area-inset-right, 0px)',
+    },
+    ':where(a[href], button, [tabindex]):focus-visible': {
+      outline: '2px solid',
+      outlineColor: 'focusRing',
+      outlineOffset: '2px',
     },
     '*::-webkit-scrollbar': { width: '6px', height: '6px' },
     '*::-webkit-scrollbar-track': { background: 'transparent' },

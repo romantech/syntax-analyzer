@@ -49,7 +49,6 @@ export function Header() {
   );
   const boxShadow = useColorModeValue('sm', 'lg');
   const hoverColor = useColorModeValue('gray.400', 'gray.100');
-  const focusRingColor = useColorModeValue('teal.600', 'teal.300');
 
   return (
     <Box
@@ -85,18 +84,10 @@ export function Header() {
               fontWeight="semibold"
               fontSize={{ base: '0.9375rem', lg: 'md' }}
               lineHeight={{ base: '1.25rem', lg: 'base' }}
-              focusRingColor={focusRingColor}
-              _focusVisible={{
-                outline: '2px solid',
-                outlineOffset: '-2px',
-                outlineColor:
-                  'color-mix(in srgb, var(--focus-ring-color) 80%, var(--chakra-colors-gray-500))',
-              }}
               _hover={{ color: hoverColor }}
               _currentPage={{
                 color: 'gray.800',
                 bg: { lg: 'gray.100' },
-                focusRingColor: 'teal.600',
                 _hover: { color: 'gray.800' },
                 '& > span': { bg: { base: 'gray.100', lg: 'transparent' } },
               }}
@@ -150,7 +141,15 @@ export function Header() {
             </Menu.Trigger>
             <Portal>
               <Menu.Positioner>
-                <Menu.Content>
+                <Menu.Content
+                  _focusVisible={{
+                    '& [data-highlighted]': {
+                      outline: '2px solid',
+                      outlineColor: 'focusRing',
+                      outlineOffset: '-2px',
+                    },
+                  }}
+                >
                   {EXTERNAL_LINKS.map(({ label, href, icon: LinkIcon }) => (
                     <Menu.Item key={href} value={href} asChild minH="44px">
                       <a href={href} target="_blank" rel="noopener noreferrer">

@@ -37,7 +37,6 @@ export default function SentenceCountPicker() {
             borderRadius="md"
             fontSize="md"
             lineHeight="base"
-            css={{ '--focus-color': 'colors.teal.300' }}
           />
           <NumberInput.Control top={0} bottom="auto" h="calc(100% - 2px)">
             <NumberInput.IncrementTrigger aria-label="문장 수 늘리기" color="currentColor">

@@ -33,7 +33,7 @@ export default function SyntaxEditor() {
     tabIndex: 0,
     role: 'region',
     'aria-label': '구문 문장',
-    _focusVisible: { outline: '2px solid', outlineColor: 'teal.300', outlineOffset: '-2px' },
+    _focusVisible: { outlineOffset: '-2px' },
   };
 
   return (
