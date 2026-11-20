@@ -126,7 +126,7 @@ const config = defineConfig({
         },
         teal: {
           focusRing: { value: '{colors.focusRing}' },
-          solid: { value: { _light: '{colors.teal.500}', _dark: '{colors.teal.200}' } },
+          solid: { value: { _light: '{colors.teal.700}', _dark: '{colors.teal.200}' } },
           contrast: { value: { _light: '{colors.white}', _dark: '{colors.gray.800}' } },
         },
         description: { value: { base: '{colors.gray.600}', _dark: '{colors.gray.400}' } },
