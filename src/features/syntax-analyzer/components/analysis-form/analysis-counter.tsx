@@ -4,11 +4,10 @@ import {
   ProgressCircle,
   Skeleton,
   SkeletonCircle,
-  Stack,
   type StackProps,
   Text,
 } from '@chakra-ui/react';
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 
 import { CenteredDivider } from '@/base';
 import {
@@ -23,11 +22,11 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
     select: ({ analysis }) => analysis,
   });
 
-  const countTitle = `남은 분석 횟수 ${count}회`;
-  const limitDesc = `하루 최대 ${DAILY_ANALYSIS_LIMIT}회까지 분석할 수 있어요 (고급 모델은 요청당 ${ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY]}회 차감)`;
-
   return (
-    <AnalysisCounterBox {...stackProps}>
+    <AnalysisCounterBox
+      {...stackProps}
+      countLabel={<Text fontWeight="bold">남은 분석 횟수 {count}회</Text>}
+    >
       <ProgressCircle.Root flexShrink={0} value={remainingCountInPercent(count)}>
         <ProgressCircle.Circle
           aria-label="Remaining analysis count"
@@ -43,31 +42,37 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
           placeItems="center"
         />
       </ProgressCircle.Root>
-      <CenteredDivider orientation="vertical" height="40px" px={1} />
-      <Box>
-        <Text fontWeight="bold">{countTitle}</Text>
-        <Text>{limitDesc}</Text>
-      </Box>
     </AnalysisCounterBox>
   );
 }
 
-const AnalysisCounterBox = ({ children, ...stackProps }: PropsWithChildren<StackProps>) => {
+const AnalysisCounterBox = ({
+  children,
+  countLabel,
+  ...stackProps
+}: PropsWithChildren<StackProps & { countLabel: ReactNode }>) => {
   return (
     <HStack w="full" maxW={660} borderWidth={1} borderRadius="2xl" p={4} {...stackProps}>
       {children}
+      <CenteredDivider orientation="vertical" height="40px" px={1} />
+      <Box minW={0}>
+        {countLabel}
+        <Text>
+          하루 최대 {DAILY_ANALYSIS_LIMIT}회까지 분석할 수 있어요 (고급 모델은 요청당{' '}
+          {ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY]}회 차감)
+        </Text>
+      </Box>
     </HStack>
   );
 };
 
 const AnalysisCounterSkeleton = (stackProps: StackProps) => {
   return (
-    <AnalysisCounterBox {...stackProps}>
-      <SkeletonCircle aspectRatio={1} w={50} h={50} />
-      <Stack w="full">
-        <Skeleton h={5} maxW={200} borderRadius="md" />
-        <Skeleton h={5} maxW={450} borderRadius="md" />
-      </Stack>
+    <AnalysisCounterBox
+      {...stackProps}
+      countLabel={<Skeleton aria-hidden h={6} maxW={128} borderRadius="md" />}
+    >
+      <SkeletonCircle aria-hidden size="50px" />
     </AnalysisCounterBox>
   );
 };
