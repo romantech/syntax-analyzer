@@ -19,8 +19,15 @@
 ## GitHub 이슈와 PR
 
 - 이슈와 PR 본문은 불릿 하나에 하나의 요점만 담는 개조식을 기본으로 하되, 문장으로 설명해야 할 때만 간결한 한다체(`~한다`)를 쓴다.
+- 작업 이슈를 만들 때 주 라벨 하나를 붙인다.
+  - `bug` · 기존 기능이 기대한 대로 동작하지 않는 문제
+  - `enhancement` · 새 기능 추가, 기존 동작 개선 또는 개발 방식 개선
+  - `documentation` · 문서나 검증 절차의 작성·수정이 주된 작업
+  - `dependencies` · 패키지나 도구 체인의 업데이트·교체·제거와 마이그레이션
+- 보조 라벨은 해당 이슈를 따로 필터링할 필요가 있을 때 붙인다. 패키지 업데이트로 기존 오류를 해결하는 이슈는 `bug`를 주 라벨로 쓰고 필요하면 `dependencies`를 함께 붙인다.
+- 이미 같은 이슈가 있으면 기존 이슈를 사용한다. 등록 후 중복을 발견하면 원본을 링크하고 `duplicate`를 붙여 닫는다.
 - PR 구성은 `변경 사항`과 `검증`. 필요하면 관련 이슈와 남은 검증을 추가한다.
 - 이슈와 PR에서 요청 흐름, 상태 전이, 세그먼트 중첩을 설명할 때는 필요에 따라 Mermaid 등으로 시각화한다.
 - `main`에 들어가는 커밋은 Conventional Commits 형식 사용.
 - `fix:`나 `feat:` 등 릴리스 대상 커밋이 `main`에 들어오면 Release Please가 릴리스 PR을 생성하거나 갱신한다. 릴리스 PR을 머지하면 버전과 변경 내역이 반영되고 GitHub Release가 생성된다.
-- 릴리스 PR의 `Validate` 실행이 승인을 기다리면 PR에서 `Approve workflows to run`을 눌러 실행한다.
+- Release Please는 `RELEASE_PLEASE_TOKEN` 저장소 Secret을 사용해 릴리스 PR의 `Validate`를 자동으로 시작한다. 토큰은 이 저장소의 `Contents`와 `Pull requests`에 읽기·쓰기 권한을 부여하고 만료 전에 교체한다.
