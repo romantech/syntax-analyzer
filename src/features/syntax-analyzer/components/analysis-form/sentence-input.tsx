@@ -37,7 +37,6 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
           lineHeight="base"
           maxLength={MAX_SENTENCE_LENGTH}
           variant="subtle"
-          css={{ '--focus-color': 'colors.teal.300' }}
           {...inputProps}
           ref={ref}
         />

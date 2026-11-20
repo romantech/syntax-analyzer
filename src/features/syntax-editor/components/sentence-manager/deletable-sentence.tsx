@@ -61,7 +61,7 @@ export default function DeletableSentence({
           lineHeight="base"
           _hover={{ color: 'teal.700' }}
           _dark={{ _hover: { color: 'teal.300' } }}
-          _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
+          focusRingOffset="-2px"
           onClick={onClick}
         >
           <Text as="span" lineClamp={1}>

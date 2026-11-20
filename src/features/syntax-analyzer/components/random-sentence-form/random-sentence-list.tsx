@@ -53,7 +53,7 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             lineHeight="tall"
             _hover={{ color: 'teal.600' }}
             _dark={{ _hover: { color: 'teal.200' } }}
-            _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
+            focusRingOffset="-2px"
             css={{
               '& > mark': { color: 'teal.700', fontWeight: 'bold', _dark: { color: 'teal.300' } },
             }}

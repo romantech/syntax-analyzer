@@ -17,6 +17,8 @@ export function EditorActions({ isTapMode = false }: { isTapMode?: boolean }) {
       justify="start"
       flexWrap={isTapMode ? 'wrap' : undefined}
       overflow={isTapMode ? undefined : 'auto hidden'}
+      p={isTapMode ? undefined : '4px'}
+      m={isTapMode ? undefined : '-4px'}
       css={{
         '& button': {
           minW: isTapMode ? '44px' : 10,

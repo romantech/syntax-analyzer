@@ -47,7 +47,6 @@ export default function AddTopicForm(stackProps: StackProps) {
             h={{ base: '2.75rem', lg: 12 }}
             ps={{ base: '2.75rem', lg: 12 }}
             maxLength={MAX_TOPIC_LENGTH}
-            css={{ '--focus-color': 'colors.teal.300' }}
             aria-label="영문 키워드"
             placeholder="영문 키워드"
             enterKeyHint="done"
