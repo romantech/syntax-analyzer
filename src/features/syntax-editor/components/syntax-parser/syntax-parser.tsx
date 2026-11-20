@@ -51,9 +51,8 @@ export default function SyntaxParser({ isTapMode = false }: { isTapMode?: boolea
   return (
     <Box
       opacity={isNestingLevelCalculated ? 1 : 0}
-      translate={isNestingLevelCalculated ? '0 0' : '0 100px'}
-      transition="opacity 0.2s ease-out, translate 0.2s ease-out"
-      _motionReduce={{ transition: 'none', translate: 'none' }}
+      transition="opacity 0.2s ease-out"
+      _motionReduce={{ transition: 'none' }}
     >
       <Sentence ref={sentenceRef} isTapMode={isTapMode}>
         <SegmentList segment={segment} tokenElements={TokenList({ sentence, isTapMode })} />
