@@ -114,7 +114,7 @@ export default defineConfig(({ command, mode }) => ({
       },
     },
   },
-  server: { open: true },
+  server: { open: true, host: true },
   define: {
     /** Jotai Devtools process is not defined 문제 해결
      * @see https://github.com/jotaijs/jotai-devtools/issues/82#issuecomment-1632818246 */
