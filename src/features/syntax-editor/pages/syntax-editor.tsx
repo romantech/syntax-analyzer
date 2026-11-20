@@ -70,6 +70,17 @@ export default function SyntaxEditor() {
           tabIndex={0}
           role="region"
           aria-label="구문 문장"
+          css={
+            isTapMode
+              ? {
+                  // 문장 끝에 붙은 배경이 오른쪽 가장자리에 닿으면 안내를 가린다.
+                  background: `
+                    linear-gradient(var(--chakra-colors-bg), var(--chakra-colors-bg)) right / 20px 100% no-repeat local,
+                    linear-gradient(to left, var(--chakra-colors-gray-muted), transparent) right / 20px 100% no-repeat scroll
+                  `,
+                }
+              : undefined
+          }
           _focusVisible={{ outline: '2px solid', outlineColor: 'teal.300', outlineOffset: '-2px' }}
         >
           <SyntaxParser isTapMode={isTapMode} />
