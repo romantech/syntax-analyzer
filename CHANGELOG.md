@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/romantech/syntax-analyzer/compare/v1.1.1...v1.1.2) (2026-11-20)
+
+
+### Bug Fixes
+
+* align analyzer loading skeletons ([#148](https://github.com/romantech/syntax-analyzer/issues/148)) ([5eaefd2](https://github.com/romantech/syntax-analyzer/commit/5eaefd2378a38a22539a2ec80ece53bd812f6a1d))
+
 ## [1.1.1](https://github.com/romantech/syntax-analyzer/compare/v1.1.0...v1.1.1) (2026-11-19)
 
 
