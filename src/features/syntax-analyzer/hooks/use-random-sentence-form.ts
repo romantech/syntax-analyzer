@@ -1,4 +1,3 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -23,11 +22,7 @@ export const useRandomSentenceForm = () => {
   const [readyToFetch, setReadyToFetch] = useState(false);
   const [params, setParams] = useState(defaultParams);
 
-  const methods = useForm({
-    defaultValues,
-    resolver: yupResolver(randomSentenceFormSchema),
-    reValidateMode: 'onSubmit', // 유효성 검사 시점
-  });
+  const methods = useForm({ defaultValues });
 
   const { data, isFetching } = useRandomSentenceQuery(params, {
     enabled: readyToFetch,
