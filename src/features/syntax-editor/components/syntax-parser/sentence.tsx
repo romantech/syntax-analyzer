@@ -16,6 +16,7 @@ const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren<{ isTapMode:
 
     return (
       <Text
+        asChild
         ref={ref}
         fontSize="3xl"
         fontWeight="bold"
@@ -31,7 +32,9 @@ const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren<{ isTapMode:
           if (event.key === 'Escape') setRange(null);
         }}
       >
-        {children}
+        <p translate="no" className="notranslate">
+          {children}
+        </p>
       </Text>
     );
   },
