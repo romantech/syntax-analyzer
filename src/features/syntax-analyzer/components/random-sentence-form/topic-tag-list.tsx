@@ -21,6 +21,8 @@ export default function TopicTagList(stackProps: StackProps) {
         <Tag.Root
           size="md"
           key={topic}
+          h={6}
+          my={{ base: 2.5, lg: 0 }}
           pl={3}
           pr={0}
           borderRadius="md"
@@ -28,12 +30,13 @@ export default function TopicTagList(stackProps: StackProps) {
           colorPalette="teal"
           _dark={{ bg: '#286769', color: '#cce3eb' }}
         >
-          <Tag.Label w="fit" textTransform="uppercase">
+          <Tag.Label w="fit" fontWeight="semibold" textTransform="uppercase">
             {topic}
           </Tag.Label>
           <Tag.CloseTrigger
             aria-label={`${topic} 토픽 삭제`}
-            boxSize={{ base: '2.75rem', lg: 8 }}
+            w={{ base: '2.75rem', lg: 8 }}
+            h={{ base: '2.75rem', lg: 6 }}
             flexShrink={0}
             cursor="pointer"
             _icon={{ boxSize: 3.5 }}
