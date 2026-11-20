@@ -3,17 +3,15 @@ import { atomWithDefault, atomWithReset, RESET } from 'jotai/utils';
 
 import type { Nullable } from '@/base';
 import {
-  type AnalysisPathParams,
   addConstituent,
   fillSegment,
   generateConstituent,
   removeEmptySegment,
   resetControlPanelAtom,
-  sampleAnalysisListAtom,
+  saveSelectedAnalysisSegmentAtom,
   selectedAnalysisAtom,
   setAndClearInvalidRangeIndexAtom,
   type TSegment,
-  userAnalysisListAtom,
   validateSelectionBounds,
 } from '@/features/syntax-editor';
 
@@ -112,24 +110,10 @@ export const isSegmentTouchedAtom = atom((get) => {
   return segmentFromAnalysis !== segmentFromHistory;
 });
 
-export const saveHistorySegmentAtom = atom(
-  null,
-  (get, set, { source, index }: AnalysisPathParams) => {
-    const segment = get(currentSegmentFromHistoryAtom);
-    if (!segment) return;
+export const saveHistorySegmentAtom = atom(null, (get, set) => {
+  const segment = get(currentSegmentFromHistoryAtom);
+  if (!segment || !set(saveSelectedAnalysisSegmentAtom, segment)) return false;
 
-    const analysisList = {
-      user: userAnalysisListAtom,
-      sample: sampleAnalysisListAtom,
-    };
-
-    set(analysisList[source], (prev) => {
-      const i = parseInt(index, 10);
-      prev[i] = { ...prev[i], rootSegment: segment };
-      set(selectedAnalysisAtom, prev[i]);
-      return [...prev];
-    });
-
-    set(resetControlPanelAtom);
-  },
-);
+  set(resetControlPanelAtom);
+  return true;
+});

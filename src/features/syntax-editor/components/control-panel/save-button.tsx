@@ -2,11 +2,9 @@ import { IconButton } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
 import { IoSaveSharp } from 'react-icons/io5';
-import { useParams } from 'react-router';
 
 import { ConfirmPopover } from '@/base';
 import {
-  type AnalysisPathParams,
   CONTROL_OPEN_POPUP_DELAY,
   isSegmentTouchedAtom,
   SAVE_SEGMENT_DELAY,
@@ -16,18 +14,18 @@ import {
 import { showToast } from '@/lib';
 
 export default function SaveButton() {
-  const { source, index } = useParams<AnalysisPathParams>();
-
   const isTouched = useAtomValue(isSegmentTouchedAtom);
   const saveHistorySegment = useSetAtom(saveHistorySegmentAtom);
 
   const [isLoading, setIsLoading] = useState(false);
 
   const onSave = () => {
-    if (!source || !index) return;
+    if (!saveHistorySegment()) {
+      showToast({ title: '다른 탭에서 문장이 삭제되어 저장할 수 없어요.', status: 'error' });
+      return;
+    }
 
     setIsLoading(true);
-    saveHistorySegment({ source, index });
     setTimeout(() => {
       setIsLoading(false);
       showToast({
