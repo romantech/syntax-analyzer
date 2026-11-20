@@ -1,12 +1,11 @@
 import {
   Box,
   Button,
+  type ButtonProps,
   Field,
-  HStack,
   Icon,
   List,
   Skeleton,
-  type SkeletonProps,
   Stack,
   type StackProps,
   Text,
@@ -59,44 +58,16 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
       </Box>
       <Field.Root invalid={!!errors.sentence} gap={0}>
         <FieldGroupHeader>영어 문장 입력</FieldGroupHeader>
-        <Stack
-          w="full"
-          direction={{ base: 'column', sm: 'row' }}
-          align={{ base: 'stretch', sm: 'start' }}
-          gap={3}
-        >
+        <SentenceInputRow>
           <SentenceInput
             {...register('sentence')}
             errorMessage={errors.sentence?.message}
             disabled={isPending}
           />
-          <Button
-            type="submit"
-            disabled={!canAnalyze || isPending}
-            variant="subtle"
-            flexShrink={0}
-            alignSelf="start"
-            size="lg"
-            h={{ base: '2.75rem', lg: 12 }}
-            fontSize="md"
-          >
-            <Icon as={GiMagicLamp} boxSize={5} />
-            분석
-          </Button>
-        </Stack>
+          <AnalysisButton disabled={!canAnalyze || isPending} />
+        </SentenceInputRow>
         {remainingCount === 0 && <UsageLimitMessage />}
-        <Field.HelperText color="description" mt={4} asChild>
-          <List.Root variant="plain" alignSelf="stretch" fontSize="sm" gap={1.5}>
-            {HELPER_TEXTS.map(({ icon, text }) => (
-              <List.Item key={text}>
-                <List.Indicator asChild>
-                  <Icon as={icon} aria-hidden />
-                </List.Indicator>
-                {text}
-              </List.Item>
-            ))}
-          </List.Root>
-        </Field.HelperText>
+        <SentenceInputHelp />
       </Field.Root>
       <ConfirmModal
         isOpen={isModalOpen}
@@ -117,28 +88,70 @@ const AnalysisFormBox = ({ children, ...stackProps }: PropsWithChildren<StackPro
   );
 };
 
-const ESkeleton = (props: SkeletonProps) => (
-  <Skeleton w="full" borderRadius="md" h={10} {...props} />
+const sentenceControlHeight = { base: '2.75rem', lg: 12 };
+
+const SentenceInputRow = ({ children }: PropsWithChildren) => (
+  <Stack
+    w="full"
+    direction={{ base: 'column', sm: 'row' }}
+    align={{ base: 'stretch', sm: 'start' }}
+    gap={3}
+  >
+    {children}
+  </Stack>
+);
+
+const AnalysisButton = (props: ButtonProps) => (
+  <Button
+    type="submit"
+    variant="subtle"
+    flexShrink={0}
+    alignSelf="start"
+    size="lg"
+    h={sentenceControlHeight}
+    fontSize="md"
+    {...props}
+  >
+    <Icon as={GiMagicLamp} boxSize={5} />
+    분석
+  </Button>
+);
+
+const SentenceInputHelp = () => (
+  <Field.HelperText color="description" mt={4} asChild>
+    <List.Root variant="plain" alignSelf="stretch" fontSize="sm" gap={1.5}>
+      {HELPER_TEXTS.map(({ icon, text }) => (
+        <List.Item key={text}>
+          <List.Indicator asChild>
+            <Icon as={icon} aria-hidden />
+          </List.Indicator>
+          {text}
+        </List.Item>
+      ))}
+    </List.Root>
+  </Field.HelperText>
 );
 
 const AnalysisFormSkeleton = (stackProps: StackProps) => {
   return (
     <AnalysisFormBox {...stackProps}>
-      <Stack gap={5} mb={2}>
-        <ESkeleton maxW={180} mb={1} />
+      <Box>
+        <FieldGroupHeader>ai 모델 선택</FieldGroupHeader>
         <Stack>
-          <ESkeleton maxW={280} />
-          <ESkeleton maxW={280} />
+          <Skeleton aria-hidden maxW={192} h="49px" borderRadius="md" />
+          <Skeleton aria-hidden maxW={156} h="49px" borderRadius="md" />
         </Stack>
-      </Stack>
-      <Stack gap={5}>
-        <ESkeleton maxW={180} mb={1} />
-        <HStack>
-          <ESkeleton />
-          <ESkeleton maxW={110} />
-        </HStack>
-        <ESkeleton maxW={250} h="85px" />
-      </Stack>
+      </Box>
+      <Field.Root gap={0}>
+        <FieldGroupHeader>영어 문장 입력</FieldGroupHeader>
+        <SentenceInputRow>
+          <Skeleton aria-hidden flexGrow={1} h={sentenceControlHeight} borderRadius="md" />
+          <Skeleton asChild>
+            <AnalysisButton aria-hidden inert />
+          </Skeleton>
+        </SentenceInputRow>
+        <SentenceInputHelp />
+      </Field.Root>
     </AnalysisFormBox>
   );
 };
