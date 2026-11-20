@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/romantech/syntax-analyzer/compare/v1.1.2...v1.2.0) (2026-11-20)
+
+
+### Features
+
+* add local analyzer API mock ([#156](https://github.com/romantech/syntax-analyzer/issues/156)) ([c0387e2](https://github.com/romantech/syntax-analyzer/commit/c0387e25ad76930f48e6db5e3048d16f2f4bdbe5))
+
 ## [1.1.2](https://github.com/romantech/syntax-analyzer/compare/v1.1.1...v1.1.2) (2026-11-20)
 
 
