@@ -30,7 +30,13 @@ export default function TopicTagList(stackProps: StackProps) {
           colorPalette="teal"
           _dark={{ bg: '#286769', color: '#cce3eb' }}
         >
-          <Tag.Label w="fit" fontWeight="semibold" textTransform="uppercase">
+          <Tag.Label
+            maxW="5.5rem"
+            truncate
+            title={topic}
+            fontWeight="semibold"
+            textTransform="uppercase"
+          >
             {topic}
           </Tag.Label>
           <Tag.CloseTrigger
