@@ -9,10 +9,13 @@ import {
   createAnalysisFormSchema,
   REMAINING_COUNT_BASE_KEY,
   useCreateAnalysisMutation,
-  useInjectAnalysis,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 import { updateAnalysisMetaData } from '@/features/syntax-editor/helpers/analysis';
+import {
+  addUserAnalysisActionAtom,
+  analysisStore,
+} from '@/features/syntax-editor/store/analysis-store';
 import { showToast } from '@/lib';
 import { getSyntaxEditorPath } from '@/routes';
 
@@ -31,7 +34,6 @@ export const processSentence = (sentence: string): string => {
 
 export const useAnalysisForm = () => {
   const navigate = useNavigate();
-  const { injectAnalysis } = useInjectAnalysis();
 
   const { open: isModalOpen, onClose: closeModal, onOpen: openModal } = useDisclosure();
 
@@ -51,7 +53,7 @@ export const useAnalysisForm = () => {
     onMutate: closeModal,
     onSuccess: (data) => {
       const analysis = updateAnalysisMetaData(data);
-      injectAnalysis(analysis);
+      analysisStore.set(addUserAnalysisActionAtom, analysis);
 
       navigate(getSyntaxEditorPath('user', 0));
       showToast({ title: '문장 분석을 완료했습니다', status: 'success', duration: 4000 });
