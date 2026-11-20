@@ -157,7 +157,7 @@ const sample1: TAnalysis = {
   },
   isAnalyzedByGPT: false,
 };
-const sample2: TAnalysis = {
+export const RELATIVE_CLAUSE_SAMPLE: TAnalysis = {
   id: '06Y2m64EK_Ti554mgq8An',
   source: 'sample',
   sentence: ['The', 'idea', 'that', 'she', 'proposed', 'was', 'innovative', '.'],
@@ -983,4 +983,10 @@ const sample5: TAnalysis = {
   isAnalyzedByGPT: false,
 };
 
-export const SAMPLE_ANALYSIS: TAnalysis[] = [sample1, sample2, sample3, sample4, sample5];
+export const SAMPLE_ANALYSIS: TAnalysis[] = [
+  sample1,
+  RELATIVE_CLAUSE_SAMPLE,
+  sample3,
+  sample4,
+  sample5,
+];

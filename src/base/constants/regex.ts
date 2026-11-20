@@ -1,4 +1,4 @@
-import { ABBREVIATIONS } from '@/base/constants/abbreviations';
+import { ABBREVIATIONS } from './abbreviations.ts';
 
 export const DIGITS_PATTERN = /\d+/g;
 

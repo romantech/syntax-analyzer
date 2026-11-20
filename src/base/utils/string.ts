@@ -1,10 +1,10 @@
+import { ABBREVIATIONS } from '../constants/abbreviations.ts';
 import {
-  ABBREVIATIONS,
   ABBREVIATIONS_PATTERNS,
   NON_WORD_CHAR_PATTERN,
   NUM_WITH_COMMAS_REGEX,
   PUNCTUATION_PATTERN,
-} from '@/base/constants';
+} from '../constants/regex.ts';
 
 /**
  * Checks if a given token is a punctuation.
