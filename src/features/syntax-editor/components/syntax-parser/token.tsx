@@ -1,13 +1,4 @@
-import {
-  Popover,
-  PopoverAnchor,
-  PopoverBody,
-  PopoverContent,
-  Portal,
-  Text,
-  type TextProps,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Popover, Portal, Text, type TextProps } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 
 import {
@@ -29,16 +20,14 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
   const range = useAtomValue(selectedTokenRangeAtom);
   const selectedTag = useAtomValue(selectedTagAtom);
   const isDeleteMode = useAtomValue(deleteModeAtom);
-  const selectionColor = useColorModeValue('teal.100', 'teal.800');
-  const selectionTextColor = useColorModeValue('gray.800', 'gray.50');
   const canSelect = isTapMode && !!selectedTag && !isDeleteMode;
   const isSelected =
     canSelect && range && index >= Math.min(...range) && index <= Math.max(...range);
   const dataAttrs = { [CONSTITUENT_DATA_ATTRS.INDEX]: index };
 
   return (
-    <Popover isOpen={!isTapMode && invalidIndex === index} isLazy>
-      <PopoverAnchor>
+    <Popover.Root open={!isTapMode && invalidIndex === index} lazyMount autoFocus={false}>
+      <Popover.Anchor asChild>
         <Text
           position="relative"
           as="span"
@@ -49,8 +38,9 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
           tabIndex={canSelect ? 0 : undefined}
           aria-label={canSelect ? `${index + 1}번째 단어: ${token}` : undefined}
           aria-pressed={canSelect ? !!isSelected : undefined}
-          bg={isSelected ? selectionColor : undefined}
-          color={isSelected ? selectionTextColor : undefined}
+          bg={isSelected ? 'teal.100' : undefined}
+          color={isSelected ? 'gray.800' : undefined}
+          _dark={isSelected ? { bg: 'teal.800', color: 'gray.50' } : undefined}
           borderRadius="sm"
           _focusVisible={{ outline: '2px solid', outlineOffset: '2px' }}
           onPointerDown={(event) => {
@@ -67,12 +57,14 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
         >
           {token}
         </Text>
-      </PopoverAnchor>
+      </Popover.Anchor>
       <Portal>
-        <PopoverContent w="fit-content">
-          <PopoverBody>구/절은 서로 교차할 수 없어요</PopoverBody>
-        </PopoverContent>
+        <Popover.Positioner>
+          <Popover.Content w="fit-content" aria-label="태깅 범위 안내">
+            <Popover.Body role="alert">구/절은 서로 교차할 수 없어요</Popover.Body>
+          </Popover.Content>
+        </Popover.Positioner>
       </Portal>
-    </Popover>
+    </Popover.Root>
   );
 }

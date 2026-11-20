@@ -1,7 +1,8 @@
-import { Button, Tooltip } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
 
+import { Tooltip } from '@/base';
 import {
   CONSTITUENT_TRANSLATIONS,
   type ConstituentWithoutId,
@@ -30,7 +31,7 @@ export default function SelectableTagButton({ constituent, onSelect }: TagButton
   const { ko, desc } = CONSTITUENT_TRANSLATIONS[constituent.label];
   const isSelected = selectedTag?.elementId === constituent.elementId;
   return (
-    <Tooltip label={desc} isOpen={isTagInfoMode && isInfoOpen}>
+    <Tooltip label={desc} open={isTagInfoMode && isInfoOpen}>
       <Button
         size="sm"
         minH={onSelect ? '44px' : { base: '44px', lg: 8 }}
@@ -47,7 +48,8 @@ export default function SelectableTagButton({ constituent, onSelect }: TagButton
           onTagClick(constituent);
           setInfoOpen(true);
         }}
-        colorScheme={isSelected ? 'teal' : 'gray'}
+        variant={isSelected ? 'solid' : 'subtle'}
+        colorPalette={isSelected ? 'teal' : 'gray'}
       >
         {ko}
       </Button>

@@ -1,15 +1,17 @@
-import { atom, type Getter, type Setter } from 'jotai';
+import { atom, createStore, type Getter, type Setter } from 'jotai';
 import { atomWithDefault, atomWithStorage } from 'jotai/utils';
 
 import { debounce, type Nullable } from '@/base';
-import {
-  type AnalysisSource,
-  type CombinedAnalysisList,
-  generateAnalysis,
-  type TAnalysis,
-} from '@/features/syntax-editor';
-import { INVALID_POPUP_DELAY } from '@/features/syntax-editor/constants';
-import { SAMPLE_ANALYSIS } from '@/features/syntax-editor/data';
+import { INVALID_POPUP_DELAY } from '@/features/syntax-editor/constants/settings';
+import { SAMPLE_ANALYSIS } from '@/features/syntax-editor/data/sample-analysis';
+import { generateAnalysis } from '@/features/syntax-editor/helpers/analysis';
+import type {
+  AnalysisSource,
+  CombinedAnalysisList,
+  TAnalysis,
+} from '@/features/syntax-editor/types/analysis';
+
+export const analysisStore = createStore();
 
 export const userAnalysisListAtom = atomWithStorage<TAnalysis[]>('userAnalysisList', []);
 

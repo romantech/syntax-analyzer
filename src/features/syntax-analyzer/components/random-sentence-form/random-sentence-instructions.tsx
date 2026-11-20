@@ -1,4 +1,4 @@
-import { ListItem, type ListProps, UnorderedList } from '@chakra-ui/react';
+import { List, type ListRootProps } from '@chakra-ui/react';
 
 import { MAX_TOPIC_ADDITION } from '@/features/syntax-analyzer';
 
@@ -8,12 +8,12 @@ const INSTRUCTIONS = [
   '생성한 문장을 선택하면 클립보드에 복사돼요',
 ];
 
-export default function RandomSentenceInstructions(listProps: ListProps) {
+export default function RandomSentenceInstructions(listProps: ListRootProps) {
   return (
-    <UnorderedList {...listProps}>
+    <List.Root ps={5} {...listProps}>
       {INSTRUCTIONS.map((instruction) => (
-        <ListItem key={instruction}>{instruction}</ListItem>
+        <List.Item key={instruction}>{instruction}</List.Item>
       ))}
-    </UnorderedList>
+    </List.Root>
   );
 }

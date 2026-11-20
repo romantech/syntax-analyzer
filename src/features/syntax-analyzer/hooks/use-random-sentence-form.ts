@@ -1,9 +1,14 @@
-import { useBoolean } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { REMAINING_COUNT_BASE_KEY, randomSentenceFormSchema } from '@/features/syntax-analyzer';
+import {
+  DEFAULT_PICKER_COUNT,
+  MAX_PICKER_SENTENCE,
+  MIN_PICKER_SENTENCE,
+  REMAINING_COUNT_BASE_KEY,
+  randomSentenceFormSchema,
+} from '@/features/syntax-analyzer';
 import { useRandomSentenceQuery } from '@/features/syntax-analyzer/api';
 
 /**
@@ -15,7 +20,7 @@ const { topics, sent_count } = defaultValues;
 const defaultParams = { topics, sent_count, timeStamp: Date.now() };
 
 export const useRandomSentenceForm = () => {
-  const [readyToFetch, setReadyToFetch] = useBoolean();
+  const [readyToFetch, setReadyToFetch] = useState(false);
   const [params, setParams] = useState(defaultParams);
 
   const methods = useForm({
@@ -31,12 +36,15 @@ export const useRandomSentenceForm = () => {
     meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });
 
-  const generateSentences = async () => {
-    if (!readyToFetch) setReadyToFetch.on(); // 쿼리 활성화
-
-    const [topics, sent_count] = methods.getValues(['topics', 'sent_count']);
+  const generateSentences = () => {
+    const [topics, inputCount] = methods.getValues(['topics', 'sent_count']);
+    const count = Number.isFinite(inputCount)
+      ? Math.min(MAX_PICKER_SENTENCE, Math.max(MIN_PICKER_SENTENCE, Math.trunc(inputCount)))
+      : DEFAULT_PICKER_COUNT;
+    methods.setValue('sent_count', count);
+    setReadyToFetch(true);
     // timeStamp 값이 바뀌면서 이전 쿼리키가 비활성화 되고 캐시 데이터에서 삭제됨 (gcTime 0이므로)
-    setParams({ topics, sent_count, timeStamp: Date.now() });
+    setParams({ topics, sent_count: count, timeStamp: Date.now() });
   };
 
   return { methods, data, isFetching, generateSentences };

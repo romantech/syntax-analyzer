@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Outlet } from 'react-router';
 
-import { Layout, ThreeDotsWave, useRemoveBodyBgColor } from '@/base';
+import { Layout, ThreeDotsWave } from '@/base';
 import { ErrorComponent } from '@/features/misc';
 
 /**
@@ -21,7 +21,6 @@ const Fallback = () => (
 
 export const App = () => {
   const { reset } = useQueryErrorResetBoundary();
-  useRemoveBodyBgColor();
 
   return (
     <LazyMotion features={framerFeature}>

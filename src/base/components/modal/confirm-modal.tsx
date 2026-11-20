@@ -1,13 +1,4 @@
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogCloseButton,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Button,
-} from '@chakra-ui/react';
+import { Button, CloseButton, Dialog, Portal } from '@chakra-ui/react';
 import { type ReactNode, useRef } from 'react';
 
 interface ConfirmModalProps {
@@ -25,32 +16,43 @@ export default function ConfirmModal({
   headerContent,
   bodyContent,
 }: ConfirmModalProps) {
-  const cancelRef = useRef(null);
+  const cancelRef = useRef<HTMLButtonElement>(null);
   return (
-    <AlertDialog
-      isOpen={isOpen}
-      onClose={onClose}
-      leastDestructiveRef={cancelRef}
-      isCentered
+    <Dialog.Root
+      role="alertdialog"
+      open={isOpen}
+      onOpenChange={({ open }) => {
+        if (!open) onClose();
+      }}
+      initialFocusEl={() => cancelRef.current}
+      restoreFocus
+      placement="center"
       scrollBehavior="inside"
     >
-      <AlertDialogOverlay>
-        <AlertDialogContent mx={4}>
-          <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            {headerContent}
-          </AlertDialogHeader>
-          <AlertDialogCloseButton />
-          <AlertDialogBody>{bodyContent}</AlertDialogBody>
-          <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
-              취소
-            </Button>
-            <Button colorScheme="teal" onClick={onConfirm} ml={3}>
-              확인
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialogOverlay>
-    </AlertDialog>
+      <Portal>
+        <Dialog.Backdrop />
+        <Dialog.Positioner px={4}>
+          <Dialog.Content>
+            <Dialog.Header>
+              <Dialog.Title fontSize="lg" fontWeight="bold">
+                {headerContent}
+              </Dialog.Title>
+            </Dialog.Header>
+            <Dialog.CloseTrigger asChild>
+              <CloseButton size="sm" aria-label="닫기" />
+            </Dialog.CloseTrigger>
+            <Dialog.Body>{bodyContent}</Dialog.Body>
+            <Dialog.Footer>
+              <Button ref={cancelRef} variant="subtle" onClick={onClose}>
+                취소
+              </Button>
+              <Button colorPalette="teal" onClick={onConfirm}>
+                확인
+              </Button>
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog.Positioner>
+      </Portal>
+    </Dialog.Root>
   );
 }

@@ -1,22 +1,6 @@
-import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  type AccordionProps,
-  Heading,
-  HStack,
-  Text,
-  Wrap,
-  WrapItem,
-} from '@chakra-ui/react';
+import { Accordion, Heading, HStack, Text, Wrap, WrapItem } from '@chakra-ui/react';
 
-import {
-  type ConstituentWithoutId,
-  SelectableTagButton,
-  TAG_LIST_DEFAULT_INDEX,
-} from '@/features/syntax-editor';
+import { type ConstituentWithoutId, SelectableTagButton } from '@/features/syntax-editor';
 import { groupedConstituentsByType } from '@/features/syntax-editor/data';
 
 const CONSTITUENT_CATEGORIES = [
@@ -37,7 +21,7 @@ const CONSTITUENT_CATEGORIES = [
   },
 ];
 
-interface TagListAccordionProps extends AccordionProps {
+interface TagListAccordionProps extends Accordion.RootProps {
   onTagSelect?: (tag: ConstituentWithoutId) => void;
 }
 
@@ -46,30 +30,32 @@ export default function TagListAccordion({
   ...accordionProps
 }: TagListAccordionProps) {
   return (
-    <Accordion defaultIndex={TAG_LIST_DEFAULT_INDEX} allowToggle {...accordionProps}>
+    <Accordion.Root defaultValue={['general']} collapsible {...accordionProps}>
       {CONSTITUENT_CATEGORIES.map((category) => (
-        <AccordionItem key={category.label}>
-          <AccordionButton minH={onTagSelect ? '44px' : undefined}>
+        <Accordion.Item key={category.label} value={category.label}>
+          <Accordion.ItemTrigger minH={onTagSelect ? '44px' : undefined}>
             <HStack flex="1" textAlign="left" textTransform="uppercase" py={2} flexWrap="wrap">
-              <Heading as="h2" size="md">
+              <Heading as="span" fontSize="xl">
                 {category.label}
               </Heading>
               <Text>{category.desc}</Text>
             </HStack>
-            <AccordionIcon />
-          </AccordionButton>
+            <Accordion.ItemIndicator />
+          </Accordion.ItemTrigger>
 
-          <AccordionPanel>
-            <Wrap spacing={2}>
-              {category.constituents.map((constituent) => (
-                <WrapItem key={constituent.label}>
-                  <SelectableTagButton constituent={constituent} onSelect={onTagSelect} />
-                </WrapItem>
-              ))}
-            </Wrap>
-          </AccordionPanel>
-        </AccordionItem>
+          <Accordion.ItemContent>
+            <Accordion.ItemBody>
+              <Wrap gap={2}>
+                {category.constituents.map((constituent) => (
+                  <WrapItem key={constituent.label}>
+                    <SelectableTagButton constituent={constituent} onSelect={onTagSelect} />
+                  </WrapItem>
+                ))}
+              </Wrap>
+            </Accordion.ItemBody>
+          </Accordion.ItemContent>
+        </Accordion.Item>
       ))}
-    </Accordion>
+    </Accordion.Root>
   );
 }

@@ -1,8 +1,7 @@
-import { useColorMode } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 import { type MouseEvent, useRef } from 'react';
 
-import { getNearestElementByClass } from '@/base';
+import { type ColorMode, getNearestElementByClass, useColorModeValue } from '@/base';
 import { DELETE_MODE_HOVER_COLOR_SCHEME, deleteModeAtom } from '@/features/syntax-editor';
 import { CONSTITUENT_CLASSES } from '@/features/syntax-editor/constants';
 
@@ -10,7 +9,7 @@ const { CONSTITUENT } = CONSTITUENT_CLASSES;
 
 export const useSegmentMouseEvent = () => {
   const hoverRef = useRef<HTMLElement | null>(null);
-  const { colorMode } = useColorMode();
+  const colorMode = useColorModeValue<ColorMode>('light', 'dark');
   const isDeleteMode = useAtomValue(deleteModeAtom);
 
   const restoreOriginalColor = () => {

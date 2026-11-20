@@ -1,8 +1,8 @@
-import { IconButton, Tooltip } from '@chakra-ui/react';
+import { IconButton } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
 import { ImRedo } from 'react-icons/im';
 
-import { clearSelection } from '@/base';
+import { clearSelection, Tooltip } from '@/base';
 import { CONTROL_OPEN_POPUP_DELAY, undoRedoActionAtom } from '@/features/syntax-editor';
 
 export default function RedoButton() {
@@ -15,12 +15,13 @@ export default function RedoButton() {
   return (
     <Tooltip label="다시 실행" openDelay={CONTROL_OPEN_POPUP_DELAY}>
       <IconButton
-        variant="solid"
+        variant="subtle"
         aria-label="Redo the last undone action"
-        icon={<ImRedo />}
-        isDisabled={!actionable.redo}
+        disabled={!actionable.redo}
         onClick={onClick}
-      />
+      >
+        <ImRedo />
+      </IconButton>
     </Tooltip>
   );
 }

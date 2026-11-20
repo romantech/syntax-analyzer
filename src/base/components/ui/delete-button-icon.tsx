@@ -1,18 +1,23 @@
-import { type ButtonProps, Center, Icon, useColorModeValue } from '@chakra-ui/react';
+import { chakra, type HTMLChakraProps, Icon } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 import { CgClose } from 'react-icons/cg';
 
-const DeleteButtonIcon = forwardRef<HTMLButtonElement, ButtonProps>(
+import { useColorModeValue } from '@/base/hooks';
+
+const DeleteButtonIcon = forwardRef<HTMLButtonElement, HTMLChakraProps<'button'>>(
   function DeleteButtonIcon(buttonProps, ref) {
     return (
-      <Center
+      <chakra.button
+        type="button"
+        display="inline-flex"
+        alignItems="center"
+        justifyContent="center"
         color={useColorModeValue('gray.300', 'gray.500')}
         _hover={{
           color: useColorModeValue('gray.500', 'gray.400'),
           bg: useColorModeValue('gray.100', 'gray.700'),
         }}
         transition="all 0.3s"
-        as="button"
         rounded="full"
         p={1}
         fontSize="xs"
@@ -20,7 +25,7 @@ const DeleteButtonIcon = forwardRef<HTMLButtonElement, ButtonProps>(
         {...buttonProps}
       >
         <Icon as={CgClose} />
-      </Center>
+      </chakra.button>
     );
   },
 );

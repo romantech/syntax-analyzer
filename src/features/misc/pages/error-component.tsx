@@ -1,17 +1,10 @@
-import {
-  Button,
-  Heading,
-  Highlight,
-  ScaleFade,
-  type SystemStyleObject,
-  Text,
-  useBoolean,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, Heading, Highlight, type SystemStyleObject, Text, VStack } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { type FallbackProps, getErrorMessage } from 'react-error-boundary';
 import { isRouteErrorResponse, Navigate, useRouteError } from 'react-router';
 
-import { DIGITS_PATTERN, Layout, LinkParticles, useIsMounted } from '@/base';
+import { DIGITS_PATTERN, Layout, LinkParticles } from '@/base';
 
 const highlightStyles: SystemStyleObject = {
   p: '1',
@@ -22,9 +15,8 @@ const highlightStyles: SystemStyleObject = {
 
 export default function ErrorComponent({ resetErrorBoundary, error }: Partial<FallbackProps>) {
   const routerError = useRouteError() as Error;
-  const [shouldRedirect, setShouldRedirect] = useBoolean(false);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
-  const isMounted = useIsMounted();
   let errorMessage = getErrorMessage(error) ?? '문제가 발생했어요';
 
   const isRouteError = isRouteErrorResponse(routerError);
@@ -33,7 +25,7 @@ export default function ErrorComponent({ resetErrorBoundary, error }: Partial<Fa
     errorMessage = `${status} | ${statusText}`;
   }
 
-  const onActionButtonClick = isRouteError ? () => setShouldRedirect.on() : resetErrorBoundary;
+  const onActionButtonClick = isRouteError ? () => setShouldRedirect(true) : resetErrorBoundary;
 
   const buttonText = isRouteError ? '돌아가기' : '다시 시도하기';
 
@@ -49,23 +41,23 @@ export default function ErrorComponent({ resetErrorBoundary, error }: Partial<Fa
       flexGrow={0.9}
     >
       <LinkParticles />
-      <ScaleFade initialScale={0.1} in={isMounted}>
-        <Heading as="h1" size="4xl" fontWeight="extrabold">
+      <motion.div initial={{ opacity: 0, scale: 0.1 }} animate={{ opacity: 1, scale: 1 }}>
+        <Heading as="h1" fontSize="6xl" fontWeight="extrabold" lineHeight={1.2}>
           Ooops!
         </Heading>
-      </ScaleFade>
-      <ScaleFade initialScale={0.1} in={isMounted}>
+      </motion.div>
+      <motion.div initial={{ opacity: 0, scale: 0.1 }} animate={{ opacity: 1, scale: 1 }}>
         <VStack>
           <Text fontSize="xl" textTransform="capitalize" maxW={500}>
             <Highlight query={errorMessage.match(DIGITS_PATTERN) ?? []} styles={highlightStyles}>
               {errorMessage}
             </Highlight>
           </Text>
-          <Button mt={2} w="full" maxW={232} onClick={onActionButtonClick}>
+          <Button variant="subtle" mt={2} w="full" maxW={232} onClick={onActionButtonClick}>
             {buttonText}
           </Button>
         </VStack>
-      </ScaleFade>
+      </motion.div>
     </Layout>
   );
 }

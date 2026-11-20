@@ -1,5 +1,4 @@
-import { useBoolean } from '@chakra-ui/react';
-import { type RefObject, useEffect } from 'react';
+import { type RefObject, useEffect, useState } from 'react';
 
 import { calculateNestingLevel, type TSegment } from '@/features/syntax-editor';
 
@@ -16,14 +15,14 @@ export const useCalculateNestingLevel = ({
   isPending = false,
   isTapMode = false,
 }: UseCalculateNestedLevelProps) => {
-  const [isNestingLevelCalculated, setNestingLevelCalculated] = useBoolean();
+  const [isNestingLevelCalculated, setNestingLevelCalculated] = useState(false);
 
   useEffect(() => {
     if (isPending || !segment || !targetRef.current) return;
 
     calculateNestingLevel(targetRef, isTapMode);
-    setNestingLevelCalculated.on();
-  }, [isPending, segment, setNestingLevelCalculated, targetRef, isTapMode]);
+    setNestingLevelCalculated(true);
+  }, [isPending, segment, targetRef, isTapMode]);
 
   return isNestingLevelCalculated;
 };

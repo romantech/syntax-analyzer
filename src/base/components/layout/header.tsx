@@ -6,22 +6,17 @@ import {
   Icon,
   IconButton,
   Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Portal,
   Spacer,
-  Tab,
-  TabList,
   Tabs,
-  useColorMode,
-  useColorModeValue,
 } from '@chakra-ui/react';
+import { useTheme } from 'next-themes';
 import { BsGithub } from 'react-icons/bs';
 import { FiCoffee, FiMoreHorizontal } from 'react-icons/fi';
 import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
-import { matchPath, NavLink, useLocation } from 'react-router';
+import { matchPath, NavLink, useLocation, useNavigate } from 'react-router';
 
+import { useColorModeValue } from '@/base/hooks';
 import { SITE_URLS } from '@/routes/paths';
 
 const NAV_TABS = [
@@ -55,16 +50,13 @@ const EXTERNAL_LINKS = [
   },
 ] as const;
 
-const useTabIndex = () => {
-  const { pathname } = useLocation();
-  return NAV_TABS.findIndex((tab) => matchPath(tab.matchPath, pathname));
-};
-
 export function Header() {
-  const tabIndex = useTabIndex();
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { pathname } = useLocation();
+  const activePath = NAV_TABS.find((tab) => matchPath(tab.matchPath, pathname))?.path ?? null;
+  const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
 
-  const ToggleIcon = colorMode === 'light' ? MdModeNight : MdOutlineLightMode;
+  const ToggleIcon = theme === 'light' ? MdModeNight : MdOutlineLightMode;
 
   const bg = useColorModeValue(
     { base: 'white', lg: 'whiteAlpha.800' },
@@ -78,27 +70,27 @@ export function Header() {
     <Box
       as="nav"
       aria-label="Main navigation"
-      position={{ base: 'sticky', lg: tabIndex === 0 ? 'fixed' : 'sticky' }}
+      position={{ base: 'sticky', lg: activePath === '/' ? 'fixed' : 'sticky' }}
       w="full"
       top={0}
       p={{ base: 2, lg: 4 }}
       pt={{
-        base: 'calc(var(--chakra-space-2) + env(safe-area-inset-top, 0px))',
-        lg: 'calc(var(--chakra-space-4) + env(safe-area-inset-top, 0px))',
+        base: 'calc(var(--chakra-spacing-2) + env(safe-area-inset-top, 0px))',
+        lg: 'calc(var(--chakra-spacing-4) + env(safe-area-inset-top, 0px))',
       }}
       zIndex={10}
       backdropFilter="blur(10px)"
       bg={bg}
       boxShadow={boxShadow}
     >
-      <HStack maxW="8xl" mx="auto" spacing={{ base: 0, sm: 2 }}>
-        <Tabs variant="soft-rounded" index={tabIndex} colorScheme="gray">
-          <TabList gap={{ base: 1, sm: 2 }}>
-            {NAV_TABS.map((tab, i) => (
-              <Tab
-                as={NavLink}
+      <HStack maxW="8xl" mx="auto" gap={{ base: 0, sm: 2 }}>
+        <Tabs.Root variant="plain" value={activePath} navigate={({ value }) => navigate(value)}>
+          <Tabs.List gap={{ base: 1, sm: 2 }}>
+            {NAV_TABS.map((tab) => (
+              <Tabs.Trigger
+                asChild
                 key={tab.label}
-                to={tab.path}
+                value={tab.path}
                 transition="all 0.3s"
                 color="description"
                 px={{ base: 0, lg: 4 }}
@@ -106,47 +98,47 @@ export function Header() {
                 minH={{ base: '44px', lg: 10 }}
                 borderRadius="xl"
                 _focusVisible={{
-                  boxShadow: `inset 0 0 0 2px color-mix(in srgb, var(--chakra-colors-${tabIndex === i ? 'teal-600' : focusRingColor}) 80%, var(--chakra-colors-gray-500))`,
+                  boxShadow: `inset 0 0 0 2px color-mix(in srgb, var(--chakra-colors-${activePath === tab.path ? 'teal-600' : focusRingColor}) 80%, var(--chakra-colors-gray-500))`,
                 }}
                 fontSize={{ base: '0.9375rem', lg: 'md' }}
                 lineHeight={{ base: '1.25rem', lg: 'base' }}
                 textTransform="capitalize"
-                _hover={{ color: tabIndex !== i ? hoverColor : '' }}
+                _hover={{ color: activePath !== tab.path ? hoverColor : undefined }}
                 _selected={{ bg: { base: 'transparent', lg: 'gray.100' }, color: 'gray.800' }}
               >
-                <Box
-                  as="span"
-                  display="flex"
-                  alignItems="center"
-                  h={{ base: 10, lg: 'auto' }}
-                  px={{ base: 2.5, sm: 4, lg: 0 }}
-                  borderRadius="xl"
-                  bg={{ base: tabIndex === i ? 'gray.100' : 'transparent', lg: 'transparent' }}
-                >
-                  {tab.label}
-                </Box>
-              </Tab>
+                <NavLink to={tab.path} end={tab.path === '/'}>
+                  <Box
+                    as="span"
+                    display="flex"
+                    alignItems="center"
+                    h={{ base: 10, lg: 'auto' }}
+                    px={{ base: 2.5, sm: 4, lg: 0 }}
+                    borderRadius="xl"
+                    bg={{
+                      base: activePath === tab.path ? 'gray.100' : 'transparent',
+                      lg: 'transparent',
+                    }}
+                  >
+                    {tab.label}
+                  </Box>
+                </NavLink>
+              </Tabs.Trigger>
             ))}
-          </TabList>
-        </Tabs>
+          </Tabs.List>
+        </Tabs.Root>
         <Spacer />
         <Flex align="center" gap={{ base: 1, lg: 0 }}>
           <Flex display={{ base: 'none', sm: 'flex' }}>
             {EXTERNAL_LINKS.map(({ label, href, icon }) => (
-              <Button
-                key={href}
-                as="a"
-                href={href}
-                target="_blank"
-                aria-label={label}
-                variant="ghost"
-              >
-                <Icon as={icon} boxSize="1.2rem" />
+              <Button key={href} asChild variant="ghost">
+                <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
+                  <Icon as={icon} boxSize="1.2rem" />
+                </a>
               </Button>
             ))}
           </Flex>
           <Button
-            onClick={toggleColorMode}
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
             variant="ghost"
             aria-label="Toggle color mode"
             minW={{ base: '44px', lg: 10 }}
@@ -155,35 +147,32 @@ export function Header() {
           >
             <Icon as={ToggleIcon} boxSize="1.2rem" />
           </Button>
-          <Menu placement="bottom-end" isLazy>
-            <MenuButton
-              as={IconButton}
-              display={{ base: 'inline-flex', sm: 'none' }}
-              aria-label="More links"
-              icon={<Icon as={FiMoreHorizontal} boxSize="1.2rem" />}
-              variant="ghost"
-              boxSize="44px"
-            />
-            <Portal>
-              <MenuList
-                zIndex="dropdown"
-                motionProps={{ variants: { enter: { opacity: 1 }, exit: { opacity: 0 } } }}
+          <Menu.Root positioning={{ placement: 'bottom-end' }} lazyMount>
+            <Menu.Trigger asChild>
+              <IconButton
+                display={{ base: 'inline-flex', sm: 'none' }}
+                aria-label="More links"
+                variant="ghost"
+                boxSize="44px"
               >
-                {EXTERNAL_LINKS.map(({ label, href, icon: LinkIcon }) => (
-                  <MenuItem
-                    key={href}
-                    as="a"
-                    href={href}
-                    target="_blank"
-                    icon={<LinkIcon />}
-                    minH="44px"
-                  >
-                    {label}
-                  </MenuItem>
-                ))}
-              </MenuList>
+                <FiMoreHorizontal />
+              </IconButton>
+            </Menu.Trigger>
+            <Portal>
+              <Menu.Positioner>
+                <Menu.Content>
+                  {EXTERNAL_LINKS.map(({ label, href, icon: LinkIcon }) => (
+                    <Menu.Item key={href} value={href} asChild minH="44px">
+                      <a href={href} target="_blank" rel="noopener noreferrer">
+                        <LinkIcon />
+                        {label}
+                      </a>
+                    </Menu.Item>
+                  ))}
+                </Menu.Content>
+              </Menu.Positioner>
             </Portal>
-          </Menu>
+          </Menu.Root>
         </Flex>
       </HStack>
     </Box>

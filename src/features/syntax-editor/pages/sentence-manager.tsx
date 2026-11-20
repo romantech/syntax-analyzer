@@ -1,13 +1,13 @@
-import { Box, Grid, ScaleFade, Stack } from '@chakra-ui/react';
+import { Box, Grid, Stack } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 
-import { Notice, useIsMounted } from '@/base';
+import { Notice } from '@/base';
 import { FieldGroupHeader, RandomSentenceForm } from '@/features/syntax-analyzer';
 import { AddSentenceForm, DEFAULT_SENTENCE_LIST_TAB, SentenceList } from '@/features/syntax-editor';
 
 export default function SentenceManager() {
-  const isMounted = useIsMounted();
-  const [tabIndex, setTabIndex] = useState(DEFAULT_SENTENCE_LIST_TAB);
+  const [activeTab, setActiveTab] = useState(DEFAULT_SENTENCE_LIST_TAB);
 
   return (
     <Grid
@@ -25,12 +25,12 @@ export default function SentenceManager() {
           p={1}
           text="문장을 직접 추가하거나 선택한 후 편집할 수 있어요"
         />
-        <AddSentenceForm onConfirmEffect={() => setTabIndex(0)} />
+        <AddSentenceForm onConfirmEffect={() => setActiveTab('user')} />
       </Stack>
       <Box gridArea="list" borderRadius="lg" borderWidth={1} p={{ base: 3, md: 4 }}>
-        <ScaleFade in={isMounted}>
-          <SentenceList tabIndex={tabIndex} onTabChange={(i) => setTabIndex(i)} />
-        </ScaleFade>
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
+          <SentenceList activeTab={activeTab} onTabChange={setActiveTab} />
+        </motion.div>
       </Box>
       <Box gridArea="generator" mt={{ base: 8, lg: 0 }}>
         <FieldGroupHeader>랜덤 문장 생성</FieldGroupHeader>

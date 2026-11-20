@@ -1,4 +1,4 @@
-import { SlideFade } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useRef } from 'react';
 import { TbMoodEmpty } from 'react-icons/tb';
 
@@ -49,10 +49,15 @@ export default function SyntaxParser({ isTapMode = false }: { isTapMode?: boolea
   }
 
   return (
-    <SlideFade in={isNestingLevelCalculated} offsetY={100}>
+    <Box
+      opacity={isNestingLevelCalculated ? 1 : 0}
+      translate={isNestingLevelCalculated ? '0 0' : '0 100px'}
+      transition="opacity 0.2s ease-out, translate 0.2s ease-out"
+      _motionReduce={{ transition: 'none', translate: 'none' }}
+    >
       <Sentence ref={sentenceRef} isTapMode={isTapMode}>
         <SegmentList segment={segment} tokenElements={TokenList({ sentence, isTapMode })} />
       </Sentence>
-    </SlideFade>
+    </Box>
   );
 }

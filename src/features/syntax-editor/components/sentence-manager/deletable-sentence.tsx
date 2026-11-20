@@ -4,7 +4,6 @@ import {
   HStack,
   type StackProps,
   Text,
-  useColorModeValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react';
@@ -30,8 +29,7 @@ export default function DeletableSentence({
   hideDeleteButton = false,
   ...stackProps
 }: DeletableSentenceProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const hoverColor = useColorModeValue('teal.700', 'teal.300');
+  const { open, onOpen, onClose } = useDisclosure();
   const sentenceText = typeof sentence === 'string' ? sentence : tokenJoiner(sentence);
 
   return (
@@ -40,18 +38,18 @@ export default function DeletableSentence({
         <HStack gap={1.5}>
           <DateChip date={createdAt} h={5} />
           {isLessThanAgo(createdAt, NEW_BADGE_DISPLAY_DURATION) && (
-            <Badge fontSize="8px" colorScheme="teal">
+            <Badge fontSize="8px" colorPalette="teal">
               New
             </Badge>
           )}
           {showGPTBadge && (
-            <Badge fontSize="8px" colorScheme="orange">
+            <Badge fontSize="8px" colorPalette="orange">
               GPT
             </Badge>
           )}
         </HStack>
         <Button
-          variant="unstyled"
+          variant="plain"
           display="block"
           w="fit-content"
           maxW="full"
@@ -61,11 +59,12 @@ export default function DeletableSentence({
           textAlign="start"
           fontWeight="normal"
           lineHeight="base"
-          _hover={{ color: hoverColor }}
+          _hover={{ color: 'teal.700' }}
+          _dark={{ _hover: { color: 'teal.300' } }}
           _focusVisible={{ outline: '2px solid', outlineOffset: '-2px' }}
           onClick={onClick}
         >
-          <Text as="span" noOfLines={1}>
+          <Text as="span" lineClamp={1}>
             {sentenceText}
           </Text>
         </Button>
@@ -79,7 +78,7 @@ export default function DeletableSentence({
         />
       )}
       <ConfirmModal
-        isOpen={isOpen}
+        isOpen={open}
         onClose={onClose}
         onConfirm={() => {
           onClose();

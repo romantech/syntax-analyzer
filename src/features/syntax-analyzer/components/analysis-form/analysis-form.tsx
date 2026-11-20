@@ -1,13 +1,10 @@
 import {
   Box,
   Button,
-  FormControl,
-  FormHelperText,
+  Field,
   HStack,
   Icon,
   List,
-  ListIcon,
-  ListItem,
   Skeleton,
   type SkeletonProps,
   Stack,
@@ -60,9 +57,10 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
           </Text>
         )}
       </Box>
-      <FormControl isInvalid={!!errors.sentence}>
+      <Field.Root invalid={!!errors.sentence} gap={0}>
         <FieldGroupHeader>영어 문장 입력</FieldGroupHeader>
         <Stack
+          w="full"
           direction={{ base: 'column', sm: 'row' }}
           align={{ base: 'stretch', sm: 'start' }}
           gap={3}
@@ -70,33 +68,36 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
           <SentenceInput
             {...register('sentence')}
             errorMessage={errors.sentence?.message}
-            isDisabled={isPending}
+            disabled={isPending}
           />
           <Button
             type="submit"
-            isDisabled={!canAnalyze || isPending}
+            disabled={!canAnalyze || isPending}
+            variant="subtle"
             flexShrink={0}
             alignSelf="start"
             size="lg"
             h={{ base: '2.75rem', lg: 12 }}
             fontSize="md"
-            leftIcon={<Icon as={GiMagicLamp} boxSize={5} />}
           >
+            <Icon as={GiMagicLamp} boxSize={5} />
             분석
           </Button>
         </Stack>
         {remainingCount === 0 && <UsageLimitMessage />}
-        <FormHelperText color="description" mt={4}>
-          <List spacing={1.5}>
+        <Field.HelperText color="description" mt={4} asChild>
+          <List.Root variant="plain" gap={1.5}>
             {HELPER_TEXTS.map(({ icon, text }) => (
-              <ListItem key={text}>
-                <ListIcon as={icon} />
+              <List.Item key={text}>
+                <List.Indicator asChild>
+                  <Icon as={icon} aria-hidden />
+                </List.Indicator>
                 {text}
-              </ListItem>
+              </List.Item>
             ))}
-          </List>
-        </FormHelperText>
-      </FormControl>
+          </List.Root>
+        </Field.HelperText>
+      </Field.Root>
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={closeModal}

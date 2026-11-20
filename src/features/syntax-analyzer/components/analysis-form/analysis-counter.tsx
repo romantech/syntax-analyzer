@@ -1,8 +1,7 @@
 import {
   Box,
-  CircularProgress,
-  CircularProgressLabel,
   HStack,
+  ProgressCircle,
   Skeleton,
   SkeletonCircle,
   Stack,
@@ -29,14 +28,21 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
 
   return (
     <AnalysisCounterBox {...stackProps}>
-      <CircularProgress
-        size="50px"
-        value={remainingCountInPercent(count)}
-        color="teal.300"
-        aria-label="Remaining analysis count"
-      >
-        <CircularProgressLabel>{`${remainingCountInPercent(count)}%`}</CircularProgressLabel>
-      </CircularProgress>
+      <ProgressCircle.Root flexShrink={0} value={remainingCountInPercent(count)}>
+        <ProgressCircle.Circle
+          aria-label="Remaining analysis count"
+          css={{ '--size': '50px', '--thickness': '5px' }}
+        >
+          <ProgressCircle.Track stroke="gray.200" />
+          <ProgressCircle.Range stroke="teal.300" />
+        </ProgressCircle.Circle>
+        <ProgressCircle.ValueText
+          position="absolute"
+          inset={0}
+          display="grid"
+          placeItems="center"
+        />
+      </ProgressCircle.Root>
       <CenteredDivider orientation="vertical" height="40px" px={1} />
       <Box>
         <Text fontWeight="bold">{countTitle}</Text>

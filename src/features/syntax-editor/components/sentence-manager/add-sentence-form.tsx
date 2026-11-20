@@ -1,4 +1,4 @@
-import { Box, type BoxProps, Button, FormControl, HStack, useDisclosure } from '@chakra-ui/react';
+import { Box, type BoxProps, Button, Field, HStack, useDisclosure } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useSetAtom } from 'jotai';
 import { useForm } from 'react-hook-form';
@@ -18,7 +18,7 @@ interface AddSentenceProps extends BoxProps {
 export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSentenceProps) {
   const { register, handleSubmit, getValues, reset, formState } = useForm(formProps);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose } = useDisclosure();
   const addAnalysis = useSetAtom(addUserAnalysisActionAtom);
 
   const onConfirm = () => {
@@ -32,12 +32,13 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
 
   return (
     <Box as="form" w="full" onSubmit={handleSubmit(onOpen)} {...boxProps}>
-      <FormControl isInvalid={!!errors.sentence}>
-        <HStack align="start">
+      <Field.Root invalid={!!errors.sentence}>
+        <HStack align="start" w="full">
           <SentenceInput {...register('sentence')} errorMessage={errors.sentence?.message} />
           <Button
             type="submit"
-            isLoading={isSubmitting}
+            loading={isSubmitting}
+            variant="subtle"
             flexShrink={0}
             size="lg"
             h={{ base: '2.75rem', lg: 12 }}
@@ -46,9 +47,9 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
             추가
           </Button>
         </HStack>
-      </FormControl>
+      </Field.Root>
       <ConfirmModal
-        isOpen={isOpen}
+        isOpen={open}
         onClose={onClose}
         onConfirm={onConfirm}
         headerContent="영어 문장 추가"

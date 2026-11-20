@@ -1,65 +1,63 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Popover,
-  PopoverArrow,
-  PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
-  type PopoverProps,
-  PopoverTrigger,
-  Portal,
-  useDisclosure,
-} from '@chakra-ui/react';
-import type { MouseEventHandler, ReactNode } from 'react';
+import { Button, ButtonGroup, Popover, Portal, Tooltip } from '@chakra-ui/react';
+import { type ReactElement, useState } from 'react';
 
-import type { VoidFunc } from '@/base';
-
-type ChildrenProps = { onOpen: MouseEventHandler; isOpen: boolean };
-interface ConfirmPopoverProps extends Omit<PopoverProps, 'children'> {
-  onConfirm: VoidFunc;
-  headerText?: ReactNode;
-  cancelText?: string;
-  confirmText?: string;
-  children: ({ onOpen }: ChildrenProps) => ReactNode;
+interface ConfirmPopoverProps {
+  onConfirm: () => void;
+  headerText: string;
+  tooltipLabel: string;
+  tooltipDelay: number;
+  children: ReactElement;
 }
 
 export default function ConfirmPopover({
   onConfirm,
-  children,
   headerText,
-  cancelText = '취소',
-  confirmText = '확인',
-  ...popoverProps
+  tooltipLabel,
+  tooltipDelay,
+  children,
 }: ConfirmPopoverProps) {
-  const { isOpen, onClose, onOpen } = useDisclosure();
-  const onConfirmButtonClick = () => {
-    onConfirm();
-    onClose();
-  };
+  const [open, setOpen] = useState(false);
 
   return (
-    <Popover isOpen={isOpen} onClose={onClose} {...popoverProps}>
-      <PopoverTrigger>
-        <Box role="button">{children({ onOpen, isOpen })}</Box>
-      </PopoverTrigger>
+    <Popover.Root open={open} onOpenChange={(event) => setOpen(event.open)}>
+      <Tooltip.Root disabled={open} openDelay={tooltipDelay} closeOnPointerDown>
+        <Popover.Trigger asChild>
+          <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
+        </Popover.Trigger>
+        <Portal>
+          <Tooltip.Positioner>
+            <Tooltip.Content>{tooltipLabel}</Tooltip.Content>
+          </Tooltip.Positioner>
+        </Portal>
+      </Tooltip.Root>
       <Portal>
-        <PopoverContent w="fit-content" minW={220}>
-          <PopoverArrow />
-          <PopoverHeader border="0" p={4}>
-            {headerText}
-          </PopoverHeader>
-          <PopoverFooter display="flex" justifyContent="flex-end" border="0">
-            <ButtonGroup size="sm">
-              <Button onClick={onClose}>{cancelText}</Button>
-              <Button colorScheme="teal" onClick={onConfirmButtonClick}>
-                {confirmText}
-              </Button>
-            </ButtonGroup>
-          </PopoverFooter>
-        </PopoverContent>
+        <Popover.Positioner>
+          <Popover.Content w="fit-content" minW={220}>
+            <Popover.Arrow>
+              <Popover.ArrowTip />
+            </Popover.Arrow>
+            <Popover.Header border="0" p={4}>
+              <Popover.Title>{headerText}</Popover.Title>
+            </Popover.Header>
+            <Popover.Footer justifyContent="flex-end" border="0">
+              <ButtonGroup size="sm">
+                <Popover.CloseTrigger asChild aria-label="취소">
+                  <Button variant="subtle">취소</Button>
+                </Popover.CloseTrigger>
+                <Button
+                  colorPalette="teal"
+                  onClick={() => {
+                    onConfirm();
+                    setOpen(false);
+                  }}
+                >
+                  확인
+                </Button>
+              </ButtonGroup>
+            </Popover.Footer>
+          </Popover.Content>
+        </Popover.Positioner>
       </Portal>
-    </Popover>
+    </Popover.Root>
   );
 }

@@ -96,13 +96,13 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   }
 }
 
-html[data-theme="light"] {
+html.light {
   .constituent > .constituent-label > span {
     background-color: var(--chakra-colors-gray-100);
   }
 }
 
-html[data-theme="dark"] {
+html.dark {
   .constituent > .constituent-label > span {
     background-color: var(--chakra-colors-gray-900);
   }

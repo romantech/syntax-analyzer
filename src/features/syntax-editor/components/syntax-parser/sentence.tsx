@@ -1,4 +1,4 @@
-import { Text, useColorModeValue } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { forwardRef, type PropsWithChildren } from 'react';
 
@@ -13,7 +13,6 @@ const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren<{ isTapMode:
     const isDeleteMode = useAtomValue(deleteModeAtom);
     const setRange = useSetAtom(selectedTokenRangeAtom);
     const handlers = useSentenceHandler(isTapMode);
-    const textColor = useColorModeValue('gray.700', 'gray.300');
 
     return (
       <Text
@@ -24,7 +23,8 @@ const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren<{ isTapMode:
         w="max-content"
         minW="full"
         userSelect={isTapMode ? 'none' : 'auto'}
-        color={textColor}
+        color="gray.700"
+        _dark={{ color: 'gray.300' }}
         cursor={isDeleteMode ? 'pointer' : 'auto'}
         {...handlers}
         onKeyDown={(event) => {

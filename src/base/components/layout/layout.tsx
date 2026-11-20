@@ -12,7 +12,7 @@ export function Layout({
     <VStack
       minH="100vh"
       h={fitViewport ? '100vh' : undefined}
-      sx={{
+      css={{
         '@supports (height: 100dvh)': {
           minH: '100dvh',
           h: fitViewport ? '100dvh' : undefined,

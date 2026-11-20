@@ -33,7 +33,7 @@ export default function RandomSentenceForm({
           <HStack align="start">
             <SentenceCountPicker />
             <Suspense fallback={<GenerateButton.Skeleton />}>
-              <GenerateButton onClick={generateSentences} isLoading={isFetching} />
+              <GenerateButton onClick={generateSentences} loading={isFetching} />
             </Suspense>
           </HStack>
           <Input {...register('topics')} hidden />

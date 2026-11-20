@@ -8,3 +8,4 @@ export { default as Notice } from './notice';
 export { default as TextPlaceholder } from './text-placeholder';
 export { default as ThemedSpinner } from './themed-spinner';
 export { default as ThreeDotsWave } from './three-dots-wave';
+export { default as Tooltip } from './tooltip';

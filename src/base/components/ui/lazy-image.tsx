@@ -33,7 +33,7 @@ export default function LazyImage({
           inset={0}
           w="full"
           h="full"
-          fit="cover"
+          objectFit="cover"
           src={placeholderSrc}
           alt={`${alt} (Placeholder)`}
         />
@@ -42,7 +42,7 @@ export default function LazyImage({
           inset={0}
           w="full"
           h="full"
-          fit="cover"
+          objectFit="cover"
           onLoad={() => setIsLoaded(true)}
           src={src}
           alt={alt}
