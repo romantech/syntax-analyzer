@@ -1,7 +1,8 @@
 import { Button, Field, HStack, Input, InputGroup, type StackProps } from '@chakra-ui/react';
-import { type SubmitHandler, useFormContext } from 'react-hook-form';
+import type { SubmitEventHandler } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { CiShoppingTag } from 'react-icons/ci';
-import type { ValidationError } from 'yup';
+import { ValidationError } from 'yup';
 
 import {
   addTopicSchema,
@@ -10,28 +11,31 @@ import {
 } from '@/features/syntax-analyzer';
 
 export default function AddTopicForm(stackProps: StackProps) {
-  const { register, clearErrors, handleSubmit, setValue, resetField, setError, formState } =
+  const { register, clearErrors, getValues, setValue, resetField, setError, formState } =
     useFormContext<RandomSentenceFormValues>();
   const keywordField = register('keyword');
 
-  const onAddTopic: SubmitHandler<RandomSentenceFormValues> = (data) => {
-    const { keyword, topics } = data;
+  const onAddTopic: SubmitEventHandler = (event) => {
+    event.preventDefault();
+    const [keyword, topics] = getValues(['keyword', 'topics']);
 
-    addTopicSchema
-      .validate({ keyword, topics: [...topics, keyword] })
-      .then(() => {
-        setValue('topics', [...topics, keyword]);
-        resetField('keyword');
-      })
-      .catch((err: ValidationError) => {
-        setError('keyword', { type: 'manual', message: err.errors[0] });
-      });
+    try {
+      const { topics: nextTopics } = addTopicSchema.validateSync(
+        { keyword, topics: [...topics, keyword] },
+        { abortEarly: false },
+      );
+      setValue('topics', nextTopics);
+      resetField('keyword');
+    } catch (error) {
+      if (!(error instanceof ValidationError)) throw error;
+      setError('keyword', { type: 'manual', message: error.errors[0] });
+    }
   };
 
   const { errors } = formState;
 
   return (
-    <HStack as="form" align="start" onSubmit={handleSubmit(onAddTopic)} {...stackProps}>
+    <HStack as="form" align="start" onSubmit={onAddTopic} {...stackProps}>
       <Field.Root minW={0} invalid={!!errors.keyword}>
         <InputGroup
           startElement={<CiShoppingTag size={20} />}

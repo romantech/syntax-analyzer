@@ -2,10 +2,8 @@ import * as yup from 'yup';
 
 import {
   DEFAULT_PICKER_COUNT,
-  MAX_PICKER_SENTENCE,
   MAX_TOPIC_ADDITION,
   MAX_TOPIC_LENGTH,
-  MIN_PICKER_SENTENCE,
   MIN_TOPIC_LENGTH,
 } from '@/features/syntax-analyzer/constants';
 
@@ -28,12 +26,7 @@ const topicsSchema = yup
   .ensure(); // 기본값 빈 배열로 설정하고 null/undefined 는 빈 배열로 변환
 
 export const randomSentenceFormSchema = yup.object({
-  sent_count: yup
-    .number()
-    .positive(`최소 ${MIN_PICKER_SENTENCE}개 문장`)
-    .max(MAX_PICKER_SENTENCE, `최대 ${MAX_PICKER_SENTENCE}개 문장`)
-    .required()
-    .default(() => DEFAULT_PICKER_COUNT),
+  sent_count: yup.number().required().default(DEFAULT_PICKER_COUNT),
   topics: topicsSchema,
   keyword: keywordSchema,
 });
