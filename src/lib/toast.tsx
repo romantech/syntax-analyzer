@@ -1,4 +1,5 @@
-import { CloseButton, createToaster, Portal, Toast, Toaster } from '@chakra-ui/react';
+import { CloseButton, createToaster, Icon, Portal, Toast, Toaster } from '@chakra-ui/react';
+import { BsCheckCircleFill, BsExclamationCircleFill } from 'react-icons/bs';
 
 type ToastOptions = {
   title: string;
@@ -10,9 +11,9 @@ const toaster = createToaster({
   placement: 'bottom',
   offsets: {
     top: '1rem',
-    left: '1rem',
-    right: '1rem',
-    bottom: 'calc(1.25rem + env(safe-area-inset-bottom, 0px))',
+    left: '0.5rem',
+    right: '0.5rem',
+    bottom: 'calc(1.75rem + env(safe-area-inset-bottom, 0px))',
   },
 });
 
@@ -25,11 +26,38 @@ export function AppToaster() {
     <Portal>
       <Toaster toaster={toaster}>
         {(toast) => (
-          <Toast.Root>
-            <Toast.Indicator />
-            <Toast.Title>{toast.title}</Toast.Title>
+          <Toast.Root
+            w="fit-content"
+            minW="min(300px, 100%)"
+            maxW="min(560px, 100%)"
+            alignItems="start"
+            py={3}
+            pe={8}
+            borderRadius="md"
+            boxShadow="lg"
+            css={{
+              '&[data-type=success]': {
+                bg: 'green.600',
+                _dark: { bg: 'green.200', color: 'gray.900' },
+              },
+              '&[data-type=error]': {
+                bg: 'red.600',
+                _dark: { bg: 'red.200', color: 'gray.900' },
+              },
+            }}
+          >
+            <Icon
+              as={toast.type === 'success' ? BsCheckCircleFill : BsExclamationCircleFill}
+              w={5}
+              h={6}
+              flexShrink={0}
+              aria-hidden
+            />
+            <Toast.Title fontSize="md" lineHeight="base" fontWeight="bold" minW={0}>
+              {toast.title}
+            </Toast.Title>
             <Toast.CloseTrigger asChild>
-              <CloseButton size="xs" />
+              <CloseButton size="xs" color="inherit" _icon={{ boxSize: 4 }} />
             </Toast.CloseTrigger>
           </Toast.Root>
         )}

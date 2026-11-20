@@ -10,7 +10,7 @@ const INSTRUCTIONS = [
 
 export default function RandomSentenceInstructions(listProps: ListRootProps) {
   return (
-    <List.Root ps={5} {...listProps}>
+    <List.Root ps={4} css={{ '& li::marker': { color: 'inherit' } }} {...listProps}>
       {INSTRUCTIONS.map((instruction) => (
         <List.Item key={instruction}>{instruction}</List.Item>
       ))}

@@ -19,7 +19,12 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
     <Box flexGrow={1} minW={0} ref={parent}>
       <InputGroup
         startElement={<PiTextTBold />}
-        startElementProps={{ boxSize: { base: '2.75rem', lg: 12 }, p: 0, fontSize: 'xl' }}
+        startElementProps={{
+          boxSize: { base: '2.75rem', lg: 12 },
+          p: 0,
+          fontSize: 'xl',
+          color: 'fg',
+        }}
       >
         <Input
           aria-label="영어 문장"
@@ -29,6 +34,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
           ps={{ base: '2.75rem', lg: 12 }}
           size={size}
           fontSize="md"
+          lineHeight="base"
           maxLength={MAX_SENTENCE_LENGTH}
           variant="subtle"
           css={{ '--focus-color': 'colors.teal.300' }}

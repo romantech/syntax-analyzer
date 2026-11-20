@@ -1,5 +1,6 @@
 import { NumberInput } from '@chakra-ui/react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 
 import {
   MAX_PICKER_SENTENCE,
@@ -31,11 +32,20 @@ export default function SentenceCountPicker() {
             onBlur={field.onBlur}
             aria-label="Sentence count picker"
             h={{ base: '2.75rem', lg: 12 }}
+            ps={4}
+            pe={8}
+            borderRadius="md"
+            fontSize="md"
+            lineHeight="base"
             css={{ '--focus-color': 'colors.teal.300' }}
           />
-          <NumberInput.Control>
-            <NumberInput.IncrementTrigger aria-label="문장 수 늘리기" />
-            <NumberInput.DecrementTrigger aria-label="문장 수 줄이기" />
+          <NumberInput.Control top={0} bottom="auto" h="calc(100% - 2px)">
+            <NumberInput.IncrementTrigger aria-label="문장 수 늘리기" color="currentColor">
+              <FaCaretUp />
+            </NumberInput.IncrementTrigger>
+            <NumberInput.DecrementTrigger aria-label="문장 수 줄리기" color="currentColor">
+              <FaCaretDown />
+            </NumberInput.DecrementTrigger>
           </NumberInput.Control>
         </NumberInput.Root>
       )}

@@ -35,7 +35,7 @@ export default function TagListAccordion({
         <Accordion.Item key={category.label} value={category.label}>
           <Accordion.ItemTrigger minH={onTagSelect ? '44px' : undefined}>
             <HStack flex="1" textAlign="left" textTransform="uppercase" py={2} flexWrap="wrap">
-              <Heading as="span" fontSize="xl">
+              <Heading as="span" fontSize="xl" lineHeight={1.2}>
                 {category.label}
               </Heading>
               <Text>{category.desc}</Text>
