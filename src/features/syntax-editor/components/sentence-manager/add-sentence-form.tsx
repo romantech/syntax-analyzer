@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { ConfirmModal, type VoidFunc } from '@/base';
 import { addSentenceFormSchema, SentenceInput } from '@/features/syntax-analyzer';
 import { addUserAnalysisActionAtom } from '@/features/syntax-editor';
+import { generateAnalysis } from '@/features/syntax-editor/helpers/analysis';
 
 const defaultValues = addSentenceFormSchema.cast({});
 const resolver = yupResolver(addSentenceFormSchema);
@@ -22,7 +23,7 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
   const addAnalysis = useSetAtom(addUserAnalysisActionAtom);
 
   const onConfirm = () => {
-    addAnalysis({ sentence: getValues('sentence'), source: 'user' });
+    addAnalysis(generateAnalysis(getValues('sentence'), 'user'));
     onConfirmEffect?.();
     onClose();
     reset();

@@ -1,19 +1,17 @@
 import { atom, createStore, type Getter, type Setter } from 'jotai';
-import { atomWithDefault, atomWithStorage } from 'jotai/utils';
+import { atomWithDefault, atomWithStorage, createJSONStorage } from 'jotai/utils';
 
 import { debounce, type Nullable } from '@/base';
 import { INVALID_POPUP_DELAY } from '@/features/syntax-editor/constants/settings';
 import { SAMPLE_ANALYSIS } from '@/features/syntax-editor/data/sample-analysis';
-import { generateAnalysis } from '@/features/syntax-editor/helpers/analysis';
-import type {
-  AnalysisSource,
-  CombinedAnalysisList,
-  TAnalysis,
-} from '@/features/syntax-editor/types/analysis';
+import type { CombinedAnalysisList, TAnalysis } from '@/features/syntax-editor/types/analysis';
 
 export const analysisStore = createStore();
 
-export const userAnalysisListAtom = atomWithStorage<TAnalysis[]>('userAnalysisList', []);
+const userAnalysisListKey = 'userAnalysisList';
+const userAnalysisStorage = createJSONStorage<TAnalysis[]>();
+
+export const userAnalysisListAtom = atomWithStorage(userAnalysisListKey, [], userAnalysisStorage);
 
 export const sampleAnalysisListAtom = atom<TAnalysis[]>(SAMPLE_ANALYSIS);
 
@@ -24,14 +22,11 @@ export const analysisListBySourceAtom = atomWithDefault<CombinedAnalysisList>((g
 
 export const selectedAnalysisAtom = atom<Nullable<TAnalysis>>(null);
 
-export const addUserAnalysisActionAtom = atom(
-  null,
-  (_get, set, payload: { sentence: string; source: AnalysisSource }) => {
-    const { sentence, source } = payload;
-    const analysis = generateAnalysis(sentence, source);
-    set(userAnalysisListAtom, (prev) => [analysis, ...prev]);
-  },
-);
+export const addUserAnalysisActionAtom = atom(null, (_get, set, analysis: TAnalysis) => {
+  // The editor's storage atom may be unmounted while the analyzer is open.
+  const latestAnalyses = userAnalysisStorage.getItem(userAnalysisListKey, []);
+  set(userAnalysisListAtom, [analysis, ...latestAnalyses]);
+});
 
 export const removeUserAnalysisActionAtom = atom(null, (_, set, sentenceId: string) => {
   set(userAnalysisListAtom, (prev) => prev.filter((analysis) => analysis.id !== sentenceId));
