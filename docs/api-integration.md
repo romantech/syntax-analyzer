@@ -8,6 +8,21 @@
 - `GET /analyzer/random-sentences`의 `sent_count`와 반복 쿼리 키(`topics=A&topics=B`), 문장 배열 응답. [랜덤 문장 요청](../src/features/syntax-analyzer/api/get-random-sentences.ts)
 - `GET /analyzer/remaining-counts`의 `analysis`와 `random_sentence` 수치. [잔여 횟수 요청](../src/features/syntax-analyzer/api/get-remaining-counts.ts)
 
+## 로컬 목 모드
+
+`pnpm dev:mock`을 실행하고 <http://localhost:5173/analyzer>를 연다. Vite가 위 세 API에 직접 응답하므로 `project-server`와 API 주소 설정이 필요 없다.
+
+| 실행 명령                                   | 확인할 동작                                                                  |
+| ------------------------------------------- | ---------------------------------------------------------------------------- |
+| `pnpm dev:mock`                             | 초기 잔여 횟수, 요청 개수만큼 샘플 문장 생성, 입력 토큰을 유지한 편집기 이동 |
+| `MOCK_API_SCENARIO=slow pnpm dev:mock`      | 약 1.5초 동안 잔여 횟수 로딩, 생성 버튼 로딩, 분석 진행 표시                 |
+| `MOCK_API_SCENARIO=error pnpm dev:mock`     | 분석·생성 요청의 HTTP 500, 분석 오류 알림, 요청 종료 후 버튼 복구            |
+| `MOCK_API_SCENARIO=exhausted pnpm dev:mock` | 두 잔여 횟수 0회, 분석·생성 버튼 비활성화, 소진 안내                         |
+
+- 분석 성공 시 선택 모델에 따라 1회 또는 2회, 문장 생성 성공 시 문장 수와 관계없이 1회 차감한다. 횟수는 개발 서버 메모리에 저장하며 서버를 다시 시작하면 초기화된다.
+- 생성에는 주제와 무관한 고정 문장을 사용한다. 분석 결과에는 입력 토큰 전체에 해당하는 루트 세그먼트만 넣는다.
+- 실제 API 연동은 `project-server`의 `pnpm start:dev`와 프런트엔드의 `pnpm dev`를 함께 실행해 확인한다.
+
 ## 호환성과 배포 순서
 
 1. 기존 화면이 보낼 요청과 읽을 응답을 확인한다. 필드 이름이나 필수 여부가 바뀐다면 서버에서 기존 요청과 새 요청을 함께 처리하고, 기존 화면이 읽는 응답 필드를 유지하는 구간을 둔다.

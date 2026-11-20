@@ -5,12 +5,15 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, type PluginOption } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+import { mockAnalyzer } from './dev/mock-analyzer.ts';
+
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => ({
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   plugins: [
     react(),
     command === 'serve' && babel({ presets: ['jotai-babel/preset'] }),
+    command === 'serve' && mode === 'mock' && mockAnalyzer(process.env.MOCK_API_SCENARIO),
     mode === 'analyze' ? (visualizer() as unknown as PluginOption) : undefined,
 
     /**
