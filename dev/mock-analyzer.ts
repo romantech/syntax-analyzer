@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import type { Plugin } from 'vite';
 
 import { generateNumberID } from '../src/base/utils/identifier.ts';
+import { tokenJoiner } from '../src/base/utils/string.ts';
 import {
   ANALYSIS_DECREMENT_COUNT,
   type AnalysisModel,
@@ -12,14 +13,15 @@ import {
   MAX_PICKER_SENTENCE,
   MIN_PICKER_SENTENCE,
 } from '../src/features/syntax-analyzer/constants/settings.ts';
+import { RELATIVE_CLAUSE_SAMPLE } from '../src/features/syntax-editor/data/sample-analysis.ts';
 import type { TAnalysis } from '../src/features/syntax-editor/types/analysis.ts';
 
 const sampleSentences = [
+  tokenJoiner(RELATIVE_CLAUSE_SAMPLE.sentence).trim(),
   'The train arrived just before sunset.',
   'She keeps a notebook beside her bed.',
   'We took the longer path through the woods.',
   'The coffee tasted better than I expected.',
-  'They opened the windows to let in fresh air.',
 ];
 
 export const mockAnalyzer = (scenario = 'success'): Plugin => ({
@@ -103,18 +105,23 @@ export const mockAnalyzer = (scenario = 'success'): Plugin => ({
       if (counts.analysis < cost) return fail(400, 'No remaining request count available.');
       counts.analysis -= cost;
 
+      const matchesSample =
+        sentence.length === RELATIVE_CLAUSE_SAMPLE.sentence.length &&
+        sentence.every((token, index) => token === RELATIVE_CLAUSE_SAMPLE.sentence[index]);
       const analysis: TAnalysis = {
         id: nanoid(),
         source: 'user',
         createdAt: new Date().toISOString(),
         sentence,
-        rootSegment: {
-          id: generateNumberID(),
-          begin: 0,
-          end: sentence.length,
-          constituents: [],
-          children: [],
-        },
+        rootSegment: matchesSample
+          ? RELATIVE_CLAUSE_SAMPLE.rootSegment
+          : {
+              id: generateNumberID(),
+              begin: 0,
+              end: sentence.length,
+              constituents: [],
+              children: [],
+            },
         isAnalyzedByGPT: true,
       };
       send(200, analysis);
