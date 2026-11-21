@@ -48,7 +48,6 @@ export default function SentenceCountPicker() {
               px={0}
               textAlign="center"
               borderColor="border.input"
-              fontSize="md"
               lineHeight="base"
             />
             <NumberInput.IncrementTrigger asChild>
