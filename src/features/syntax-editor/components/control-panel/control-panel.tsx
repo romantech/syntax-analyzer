@@ -2,14 +2,14 @@ import { Card, HStack, Separator, Skeleton, VStack } from '@chakra-ui/react';
 
 import { useIsMounted } from '@/base';
 import {
-  AbbrInfoSwitch,
   DeleteButton,
   RedoButton,
   ResetButton,
   SaveButton,
-  TagInfoSwitch,
   UndoButton,
 } from '@/features/syntax-editor';
+
+import TooltipSwitches from './tooltip-switches';
 
 export function EditorActions({ isTapMode = false }: { isTapMode?: boolean }) {
   return (
@@ -57,10 +57,7 @@ export default function ControlPanel() {
     >
       <Card.Root p={3} variant="outline">
         <VStack align="stretch" gap={2}>
-          <HStack gap={4} flexWrap="wrap">
-            <TagInfoSwitch w="auto" justifyContent="start" gap={2} />
-            <AbbrInfoSwitch w="auto" justifyContent="start" gap={2} />
-          </HStack>
+          <TooltipSwitches />
           <Separator />
           <EditorActions />
         </VStack>
