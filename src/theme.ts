@@ -39,6 +39,7 @@ const config = defineConfig({
           subtle: { value: { _dark: '{colors.gray.900}' } },
           muted: { value: { _dark: '{colors.gray.800}' } },
         },
+        gray: { focusRing: { value: { _light: '{colors.gray.500}' } } },
         teal: {
           accent: { value: { _light: '{colors.teal.600}', _dark: '{colors.teal.300}' } },
           focusRing: { value: '{colors.gray.focusRing}' },
