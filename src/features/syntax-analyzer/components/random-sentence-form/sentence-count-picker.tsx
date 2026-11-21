@@ -41,7 +41,7 @@ export default function SentenceCountPicker() {
               h="full"
               px={0}
               textAlign="center"
-              fontSize="sm"
+              fontSize="0.9375rem"
               lineHeight="base"
               _focus={{ fontSize: 'md' }}
             />
