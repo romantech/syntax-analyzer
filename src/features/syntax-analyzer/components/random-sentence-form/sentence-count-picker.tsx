@@ -29,7 +29,13 @@ export default function SentenceCountPicker() {
         >
           <Group attached flexShrink={0} h={SENTENCE_CONTROL_HEIGHT}>
             <NumberInput.DecrementTrigger asChild>
-              <IconButton aria-label="문장 수 줄리기" variant="outline" size="sm" h="full">
+              <IconButton
+                aria-label="문장 수 줄리기"
+                variant="outline"
+                size="sm"
+                h="full"
+                borderColor="border.input"
+              >
                 <FiMinus />
               </IconButton>
             </NumberInput.DecrementTrigger>
@@ -41,6 +47,7 @@ export default function SentenceCountPicker() {
               h="full"
               px={0}
               textAlign="center"
+              borderColor="border.input"
               fontSize="md"
               lineHeight="base"
             />
@@ -50,6 +57,7 @@ export default function SentenceCountPicker() {
                 variant="outline"
                 size="sm"
                 h="full"
+                borderColor="border.input"
                 borderTopEndRadius="md"
               >
                 <FiPlus />
