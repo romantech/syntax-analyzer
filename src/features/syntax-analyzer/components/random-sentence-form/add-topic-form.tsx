@@ -8,6 +8,7 @@ import {
   addTopicSchema,
   MAX_TOPIC_LENGTH,
   type RandomSentenceFormValues,
+  SENTENCE_CONTROL_HEIGHT,
 } from '@/features/syntax-analyzer';
 
 export default function AddTopicForm(stackProps: StackProps) {
@@ -39,7 +40,7 @@ export default function AddTopicForm(stackProps: StackProps) {
       <Field.Root minW={0} invalid={!!errors.keyword}>
         <InputGroup
           startElement={<CiShoppingTag size={20} />}
-          startElementProps={{ boxSize: { base: '2.75rem', lg: 12 }, p: 0, color: 'fg' }}
+          startElementProps={{ boxSize: SENTENCE_CONTROL_HEIGHT, p: 0, color: 'fg' }}
         >
           <Input
             {...keywordField}
@@ -47,8 +48,8 @@ export default function AddTopicForm(stackProps: StackProps) {
               await keywordField.onChange(event);
               if (errors.keyword) clearErrors('keyword');
             }}
-            h={{ base: '2.75rem', lg: 12 }}
-            ps={{ base: '2.75rem', lg: 12 }}
+            h={SENTENCE_CONTROL_HEIGHT}
+            ps={SENTENCE_CONTROL_HEIGHT}
             maxLength={MAX_TOPIC_LENGTH}
             aria-label="영문 키워드"
             placeholder="영문 키워드"
@@ -57,7 +58,7 @@ export default function AddTopicForm(stackProps: StackProps) {
         </InputGroup>
         <Field.ErrorText aria-live="polite">{errors.keyword?.message}</Field.ErrorText>
       </Field.Root>
-      <Button flexShrink={0} h={{ base: '2.75rem', lg: 12 }} fontSize="md" type="submit">
+      <Button flexShrink={0} h={SENTENCE_CONTROL_HEIGHT} fontSize="md" type="submit">
         토픽 등록
       </Button>
     </HStack>

@@ -12,6 +12,7 @@ export const DEFAULT_PICKER_COUNT = 3;
 
 export const MAX_SENTENCE_LENGTH = 80;
 export const MIN_SENTENCE_WORDS = 3;
+export const SENTENCE_CONTROL_HEIGHT = { base: '2.75rem', lg: 12 };
 
 /** 서버 허용값과 일치 필요 */
 export const AnalysisModel = {
