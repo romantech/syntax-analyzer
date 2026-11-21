@@ -33,7 +33,7 @@ export default function ConfirmModal({
       <Portal>
         <Dialog.Backdrop bg="blackAlpha.600" />
         <Dialog.Positioner px={4}>
-          <Dialog.Content textStyle="md" borderRadius="md" _dark={{ boxShadow: 'dark-lg' }}>
+          <Dialog.Content textStyle="md" borderRadius="md">
             <Dialog.Header pt={4}>
               <Dialog.Title fontSize="lg" lineHeight="base" fontWeight="bold">
                 {headerContent}
@@ -49,7 +49,12 @@ export default function ConfirmModal({
               <Button ref={cancelRef} variant="subtle" onClick={onClose}>
                 취소
               </Button>
-              <Button colorPalette="teal" onClick={onConfirm}>
+              <Button
+                variant="outline"
+                colorPalette="teal"
+                _light={{ color: 'teal.700' }}
+                onClick={onConfirm}
+              >
                 확인
               </Button>
             </Dialog.Footer>

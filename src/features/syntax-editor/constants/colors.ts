@@ -1,25 +1,20 @@
-import type { ColorMode } from '@/base';
 import type { ConstituentColors } from '@/features/syntax-editor';
-
-export const DELETE_MODE_HOVER_COLOR_SCHEME = (mode: ColorMode) => {
-  return mode === 'dark' ? 'var(--chakra-colors-gray-500)' : 'var(--chakra-colors-gray-300)';
-};
 
 export const CONSTITUENT_COLORS: ConstituentColors = {
   token: {
-    dark: 'red.200',
-    light: 'red.400',
+    dark: 'red.400',
+    light: 'red.700',
   },
   'token-group': {
-    dark: 'blue.200',
-    light: 'blue.400',
+    dark: 'blue.400',
+    light: 'blue.600',
   },
   phrase: {
-    dark: 'purple.200',
-    light: 'purple.400',
+    dark: 'purple.400',
+    light: 'purple.600',
   },
   clause: {
-    dark: 'teal.200',
-    light: 'teal.400',
+    dark: 'teal.400',
+    light: 'teal.700',
   },
 };

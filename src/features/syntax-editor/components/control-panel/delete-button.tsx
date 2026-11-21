@@ -16,7 +16,7 @@ export default function DeleteButton() {
   return (
     <Tooltip label="태그 삭제" openDelay={CONTROL_OPEN_POPUP_DELAY}>
       <IconButton
-        variant={isDeleteMode ? 'solid' : 'subtle'}
+        variant={isDeleteMode ? 'outline' : 'subtle'}
         colorPalette={isDeleteMode ? 'teal' : 'gray'}
         aria-label="Delete Tag"
         aria-pressed={isDeleteMode}

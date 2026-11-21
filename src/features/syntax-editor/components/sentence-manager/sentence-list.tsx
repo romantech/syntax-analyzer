@@ -67,15 +67,17 @@ export default function SentenceList({ activeTab, onTabChange }: SentenceListPro
         {TAB_LIST.map(({ source }) => (
           <Tabs.Content value={source} pt={4} px={0} pb={0} key={source}>
             <Card.Root variant="outline" maxH={460} overflowY="auto">
-              <Card.Body p={2.5}>
+              <Card.Body px={2.5} py={0.5}>
                 <Stack
+                  gap={0}
                   separator={<StackSeparator />}
                   ref={source === 'user' ? parent : undefined}
                   overflowY="hidden"
                 >
                   {!combinedAnalysisList[source].length && (
                     <TextPlaceholder
-                      p={1.5}
+                      px={1.5}
+                      py={3.5}
                       text="아직 추가한 문장이 없어요"
                       endIcon={TbMoodEmpty}
                     />

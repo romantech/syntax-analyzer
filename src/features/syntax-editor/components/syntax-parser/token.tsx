@@ -38,9 +38,8 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
           tabIndex={canSelect ? 0 : undefined}
           aria-label={canSelect ? `${index + 1}번째 단어: ${token}` : undefined}
           aria-pressed={canSelect ? !!isSelected : undefined}
-          bg={isSelected ? 'teal.100' : undefined}
-          color={isSelected ? 'gray.800' : undefined}
-          _dark={isSelected ? { bg: 'teal.800', color: 'gray.50' } : undefined}
+          bg={isSelected ? 'teal.muted' : undefined}
+          color={isSelected ? 'teal.fg' : undefined}
           borderRadius="sm"
           onPointerDown={(event) => {
             if (canSelect) event.currentTarget.focus({ preventScroll: true });
