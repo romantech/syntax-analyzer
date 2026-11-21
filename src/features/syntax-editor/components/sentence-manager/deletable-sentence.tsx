@@ -32,15 +32,9 @@ export default function DeletableSentence({
         <HStack as="span" id={metadataId} gap={1.5}>
           <DateChip date={createdAt} h={5} />
           {isLessThanAgo(createdAt, NEW_BADGE_DISPLAY_DURATION) && (
-            <Badge fontSize="8px" colorPalette="teal">
-              New
-            </Badge>
+            <Badge colorPalette="teal">New</Badge>
           )}
-          {showGPTBadge && (
-            <Badge fontSize="8px" colorPalette="orange">
-              GPT
-            </Badge>
-          )}
+          {showGPTBadge && <Badge colorPalette="orange">GPT</Badge>}
         </HStack>
         <Button
           aria-label={sentenceText}

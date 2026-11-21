@@ -61,7 +61,6 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
                   <RadioGroup.ItemText>{field.label}</RadioGroup.ItemText>
                 </RadioGroup.Item>
                 <Badge
-                  fontSize="2xs"
                   fontWeight="semibold"
                   variant="subtle"
                   colorPalette="teal"
