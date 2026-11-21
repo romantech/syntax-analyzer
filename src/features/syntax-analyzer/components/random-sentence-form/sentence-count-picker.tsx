@@ -1,6 +1,6 @@
-import { NumberInput } from '@chakra-ui/react';
+import { Group, IconButton, NumberInput } from '@chakra-ui/react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
+import { FiMinus, FiPlus } from 'react-icons/fi';
 
 import {
   MAX_PICKER_SENTENCE,
@@ -18,35 +18,44 @@ export default function SentenceCountPicker() {
       control={control}
       render={({ field }) => (
         <NumberInput.Root
+          asChild
           name={field.name}
           value={Number.isNaN(field.value) ? '' : String(field.value)}
           onValueChange={({ value, valueAsNumber }) =>
             field.onChange(value === '' ? NaN : valueAsNumber)
           }
-          w="full"
-          maxW={66}
           min={MIN_PICKER_SENTENCE}
           max={MAX_PICKER_SENTENCE}
         >
-          <NumberInput.Input
-            ref={field.ref}
-            onBlur={field.onBlur}
-            aria-label="Sentence count picker"
-            h={SENTENCE_CONTROL_HEIGHT}
-            ps={4}
-            pe={8}
-            borderRadius="md"
-            fontSize="md"
-            lineHeight="base"
-          />
-          <NumberInput.Control top={0} bottom="auto" h="calc(100% - 2px)">
-            <NumberInput.IncrementTrigger aria-label="문장 수 늘리기" color="currentColor">
-              <FaCaretUp />
-            </NumberInput.IncrementTrigger>
-            <NumberInput.DecrementTrigger aria-label="문장 수 줄리기" color="currentColor">
-              <FaCaretDown />
+          <Group attached flexShrink={0} h={SENTENCE_CONTROL_HEIGHT}>
+            <NumberInput.DecrementTrigger asChild>
+              <IconButton aria-label="문장 수 줄리기" variant="outline" minW={8} h="full">
+                <FiMinus />
+              </IconButton>
             </NumberInput.DecrementTrigger>
-          </NumberInput.Control>
+            <NumberInput.Input
+              ref={field.ref}
+              onBlur={field.onBlur}
+              aria-label="Sentence count picker"
+              w={10}
+              h="full"
+              px={0}
+              textAlign="center"
+              fontSize="md"
+              lineHeight="base"
+            />
+            <NumberInput.IncrementTrigger asChild>
+              <IconButton
+                aria-label="문장 수 늘리기"
+                variant="outline"
+                minW={8}
+                h="full"
+                borderTopEndRadius="md"
+              >
+                <FiPlus />
+              </IconButton>
+            </NumberInput.IncrementTrigger>
+          </Group>
         </NumberInput.Root>
       )}
     />
