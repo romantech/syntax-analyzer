@@ -18,7 +18,7 @@ const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren<{ isTapMode:
       <Text
         asChild
         ref={ref}
-        fontSize="3xl"
+        fontSize={isTapMode ? '2xl' : '3xl'}
         fontWeight="bold"
         whiteSpace="nowrap"
         w="max-content"
