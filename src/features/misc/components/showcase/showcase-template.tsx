@@ -50,9 +50,9 @@ export const ShowcaseTemplate = ({
             <Link
               asChild
               colorPalette="teal"
-              color="teal.700"
-              _hover={{ color: 'teal.fg', textDecoration: 'none' }}
-              _dark={{ color: 'teal.fg', _hover: { color: 'teal.200' } }}
+              fontWeight="medium"
+              _hover={{ color: 'teal.800', textDecoration: 'none' }}
+              _dark={{ _hover: { color: 'teal.200' } }}
               w="fit-content"
               display="inline-flex"
               alignItems="center"
