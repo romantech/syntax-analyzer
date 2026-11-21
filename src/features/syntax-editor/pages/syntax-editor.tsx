@@ -1,17 +1,16 @@
-import { Box, Flex, Grid, HStack, ScrollArea } from '@chakra-ui/react';
+import { Box, Flex, Grid, ScrollArea } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 import { useRef } from 'react';
 import { useOutletContext } from 'react-router';
 
 import { Notice, useBeforeUnload } from '@/base';
 import {
-  AbbrInfoSwitch,
   ControlPanel,
   isSegmentTouchedAtom,
   SyntaxParser,
-  TagInfoSwitch,
   TagListAccordion,
   TapSelectionControls,
+  TooltipSwitches,
   useAnalysisDataLoader,
   useSyntaxEditorInitializer,
 } from '@/features/syntax-editor';
@@ -72,10 +71,7 @@ export default function SyntaxEditor() {
           }
         />
         {isTapMode ? (
-          <HStack gap={4} flexWrap="wrap">
-            <TagInfoSwitch w="auto" justifyContent="start" />
-            <AbbrInfoSwitch w="auto" justifyContent="start" />
-          </HStack>
+          <TooltipSwitches isTapMode />
         ) : (
           <>
             <TagListAccordion minW={0} />
