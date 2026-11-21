@@ -34,7 +34,7 @@ export default function SentenceCountPicker() {
                 variant="outline"
                 size="sm"
                 h="full"
-                borderColor="border.input"
+                borderColor="border"
               >
                 <FiMinus />
               </IconButton>
@@ -47,7 +47,6 @@ export default function SentenceCountPicker() {
               h="full"
               px={0}
               textAlign="center"
-              borderColor="border.input"
               lineHeight="base"
             />
             <NumberInput.IncrementTrigger asChild>
@@ -56,7 +55,7 @@ export default function SentenceCountPicker() {
                 variant="outline"
                 size="sm"
                 h="full"
-                borderColor="border.input"
+                borderColor="border"
                 borderTopEndRadius="md"
               >
                 <FiPlus />
