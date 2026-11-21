@@ -32,7 +32,7 @@ const Sentence = forwardRef<HTMLParagraphElement, PropsWithChildren<{ isTapMode:
           if (event.key === 'Escape') setRange(null);
         }}
       >
-        <p translate="no" className="notranslate">
+        <p lang="en" translate="no" className="notranslate">
           {children}
         </p>
       </Text>

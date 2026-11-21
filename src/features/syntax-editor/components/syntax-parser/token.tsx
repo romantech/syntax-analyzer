@@ -36,6 +36,7 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
           minH={isTapMode ? '44px' : undefined}
           role={canSelect ? 'button' : undefined}
           tabIndex={canSelect ? 0 : undefined}
+          lang={canSelect ? 'ko' : undefined}
           aria-label={canSelect ? `${index + 1}번째 단어: ${token}` : undefined}
           aria-pressed={canSelect ? !!isSelected : undefined}
           bg={isSelected ? 'teal.muted' : undefined}

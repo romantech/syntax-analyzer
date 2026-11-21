@@ -37,6 +37,7 @@ export default function DeletableSentence({
           {showGPTBadge && <Badge colorPalette="orange">GPT</Badge>}
         </HStack>
         <Button
+          lang="en"
           aria-label={sentenceText}
           aria-describedby={metadataId}
           variant="plain"

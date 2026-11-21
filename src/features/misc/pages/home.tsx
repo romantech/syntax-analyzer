@@ -27,6 +27,7 @@ export default function Home() {
 
   return (
     <Layout
+      lang="en"
       fitViewport
       position="relative"
       maxW="full"
