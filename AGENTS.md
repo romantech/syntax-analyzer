@@ -9,6 +9,7 @@
 
 ## 코드와 검증
 
+- UI 기능을 추가하거나 Chakra UI 컴포넌트·테마를 수정할 때는 기존 공용 컴포넌트와 `src/theme.ts`를 먼저 확인한다. Chakra UI MCP가 연결되어 있으면 props·사용 예제·토큰을 조회하고, 사용할 수 없으면 공식 문서를 참고한다. 적용할 API는 `package.json`의 `@chakra-ui/react` 버전과 대조한다. [Chakra UI MCP](https://chakra-ui.com/docs/get-started/ai/mcp-server) · [Chakra UI 문서](https://chakra-ui.com/docs/components)
 - 서버는 별도 저장소에서 관리한다. API 변경 시 계약, 환경 변수, 배포 순서 확인. [romantech/project-server](https://github.com/romantech/project-server) · [API 변경 가이드](docs/api-integration.md)
 - 백엔드 없이 화면을 검증할 때는 `pnpm dev:mock`을 실행하고 `http://localhost:5173/analyzer`에서 확인한다. 지연·오류·소진은 [목 모드 실행 방법](docs/api-integration.md#로컬-목-모드)을 따른다.
 - 실제 API 연동을 검증할 때는 `project-server`에서 `pnpm start:dev`, `syntax-analyzer`에서 `pnpm dev`를 실행하고 `http://localhost:5173/`에서 확인한다. 실행 중인 개발 서버가 같은 모드라면 재사용한다.
