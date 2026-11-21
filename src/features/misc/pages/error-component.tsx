@@ -15,7 +15,8 @@ window.addEventListener('vite:preloadError', (event) => {
 
 const highlightStyles: SystemStyleObject = {
   p: '1',
-  bg: 'teal.100',
+  bg: 'teal.subtle',
+  color: 'teal.fg',
   borderRadius: 'sm',
   fontWeight: 'bold',
 };

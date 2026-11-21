@@ -36,7 +36,7 @@ interface ThreeDotsLoadingProps {
  * */
 export const ThreeDotsWave = ({
   size = 4,
-  color = 'teal.200',
+  color = 'teal.fg',
   delay,
   gap,
 }: ThreeDotsLoadingProps) => {

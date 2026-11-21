@@ -39,7 +39,6 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
           <Button
             type="submit"
             loading={isSubmitting}
-            variant="subtle"
             flexShrink={0}
             size="lg"
             h={{ base: '2.75rem', lg: 12 }}

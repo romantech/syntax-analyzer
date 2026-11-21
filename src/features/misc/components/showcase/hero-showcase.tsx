@@ -13,12 +13,10 @@ export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSecti
           as="p"
           fontSize={{ base: 'xl', lg: '3xl' }}
           lineHeight={1.2}
-          bgImage="linear-gradient(to right, var(--chakra-colors-teal-700), var(--chakra-colors-yellow-800) 60%)"
-          bgClip="text"
-          color="transparent"
-          _dark={{
-            bgImage:
-              'linear-gradient(to right, var(--chakra-colors-teal-300), var(--chakra-colors-yellow-400) 60%)',
+          textStyle="showcaseGradient"
+          css={{
+            '--showcase-stop': '60%',
+            _light: { w: 'fit-content', '--showcase-stop': '90%' },
           }}
         >
           Interpreting English Structure with AI

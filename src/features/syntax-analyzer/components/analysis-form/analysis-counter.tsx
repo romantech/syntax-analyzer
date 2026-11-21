@@ -27,13 +27,17 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
       {...stackProps}
       countLabel={<Text fontWeight="bold">남은 분석 횟수 {count}회</Text>}
     >
-      <ProgressCircle.Root flexShrink={0} value={remainingCountInPercent(count)}>
+      <ProgressCircle.Root
+        colorPalette="teal"
+        flexShrink={0}
+        value={remainingCountInPercent(count)}
+      >
         <ProgressCircle.Circle
           aria-label="Remaining analysis count"
           css={{ '--size': '50px', '--thickness': '5px' }}
         >
-          <ProgressCircle.Track stroke="gray.200" />
-          <ProgressCircle.Range stroke="teal.300" />
+          <ProgressCircle.Track _light={{ stroke: 'teal.subtle' }} />
+          <ProgressCircle.Range />
         </ProgressCircle.Circle>
         <ProgressCircle.ValueText
           position="absolute"

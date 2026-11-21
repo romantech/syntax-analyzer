@@ -8,7 +8,7 @@ interface DateChipProps extends TextProps {
 
 export default function DateChip({ date, ...textProps }: DateChipProps) {
   return (
-    <Text as="span" fontSize="xs" color="description" {...textProps}>
+    <Text as="span" fontSize="xs" color="fg.muted" {...textProps}>
       {getFormattedKoDate(date)}
     </Text>
   );

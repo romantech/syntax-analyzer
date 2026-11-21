@@ -47,7 +47,6 @@ export default function AddTopicForm(stackProps: StackProps) {
               await keywordField.onChange(event);
               if (errors.keyword) clearErrors('keyword');
             }}
-            variant="subtle"
             h={{ base: '2.75rem', lg: 12 }}
             ps={{ base: '2.75rem', lg: 12 }}
             maxLength={MAX_TOPIC_LENGTH}
@@ -58,13 +57,7 @@ export default function AddTopicForm(stackProps: StackProps) {
         </InputGroup>
         <Field.ErrorText aria-live="polite">{errors.keyword?.message}</Field.ErrorText>
       </Field.Root>
-      <Button
-        flexShrink={0}
-        h={{ base: '2.75rem', lg: 12 }}
-        fontSize="md"
-        variant="outline"
-        type="submit"
-      >
+      <Button flexShrink={0} h={{ base: '2.75rem', lg: 12 }} fontSize="md" type="submit">
         토픽 등록
       </Button>
     </HStack>

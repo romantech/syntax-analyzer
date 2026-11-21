@@ -61,21 +61,17 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
                   <RadioGroup.ItemText>{field.label}</RadioGroup.ItemText>
                 </RadioGroup.Item>
                 <Badge
-                  fontSize="xs"
+                  fontSize="2xs"
                   fontWeight="semibold"
                   variant="subtle"
                   colorPalette="teal"
+                  _light={{ color: 'teal.700' }}
                   hidden={!field.recommend}
                 >
                   recommended
                 </Badge>
               </HStack>
-              <Text
-                id={`model-description-${field.value}`}
-                ml={6}
-                fontSize={14}
-                color="description"
-              >
+              <Text id={`model-description-${field.value}`} ml={6} fontSize={14} color="fg.muted">
                 {field.desc}
               </Text>
             </Stack>

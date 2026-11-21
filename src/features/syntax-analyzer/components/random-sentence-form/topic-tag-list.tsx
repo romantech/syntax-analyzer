@@ -28,7 +28,6 @@ export default function TopicTagList(stackProps: StackProps) {
           borderRadius="md"
           variant="subtle"
           colorPalette="teal"
-          _dark={{ bg: '#286769', color: '#cce3eb' }}
         >
           <Tag.Label
             maxW="5.5rem"

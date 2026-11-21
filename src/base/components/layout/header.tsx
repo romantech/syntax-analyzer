@@ -15,7 +15,6 @@ import { FiCoffee, FiMoreHorizontal } from 'react-icons/fi';
 import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
 import { NavLink, useLocation } from 'react-router';
 
-import { useColorModeValue } from '@/base/hooks';
 import { SITE_URLS } from '@/routes/paths';
 
 const NAV_LINKS = [
@@ -43,13 +42,6 @@ export function Header() {
 
   const ToggleIcon = theme === 'light' ? MdModeNight : MdOutlineLightMode;
 
-  const bg = useColorModeValue(
-    { base: 'white', lg: 'whiteAlpha.800' },
-    { base: 'gray.800', lg: 'grayAlpha.800' },
-  );
-  const boxShadow = useColorModeValue('sm', 'lg');
-  const hoverColor = useColorModeValue('gray.400', 'gray.100');
-
   return (
     <Box
       as="nav"
@@ -64,8 +56,8 @@ export function Header() {
       }}
       zIndex={10}
       backdropFilter="blur(10px)"
-      bg={bg}
-      boxShadow={boxShadow}
+      bg={{ base: 'bg', lg: 'bg/80' }}
+      boxShadow="sm"
     >
       <HStack maxW="8xl" mx="auto" gap={{ base: 0, sm: 2 }}>
         <HStack gap={{ base: 1, sm: 2 }}>
@@ -76,7 +68,7 @@ export function Header() {
               align="center"
               transitionProperty="background-color, color"
               transitionDuration="0.3s"
-              color="description"
+              color="fg.muted"
               px={{ base: 0, lg: 4 }}
               py={{ base: 0, lg: 2 }}
               minH={{ base: '44px', lg: 10 }}
@@ -84,12 +76,17 @@ export function Header() {
               fontWeight="semibold"
               fontSize={{ base: '0.9375rem', lg: 'md' }}
               lineHeight={{ base: '1.25rem', lg: 'base' }}
-              _hover={{ color: hoverColor }}
+              _hover={{
+                '&:not([aria-current=page])': {
+                  color: 'fg',
+                  bg: { lg: 'gray.subtle' },
+                  '& > span': { bg: { base: 'gray.subtle', lg: 'transparent' } },
+                },
+              }}
               _currentPage={{
-                color: 'gray.800',
-                bg: { lg: 'gray.100' },
-                _hover: { color: 'gray.800' },
-                '& > span': { bg: { base: 'gray.100', lg: 'transparent' } },
+                color: 'fg',
+                bg: { lg: 'gray.muted' },
+                '& > span': { bg: { base: 'gray.muted', lg: 'transparent' } },
               }}
             >
               <NavLink to={path} end={path === SITE_URLS.ROOT}>
@@ -145,7 +142,7 @@ export function Header() {
                   _focusVisible={{
                     '& [data-highlighted]': {
                       outline: '2px solid',
-                      outlineColor: 'focusRing',
+                      outlineColor: 'colorPalette.focusRing',
                       outlineOffset: '-2px',
                     },
                   }}

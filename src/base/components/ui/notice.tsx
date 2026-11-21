@@ -7,7 +7,7 @@ interface NoticeProps extends CardRootProps {
 
 export default function Notice({ text, ...cardProps }: NoticeProps) {
   return (
-    <Card.Root variant="subtle" w="full" {...cardProps}>
+    <Card.Root variant="subtle" w="full" bg="bg.emphasized" {...cardProps}>
       <Card.Body px={4} py={3}>
         <HStack align="start" gap={2.5}>
           <Icon as={FaCircleInfo} boxSize={4} mt={1} flexShrink={0} aria-hidden />

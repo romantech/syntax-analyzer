@@ -16,6 +16,9 @@ export default function GenerateButton({ onClick, loading, ...buttonProps }: But
   return (
     <Stack align="start" maxW={190}>
       <Button
+        variant="outline"
+        colorPalette="teal"
+        borderColor="currentColor"
         minW={170}
         gap={0}
         h={{ base: '2.75rem', lg: 12 }}
@@ -24,17 +27,11 @@ export default function GenerateButton({ onClick, loading, ...buttonProps }: But
         textTransform="uppercase"
         loading={loading}
         disabled={!hasCount}
-        variant="subtle"
         {...buttonProps}
       >
         <Icon as={RiAiGenerate} me={2} />
         <Text as="span">문장 생성</Text>
-        <Text
-          pl={1}
-          as="span"
-          color="description"
-          fontSize="sm"
-        >{`(${count}/${DAILY_SENTENCE_LIMIT})`}</Text>
+        <Text pl={1} as="span" fontSize="sm">{`(${count}/${DAILY_SENTENCE_LIMIT})`}</Text>
       </Button>
       {!hasCount && <UsageLimitMessage />}
     </Stack>

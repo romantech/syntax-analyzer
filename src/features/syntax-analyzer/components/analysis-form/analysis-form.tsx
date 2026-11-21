@@ -51,7 +51,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
         <FieldGroupHeader>ai 모델 선택</FieldGroupHeader>
         <ModelChoiceGroup control={control} remainingCount={remainingCount} />
         {remainingCount > 0 && remainingCount < ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY] && (
-          <Text mt={2} color="description" fontSize="sm">
+          <Text mt={2} color="fg.muted" fontSize="sm">
             고급 모델은 분석 횟수가 {ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY]}회 필요해요.
           </Text>
         )}
@@ -104,7 +104,9 @@ const SentenceInputRow = ({ children }: PropsWithChildren) => (
 const AnalysisButton = (props: ButtonProps) => (
   <Button
     type="submit"
-    variant="subtle"
+    variant="outline"
+    colorPalette="teal"
+    borderColor="currentColor"
     flexShrink={0}
     alignSelf="start"
     size="lg"
@@ -118,7 +120,7 @@ const AnalysisButton = (props: ButtonProps) => (
 );
 
 const SentenceInputHelp = () => (
-  <Field.HelperText color="description" mt={4} asChild>
+  <Field.HelperText color="fg.muted" mt={4} asChild>
     <List.Root variant="plain" alignSelf="stretch" fontSize="sm" gap={1.5}>
       {HELPER_TEXTS.map(({ icon, text }) => (
         <List.Item key={text}>

@@ -45,7 +45,9 @@ export default function ConfirmPopover({
                   <Button variant="subtle">취소</Button>
                 </Popover.CloseTrigger>
                 <Button
+                  variant="outline"
                   colorPalette="teal"
+                  _light={{ color: 'teal.700' }}
                   onClick={() => {
                     onConfirm();
                     setOpen(false);

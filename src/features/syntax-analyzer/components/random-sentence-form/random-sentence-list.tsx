@@ -39,10 +39,11 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             key={sentence}
             aria-label={`문장 복사: ${sentence}`}
             variant="plain"
+            borderRadius="none"
             display="block"
             flexShrink={0}
             h="auto"
-            minH="2.75rem"
+            minH={11}
             px={2}
             py={{ base: 2.5, lg: 1 }}
             textAlign="start"
@@ -51,11 +52,10 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             fontWeight="normal"
             fontStyle="italic"
             lineHeight="tall"
-            _hover={{ color: 'teal.600' }}
-            _dark={{ _hover: { color: 'teal.200' } }}
+            _hover={{ color: 'teal.fg' }}
             focusRingOffset="-2px"
             css={{
-              '& > mark': { color: 'teal.700', fontWeight: 'bold', _dark: { color: 'teal.300' } },
+              '& > mark': { color: 'teal.fg', fontWeight: 'bold' },
             }}
             onClick={() => copySentence(sentence)}
           >

@@ -5,8 +5,8 @@ export default function ThemedSpinner(spinnerProps: SpinnerProps) {
     <Spinner
       borderWidth="5px"
       animationDuration="0.65s"
-      css={{ '--spinner-track-color': 'colors.gray.200' }}
-      color="teal.300"
+      css={{ '--spinner-track-color': 'colors.border' }}
+      color="teal.fg"
       size="xl"
       {...spinnerProps}
     />

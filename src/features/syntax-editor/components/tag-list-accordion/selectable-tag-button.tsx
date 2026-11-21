@@ -48,7 +48,7 @@ export default function SelectableTagButton({ constituent, onSelect }: TagButton
           onTagClick(constituent);
           setInfoOpen(true);
         }}
-        variant={isSelected ? 'solid' : 'subtle'}
+        variant={isSelected ? 'outline' : 'subtle'}
         colorPalette={isSelected ? 'teal' : 'gray'}
       >
         {ko}

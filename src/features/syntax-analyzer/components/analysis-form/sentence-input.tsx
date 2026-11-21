@@ -36,7 +36,6 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
           fontSize="md"
           lineHeight="base"
           maxLength={MAX_SENTENCE_LENGTH}
-          variant="subtle"
           {...inputProps}
           ref={ref}
         />

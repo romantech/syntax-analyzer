@@ -35,13 +35,7 @@ export const ShowcaseTemplate = ({
           <Heading
             fontSize={{ base: '1.75rem', lg: '4xl' }}
             lineHeight={{ base: 1.33, md: 1.2 }}
-            bgImage="linear-gradient(to right, var(--chakra-colors-teal-700), var(--chakra-colors-yellow-800) 70%)"
-            bgClip="text"
-            color="transparent"
-            _dark={{
-              bgImage:
-                'linear-gradient(to right, var(--chakra-colors-teal-300), var(--chakra-colors-yellow-400) 70%)',
-            }}
+            textStyle="showcaseGradient"
             whiteSpace="pre-line"
           >
             {title}
@@ -55,9 +49,10 @@ export const ShowcaseTemplate = ({
             </Text>
             <Link
               asChild
+              colorPalette="teal"
               color="teal.700"
-              _hover={{ color: 'teal.600', textDecoration: 'none' }}
-              _dark={{ color: 'teal.300', _hover: { color: 'teal.200' } }}
+              _hover={{ color: 'teal.fg', textDecoration: 'none' }}
+              _dark={{ color: 'teal.fg', _hover: { color: 'teal.200' } }}
               w="fit-content"
               display="inline-flex"
               alignItems="center"

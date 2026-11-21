@@ -75,13 +75,12 @@ export default function TapSelectionControls({
         gap={2}
         bg="bg"
         borderTopWidth="1px"
-        borderColor="gray.200"
-        _dark={{ borderColor: 'gray.700' }}
+        borderColor="border"
         onKeyDown={(event) => {
           if (event.key === 'Escape' && range && !open) cancelRange();
         }}
       >
-        <Text role="status" fontSize="sm" color="description" lineClamp={2} overflowWrap="anywhere">
+        <Text role="status" fontSize="sm" color="fg.muted" lineClamp={2} overflowWrap="anywhere">
           {isDeleteMode && '지울 태그의 약어를 탭하세요.'}
           {selectedTag &&
             (range
@@ -96,7 +95,6 @@ export default function TapSelectionControls({
               minH="44px"
               px={3}
               justifyContent="space-between"
-              variant="outline"
               aria-label={tagName ? `태그 선택 (현재 ${tagName})` : '태그 선택'}
               disabled={!sentence}
               ref={triggerRef}
@@ -110,7 +108,6 @@ export default function TapSelectionControls({
           <Button
             minH="44px"
             px={3}
-            colorPalette="teal"
             disabled={!range}
             onClick={() => {
               applyTag(begin, end);
@@ -124,7 +121,7 @@ export default function TapSelectionControls({
           </Button>
         </HStack>
         {range && invalidIndex === end - 1 && (
-          <Text role="alert" color="description" fontSize="sm">
+          <Text role="alert" color="fg.muted" fontSize="sm">
             구/절은 서로 교차할 수 없어요
           </Text>
         )}
