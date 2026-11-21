@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.1](https://github.com/romantech/syntax-analyzer/compare/v1.3.0...v1.3.1) (2026-11-21)
+
+
+### Bug Fixes
+
+* allow topics with an empty sentence count ([#179](https://github.com/romantech/syntax-analyzer/issues/179)) ([c25ac66](https://github.com/romantech/syntax-analyzer/commit/c25ac663442dfb2d26cb228bdc9d99dc30681fcc))
+* improve mobile editor scrolling ([#167](https://github.com/romantech/syntax-analyzer/issues/167)) ([cebca1c](https://github.com/romantech/syntax-analyzer/commit/cebca1cede2d818fc0dfa6825ba5d4fe3df76940))
+* preserve analyses saved in other tabs ([#177](https://github.com/romantech/syntax-analyzer/issues/177)) ([404168d](https://github.com/romantech/syntax-analyzer/commit/404168d32044867e3ab144cca9f40ebaf3781228))
+* refine Chakra colors and interaction states ([#180](https://github.com/romantech/syntax-analyzer/issues/180)) ([5c341e1](https://github.com/romantech/syntax-analyzer/commit/5c341e119edf46d0711c27136254dfb56432856f))
+* restore random sentence keyword styles ([#165](https://github.com/romantech/syntax-analyzer/issues/165)) ([77f8a55](https://github.com/romantech/syntax-analyzer/commit/77f8a557cbb6df7eb7e99d503b1df16ae3b7432f)), closes [#164](https://github.com/romantech/syntax-analyzer/issues/164)
+* save editor tags by sentence ID ([#178](https://github.com/romantech/syntax-analyzer/issues/178)) ([059b81f](https://github.com/romantech/syntax-analyzer/commit/059b81f5227f52dec84bce59c83ab93d57953049))
+* unify keyboard focus rings ([#168](https://github.com/romantech/syntax-analyzer/issues/168)) ([5368993](https://github.com/romantech/syntax-analyzer/commit/5368993c0137e83bd1e9b9218bc184ba8d253fa3)), closes [#145](https://github.com/romantech/syntax-analyzer/issues/145)
+
 ## [1.3.0](https://github.com/romantech/syntax-analyzer/compare/v1.2.0...v1.3.0) (2026-11-20)
 
 
