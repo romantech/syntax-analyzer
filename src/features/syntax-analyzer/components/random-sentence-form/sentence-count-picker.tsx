@@ -41,9 +41,8 @@ export default function SentenceCountPicker() {
               h="full"
               px={0}
               textAlign="center"
-              fontSize="0.9375rem"
+              fontSize="md"
               lineHeight="base"
-              _focus={{ fontSize: 'md' }}
             />
             <NumberInput.IncrementTrigger asChild>
               <IconButton
