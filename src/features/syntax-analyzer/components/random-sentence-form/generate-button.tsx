@@ -3,43 +3,53 @@ import { RiAiGenerate } from 'react-icons/ri';
 
 import {
   DAILY_SENTENCE_LIMIT,
+  SENTENCE_CONTROL_HEIGHT,
   UsageLimitMessage,
   useRemainingCountQuery,
 } from '@/features/syntax-analyzer';
 
-export default function GenerateButton({ onClick, loading, ...buttonProps }: ButtonProps) {
+export default function GenerateButton(buttonProps: ButtonProps) {
   const { data: count = 0 } = useRemainingCountQuery({
     select: (data) => data.random_sentence,
   });
   const hasCount = count > 0;
 
   return (
-    <Stack align="start" maxW={190}>
-      <Button
-        variant="outline"
-        colorPalette="teal"
-        borderColor="currentColor"
-        minW={170}
-        gap={0}
-        h={{ base: '2.75rem', lg: 12 }}
-        fontSize="md"
-        onClick={onClick}
-        textTransform="uppercase"
-        loading={loading}
-        disabled={!hasCount}
-        {...buttonProps}
-      >
-        <Icon as={RiAiGenerate} me={2} />
-        <Text as="span">문장 생성</Text>
-        <Text pl={1} as="span" fontSize="sm">{`(${count}/${DAILY_SENTENCE_LIMIT})`}</Text>
-      </Button>
+    <Stack align="start" w="min-content">
+      <GenerateButtonControl count={count} disabled={!hasCount} {...buttonProps} />
       {!hasCount && <UsageLimitMessage />}
     </Stack>
   );
 }
 
-const GenerateButtonSkeleton = () => {
-  return <Skeleton minW={170} h={{ base: '2.75rem', lg: 12 }} borderRadius="md" />;
-};
+const GenerateButtonControl = ({ count, ...buttonProps }: ButtonProps & { count: number }) => (
+  <Button
+    variant="outline"
+    colorPalette="teal"
+    borderColor="currentColor"
+    minW={170}
+    gap={0}
+    h={SENTENCE_CONTROL_HEIGHT}
+    fontSize="md"
+    textTransform="uppercase"
+    {...buttonProps}
+  >
+    <Icon as={RiAiGenerate} me={2} />
+    <Text as="span">문장 생성</Text>
+    <Text pl={1} as="span" fontSize="sm" fontVariantNumeric="tabular-nums">
+      (
+      <Text as="span" display="inline-block" w="2ch" textAlign="end">
+        {count}
+      </Text>
+      {`/${DAILY_SENTENCE_LIMIT})`}
+    </Text>
+  </Button>
+);
+
+const GenerateButtonSkeleton = () => (
+  <Skeleton asChild>
+    <GenerateButtonControl count={DAILY_SENTENCE_LIMIT} aria-hidden inert />
+  </Skeleton>
+);
 
 GenerateButton.Skeleton = GenerateButtonSkeleton;

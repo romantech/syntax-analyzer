@@ -4,7 +4,11 @@ import { useSetAtom } from 'jotai';
 import { useForm } from 'react-hook-form';
 
 import { ConfirmModal, type VoidFunc } from '@/base';
-import { addSentenceFormSchema, SentenceInput } from '@/features/syntax-analyzer';
+import {
+  addSentenceFormSchema,
+  SENTENCE_CONTROL_HEIGHT,
+  SentenceInput,
+} from '@/features/syntax-analyzer';
 import { addUserAnalysisActionAtom } from '@/features/syntax-editor';
 import { generateAnalysis } from '@/features/syntax-editor/helpers/analysis';
 
@@ -41,7 +45,7 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
             loading={isSubmitting}
             flexShrink={0}
             size="lg"
-            h={{ base: '2.75rem', lg: 12 }}
+            h={SENTENCE_CONTROL_HEIGHT}
             fontSize="md"
           >
             추가

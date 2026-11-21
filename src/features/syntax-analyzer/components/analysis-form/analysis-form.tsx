@@ -24,6 +24,7 @@ import {
   AnalysisModel,
   FieldGroupHeader,
   ModelChoiceGroup,
+  SENTENCE_CONTROL_HEIGHT,
   SentenceInput,
   UsageLimitMessage,
   useAnalysisForm,
@@ -88,8 +89,6 @@ const AnalysisFormBox = ({ children, ...stackProps }: PropsWithChildren<StackPro
   );
 };
 
-const sentenceControlHeight = { base: '2.75rem', lg: 12 };
-
 const SentenceInputRow = ({ children }: PropsWithChildren) => (
   <Stack
     w="full"
@@ -110,7 +109,7 @@ const AnalysisButton = (props: ButtonProps) => (
     flexShrink={0}
     alignSelf="start"
     size="lg"
-    h={sentenceControlHeight}
+    h={SENTENCE_CONTROL_HEIGHT}
     fontSize="md"
     {...props}
   >
@@ -147,7 +146,7 @@ const AnalysisFormSkeleton = (stackProps: StackProps) => {
       <Field.Root gap={0}>
         <FieldGroupHeader>영어 문장 입력</FieldGroupHeader>
         <SentenceInputRow>
-          <Skeleton aria-hidden flexGrow={1} h={sentenceControlHeight} borderRadius="md" />
+          <Skeleton aria-hidden flexGrow={1} h={SENTENCE_CONTROL_HEIGHT} borderRadius="md" />
           <Skeleton asChild>
             <AnalysisButton aria-hidden inert />
           </Skeleton>

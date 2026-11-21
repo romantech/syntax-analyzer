@@ -3,7 +3,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { forwardRef } from 'react';
 import { PiTextTBold } from 'react-icons/pi';
 
-import { MAX_SENTENCE_LENGTH } from '@/features/syntax-analyzer/constants';
+import { MAX_SENTENCE_LENGTH, SENTENCE_CONTROL_HEIGHT } from '@/features/syntax-analyzer/constants';
 
 interface SentenceInputProps extends InputProps {
   errorMessage?: string;
@@ -20,7 +20,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
       <InputGroup
         startElement={<PiTextTBold />}
         startElementProps={{
-          boxSize: { base: '2.75rem', lg: 12 },
+          boxSize: SENTENCE_CONTROL_HEIGHT,
           p: 0,
           fontSize: 'xl',
           color: 'fg',
@@ -30,8 +30,8 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
           aria-label="영어 문장"
           enterKeyHint="done"
           placeholder="영어 문장 입력"
-          h={{ base: '2.75rem', lg: 12 }}
-          ps={{ base: '2.75rem', lg: 12 }}
+          h={SENTENCE_CONTROL_HEIGHT}
+          ps={SENTENCE_CONTROL_HEIGHT}
           size={size}
           fontSize="md"
           lineHeight="base"

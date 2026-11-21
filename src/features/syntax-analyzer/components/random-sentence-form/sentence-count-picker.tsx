@@ -6,6 +6,7 @@ import {
   MAX_PICKER_SENTENCE,
   MIN_PICKER_SENTENCE,
   type RandomSentenceFormValues,
+  SENTENCE_CONTROL_HEIGHT,
 } from '@/features/syntax-analyzer';
 
 export default function SentenceCountPicker() {
@@ -31,7 +32,7 @@ export default function SentenceCountPicker() {
             ref={field.ref}
             onBlur={field.onBlur}
             aria-label="Sentence count picker"
-            h={{ base: '2.75rem', lg: 12 }}
+            h={SENTENCE_CONTROL_HEIGHT}
             ps={4}
             pe={8}
             borderRadius="md"
