@@ -31,7 +31,7 @@ export default function RandomSentenceForm({
       <FormProvider {...methods}>
         <HStack flexWrap="wrap" align="start" columnGap={4} rowGap={3}>
           <AddTopicForm flex="1 1 320px" minW={0} />
-          <HStack align="start">
+          <HStack align="start" flexWrap="wrap" maxW="full">
             <SentenceCountPicker />
             <Suspense fallback={<GenerateButton.Skeleton />}>
               <GenerateButton onClick={generateSentences} loading={isFetching} />
