@@ -88,10 +88,9 @@ const config = defineConfig({
           variant: {
             // Declare the inherited variant so defineRecipe can type-check the default.
             surface: {},
-            ghost: { _hover: { bg: 'colorPalette.subtle' }, _active: { bg: 'colorPalette.muted' } },
+            ghost: { _active: { bg: 'colorPalette.muted' } },
             outline: {
               borderColor: 'colorPalette.border',
-              _hover: { bg: 'colorPalette.subtle' },
               _active: { bg: 'colorPalette.muted' },
             },
             subtle: {
