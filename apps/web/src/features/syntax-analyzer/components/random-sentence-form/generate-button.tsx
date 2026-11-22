@@ -1,5 +1,5 @@
 import { Button, type ButtonProps, Icon, Skeleton, Stack, Text } from '@chakra-ui/react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { RiAiGenerate } from 'react-icons/ri';
 
 import {
@@ -30,32 +30,23 @@ const GenerateButtonControl = ({ count, ...buttonProps }: ButtonProps & { count:
       variant="outline"
       colorPalette="teal"
       borderColor="currentColor"
+      size="lg"
       w="max-content"
-      minW={170}
       maxW="full"
       gap={0}
-      h="auto"
-      minH={SENTENCE_CONTROL_HEIGHT}
-      py={1}
+      h={SENTENCE_CONTROL_HEIGHT}
       fontSize="md"
       textTransform="uppercase"
-      css={{ '&:lang(en)': { smDown: { px: 2, fontSize: 'sm' } } }}
       {...buttonProps}
     >
       <Icon as={RiAiGenerate} me={2} />
-      <Text as="span" whiteSpace="normal">
-        <Trans
-          t={t}
-          i18nKey="generator.generate"
-          components={{ wide: <Text as="span" hideBelow="sm" /> }}
-        />
-      </Text>
+      <Text as="span">{t('generator.generate')}</Text>
       <Text pl={1} as="span" fontSize="sm" fontVariantNumeric="tabular-nums">
         (
         <Text as="span" display="inline-block" w="2ch" textAlign="end">
           {count}
         </Text>
-        {`/${DAILY_SENTENCE_LIMIT})`}
+        {` / ${DAILY_SENTENCE_LIMIT})`}
       </Text>
     </Button>
   );

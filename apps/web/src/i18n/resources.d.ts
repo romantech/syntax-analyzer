@@ -94,7 +94,7 @@ export default interface Resources {
       "copySentence": "문장 복사: {{sentence}}",
       "count": "문장 수",
       "decreaseCount": "문장 수 줄리기",
-      "generate": "문장 생성",
+      "generate": "생성",
       "heading": "랜덤 문장 생성",
       "increaseCount": "문장 수 늘리기",
       "keyword": "영문 키워드",
