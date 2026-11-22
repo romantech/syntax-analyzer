@@ -7,12 +7,12 @@ import {
   sentencesSchema,
 } from '@/constants';
 import { handleValidationErrors } from '@/middlewares/handleValidationErrors';
-import { validateAnalysisCount } from '@/middlewares/validateAnalysisCount';
+import { validateClientIP } from '@/middlewares/validateClientIP';
 import {
   ANALYZER_REDIS_SCHEMA,
-  decrementRedisCounters,
   RANDOM_SENTENCE_CONFIG,
   redis,
+  withAnalyzerQuota,
 } from '@/services';
 import { asyncHandler, throwCustomError } from '@/utils';
 import {
@@ -23,24 +23,21 @@ import {
 
 const { IP_UNIDENTIFIABLE, RETRIEVE_FAILED } = ERROR_MESSAGES;
 const { KEYS, FIELDS } = ANALYZER_REDIS_SCHEMA;
-const DECREMENT_COUNT = 1;
+const RANDOM_SENTENCE_COST = 1;
 
 export const getRandomSentences = [
   checkMaxCharField,
   checkTopicsField,
   checkSentenceCountField,
-  validateAnalysisCount(FIELDS.RANDOM_SENTENCE, () => DECREMENT_COUNT),
   handleValidationErrors,
+  validateClientIP,
   asyncHandler(async (req, res) => {
     const clientIP = req.clientIP ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
-    const sentences = await generateRandomSentences(
-      matchedData<RandomSentenceParams>(req),
-    );
-
-    await decrementRedisCounters(
-      [KEYS.REMAINING.TOTAL, KEYS.REMAINING.USER(clientIP)],
+    const sentences = await withAnalyzerQuota(
+      clientIP,
       FIELDS.RANDOM_SENTENCE,
-      DECREMENT_COUNT,
+      RANDOM_SENTENCE_COST,
+      () => generateRandomSentences(matchedData<RandomSentenceParams>(req)),
     );
 
     res.status(200).json(sentences);

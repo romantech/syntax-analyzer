@@ -14,6 +14,8 @@
 
 실제 API와 연동하려면 [서버 환경 변수 예제](../apps/api/.env.example)를 기준으로 `apps/api/.env`에 개발용 Redis와 OpenAI 설정을 입력하고 `CORS_ORIGIN`에 `http://localhost:5173`을 추가한다. [웹 환경 변수 예제](../.env.example)를 기준으로 루트 `.env.local`의 `VITE_API_BASE_URL_DEV`를 `http://localhost:3001`로 설정한다. 루트에서 별도 터미널로 `pnpm dev:api`와 `pnpm dev`를 실행한 뒤 <http://localhost:5173/>을 연다.
 
+Redis 할당량 통합 테스트는 전용 로컬 Redis를 실행한 뒤 `REDIS_TEST_PORT=6379 pnpm --filter syntax-analyzer-api test`로 실행한다. 모델 호출은 테스트에서 대체한다. GitHub Actions는 테스트용 Redis를 제공한다.
+
 ## 로컬 목 모드
 
 `pnpm dev:mock`을 실행하고 <http://localhost:5173/analyzer>를 연다. Vite가 위 세 API에 직접 응답한다.

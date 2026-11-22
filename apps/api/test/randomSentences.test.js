@@ -27,16 +27,13 @@ require.cache[servicesPath] = {
       FIELDS: { ANALYSIS: 'analysis', RANDOM_SENTENCE: 'random_sentence' },
     },
     RANDOM_SENTENCE_CONFIG: {},
-    decrementRedisCounters: async (_keys, field, cost) => {
+    withAnalyzerQuota: async (_ip, field, cost, run) => {
       quotaDebit = { field, cost };
+      return run();
     },
     redis: {
-      hget: async (key, field) => {
-        if (key === 'prompt') {
-          return 'Generate {sent_count} sentences with up to {max_chars} characters about {topics}';
-        }
-        return field === 'random_sentence' ? '1' : '0';
-      },
+      hget: async () =>
+        'Generate {sent_count} sentences with up to {max_chars} characters about {topics}',
     },
   },
 };
