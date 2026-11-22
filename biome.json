@@ -10,7 +10,6 @@
     "includes": ["**", "!!apps", "!!dist", "!!dev-dist"]
   },
   "formatter": {
-    "includes": ["**", "!CHANGELOG.md"],
     "indentStyle": "space",
     "lineWidth": 100
   },

@@ -12,7 +12,7 @@
   },
   "formatter": {
     "enabled": true,
-    "includes": ["**", "!src/i18n/resources.d.ts"],
+    "includes": ["**", "!CHANGELOG.md", "!src/i18n/resources.d.ts"],
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
