@@ -16,7 +16,7 @@ export default function GenerateButton(buttonProps: ButtonProps) {
   const hasCount = count > 0;
 
   return (
-    <Stack align="start" w="min-content">
+    <Stack align="start" w="min-content" maxW="full">
       <GenerateButtonControl count={count} disabled={!hasCount} {...buttonProps} />
       {!hasCount && <UsageLimitMessage />}
     </Stack>
@@ -30,15 +30,21 @@ const GenerateButtonControl = ({ count, ...buttonProps }: ButtonProps & { count:
       variant="outline"
       colorPalette="teal"
       borderColor="currentColor"
+      w="max-content"
       minW={170}
+      maxW="full"
       gap={0}
-      h={SENTENCE_CONTROL_HEIGHT}
+      h="auto"
+      minH={SENTENCE_CONTROL_HEIGHT}
+      py={1}
       fontSize="md"
       textTransform="uppercase"
       {...buttonProps}
     >
       <Icon as={RiAiGenerate} me={2} />
-      <Text as="span">{t('generator.generate')}</Text>
+      <Text as="span" whiteSpace="normal">
+        {t('generator.generate')}
+      </Text>
       <Text pl={1} as="span" fontSize="sm" fontVariantNumeric="tabular-nums">
         (
         <Text as="span" display="inline-block" w="2ch" textAlign="end">
