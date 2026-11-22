@@ -89,10 +89,9 @@ const config = defineConfig({
           },
           variant: {
             surface: { _dark: { shadowColor: 'border' } },
-            ghost: { _hover: { bg: 'colorPalette.subtle' }, _active: { bg: 'colorPalette.muted' } },
+            ghost: { _active: { bg: 'colorPalette.muted' } },
             outline: {
               borderColor: 'colorPalette.border',
-              _hover: { bg: 'colorPalette.subtle' },
               _active: { bg: 'colorPalette.muted' },
             },
             subtle: {
