@@ -1,5 +1,5 @@
 import { Button, type ButtonProps, Icon, Skeleton, Stack, Text } from '@chakra-ui/react';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { RiAiGenerate } from 'react-icons/ri';
 
 import {
@@ -39,11 +39,16 @@ const GenerateButtonControl = ({ count, ...buttonProps }: ButtonProps & { count:
       py={1}
       fontSize="md"
       textTransform="uppercase"
+      css={{ '&:lang(en)': { smDown: { px: 2, fontSize: 'sm' } } }}
       {...buttonProps}
     >
       <Icon as={RiAiGenerate} me={2} />
       <Text as="span" whiteSpace="normal">
-        {t('generator.generate')}
+        <Trans
+          t={t}
+          i18nKey="generator.generate"
+          components={{ wide: <Text as="span" hideBelow="sm" /> }}
+        />
       </Text>
       <Text pl={1} as="span" fontSize="sm" fontVariantNumeric="tabular-nums">
         (
