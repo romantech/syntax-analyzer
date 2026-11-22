@@ -7,37 +7,16 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!!dist", "!!dev-dist", "!src/assets/lottie/**/*.json"]
+    "includes": ["**", "!!apps", "!!dist", "!!dev-dist"]
   },
   "formatter": {
-    "enabled": true,
-    "includes": ["**", "!CHANGELOG.md", "!src/i18n/resources.d.ts"],
+    "includes": ["**", "!CHANGELOG.md"],
     "indentStyle": "space",
-    "indentWidth": 2,
-    "lineEnding": "lf",
     "lineWidth": 100
-  },
-  "assist": {
-    "actions": {
-      "source": {
-        "organizeImports": "on"
-      }
-    }
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "preset": "recommended"
-    }
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single",
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
-      "semicolons": "always",
-      "arrowParentheses": "always"
+      "quoteStyle": "single"
     }
   }
 }

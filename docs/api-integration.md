@@ -2,15 +2,21 @@
 
 ## 계약 확인
 
-요청 필드, 응답 형식, 검증 규칙을 바꿀 때는 프런트엔드 호출부와 `project-server`의 구현을 함께 확인한다. [서버 라우트](https://github.com/romantech/project-server/blob/main/src/routes/analyzer.ts), [입력 검증](https://github.com/romantech/project-server/blob/main/src/validators/analyzer.ts), [API 명세](https://github.com/romantech/project-server#syntax-analyzer)
+요청 필드, 응답 형식, 검증 규칙을 바꿀 때는 프런트엔드 호출부와 Express 구현을 함께 확인한다. [서버 라우트](../apps/api/src/routes/analyzer.ts) · [입력 검증](../apps/api/src/validators/analyzer.ts) · [API 명세](../apps/api/README.md)
 
-- `POST /analyzer`의 모델 키와 토큰 배열, `TAnalysis` 응답. [분석 요청](../src/features/syntax-analyzer/api/create-analysis.ts), [응답 타입](../src/features/syntax-editor/types/analysis.ts)
-- `GET /analyzer/random-sentences`의 `sent_count`와 반복 쿼리 키(`topics=A&topics=B`), 문장 배열 응답. [랜덤 문장 요청](../src/features/syntax-analyzer/api/get-random-sentences.ts)
-- `GET /analyzer/remaining-counts`의 `analysis`와 `random_sentence` 수치. [잔여 횟수 요청](../src/features/syntax-analyzer/api/get-remaining-counts.ts)
+- `POST /analyzer`의 모델 키와 토큰 배열, `TAnalysis` 응답. [분석 요청](../apps/web/src/features/syntax-analyzer/api/create-analysis.ts) · [응답 타입](../apps/web/src/features/syntax-editor/types/analysis.ts)
+- `GET /analyzer/random-sentences`의 `sent_count`와 반복 쿼리 키(`topics=A&topics=B`), 문장 배열 응답. [랜덤 문장 요청](../apps/web/src/features/syntax-analyzer/api/get-random-sentences.ts)
+- `GET /analyzer/remaining-counts`의 `analysis`와 `random_sentence` 수치. [잔여 횟수 요청](../apps/web/src/features/syntax-analyzer/api/get-remaining-counts.ts)
+
+## 로컬 개발
+
+저장소 루트에서 `pnpm install`로 두 앱의 의존성을 설치한다. `pnpm lint`, `pnpm test`, `pnpm build`는 두 앱을 확인하고, `pnpm i18n:check`는 웹 번역을 확인한다.
+
+실제 API와 연동하려면 [서버 환경 변수 예제](../apps/api/.env.example)를 기준으로 `apps/api/.env`에 개발용 Redis와 OpenAI 설정을 입력하고 `CORS_ORIGIN`에 `http://localhost:5173`을 추가한다. [웹 환경 변수 예제](../.env.example)를 기준으로 루트 `.env.local`의 `VITE_API_BASE_URL_DEV`를 `http://localhost:3001`로 설정한다. 루트에서 별도 터미널로 `pnpm dev:api`와 `pnpm dev`를 실행한 뒤 <http://localhost:5173/>을 연다.
 
 ## 로컬 목 모드
 
-`pnpm dev:mock`을 실행하고 <http://localhost:5173/analyzer>를 연다. Vite가 위 세 API에 직접 응답하므로 `project-server`와 API 주소 설정이 필요 없다.
+`pnpm dev:mock`을 실행하고 <http://localhost:5173/analyzer>를 연다. Vite가 위 세 API에 직접 응답한다.
 
 | 실행 명령                                   | 확인할 동작                                                                  |
 | ------------------------------------------- | ---------------------------------------------------------------------------- |
@@ -21,7 +27,6 @@
 
 - 분석 성공 시 선택 모델에 따라 1회 또는 2회, 문장 생성 성공 시 문장 수와 관계없이 1회 차감한다. 횟수는 개발 서버 메모리에 저장하며 서버를 다시 시작하면 초기화된다.
 - 생성에는 주제와 무관한 고정 문장을 사용한다. 첫 번째 샘플과 입력 토큰이 일치하면 편집기 샘플의 세그먼트 트리를 반환한다. 다른 입력에는 입력 토큰 전체를 감싸는 루트 세그먼트만 반환한다.
-- 실제 API 연동은 `project-server`의 `pnpm start:dev`와 프런트엔드의 `pnpm dev`를 함께 실행해 확인한다.
 
 ### 샘플 분석 확인
 
@@ -33,7 +38,10 @@
 
 1. 기존 화면이 보낼 요청과 읽을 응답을 확인한다. 필드 이름이나 필수 여부가 바뀐다면 서버에서 기존 요청과 새 요청을 함께 처리하고, 기존 화면이 읽는 응답 필드를 유지하는 구간을 둔다.
 2. 기존 프런트엔드와 변경된 서버의 조합을 검증한 뒤 서버를 먼저 배포한다. 새 서버 동작에 의존하는 프런트엔드는 새 조합을 검증한 뒤 배포한다.
-3. 기존 프런트엔드로 되돌릴 가능성과 열린 탭, PWA 캐시를 고려해 호환 동작을 제거할 시점을 정한다. 두 저장소를 변경할 때는 PR을 서로 연결하고 배포 순서와 롤백 시 사용할 조합을 기록한다.
+3. 기존 프런트엔드로 되돌릴 가능성과 열린 탭, PWA 캐시를 고려해 호환 동작을 제거할 시점을 정한다. 웹과 API를 함께 바꾸는 PR에 배포 순서와 롤백 시 사용할 조합을 기록한다.
+
+- Vercel은 저장소 루트의 [설정](../vercel.json)으로 웹을 빌드하고 `apps/web/dist`를 배포한다.
+- Koyeb에서 이 저장소를 소스로 쓰는 전환은 [#159](https://github.com/romantech/syntax-analyzer/issues/159)에서 진행한다. 전환 전에는 `romantech/project-server`가 Koyeb 배포 소스다.
 
 ## 배포 전후 확인
 

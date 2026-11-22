@@ -9,6 +9,8 @@ import { mockAnalyzer } from './dev/mock-analyzer.ts';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => ({
+  // Keep using the repository root's .env files after moving the web app.
+  envDir: fileURLToPath(new URL('../../', import.meta.url)),
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   plugins: [
     react(),
@@ -114,7 +116,11 @@ export default defineConfig(({ command, mode }) => ({
       },
     },
   },
-  server: { open: true, host: true },
+  server: {
+    open: true,
+    host: true,
+    fs: { allow: [fileURLToPath(new URL('.', import.meta.url))] },
+  },
   define: {
     /** Jotai Devtools process is not defined 문제 해결
      * @see https://github.com/jotaijs/jotai-devtools/issues/82#issuecomment-1632818246 */

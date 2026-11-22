@@ -7,7 +7,7 @@
 Syntax Analyzer 是一款可自动分析英语句子结构并编辑分析结果的网页应用。它使用 30 多种常用语法标签，让复杂的句子结构一目了然。它还可以根据你输入的主题随机生成英语句子。英语句法分析使用本项目微调的 OpenAI 模型。
 
 - 网页应用 · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
-- 后端仓库 · [https://github.com/romantech/project-server](https://github.com/romantech/project-server)
+- [Express API 文档](apps/api/README.md)
 - 模型微调仓库 · [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
 
 # 目录

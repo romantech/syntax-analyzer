@@ -4,5 +4,7 @@
       "ENABLE_EXPERIMENTAL_COREPACK": "1"
     }
   },
+  "buildCommand": "pnpm --filter syntax-analyzer-web build",
+  "outputDirectory": "apps/web/dist",
   "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
