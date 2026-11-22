@@ -38,7 +38,7 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
         gap={0}
         maxH="190px"
         overflowY="auto"
-        separator={<StackSeparator _dark={{ opacity: 0.9 }} />}
+        separator={<StackSeparator _dark={{ opacity: 0.8 }} />}
       >
         {data?.map((sentence) => (
           <Button
