@@ -13,8 +13,9 @@ import {
   tabsAnatomy,
 } from '@chakra-ui/react/anatomy';
 
-const fontFamily =
-  'var(--app-font-family, "Pretendard Variable", system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif)';
+const pretendardFontFamily =
+  '"Pretendard Variable", system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+const fontFamily = `var(--app-font-family, ${pretendardFontFamily})`;
 
 const config = defineConfig({
   // next-themes puts one explicit mode on <html>, the root of the semantic tokens.
@@ -28,7 +29,11 @@ const config = defineConfig({
       },
     },
     tokens: {
-      fonts: { body: { value: fontFamily }, heading: { value: fontFamily } },
+      fonts: {
+        body: { value: fontFamily },
+        heading: { value: fontFamily },
+        brand: { value: pretendardFontFamily },
+      },
       lineHeights: { base: { value: 1.5 } },
     },
     semanticTokens: {
@@ -257,12 +262,12 @@ const config = defineConfig({
     html: { color: 'fg', bg: 'bg' },
     '[lang]:lang(ja)': {
       '--app-font-family':
-        '"Hiragino Sans", "Yu Gothic", "Noto Sans CJK JP", system-ui, sans-serif',
+        '"Pretendard JP Variable", "Hiragino Sans", "Yu Gothic", "Noto Sans CJK JP", system-ui, sans-serif',
       fontFamily: 'var(--app-font-family)',
     },
     '[lang]:lang(zh-Hans)': {
       '--app-font-family':
-        '"PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif',
+        '"Noto Sans SC", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif',
       fontFamily: 'var(--app-font-family)',
     },
     body: {

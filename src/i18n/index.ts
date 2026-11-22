@@ -14,6 +14,17 @@ import ja from './locales/ja/translation.json';
 import ko from './locales/ko/translation.json';
 import zhHans from './locales/zh-Hans/translation.json';
 
+const localeFonts: Partial<Record<Language, { id: string; href: string }>> = {
+  ja: {
+    id: 'pretendard-jp',
+    href: 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-jp-dynamic-subset.min.css',
+  },
+  'zh-Hans': {
+    id: 'noto-sans-sc',
+    href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400..800&display=swap',
+  },
+};
+
 function readStoredLanguage() {
   try {
     return window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
@@ -25,6 +36,17 @@ function readStoredLanguage() {
 i18n.on('languageChanged', (language) => {
   document.documentElement.lang = language;
   document.title = i18n.t('home.appTitle');
+
+  const font = isLanguage(language) ? localeFonts[language] : undefined;
+  if (!font || document.getElementById(font.id)) return;
+
+  const stylesheet = document.createElement('link');
+  stylesheet.id = font.id;
+  stylesheet.rel = 'stylesheet';
+  stylesheet.crossOrigin = 'anonymous';
+  stylesheet.href = font.href;
+  stylesheet.addEventListener('error', () => stylesheet.remove(), { once: true });
+  document.head.append(stylesheet);
 });
 
 void i18n.use(initReactI18next).init({

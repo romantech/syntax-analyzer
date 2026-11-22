@@ -114,10 +114,9 @@ export default interface Resources {
       "generatorImage": "랜덤 문장 생성 화면",
       "generatorTitle": "원하는 주제로\n랜덤 문장 생성",
       "heroDescription": "AI가 분석한 영어 문장 구조를 한눈에 살펴보세요. 단어, 구, 절의 관계를 시각적으로 확인하고 직접 편집할 수 있어요.",
-      "heroLead": "AI로 영어 문장 구조 분석",
-      "heroTitle": "영어 구문\n분석기",
+      "heroLead": "AI 영어 문장 구조 분석",
       "scrollDown": "아래로 스크롤",
-      "tryNow": "지금 해보기"
+      "tryNow": "지금 사용해 보기"
     },
     "nav": {
       "analyzer": "분석기",

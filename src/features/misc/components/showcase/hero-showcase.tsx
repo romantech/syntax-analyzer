@@ -25,13 +25,15 @@ export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSecti
         </Heading>
         <Heading
           as="h1"
+          lang="en"
+          fontFamily="brand"
           fontSize={{ base: '4xl', sm: '5xl', md: '6xl', lg: '7xl' }}
           lineHeight={{ base: 1.2, sm: 1 }}
           textTransform="uppercase"
           whiteSpace="pre-line"
           fontWeight="extrabold"
         >
-          {t('home.heroTitle')}
+          {'Syntax\nAnalyzer'}
         </Heading>
       </Stack>
       <Text
