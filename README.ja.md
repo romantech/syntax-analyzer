@@ -7,7 +7,7 @@
 Syntax Analyzer は、英文の構造を自動で分析し、その結果を自由に編集できるウェブアプリです。よく使われる30種類以上の文法タグで、複雑な英文の構造をひと目で確認できます。入力したトピックに沿って英文をランダムに生成することもできます。英文の分析には、このプロジェクトでファインチューニングした OpenAI のモデルを使用しています。
 
 - ウェブアプリ · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
-- バックエンドのリポジトリ · [https://github.com/romantech/project-server](https://github.com/romantech/project-server)
+- [Express API リファレンス](apps/api/README.md)
 - ファインチューニングのリポジトリ · [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
 
 # 目次

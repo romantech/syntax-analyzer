@@ -7,7 +7,7 @@
 Syntax Analyzer is a web app that automatically analyzes English sentence structure and lets you edit the results. It uses more than 30 common grammar tags to show how complex sentences fit together. It can also generate random sentences on the topics you enter. The analyzer uses an OpenAI model fine-tuned for this project.
 
 - Web app · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
-- Backend repository · [https://github.com/romantech/project-server](https://github.com/romantech/project-server)
+- [Express API reference](apps/api/README.md)
 - Fine-tuning repository · [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
 
 # Contents

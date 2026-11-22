@@ -37,7 +37,7 @@ API 검증에는 서비스 워커를 차단한 브라우저 컨텍스트를 사�
 - 모바일 시트에서 태그를 고르면 시트가 닫히고 포커스가 `구문 문장` 영역으로 이동
 - 단어를 선택한 뒤 시트를 다시 열고 닫기 버튼이나 Esc로 닫으면 선택 범위 유지 및 `태그 선택` 버튼으로 포커스 복귀
 - 태그 적용 후 문장 영역으로 포커스 복귀
-- v2 저장·초기화 팝오버는 실제 버튼 외에 감싸는 요소에도 `role="button"`이 있어 같은 이름으로 두 요소가 노출됨. 공통 UI 전환 때 트리거의 접근성 확인. [ConfirmPopover 구현](../src/base/components/modal/confirm-popover.tsx)
+- v2 저장·초기화 팝오버는 실제 버튼 외에 감싸는 요소에도 `role="button"`이 있어 같은 이름으로 두 요소가 노출됨. 공통 UI 전환 때 트리거의 접근성 확인. [ConfirmPopover 구현](../apps/web/src/base/components/modal/confirm-popover.tsx)
 
 <details>
 <summary>태깅과 저장 재현용 데이터</summary>
