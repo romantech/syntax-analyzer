@@ -88,8 +88,7 @@ const config = defineConfig({
             lg: { h: 12, minW: 12, px: 6, fontSize: 'lg', gap: 2, textStyle: 'button' },
           },
           variant: {
-            // Declare the inherited variant so defineRecipe can type-check the default.
-            surface: {},
+            surface: { _dark: { shadowColor: 'border' } },
             ghost: { _hover: { bg: 'colorPalette.subtle' }, _active: { bg: 'colorPalette.muted' } },
             outline: {
               borderColor: 'colorPalette.border',
