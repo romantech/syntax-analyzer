@@ -4,6 +4,8 @@ import { setupRoutes } from '@/routes';
 import { redis } from '@/services';
 import { checkEnvVariables } from '@/utils';
 
+const REDIS_STARTUP_TIMEOUT_MS = 10_000;
+
 /**
  * 배포 환경에선 빌드(ts -> js 파일로 트랜스파일) 후 모든 js 파일이 dist 폴더에 저장됨
  * node -r module-alias/register 명령어는 module-alias/register 모듈을 실행하고,
@@ -14,15 +16,27 @@ import { checkEnvVariables } from '@/utils';
 const initServer = async () => {
   checkEnvVariables();
 
-  const app = createServer();
-  app.locals.redis = redis;
-
+  let startupTimeout: ReturnType<typeof setTimeout> | undefined;
   try {
-    await redis.ping();
+    await Promise.race([
+      redis.ping(),
+      new Promise<never>((_, reject) => {
+        startupTimeout = setTimeout(() => {
+          reject(new Error('Redis PING timed out during startup'));
+        }, REDIS_STARTUP_TIMEOUT_MS);
+      }),
+    ]);
   } catch (err) {
     logger.error('Failed to check the Redis connection:', err);
+    redis.disconnect();
+    process.exitCode = 1;
+    return;
+  } finally {
+    clearTimeout(startupTimeout);
   }
 
+  const app = createServer();
+  app.locals.redis = redis;
   setupRoutes(app);
 
   app.use(notFoundHandler);
