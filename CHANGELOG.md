@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.2](https://github.com/romantech/syntax-analyzer/compare/v1.3.1...v1.3.2) (2026-11-22)
+
+
+### Bug Fixes
+
+* align sentence form controls during loading ([#183](https://github.com/romantech/syntax-analyzer/issues/183)) ([e547312](https://github.com/romantech/syntax-analyzer/commit/e5473124f69af599d344795d0798d929ed8113ee))
+* improve UI readability and accessibility ([#186](https://github.com/romantech/syntax-analyzer/issues/186)) ([794c78c](https://github.com/romantech/syntax-analyzer/commit/794c78cc660e893c5af6775053c5495f29f4d336))
+
 ## [1.3.1](https://github.com/romantech/syntax-analyzer/compare/v1.3.0...v1.3.1) (2026-11-21)
 
 
