@@ -63,17 +63,19 @@ export function Header() {
       boxShadow="sm"
     >
       <HStack maxW="8xl" mx="auto" gap={{ base: 0, sm: 2 }}>
-        <HStack gap={{ base: 0, sm: 2 }}>
+        <HStack gap={{ base: 'clamp(0px, calc(8vw - 26px), 4px)', sm: 2 }}>
           {navLinks.map(({ label, path }) => (
             <Flex
               asChild
               key={path}
               align="center"
+              justify="center"
               transitionProperty="background-color, color"
               transitionDuration="0.3s"
               color="fg.muted"
               px={{ base: 0, lg: 4 }}
               py={{ base: 0, lg: 2 }}
+              minW={{ base: '44px', lg: 'auto' }}
               minH={{ base: '44px', lg: 10 }}
               borderRadius="xl"
               fontWeight="semibold"
@@ -97,8 +99,10 @@ export function Header() {
                   as="span"
                   display="flex"
                   alignItems="center"
+                  justifyContent="center"
+                  minW={{ base: '44px', lg: 'auto' }}
                   h={{ base: 10, lg: 'auto' }}
-                  px={{ base: 1.5, sm: 4, lg: 0 }}
+                  px={{ base: 'clamp(6px, calc(8vw - 20px), 12px)', sm: 4, lg: 0 }}
                   borderRadius="xl"
                 >
                   {label}
