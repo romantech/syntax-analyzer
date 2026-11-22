@@ -40,8 +40,18 @@
 2. 기존 프런트엔드와 변경된 서버의 조합을 검증한 뒤 서버를 먼저 배포한다. 새 서버 동작에 의존하는 프런트엔드는 새 조합을 검증한 뒤 배포한다.
 3. 기존 프런트엔드로 되돌릴 가능성과 열린 탭, PWA 캐시를 고려해 호환 동작을 제거할 시점을 정한다. 웹과 API를 함께 바꾸는 PR에 배포 순서와 롤백 시 사용할 조합을 기록한다.
 
-- Vercel은 저장소 루트의 [설정](../vercel.json)으로 웹을 빌드하고 `apps/web/dist`를 배포한다.
-- Koyeb에서 이 저장소를 소스로 쓰는 전환은 [#159](https://github.com/romantech/syntax-analyzer/issues/159)에서 진행한다. 전환 전에는 `romantech/project-server`가 Koyeb 배포 소스다.
+Vercel은 저장소 루트의 [설정](../vercel.json)으로 웹을 빌드하고 `apps/web/dist`를 배포한다.
+
+### Koyeb API 배포
+
+- 기존 서비스의 GitHub 소스로 `romantech/syntax-analyzer`의 `main`을 선택한다.
+- 빌더는 Dockerfile을 선택하고 경로는 `apps/api/Dockerfile`로 설정한다. 루트 `pnpm-lock.yaml`과 워크스페이스 설정을 사용하므로 Work directory는 비운다. Entrypoint와 Command는 Dockerfile의 기본값을 사용한다.
+- 기존 도메인, HTTP 포트 `8000`, 헬스 체크와 [런타임 환경 변수](../apps/api/.env.example)를 유지한다. `NODE_ENV=production`과 포트가 기존 서비스 설정과 일치하는지 확인한다.
+- 배포 전 로컬에서는 저장소 루트에서 `docker build -f apps/api/Dockerfile -t syntax-analyzer-api .`로 같은 이미지를 빌드할 수 있다.
+- 새 배포가 Healthy 상태가 되면 기존 API 주소의 `/health`와 `/analyzer/remaining-counts`를 확인하고 웹에서 분석과 랜덤 문장 생성을 검증한다.
+- 전환 직후 문제가 생기면 Koyeb Deployments에서 `romantech/project-server`의 마지막 Healthy 배포 설정을 선택해 다시 배포한다. 이전 설정의 GitHub 소스와 빌드팩이 적용됐는지 확인한 뒤 기존 API 주소에서 동일한 검증을 반복한다. 전환 이후에는 마지막 정상 모노레포 배포를 같은 방법으로 되돌린다.
+
+[Koyeb GitHub 배포 및 롤백](https://www.koyeb.com/docs/build-and-deploy/deploy-with-git) · [Koyeb 모노레포 설정](https://www.koyeb.com/docs/build-and-deploy/monorepo)
 
 ## 배포 전후 확인
 
