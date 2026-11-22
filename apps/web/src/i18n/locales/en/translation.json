@@ -92,7 +92,7 @@
     "copySentence": "Copy sentence: {{sentence}}",
     "count": "Number of sentences",
     "decreaseCount": "Decrease sentence count",
-    "generate": "Generate<wide> sentences</wide>",
+    "generate": "Generate",
     "heading": "Random sentence generator",
     "increaseCount": "Increase sentence count",
     "keyword": "English keyword",
