@@ -131,127 +131,127 @@
   },
   "tags": {
     "tag1": {
-      "description": "表示句子所陈述的人或事物的单词或短语。",
+      "description": "表示句子所陈述的人或事物的单词或短语",
       "name": "主语"
     },
     "tag10": {
-      "description": "由 to 加动词原形构成的形式。",
+      "description": "由 to 加动词原形构成的形式",
       "name": "带 to 的不定式"
     },
     "tag11": {
-      "description": "用作名词的动词 -ing 形式。",
+      "description": "用作名词的动词 -ing 形式",
       "name": "动名词"
     },
     "tag12": {
-      "description": "动词的现在分词或过去分词形式。",
+      "description": "动词的现在分词或过去分词形式",
       "name": "分词"
     },
     "tag13": {
-      "description": "连接单词、短语或分句的词。",
+      "description": "连接单词、短语或分句的词",
       "name": "连词"
     },
     "tag14": {
-      "description": "以分词为核心的短语。",
+      "description": "以分词为核心的短语",
       "name": "分词短语"
     },
     "tag15": {
-      "description": "由介词及其宾语构成的短语。",
+      "description": "由介词及其宾语构成的短语",
       "name": "介词短语"
     },
     "tag16": {
-      "description": "以名词为核心、可带修饰语的短语。",
+      "description": "以名词为核心、可带修饰语的短语",
       "name": "名词短语"
     },
     "tag17": {
-      "description": "在句中起副词作用的短语。",
+      "description": "在句中起副词作用的短语",
       "name": "副词短语"
     },
     "tag18": {
-      "description": "以动词为核心的短语。",
+      "description": "以动词为核心的短语",
       "name": "动词短语"
     },
     "tag19": {
-      "description": "在句中起形容词作用的短语。",
+      "description": "在句中起形容词作用的短语",
       "name": "形容词短语"
     },
     "tag2": {
-      "description": "表示动作或状态的词。",
+      "description": "表示动作或状态的词",
       "name": "动词"
     },
     "tag20": {
-      "description": "以动名词为核心的短语。",
+      "description": "以动名词为核心的短语",
       "name": "动名词短语"
     },
     "tag21": {
-      "description": "由不定式及相关成分构成的短语。",
+      "description": "由不定式及相关成分构成的短语",
       "name": "不定式短语"
     },
     "tag22": {
-      "description": "与另一个语法地位相同的分句并列的分句。",
+      "description": "与另一个语法地位相同的分句并列的分句",
       "name": "并列分句"
     },
     "tag23": {
-      "description": "与另一分句采用相同语法结构的分句。",
+      "description": "与另一分句采用相同语法结构的分句",
       "name": "平行分句"
     },
     "tag24": {
-      "description": "在句中起名词作用的从句。",
+      "description": "在句中起名词作用的从句",
       "name": "名词性从句"
     },
     "tag25": {
-      "description": "在句中起形容词作用的从句。",
+      "description": "在句中起形容词作用的从句",
       "name": "形容词性从句"
     },
     "tag26": {
-      "description": "在句中充当状语的从句。",
+      "description": "在句中充当状语的从句",
       "name": "状语从句"
     },
     "tag27": {
-      "description": "插入另一分句中的分句。",
+      "description": "插入另一分句中的分句",
       "name": "插入分句"
     },
     "tag28": {
-      "description": "补充说明所修饰的名词或表达的从句。",
+      "description": "补充说明所修饰的名词或表达的从句",
       "name": "关系从句"
     },
     "tag29": {
-      "description": "需要依附于另一分句才能构成完整句子的分句。",
+      "description": "需要依附于另一分句才能构成完整句子的分句",
       "name": "从属分句"
     },
     "tag3": {
-      "description": "与其他动词连用，表示能力、可能性或义务等意义的动词。",
+      "description": "与其他动词连用，表示能力、可能性或义务等意义的动词",
       "name": "情态动词"
     },
     "tag30": {
-      "description": "可以独立构成完整句子的分句。",
+      "description": "可以独立构成完整句子的分句",
       "name": "独立分句"
     },
     "tag31": {
-      "description": "修饰动词、形容词或其他副词的词。",
+      "description": "修饰动词、形容词或其他副词的词",
       "name": "副词"
     },
     "tag4": {
-      "description": "表示动词动作所涉及的人或事物的单词或短语。",
+      "description": "表示动词动作所涉及的人或事物的单词或短语",
       "name": "宾语"
     },
     "tag5": {
-      "description": "表示动作的接受者或受益者的单词或短语。",
+      "description": "表示动作的接受者或受益者的单词或短语",
       "name": "间接宾语"
     },
     "tag6": {
-      "description": "直接承受动词动作的单词或短语。",
+      "description": "直接承受动词动作的单词或短语",
       "name": "直接宾语"
     },
     "tag7": {
-      "description": "由介词引出的单词或短语。",
+      "description": "由介词引出的单词或短语",
       "name": "介词宾语"
     },
     "tag8": {
-      "description": "说明主语或宾语并补足其含义的单词或短语。",
+      "description": "说明主语或宾语并补足其含义的单词或短语",
       "name": "补语"
     },
     "tag9": {
-      "description": "说明宾语并补足其含义的单词或短语。",
+      "description": "说明宾语并补足其含义的单词或短语",
       "name": "宾语补足语"
     }
   },
