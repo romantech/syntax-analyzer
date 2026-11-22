@@ -1,8 +1,7 @@
 import { createServer, envConfig, logger } from '@/config';
 import { errorHandler, notFoundHandler } from '@/middlewares';
 import { setupRoutes } from '@/routes';
-import { initSchedulers } from '@/schedulers';
-import { initRedisKeys, redis } from '@/services';
+import { redis } from '@/services';
 import { checkEnvVariables } from '@/utils';
 
 /**
@@ -19,11 +18,9 @@ const initServer = async () => {
   app.locals.redis = redis;
 
   try {
-    await initRedisKeys(redis);
-    logger.info('Redis has been successfully initialized');
-    initSchedulers();
+    await redis.ping();
   } catch (err) {
-    logger.error('Failed to initialize Redis:', err);
+    logger.error('Failed to check the Redis connection:', err);
   }
 
   setupRoutes(app);

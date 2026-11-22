@@ -8,6 +8,9 @@ const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
 
 const { KEYS, FIELDS } = ANALYZER_REDIS_SCHEMA;
 const { REMAINING } = KEYS;
+const periodField = '__quota_period';
+const beforeMidnight = Date.parse('2026-11-22T14:59:59Z');
+const midnight = Date.parse('2026-11-22T15:00:00Z');
 const firstIP = '192.0.2.1';
 const secondIP = '192.0.2.2';
 const redisPort = process.env.REDIS_TEST_PORT;
@@ -35,28 +38,130 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
   });
   await redis.ping();
 
+  let now;
   require.cache[require.resolve('../dist/services/redis/redis')] = {
-    exports: { redis },
+    exports: {
+      redis: {
+        eval: (script, ...args) =>
+          redis.eval(
+            now === undefined
+              ? script
+              : script.replace("redis.call('TIME')[1]", String(now / 1000)),
+            ...args,
+          ),
+      },
+    },
   };
-  const {
-    getAnalyzerRemainingCounts,
-    resetAnalyzerQuota,
-    withAnalyzerQuota,
-  } = require('../dist/services/redis/analyzerQuota');
-  const { initRedisKeys } = require('../dist/services/redis/initRedisKeys');
+  const quotaPath = require.resolve('../dist/services/redis/analyzerQuota');
+  const { getAnalyzerRemainingCounts, withAnalyzerQuota } = require(quotaPath);
   const exhausted = {
     status: 400,
     message: 'No remaining request count available.',
   };
 
   const seed = async (field, total, user) => {
+    now = beforeMidnight;
     await clearKeys();
-    await initRedisKeys(redis);
     await getAnalyzerRemainingCounts(firstIP);
     await getAnalyzerRemainingCounts(secondIP);
     await redis.hset(REMAINING.TOTAL, field, total);
     await redis.hset(REMAINING.USER(firstIP), field, user);
   };
+
+  await context.test(
+    'initializes a missing shared quota using Redis time',
+    async () => {
+      const [secondsBefore] = await redis.time();
+      assert.deepEqual(await getAnalyzerRemainingCounts(firstIP), {
+        analysis: 10,
+        random_sentence: 20,
+      });
+      const [secondsAfter] = await redis.time();
+      const period = Number(await redis.hget(REMAINING.TOTAL, periodField));
+      assert.equal((period / 1000 + 9 * 3600) % 86400, 0);
+      assert(period <= Number(secondsAfter) * 1000);
+      assert(period + 86400000 > Number(secondsBefore) * 1000);
+    },
+  );
+
+  await context.test(
+    'the first read after midnight resets both shared balances',
+    async () => {
+      await seed(FIELDS.ANALYSIS, 0, 2);
+      await redis.hset(REMAINING.TOTAL, FIELDS.RANDOM_SENTENCE, 0);
+      assert.deepEqual(await getAnalyzerRemainingCounts(firstIP), {
+        analysis: 0,
+        random_sentence: 0,
+      });
+
+      now = midnight;
+      assert.deepEqual(await getAnalyzerRemainingCounts(firstIP), {
+        analysis: 2,
+        random_sentence: 20,
+      });
+      assert.deepEqual(
+        await redis.hmget(
+          REMAINING.TOTAL,
+          periodField,
+          FIELDS.ANALYSIS,
+          FIELDS.RANDOM_SENTENCE,
+        ),
+        [String(midnight), '50', '100'],
+      );
+    },
+  );
+
+  await context.test(
+    'concurrent requests at midnight share one refill across both operations',
+    async () => {
+      await seed(FIELDS.ANALYSIS, 0, 2);
+      await redis.hset(REMAINING.TOTAL, FIELDS.RANDOM_SENTENCE, 0);
+
+      now = midnight;
+      await Promise.all([
+        withAnalyzerQuota(firstIP, FIELDS.ANALYSIS, 2, async () => {}),
+        getAnalyzerRemainingCounts(firstIP),
+        withAnalyzerQuota(secondIP, FIELDS.RANDOM_SENTENCE, 1, async () => {}),
+      ]);
+      assert.deepEqual(
+        await redis.hmget(
+          REMAINING.TOTAL,
+          periodField,
+          FIELDS.ANALYSIS,
+          FIELDS.RANDOM_SENTENCE,
+        ),
+        [String(midnight), '48', '99'],
+      );
+
+      delete require.cache[quotaPath];
+      const restartedQuota = require(quotaPath);
+      now += 3600000;
+      await restartedQuota.getAnalyzerRemainingCounts(secondIP);
+      await restartedQuota.withAnalyzerQuota(
+        secondIP,
+        FIELDS.ANALYSIS,
+        2,
+        async () => {},
+      );
+      assert.deepEqual(
+        await redis.hmget(
+          REMAINING.TOTAL,
+          periodField,
+          FIELDS.ANALYSIS,
+          FIELDS.RANDOM_SENTENCE,
+        ),
+        [String(midnight), '46', '99'],
+      );
+    },
+  );
+
+  await context.test('initializes an old undated quota only once', async () => {
+    await seed(FIELDS.ANALYSIS, 0, 2);
+    await redis.hset(REMAINING.TOTAL, periodField, randomUUID());
+    await withAnalyzerQuota(firstIP, FIELDS.ANALYSIS, 2, async () => {});
+    await getAnalyzerRemainingCounts(firstIP);
+    assert.equal(await redis.hget(REMAINING.TOTAL, FIELDS.ANALYSIS), '48');
+  });
 
   for (const [field, cost] of [
     [FIELDS.ANALYSIS, 2],
@@ -147,14 +252,11 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
     'a late refund leaves the reset shared balance unchanged',
     async () => {
       const field = FIELDS.ANALYSIS;
-      const fireDate = new Date('2026-11-22T15:00:00Z');
       await seed(field, 2, 2);
       await assert.rejects(
         withAnalyzerQuota(firstIP, field, 2, async () => {
-          await resetAnalyzerQuota(fireDate);
+          now = midnight;
           await withAnalyzerQuota(secondIP, field, 2, async () => {});
-          await initRedisKeys(redis);
-          await resetAnalyzerQuota(fireDate);
           throw new Error('Model request failed');
         }),
         /Model request failed/,

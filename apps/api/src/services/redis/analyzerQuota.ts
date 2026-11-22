@@ -9,11 +9,36 @@ const { FIELDS, KEYS } = ANALYZER_REDIS_SCHEMA;
 const { REMAINING } = KEYS;
 const { ANALYSIS, RANDOM_SENTENCE } = ANALYZER_INIT_COUNTS;
 const PERIOD_FIELD = '__quota_period';
+const TOTAL_QUOTA_ARGS = [
+  PERIOD_FIELD,
+  FIELDS.ANALYSIS,
+  ANALYSIS.TOTAL,
+  FIELDS.RANDOM_SENTENCE,
+  RANDOM_SENTENCE.TOTAL,
+] as const;
 
-const RESERVE_QUOTA = `
+const ENSURE_TOTAL_QUOTA = `
+local function ensure_total_quota(total_key, period_field, analysis_field, analysis_limit, sentence_field, sentence_limit)
+  local seconds_per_day = 86400
+  local kst_offset = 9 * 3600
+  local now = tonumber(redis.call('TIME')[1])
+  -- Keep the millisecond timestamp format used by the old scheduler.
+  local midnight = (math.floor((now + kst_offset) / seconds_per_day) * seconds_per_day - kst_offset) * 1000
+  local period = redis.call('HGET', total_key, period_field)
+  local previous_midnight = tonumber(period)
+  if not previous_midnight or previous_midnight < midnight then
+    period = tostring(midnight)
+    redis.call('HSET', total_key, period_field, period, analysis_field, analysis_limit, sentence_field, sentence_limit)
+  end
+  return period
+end
+`;
+
+const RESERVE_QUOTA = `${ENSURE_TOTAL_QUOTA}
 local total_key, user_key, reservation_key = unpack(KEYS)
-local field, cost, period_field, reservation_id, ttl = unpack(ARGV)
+local period_field, analysis_field, analysis_limit, sentence_field, sentence_limit, field, cost, reservation_id, ttl = unpack(ARGV)
 cost = tonumber(cost)
+local total_period = ensure_total_quota(total_key, period_field, analysis_field, analysis_limit, sentence_field, sentence_limit)
 
 if redis.call('EXISTS', reservation_key) == 1 then
   return 1
@@ -25,9 +50,7 @@ if not total or not user or total < cost or user < cost then
   return 0
 end
 
-redis.call('HSETNX', total_key, period_field, reservation_id)
 redis.call('HSETNX', user_key, period_field, reservation_id)
-local total_period = redis.call('HGET', total_key, period_field)
 local user_period = redis.call('HGET', user_key, period_field)
 redis.call('HSET', total_key, field, total - cost)
 redis.call('HSET', user_key, field, user - cost)
@@ -55,29 +78,21 @@ end
 return redis.call('DEL', reservation_key)
 `;
 
-const READ_QUOTA = `
+const READ_QUOTA = `${ENSURE_TOTAL_QUOTA}
 local total_key, user_key = unpack(KEYS)
-local analysis_field, sentence_field, analysis_limit, sentence_limit, ttl = unpack(ARGV)
+local period_field, analysis_field, analysis_limit, sentence_field, sentence_limit, user_analysis_limit, user_sentence_limit, ttl = unpack(ARGV)
+ensure_total_quota(total_key, period_field, analysis_field, analysis_limit, sentence_field, sentence_limit)
 local total = redis.call('HMGET', total_key, analysis_field, sentence_field)
 local user = redis.call('HMGET', user_key, analysis_field, sentence_field)
 
 -- An in-flight reservation can temporarily lower the shared balance.
 if total[1] and total[2] and redis.call('EXISTS', user_key) == 0 then
-  redis.call('HSET', user_key, analysis_field, analysis_limit, sentence_field, sentence_limit)
+  redis.call('HSET', user_key, analysis_field, user_analysis_limit, sentence_field, user_sentence_limit)
   redis.call('EXPIRE', user_key, ttl)
-  user = {analysis_limit, sentence_limit}
+  user = {user_analysis_limit, user_sentence_limit}
 end
 
 return {total[1], total[2], user[1], user[2]}
-`;
-
-const RESET_TOTAL_QUOTA = `
-local total_key = KEYS[1]
-local period_field, reset_at, analysis_field, analysis_limit, sentence_field, sentence_limit = unpack(ARGV)
-local previous_reset = tonumber(redis.call('HGET', total_key, period_field))
-if not previous_reset or previous_reset < tonumber(reset_at) then
-  redis.call('HSET', total_key, period_field, reset_at, analysis_field, analysis_limit, sentence_field, sentence_limit)
-end
 `;
 
 export const withAnalyzerQuota = async <Result>(
@@ -99,9 +114,9 @@ export const withAnalyzerQuota = async <Result>(
       RESERVE_QUOTA,
       keys.length,
       ...keys,
+      ...TOTAL_QUOTA_ARGS,
       field,
       cost,
-      PERIOD_FIELD,
       id,
       ANALYZER_KEY_EXP,
     );
@@ -134,8 +149,7 @@ export const getAnalyzerRemainingCounts = async (clientIP: string) => {
       2,
       REMAINING.TOTAL,
       REMAINING.USER(clientIP),
-      FIELDS.ANALYSIS,
-      FIELDS.RANDOM_SENTENCE,
+      ...TOTAL_QUOTA_ARGS,
       ANALYSIS.PER_USER,
       RANDOM_SENTENCE.PER_USER,
       ANALYZER_KEY_EXP,
@@ -155,18 +169,4 @@ export const getAnalyzerRemainingCounts = async (clientIP: string) => {
     analysis: Math.min(Number(totalAnalysis), Number(userAnalysis)),
     random_sentence: Math.min(Number(totalSentences), Number(userSentences)),
   };
-};
-
-export const resetAnalyzerQuota = async (fireDate: Date) => {
-  await redis.eval(
-    RESET_TOTAL_QUOTA,
-    1,
-    REMAINING.TOTAL,
-    PERIOD_FIELD,
-    fireDate.getTime(),
-    FIELDS.ANALYSIS,
-    ANALYSIS.TOTAL,
-    FIELDS.RANDOM_SENTENCE,
-    RANDOM_SENTENCE.TOTAL,
-  );
 };
