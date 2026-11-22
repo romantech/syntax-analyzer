@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/romantech/syntax-analyzer/compare/v1.3.2...v1.4.0) (2026-11-22)
+
+
+### Features
+
+* localize the syntax analyzer UI ([#189](https://github.com/romantech/syntax-analyzer/issues/189)) ([a7f9b19](https://github.com/romantech/syntax-analyzer/commit/a7f9b19649e23f79d421c36d956228c3b7cdb842)), closes [#6](https://github.com/romantech/syntax-analyzer/issues/6)
+
+
+### Bug Fixes
+
+* polish multilingual home and navigation ([#191](https://github.com/romantech/syntax-analyzer/issues/191)) ([b1adcc2](https://github.com/romantech/syntax-analyzer/commit/b1adcc244e9c8c17710a55f62f2fe5b21094dec7))
+* use the default dotLottie WASM loader ([#187](https://github.com/romantech/syntax-analyzer/issues/187)) ([101ea13](https://github.com/romantech/syntax-analyzer/commit/101ea13327a09fa941fa58f381e379cc5da9cada)), closes [#176](https://github.com/romantech/syntax-analyzer/issues/176)
+
 ## [1.3.2](https://github.com/romantech/syntax-analyzer/compare/v1.3.1...v1.3.2) (2026-11-22)
 
 
