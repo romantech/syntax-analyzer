@@ -27,20 +27,20 @@ test('목 API는 요청한 문장과 분석 토큰을 반환하고 성공한 요
   const base = server.resolvedUrls?.local[0];
   assert.ok(base);
 
-  const remaining = async () => (await fetch(`${base}analyzer/remaining-counts`)).json();
+  const remaining = async () => (await fetch(`${base}api/analyzer/remaining-counts`)).json();
   const before = await remaining();
-  const invalid = await fetch(`${base}analyzer/random-sentences?sent_count=6`);
+  const invalid = await fetch(`${base}api/analyzer/random-sentences?sent_count=6`);
   assert.equal(invalid.status, 400);
   assert.deepEqual(await remaining(), before);
 
-  const random = await fetch(`${base}analyzer/random-sentences?sent_count=4&topics=travel`);
+  const random = await fetch(`${base}api/analyzer/random-sentences?sent_count=4&topics=travel`);
   assert.equal(random.status, 200);
   const sentences = await random.json();
   assert.equal(sentences.length, 4);
   assert.equal(sentences[0], 'The idea that she proposed was innovative.');
 
   const analyze = async (sentence: string[]) => {
-    const response = await fetch(`${base}analyzer`, {
+    const response = await fetch(`${base}api/analyzer`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: 'primary', sentence }),

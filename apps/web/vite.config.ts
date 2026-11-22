@@ -8,7 +8,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import { mockAnalyzer } from './dev/mock-analyzer.ts';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => ({
+export default defineConfig(({ command, isPreview, mode }) => ({
   // Keep using the repository root's .env files after moving the web app.
   envDir: fileURLToPath(new URL('../../', import.meta.url)),
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
@@ -120,6 +120,16 @@ export default defineConfig(({ command, mode }) => ({
     open: true,
     host: true,
     fs: { allow: [fileURLToPath(new URL('.', import.meta.url))] },
+    proxy:
+      command === 'serve' && !isPreview && mode !== 'mock'
+        ? {
+            '^/api/': {
+              target: process.env.API_PROXY_TARGET || 'http://localhost:3001',
+              changeOrigin: true,
+              rewrite: (path) => path.replace(/^\/api/, ''),
+            },
+          }
+        : undefined,
   },
   define: {
     /** Jotai Devtools process is not defined 문제 해결

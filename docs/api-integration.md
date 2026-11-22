@@ -12,13 +12,17 @@
 
 저장소 루트에서 `pnpm install`로 두 앱의 의존성을 설치한다. `pnpm lint`, `pnpm test`, `pnpm build`는 두 앱을 확인하고, `pnpm i18n:check`는 웹 번역을 확인한다.
 
-실제 API와 연동하려면 [서버 환경 변수 예제](../apps/api/.env.example)를 기준으로 `apps/api/.env`에 개발용 Redis와 OpenAI 설정을 입력하고 `CORS_ORIGIN`에 `http://localhost:5173`을 추가한다. [웹 환경 변수 예제](../.env.example)를 기준으로 루트 `.env.local`의 `VITE_API_BASE_URL_DEV`를 `http://localhost:3001`로 설정한다. 루트에서 별도 터미널로 `pnpm dev:api`와 `pnpm dev`를 실행한 뒤 <http://localhost:5173/>을 연다.
+실제 API와 연동하려면 [서버 환경 변수 예제](../apps/api/.env.example)를 기준으로 `apps/api/.env`에 개발용 Redis와 OpenAI 설정을 입력한다. 루트에서 별도 터미널로 `pnpm dev:api`와 `pnpm dev`를 실행한 뒤 <http://localhost:5173/>을 연다.
+
+Vite 개발 서버는 `/api/`로 시작하는 요청에서 접두사를 제거하고 `http://localhost:3001`로 전달한다. 같은 네트워크의 모바일에서는 Vite가 출력한 `Network` 주소로 접속한다. 웹 `.env.local`에 개발 API 주소를 넣거나 Express의 `CORS_ORIGIN`에 모바일 접속 주소를 추가할 필요가 없다. 로컬 프록시를 거친 요청은 Express에 같은 IP로 들어오므로 PC와 모바일이 IP별 할당량을 공유한다.
+
+다른 API 서버를 테스트하려면 `API_PROXY_TARGET=https://api.example.com pnpm dev`로 Vite를 실행한다. 기존 `.env.local`에 `VITE_API_BASE_URL_DEV`가 있으면 제거해도 된다.
 
 Redis 할당량 통합 테스트는 전용 로컬 Redis를 실행한 뒤 `REDIS_TEST_PORT=6379 pnpm --filter syntax-analyzer-api test`로 실행한다. 모델 호출은 테스트에서 대체한다. GitHub Actions는 테스트용 Redis를 제공한다.
 
 ## 로컬 목 모드
 
-`pnpm dev:mock`을 실행하고 <http://localhost:5173/analyzer>를 연다. Vite가 위 세 API에 직접 응답한다.
+`pnpm dev:mock`을 실행하고 <http://localhost:5173/analyzer>를 연다. Vite가 `/api`로 시작하는 세 분석 API 요청에 직접 응답한다.
 
 | 실행 명령                                   | 확인할 동작                                                                  |
 | ------------------------------------------- | ---------------------------------------------------------------------------- |
@@ -75,7 +79,7 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 
 ## 배포 전후 확인
 
-- 로컬에서 `pnpm dev`는 `VITE_API_BASE_URL_DEV`를 사용한다. 프리뷰를 포함한 운영 모드 빌드는 `VITE_API_BASE_URL_PROD`를 사용한다. 테스트 서버를 대상으로 할 때는 해당 환경의 값을 설정하고 브라우저 네트워크 탭에서 요청 주소를 확인한다.
+- 프리뷰를 포함한 운영 모드 빌드는 `VITE_API_BASE_URL_PROD`를 사용한다. 배포 환경에 맞는 값을 설정하고 브라우저 네트워크 탭에서 요청 주소를 확인한다.
 - 변경된 기능을 정상 입력과 오류 응답으로 확인한다. 분석 결과는 편집기에서 열고, 토큰과 세그먼트 형식이 바뀌었다면 기존에 저장한 분석도 다시 연다.
 - 랜덤 문장은 요청한 개수와 주제 목록이 서버에 전달되는지 확인한다. 분석이나 문장 생성이 성공하면 화면의 잔여 횟수가 갱신되는지 확인한다.
 - 문장 수를 비운 상태에서 유효한 토픽을 등록할 수 있고, 중복 또는 최대 개수 초과 시 키워드 입력 아래에 오류가 표시되는지 확인한다.

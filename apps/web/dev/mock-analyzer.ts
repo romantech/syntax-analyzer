@@ -38,9 +38,9 @@ export const mockAnalyzer = (scenario = 'success'): Plugin => ({
       if (
         !url ||
         ![
-          'GET /analyzer/remaining-counts',
-          'GET /analyzer/random-sentences',
-          'POST /analyzer',
+          'GET /api/analyzer/remaining-counts',
+          'GET /api/analyzer/random-sentences',
+          'POST /api/analyzer',
         ].includes(route)
       ) {
         return next();
@@ -56,10 +56,10 @@ export const mockAnalyzer = (scenario = 'success'): Plugin => ({
       const fail = (status: number, message: string) => send(status, { status: 'error', message });
 
       if (scenario === 'slow') await setTimeout(1500);
-      if (route === 'GET /analyzer/remaining-counts') return send(200, counts);
+      if (route === 'GET /api/analyzer/remaining-counts') return send(200, counts);
       if (scenario === 'error') return fail(500, 'Mock API error.');
 
-      if (route === 'GET /analyzer/random-sentences') {
+      if (route === 'GET /api/analyzer/random-sentences') {
         const count = Number(url.searchParams.get('sent_count') ?? DEFAULT_PICKER_COUNT);
         if (
           !Number.isInteger(count) ||
