@@ -26,8 +26,11 @@ const { KEYS, FIELDS } = ANALYZER_REDIS_SCHEMA;
 export const createAnalysis = [
   checkSentenceField,
   checkModelField,
-  validateAnalysisCount,
   handleValidationErrors,
+  validateAnalysisCount(
+    FIELDS.ANALYSIS,
+    ({ model }: RequestBody) => ANALYSIS_DECREMENT_COUNT[model],
+  ),
   asyncHandler(async (req, res) => {
     const clientIP = req.clientIP ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
     const { sentence, model }: RequestBody = req.body;
