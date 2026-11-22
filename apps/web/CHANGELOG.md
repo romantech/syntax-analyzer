@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/romantech/syntax-analyzer/compare/v1.4.1...v1.4.2) (2026-11-22)
+
+
+### Bug Fixes
+
+* refine the sentence generation button ([#213](https://github.com/romantech/syntax-analyzer/issues/213)) ([22d9656](https://github.com/romantech/syntax-analyzer/commit/22d96567e29d6bf389011ee21ce01c4986db661a))
+
 ## [1.4.1](https://github.com/romantech/syntax-analyzer/compare/v1.4.0...v1.4.1) (2026-11-22)
 
 
