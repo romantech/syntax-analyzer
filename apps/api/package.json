@@ -37,7 +37,6 @@
     "langchain": "^1.6.4",
     "module-alias": "^2.3.5",
     "morgan": "^1.12.1",
-    "node-schedule": "^2.1.2",
     "openai": "^7.55.0",
     "request-ip": "^3.3.0",
     "winston": "^3.19.0",
@@ -54,7 +53,6 @@
     "@types/module-alias": "^2.0.4",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.19.2",
-    "@types/node-schedule": "^2.1.8",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },

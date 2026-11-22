@@ -215,7 +215,9 @@ GET /analyzer/random-sentences
 
 - Each model request reserves credits from both the IP-based and shared quotas before calling the model. Random sentence generation reserves one credit per request regardless of the number of sentences.
 - If either quota has insufficient credits, the API returns HTTP 400 with `{"status":"error","message":"No remaining request count available."}`.
-- A failed model request returns credits to the quota buckets that still match the reservation. The shared quota resets at midnight Korea Standard Time, and each IP quota expires 24 hours after initialization.
+- The first balance lookup or reservation on a new date in Korea Standard Time resets both shared balances atomically. Redis provides the clock and stores the period across API restarts.
+- An existing shared balance without a recorded reset date is initialized on its first lookup or reservation after the update.
+- A failed model request returns credits to the quota buckets that still match the reservation. Each IP quota expires 24 hours after initialization.
 
 ### Check remaining counts
 
