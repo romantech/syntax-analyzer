@@ -29,7 +29,7 @@ export const getRandomSentences = [
   checkMaxCharField,
   checkTopicsField,
   checkSentenceCountField,
-  validateAnalysisCount,
+  validateAnalysisCount(FIELDS.RANDOM_SENTENCE, () => DECREMENT_COUNT),
   handleValidationErrors,
   asyncHandler(async (req, res) => {
     const clientIP = req.clientIP ?? throwCustomError(IP_UNIDENTIFIABLE, 400);

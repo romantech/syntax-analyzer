@@ -8,6 +8,7 @@ const servicesPath = require.resolve('../dist/services');
 const openAIPath = require.resolve('@langchain/openai');
 let llmCalls = 0;
 let llmPrompt = '';
+let quotaDebit;
 
 require.cache[servicesPath] = {
   exports: {
@@ -26,10 +27,16 @@ require.cache[servicesPath] = {
       FIELDS: { ANALYSIS: 'analysis', RANDOM_SENTENCE: 'random_sentence' },
     },
     RANDOM_SENTENCE_CONFIG: {},
-    decrementRedisCounters: async () => {},
+    decrementRedisCounters: async (_keys, field, cost) => {
+      quotaDebit = { field, cost };
+    },
     redis: {
-      hget: async () =>
-        'Generate {sent_count} sentences with up to {max_chars} characters about {topics}',
+      hget: async (key, field) => {
+        if (key === 'prompt') {
+          return 'Generate {sent_count} sentences with up to {max_chars} characters about {topics}';
+        }
+        return field === 'random_sentence' ? '1' : '0';
+      },
     },
   },
 };
@@ -54,21 +61,8 @@ const {
 } = require('../dist/controllers/analyzer/getRandomSentences');
 
 test('uses sanitized defaults and bracketed topic arrays', async (context) => {
-  const [maxChars, topics, sentenceCount, , validationErrors, handler] =
-    getRandomSentences;
   const app = createServer();
-  app.get(
-    '/analyzer/random-sentences',
-    maxChars,
-    topics,
-    sentenceCount,
-    (req, _res, next) => {
-      req.clientIP = '127.0.0.1';
-      next();
-    },
-    validationErrors,
-    handler,
-  );
+  app.get('/analyzer/random-sentences', ...getRandomSentences);
   app.use((error, _req, res, _next) => {
     res.status(500).json({ error: error.message });
   });
@@ -90,6 +84,7 @@ test('uses sanitized defaults and bracketed topic arrays', async (context) => {
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), ['Generated sentence.']);
   assert.equal(llmCalls, 1);
+  assert.deepEqual(quotaDebit, { field: 'random_sentence', cost: 1 });
   assert.match(llmPrompt, /sports/);
   assert.match(llmPrompt, /travel/);
 });
