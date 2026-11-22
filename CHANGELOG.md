@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/romantech/syntax-analyzer/compare/v1.4.0...v1.4.1) (2026-11-22)
+
+
+### Bug Fixes
+
+* enforce analysis model credit cost ([#196](https://github.com/romantech/syntax-analyzer/issues/196)) ([63596df](https://github.com/romantech/syntax-analyzer/commit/63596df93b16661f3952158ab51b09c741714587))
+
 ## [1.4.0](https://github.com/romantech/syntax-analyzer/compare/v1.3.2...v1.4.0) (2026-11-22)
 
 
