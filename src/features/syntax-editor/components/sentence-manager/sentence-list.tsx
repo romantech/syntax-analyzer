@@ -70,7 +70,7 @@ export default function SentenceList({ activeTab, onTabChange }: SentenceListPro
               <Card.Body px={2.5} py={0.5}>
                 <Stack
                   gap={0}
-                  separator={<StackSeparator _dark={{ opacity: 0.85 }} />}
+                  separator={<StackSeparator _dark={{ opacity: 0.9 }} />}
                   ref={source === 'user' ? parent : undefined}
                   overflowY="hidden"
                 >

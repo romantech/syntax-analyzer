@@ -154,7 +154,7 @@ const config = defineConfig({
           },
         ],
       }),
-      separator: defineRecipe({ base: { opacity: 0.6, _dark: { opacity: 0.85 } } }),
+      separator: defineRecipe({ base: { opacity: 0.6, _dark: { opacity: 0.9 } } }),
     },
     slotRecipes: {
       card: defineSlotRecipe({
