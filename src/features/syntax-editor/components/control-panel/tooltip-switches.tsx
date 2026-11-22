@@ -1,5 +1,6 @@
-import { HStack, Switch } from '@chakra-ui/react';
+import { Flex, HStack, Switch, Text } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
+import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { abbrInfoModeAtom, tagInfoModeAtom } from '@/features/syntax-editor/store';
@@ -7,47 +8,55 @@ import { abbrInfoModeAtom, tagInfoModeAtom } from '@/features/syntax-editor/stor
 function TooltipSwitch({
   label,
   preferenceAtom,
-  gap,
+  isTapMode,
 }: {
   label: string;
   preferenceAtom: typeof tagInfoModeAtom;
-  gap: number;
+  isTapMode: boolean;
 }) {
   const [checked, setChecked] = useAtom(preferenceAtom);
+  const labelId = useId();
 
   return (
-    <Switch.Root
-      w="auto"
-      justifyContent="start"
-      gap={gap}
-      minH="44px"
-      colorPalette="teal"
-      checked={checked}
-      onCheckedChange={({ checked }) => setChecked(checked)}
-    >
-      <Switch.HiddenInput role="switch" />
-      <Switch.Label lineClamp={1} fontSize="sm">
+    <HStack gap={2} minW={0}>
+      <Text as="span" id={labelId} fontSize="sm" fontWeight="medium">
         {label}
-      </Switch.Label>
-      <Switch.Control>
-        <Switch.Thumb />
-      </Switch.Control>
-    </Switch.Root>
+      </Text>
+      <Switch.Root
+        ids={{ label: labelId }}
+        justifyContent="center"
+        minH={isTapMode ? '44px' : 7}
+        minW={isTapMode ? '44px' : undefined}
+        flexShrink={0}
+        cursor="pointer"
+        colorPalette="teal"
+        checked={checked}
+        onCheckedChange={({ checked }) => setChecked(checked)}
+      >
+        <Switch.HiddenInput role="switch" />
+        <Switch.Control>
+          <Switch.Thumb />
+        </Switch.Control>
+      </Switch.Root>
+    </HStack>
   );
 }
 
 export default function TooltipSwitches({ isTapMode = false }: { isTapMode?: boolean }) {
   const { t } = useTranslation();
-  const gap = isTapMode ? 2.5 : 2;
 
   return (
-    <HStack gap={4} flexWrap="wrap">
-      <TooltipSwitch label={t('editor.tagTooltip')} preferenceAtom={tagInfoModeAtom} gap={gap} />
+    <Flex align="center" wrap="wrap" columnGap={4} rowGap={isTapMode ? 0 : 1}>
+      <TooltipSwitch
+        label={t('editor.tagTooltip')}
+        preferenceAtom={tagInfoModeAtom}
+        isTapMode={isTapMode}
+      />
       <TooltipSwitch
         label={t('editor.abbreviationTooltip')}
         preferenceAtom={abbrInfoModeAtom}
-        gap={gap}
+        isTapMode={isTapMode}
       />
-    </HStack>
+    </Flex>
   );
 }
