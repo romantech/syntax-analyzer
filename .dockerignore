@@ -1,0 +1,8 @@
+**
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!apps/api/Dockerfile
+!apps/api/package.json
+!apps/api/tsconfig.json
+!apps/api/src/**
