@@ -39,10 +39,7 @@ const config = defineConfig({
           subtle: { value: { _dark: '{colors.gray.900}' } },
           muted: { value: { _dark: '{colors.gray.800}' } },
         },
-        border: {
-          DEFAULT: { value: { _dark: '#404143' } },
-          input: { value: { base: '{colors.border}', _dark: '#5b5d62' } },
-        },
+        border: { DEFAULT: { value: { _dark: '#404143' } } },
         gray: { focusRing: { value: { _light: '{colors.gray.500}' } } },
         teal: {
           accent: { value: { _light: '{colors.teal.600}', _dark: '{colors.teal.300}' } },
@@ -123,7 +120,6 @@ const config = defineConfig({
           size: { md: { fontSize: 'md', lineHeight: 'base', px: 4 } },
           variant: {
             outline: {
-              borderColor: 'border.input',
               _focus: {
                 borderColor: 'var(--focus-color)',
                 _invalid: { borderColor: 'var(--error-color)' },
@@ -158,7 +154,7 @@ const config = defineConfig({
           },
         ],
       }),
-      separator: defineRecipe({ base: { opacity: 0.6, _dark: { opacity: 1 } } }),
+      separator: defineRecipe({ base: { opacity: 0.6, _dark: { opacity: 0.85 } } }),
     },
     slotRecipes: {
       card: defineSlotRecipe({

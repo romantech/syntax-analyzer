@@ -33,7 +33,13 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
       css={{ '--slide-from-bottom-distance': '20px', '--slide-to-bottom-distance': '20px' }}
       _motionReduce={{ animationName: 'none' }}
     >
-      <VStack align="stretch" gap={0} maxH="190px" overflowY="auto" separator={<StackSeparator />}>
+      <VStack
+        align="stretch"
+        gap={0}
+        maxH="190px"
+        overflowY="auto"
+        separator={<StackSeparator _dark={{ opacity: 0.85 }} />}
+      >
         {data?.map((sentence) => (
           <Button
             key={sentence}
