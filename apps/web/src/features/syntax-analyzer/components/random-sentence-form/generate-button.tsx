@@ -31,6 +31,7 @@ const GenerateButtonControl = ({ count, ...buttonProps }: ButtonProps & { count:
       colorPalette="teal"
       borderColor="currentColor"
       size="lg"
+      px={{ smDown: 5 }}
       w="max-content"
       maxW="full"
       gap={0}

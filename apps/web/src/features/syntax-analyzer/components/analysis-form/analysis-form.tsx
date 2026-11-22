@@ -114,6 +114,7 @@ const AnalysisButton = (props: ButtonProps) => {
       flexShrink={0}
       alignSelf="start"
       size="lg"
+      px={{ smDown: 5 }}
       h={SENTENCE_CONTROL_HEIGHT}
       fontSize="md"
       {...props}
