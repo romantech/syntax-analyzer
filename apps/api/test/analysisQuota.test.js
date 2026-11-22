@@ -31,8 +31,7 @@ require.cache[require.resolve('../dist/services')] = {
       FIELDS: { ANALYSIS: 'analysis', RANDOM_SENTENCE: 'random_sentence' },
     },
     redis: {
-      hget: async (key) =>
-        key === 'prompt' ? 'Analyze this sentence' : String(balances[key]),
+      hget: async () => 'Analyze this sentence',
     },
     createJSONChatOpenAI: () => ({
       pipe: () => ({
@@ -43,8 +42,14 @@ require.cache[require.resolve('../dist/services')] = {
       }),
     }),
     validateAndRepairJSON: JSON.parse,
-    decrementRedisCounters: async (keys, field, cost) => {
-      debits.push({ keys, field, cost });
+    withAnalyzerQuota: async (ip, field, cost, run) => {
+      assert.equal(ip, '127.0.0.1');
+      if (balances.total < cost || balances.user < cost) {
+        const { throwCustomError } = require('../dist/utils/customError');
+        throwCustomError('No remaining request count available.', 400);
+      }
+      debits.push({ field, cost });
+      return run();
     },
   },
 };
@@ -54,7 +59,7 @@ const {
 } = require('../dist/controllers/analyzer/createAnalysis');
 const { errorHandler } = require('../dist/middlewares/errorHandler');
 
-test('checks both balances against the selected analysis model cost', async (context) => {
+test('passes the selected analysis model cost to the quota service', async (context) => {
   const app = createServer();
   app.post('/analyzer', ...createAnalysis);
   app.use(errorHandler);
@@ -103,9 +108,7 @@ test('checks both balances against the selected analysis model cost', async (con
           assert.equal(response.status, 200);
           assert.deepEqual(await response.json(), analysis);
           assert.equal(modelCalls, 1);
-          assert.deepEqual(debits, [
-            { keys: ['total', 'user'], field: 'analysis', cost: expectedCost },
-          ]);
+          assert.deepEqual(debits, [{ field: 'analysis', cost: expectedCost }]);
         }
       },
     );

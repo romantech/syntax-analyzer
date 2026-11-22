@@ -2,15 +2,15 @@ import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { ANALYSIS_DECREMENT_COUNT, ERROR_MESSAGES } from '@/constants';
 import { handleValidationErrors } from '@/middlewares/handleValidationErrors';
-import { validateAnalysisCount } from '@/middlewares/validateAnalysisCount';
+import { validateClientIP } from '@/middlewares/validateClientIP';
 import {
   ANALYSIS_MODEL_OPTION,
   ANALYZER_REDIS_SCHEMA,
   type AnalysisModel,
   createJSONChatOpenAI,
-  decrementRedisCounters,
   redis,
   validateAndRepairJSON,
+  withAnalyzerQuota,
 } from '@/services';
 import { asyncHandler, throwCustomError } from '@/utils';
 import { checkModelField, checkSentenceField } from '@/validators';
@@ -27,20 +27,16 @@ export const createAnalysis = [
   checkSentenceField,
   checkModelField,
   handleValidationErrors,
-  validateAnalysisCount(
-    FIELDS.ANALYSIS,
-    ({ model }: RequestBody) => ANALYSIS_DECREMENT_COUNT[model],
-  ),
+  validateClientIP,
   asyncHandler(async (req, res) => {
     const clientIP = req.clientIP ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
     const { sentence, model }: RequestBody = req.body;
 
-    const analysis = await executeAnalysis(JSON.stringify(sentence), model);
-
-    await decrementRedisCounters(
-      [KEYS.REMAINING.TOTAL, KEYS.REMAINING.USER(clientIP)],
+    const analysis = await withAnalyzerQuota(
+      clientIP,
       FIELDS.ANALYSIS,
       ANALYSIS_DECREMENT_COUNT[model],
+      () => executeAnalysis(JSON.stringify(sentence), model),
     );
 
     res.status(200).json(analysis);

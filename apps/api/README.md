@@ -211,9 +211,15 @@ GET /analyzer/random-sentences
 ```
 </details>
 
+### Shared quota behavior
+
+- Each model request reserves credits from both the IP-based and shared quotas before calling the model. Random sentence generation reserves one credit per request regardless of the number of sentences.
+- If either quota has insufficient credits, the API returns HTTP 400 with `{"status":"error","message":"No remaining request count available."}`.
+- A failed model request returns credits to the quota buckets that still match the reservation. The shared quota resets at midnight Korea Standard Time, and each IP quota expires 24 hours after initialization.
+
 ### Check remaining counts
 
-This endpoint provides remaining user quotas for syntax analysis and random sentences, resetting daily to 10 and 20, respectively.
+This endpoint initializes the IP quota on first use and returns the smaller of the IP and shared balances for each operation. In-flight reservations are included in the balance.
 
 #### Endpoint
 
