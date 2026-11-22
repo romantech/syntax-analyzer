@@ -44,8 +44,13 @@ const GenerateButtonControl = ({ count, ...buttonProps }: ButtonProps & { count:
       <Text as="span">{t('generator.generate')}</Text>
       <Text pl={1} as="span" fontSize="sm" fontVariantNumeric="tabular-nums">
         (
-        <Text as="span" display="inline-block" w="2ch" textAlign="end">
-          {count}
+        <Text as="span" display="inline-grid" textAlign="end">
+          <Text as="span" gridArea="1 / 1" visibility="hidden">
+            {DAILY_SENTENCE_LIMIT}
+          </Text>
+          <Text as="span" gridArea="1 / 1">
+            {count}
+          </Text>
         </Text>
         {` / ${DAILY_SENTENCE_LIMIT})`}
       </Text>
