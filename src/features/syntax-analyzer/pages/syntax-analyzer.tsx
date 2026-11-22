@@ -2,7 +2,7 @@ import { Box, Stack } from '@chakra-ui/react';
 import { useIsMutating } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-import { CenteredDivider, Layout } from '@/base';
+import { Layout } from '@/base';
 import {
   AnalysisCounter,
   AnalysisForm,
@@ -36,7 +36,6 @@ export default function SyntaxAnalyzer() {
           <Suspense fallback={<AnalysisForm.Skeleton />}>
             <AnalysisForm />
           </Suspense>
-          <CenteredDivider display={{ base: 'none', lg: 'flex' }} h={395} orientation="vertical" />
           <Box w="full" maxW={630}>
             <FieldGroupHeader>랜덤 문장 생성</FieldGroupHeader>
             <RandomSentenceForm />

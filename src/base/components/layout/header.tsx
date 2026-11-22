@@ -45,6 +45,7 @@ export function Header() {
   return (
     <Box
       as="nav"
+      lang="en"
       aria-label="Main navigation"
       position={{ base: 'sticky', lg: pathname === SITE_URLS.ROOT ? 'fixed' : 'sticky' }}
       w="full"
@@ -139,6 +140,7 @@ export function Header() {
             <Portal>
               <Menu.Positioner>
                 <Menu.Content
+                  lang="en"
                   _focusVisible={{
                     '& [data-highlighted]': {
                       outline: '2px solid',

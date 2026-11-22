@@ -58,6 +58,7 @@ export default function ErrorComponent({ resetErrorBoundary, error }: Partial<Fa
       <motion.div initial={{ opacity: 0, scale: 0.1 }} animate={{ opacity: 1, scale: 1 }}>
         <Heading
           as="h1"
+          lang="en"
           fontSize={{ base: '6xl', md: '7xl' }}
           fontWeight="extrabold"
           lineHeight={1}
@@ -67,7 +68,12 @@ export default function ErrorComponent({ resetErrorBoundary, error }: Partial<Fa
       </motion.div>
       <motion.div initial={{ opacity: 0, scale: 0.1 }} animate={{ opacity: 1, scale: 1 }}>
         <VStack>
-          <Text fontSize="xl" textTransform="capitalize" maxW={500}>
+          <Text
+            lang={isRouteError ? 'en' : undefined}
+            fontSize="xl"
+            textTransform="capitalize"
+            maxW={500}
+          >
             <Highlight query={errorMessage.match(DIGITS_PATTERN) ?? []} styles={highlightStyles}>
               {errorMessage}
             </Highlight>

@@ -26,6 +26,8 @@ export default function TokenList({ sentence, isTapMode }: TokensProps) {
         key={tokenKey}
         paddingRight={spaceAfter}
         paddingLeft={spaceBefore}
+        minW={isTapMode && !isCurrentTokenPunctuation ? 6 : undefined}
+        textAlign={isTapMode ? 'center' : undefined}
         index={i}
         isTapMode={isTapMode}
       />

@@ -33,7 +33,13 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
       css={{ '--slide-from-bottom-distance': '20px', '--slide-to-bottom-distance': '20px' }}
       _motionReduce={{ animationName: 'none' }}
     >
-      <VStack align="stretch" gap={0} maxH="190px" overflowY="auto" separator={<StackSeparator />}>
+      <VStack
+        align="stretch"
+        gap={0}
+        maxH="190px"
+        overflowY="auto"
+        separator={<StackSeparator _dark={{ opacity: 0.8 }} />}
+      >
         {data?.map((sentence) => (
           <Button
             key={sentence}
@@ -55,11 +61,13 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             _hover={{ color: 'teal.fg' }}
             focusRingOffset="-2px"
             css={{
-              '& > mark': { color: 'teal.fg', fontWeight: 'bold' },
+              '& mark': { color: 'teal.fg', fontWeight: 'bold' },
             }}
             onClick={() => copySentence(sentence)}
           >
-            <Highlight query={query}>{sentence}</Highlight>
+            <span lang="en">
+              <Highlight query={query}>{sentence}</Highlight>
+            </span>
           </Button>
         ))}
       </VStack>

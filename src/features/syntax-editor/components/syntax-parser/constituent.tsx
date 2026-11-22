@@ -80,6 +80,7 @@ export default function Constituent({
       >
         <chakra.button
           type="button"
+          lang="ko"
           className="constituent-label"
           aria-label={`${constituent.abbreviation}: ${koLabel ?? constituent.label} (${begin + 1}~${end} 단어)`}
         >

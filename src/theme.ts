@@ -39,6 +39,8 @@ const config = defineConfig({
           subtle: { value: { _dark: '{colors.gray.900}' } },
           muted: { value: { _dark: '{colors.gray.800}' } },
         },
+        border: { DEFAULT: { value: { _dark: '#363739' } } },
+        gray: { focusRing: { value: { _light: '{colors.gray.500}' } } },
         teal: {
           accent: { value: { _light: '{colors.teal.600}', _dark: '{colors.teal.300}' } },
           focusRing: { value: '{colors.gray.focusRing}' },
@@ -86,8 +88,7 @@ const config = defineConfig({
             lg: { h: 12, minW: 12, px: 6, fontSize: 'lg', gap: 2, textStyle: 'button' },
           },
           variant: {
-            // Declare the inherited variant so defineRecipe can type-check the default.
-            surface: {},
+            surface: { _dark: { shadowColor: 'border' } },
             ghost: { _active: { bg: 'colorPalette.muted' } },
             outline: {
               borderColor: 'colorPalette.border',
@@ -151,7 +152,7 @@ const config = defineConfig({
           },
         ],
       }),
-      separator: defineRecipe({ base: { opacity: 0.6 } }),
+      separator: defineRecipe({ base: { opacity: 0.6, _dark: { opacity: 0.8 } } }),
     },
     slotRecipes: {
       card: defineSlotRecipe({
