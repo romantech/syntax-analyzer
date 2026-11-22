@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/romantech/syntax-analyzer/compare/v1.4.0...v1.4.1) (2026-11-22)
+
+
+### Bug Fixes
+
+* prevent mobile sentence button overflow ([#210](https://github.com/romantech/syntax-analyzer/issues/210)) ([0896ff1](https://github.com/romantech/syntax-analyzer/commit/0896ff1d98e471f96634b195422698d5bdcffd9e))
+
 ## [1.4.0](https://github.com/romantech/syntax-analyzer/compare/v1.3.2...v1.4.0) (2026-11-22)
 
 

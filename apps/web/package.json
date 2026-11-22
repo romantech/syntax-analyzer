@@ -1,7 +1,7 @@
 {
   "name": "syntax-analyzer-web",
   "private": true,
-  "version": "1.4.0",
+  "version": "1.4.1",
   "type": "module",
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": "pnpm --filter syntax-analyzer-web exec biome check --write"
