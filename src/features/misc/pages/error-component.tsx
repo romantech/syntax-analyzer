@@ -1,7 +1,8 @@
 import { Button, Heading, Highlight, type SystemStyleObject, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { type FallbackProps, getErrorMessage } from 'react-error-boundary';
+import type { FallbackProps } from 'react-error-boundary';
+import { useTranslation } from 'react-i18next';
 import { isRouteErrorResponse, Navigate, useRouteError } from 'react-router';
 
 import { DIGITS_PATTERN, Layout, LinkParticles } from '@/base';
@@ -22,25 +23,26 @@ const highlightStyles: SystemStyleObject = {
 };
 
 export default function ErrorComponent({ resetErrorBoundary, error }: Partial<FallbackProps>) {
+  const { t } = useTranslation();
   const routerError = useRouteError();
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const caughtError = error ?? routerError;
   const isPreloadError = caughtError instanceof Error && preloadErrors.has(caughtError);
   const isRouteError = isRouteErrorResponse(routerError);
 
-  let errorMessage = getErrorMessage(error) ?? '문제가 발생했어요';
+  let errorMessage: string = t('common.genericError');
   let onActionButtonClick = resetErrorBoundary;
-  let buttonText = '다시 시도하기';
+  let buttonText: string = t('common.tryAgain');
 
   if (isPreloadError) {
-    errorMessage = '화면을 불러오지 못했어요. 새로고침해 주세요.';
+    errorMessage = t('common.reloadError');
     onActionButtonClick = () => window.location.reload();
-    buttonText = '새로고침';
+    buttonText = t('common.reload');
   } else if (isRouteError) {
     const { status, statusText } = routerError;
     errorMessage = `${status} | ${statusText}`;
     onActionButtonClick = () => setShouldRedirect(true);
-    buttonText = '돌아가기';
+    buttonText = t('common.goBack');
   }
 
   if (shouldRedirect) return <Navigate to=".." replace />;
@@ -58,22 +60,17 @@ export default function ErrorComponent({ resetErrorBoundary, error }: Partial<Fa
       <motion.div initial={{ opacity: 0, scale: 0.1 }} animate={{ opacity: 1, scale: 1 }}>
         <Heading
           as="h1"
-          lang="en"
-          fontSize={{ base: '6xl', md: '7xl' }}
+          fontSize={{ base: '3xl', md: '5xl' }}
+          textAlign="center"
           fontWeight="extrabold"
           lineHeight={1}
         >
-          Ooops!
+          {t('common.errorHeading')}
         </Heading>
       </motion.div>
       <motion.div initial={{ opacity: 0, scale: 0.1 }} animate={{ opacity: 1, scale: 1 }}>
         <VStack>
-          <Text
-            lang={isRouteError ? 'en' : undefined}
-            fontSize="xl"
-            textTransform="capitalize"
-            maxW={500}
-          >
+          <Text lang={isRouteError ? 'en' : undefined} fontSize="xl" maxW={500}>
             <Highlight query={errorMessage.match(DIGITS_PATTERN) ?? []} styles={highlightStyles}>
               {errorMessage}
             </Highlight>

@@ -2,18 +2,18 @@ import { Box, chakra, Text } from '@chakra-ui/react';
 import { clsx } from 'clsx';
 import { useAtomValue } from 'jotai';
 import type { PropsWithChildren } from 'react';
-
+import { useTranslation } from 'react-i18next';
 import { Tooltip } from '@/base';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_COLORS,
   CONSTITUENT_DATA_ATTRS,
-  CONSTITUENT_TRANSLATIONS,
   hoveredConstituentAtom,
   isAbbrTooltipVisibleAtom,
   type TConstituent,
   useConstituentHover,
 } from '@/features/syntax-editor';
+import { getConstituentTranslation } from '../../helpers/constituent-translation';
 
 interface ConstituentProps {
   constituent: TConstituent;
@@ -29,12 +29,13 @@ export default function Constituent({
   end,
   isMultipleTokenRange,
 }: PropsWithChildren<ConstituentProps>) {
+  const { t, i18n } = useTranslation();
   const { dark, light } = CONSTITUENT_COLORS[constituent.type];
 
   const isAbbrTooltipVisible = useAtomValue(isAbbrTooltipVisibleAtom);
   const hoveredConstituent = useAtomValue(hoveredConstituentAtom);
   const handlers = useConstituentHover();
-  const koLabel = CONSTITUENT_TRANSLATIONS[constituent.label]?.ko;
+  const { name } = getConstituentTranslation(t, constituent);
   const isTooltipOpen = isAbbrTooltipVisible && hoveredConstituent === constituent.id;
 
   const dataAttrs = {
@@ -59,7 +60,7 @@ export default function Constituent({
     >
       {children}
       <Tooltip
-        label={koLabel ?? constituent.label}
+        label={name}
         open={isTooltipOpen}
         positioning={{
           placement: 'top',
@@ -80,9 +81,14 @@ export default function Constituent({
       >
         <chakra.button
           type="button"
-          lang="ko"
+          lang={i18n.resolvedLanguage}
           className="constituent-label"
-          aria-label={`${constituent.abbreviation}: ${koLabel ?? constituent.label} (${begin + 1}~${end} 단어)`}
+          aria-label={t('editor.constituentLabel', {
+            abbr: constituent.abbreviation,
+            label: name,
+            begin: begin + 1,
+            end,
+          })}
         >
           <Box as="span" visibility={isTooltipOpen ? 'hidden' : undefined}>
             {constituent.abbreviation}

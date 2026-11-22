@@ -1,4 +1,5 @@
 import { Button, type ButtonProps, Icon, Skeleton, Stack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { RiAiGenerate } from 'react-icons/ri';
 
 import {
@@ -22,29 +23,32 @@ export default function GenerateButton(buttonProps: ButtonProps) {
   );
 }
 
-const GenerateButtonControl = ({ count, ...buttonProps }: ButtonProps & { count: number }) => (
-  <Button
-    variant="outline"
-    colorPalette="teal"
-    borderColor="currentColor"
-    minW={170}
-    gap={0}
-    h={SENTENCE_CONTROL_HEIGHT}
-    fontSize="md"
-    textTransform="uppercase"
-    {...buttonProps}
-  >
-    <Icon as={RiAiGenerate} me={2} />
-    <Text as="span">문장 생성</Text>
-    <Text pl={1} as="span" fontSize="sm" fontVariantNumeric="tabular-nums">
-      (
-      <Text as="span" display="inline-block" w="2ch" textAlign="end">
-        {count}
+const GenerateButtonControl = ({ count, ...buttonProps }: ButtonProps & { count: number }) => {
+  const { t } = useTranslation();
+  return (
+    <Button
+      variant="outline"
+      colorPalette="teal"
+      borderColor="currentColor"
+      minW={170}
+      gap={0}
+      h={SENTENCE_CONTROL_HEIGHT}
+      fontSize="md"
+      textTransform="uppercase"
+      {...buttonProps}
+    >
+      <Icon as={RiAiGenerate} me={2} />
+      <Text as="span">{t('generator.generate')}</Text>
+      <Text pl={1} as="span" fontSize="sm" fontVariantNumeric="tabular-nums">
+        (
+        <Text as="span" display="inline-block" w="2ch" textAlign="end">
+          {count}
+        </Text>
+        {`/${DAILY_SENTENCE_LIMIT})`}
       </Text>
-      {`/${DAILY_SENTENCE_LIMIT})`}
-    </Text>
-  </Button>
-);
+    </Button>
+  );
+};
 
 const GenerateButtonSkeleton = () => (
   <Skeleton asChild>

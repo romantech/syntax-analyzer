@@ -1,6 +1,7 @@
 import { Box, Heading, Stack, type StackProps, Text } from '@chakra-ui/react';
 import { type DotLottie, DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useEffect, useRef } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { loadingAnimation } from '@/assets/lottie';
 import { LoadingTransition } from '@/features/syntax-analyzer/components/';
@@ -20,6 +21,7 @@ export default function AnalysisLoadIndicator({
   play,
   ...stackProps
 }: AnalysisLoadingIndicatorProps) {
+  const { t } = useTranslation();
   const dotLottieRef = useRef<DotLottie | null>(null);
   const handleDotLottieRef = (dotLottie: DotLottie | null) => {
     dotLottieRef.current = dotLottie;
@@ -57,14 +59,16 @@ export default function AnalysisLoadIndicator({
           lineHeight={{ base: 1.33, md: 1.2, lg: 1 }}
           fontWeight="bold"
         >
-          문장 분석 중
+          {t('analyzer.loading')}
         </Heading>
         <Text fontSize={{ base: 'md', lg: '2xl' }}>
-          최대
-          <Text as="span" borderRadius="md" bg="teal.subtle" color="teal.fg" mx={1} px={1}>
-            1분
-          </Text>
-          까지 소요될 수 있어요
+          <Trans
+            t={t}
+            i18nKey="analyzer.loadingTime"
+            components={{
+              time: <Text as="span" borderRadius="md" bg="teal.subtle" color="teal.fg" px={1} />,
+            }}
+          />
         </Text>
       </Stack>
     </LoadingTransition>

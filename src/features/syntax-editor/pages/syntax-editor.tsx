@@ -1,6 +1,7 @@
 import { Box, Flex, Grid, ScrollArea } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useOutletContext } from 'react-router';
 
 import { Notice, useBeforeUnload } from '@/base';
@@ -19,6 +20,7 @@ const SHORT_VIEWPORT = '@media (max-height: 24rem)';
 const SENTENCE_ROW = 'minmax(calc(4rem + var(--horizontal-scrollbar-overlap)), 1fr)';
 
 export default function SyntaxEditor() {
+  const { t } = useTranslation();
   const isTouched = useAtomValue(isSegmentTouchedAtom);
   const isTapMode = useOutletContext<boolean>();
   const sentenceRegionRef = useRef<HTMLDivElement>(null);
@@ -31,7 +33,7 @@ export default function SyntaxEditor() {
     ref: sentenceRegionRef,
     tabIndex: 0,
     role: 'region',
-    'aria-label': '구문 문장',
+    'aria-label': t('editor.sentenceRegion'),
     _focusVisible: { outlineOffset: '-2px' },
   };
 
@@ -64,11 +66,7 @@ export default function SyntaxEditor() {
         <Notice
           gridColumn="1 / -1"
           css={isTapMode ? { [SHORT_VIEWPORT]: { display: 'none' } } : undefined}
-          text={
-            isTapMode
-              ? '태그를 고르고 단어를 탭한 뒤 적용하세요.'
-              : '문법 요소를 선택한 후 단어를 클릭하거나 드래그하면 태깅할 수 있어요'
-          }
+          text={isTapMode ? t('editor.tapInstructions') : t('editor.pointerInstructions')}
         />
         {isTapMode ? (
           <TooltipSwitches isTapMode />

@@ -9,6 +9,8 @@ overrides:
 
 allowBuilds:
   "@parcel/watcher": true
+  # SWC uses the platform binary installed from its optional dependencies.
+  "@swc/core": false
   # The install script only checks dependencies and logs a TypeError in 4.6.0.
   "@tsparticles/engine@4.6.0": false
   esbuild: true

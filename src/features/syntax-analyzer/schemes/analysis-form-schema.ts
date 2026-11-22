@@ -1,11 +1,11 @@
 import * as yup from 'yup';
 
-import { AnalysisModel } from '@/features/syntax-analyzer';
+import { AnalysisModel } from '../constants';
 
 import { englishSentenceSchema } from './english-sentence-schema';
 
 export const addSentenceFormSchema = yup.object({
-  sentence: englishSentenceSchema.required().ensure(),
+  sentence: englishSentenceSchema.required('validation.sentenceRequired').ensure(),
 });
 
 export const createAnalysisFormSchema = yup.object({

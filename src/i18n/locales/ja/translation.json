@@ -1,0 +1,269 @@
+{
+  "analyzer": {
+    "advancedModel": "高精度モデル",
+    "advancedModelDescription": "より正確に分析できます",
+    "analyze": "分析",
+    "basicModel": "基本モデル",
+    "basicModelDescription": "ほとんどの英文を十分に分析できます",
+    "chooseModel": "AIモデルを選択",
+    "confirmBody": "入力した英文を分析しますか？",
+    "confirmTitle": "英文を分析",
+    "contractions": "短縮形は自動で展開されます（I'll → I will）",
+    "dailyLimit": "1日最大{{limit}}回まで分析できます（高精度モデルは1回のリクエストにつき{{cost}}回分を消費）",
+    "enterSentence": "英文を入力",
+    "exhausted": "本日の上限に達しました。明日もう一度お試しください。",
+    "loading": "英文を分析中",
+    "loadingTime": "最長<time>1分</time>ほどかかる場合があります",
+    "modelCost": "高精度モデルでは1回のリクエストに分析枠を{{cost}}回分使います。",
+    "recommended": "おすすめ",
+    "remaining": "分析の残り回数：{{remaining}}回",
+    "remainingLabel": "分析の残り回数",
+    "sentence": "英文",
+    "success": "英文の分析が完了しました"
+  },
+  "common": {
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "confirm": "確認",
+    "errorHeading": "エラーが発生しました",
+    "genericError": "エラーが発生しました。",
+    "goBack": "戻る",
+    "notifications": "通知",
+    "reload": "再読み込み",
+    "reloadError": "ページを読み込めませんでした。再読み込みしてください。",
+    "requestError": "エラーが発生しました。しばらくしてから再試行してください。",
+    "tryAgain": "再試行"
+  },
+  "editor": {
+    "abbreviationTooltip": "略語のツールチップ",
+    "add": "追加",
+    "addConfirm": "入力した英文を追加しますか？",
+    "addTitle": "英文を追加",
+    "apply": "適用",
+    "chooseSentenceConfirm": "選択した英文を編集しますか？",
+    "chooseSentenceTitle": "英文を選択",
+    "chooseTag": "タグを選択",
+    "clauseTags": "節",
+    "clauseTagsHelp": "独立節・従属節など",
+    "clearSelection": "選択を解除",
+    "closeTagPicker": "タグ選択を閉じる",
+    "constituentLabel": "{{abbr}}：{{label}}（{{begin}}〜{{end}}語目）",
+    "crossingRange": "句や節の範囲は交差できません",
+    "currentTag": "タグを選択（現在：{{tag}}）",
+    "deleteSentenceConfirm": "選択した英文を削除しますか？",
+    "deleteSentenceLabel": "英文を削除：{{sentence}}",
+    "deleteSentenceTitle": "英文を削除",
+    "deleteTag": "タグを削除",
+    "generalTags": "一般",
+    "generalTagsHelp": "主語・動詞・目的語など",
+    "instructions": "自分で英文を追加するか、一覧から選んで編集できます",
+    "newBadge": "新着",
+    "noSelectedSentence": "英文が選択されていません",
+    "noUserSentences": "まだ英文が追加されていません",
+    "phraseTags": "句",
+    "phraseTagsHelp": "前置詞句・動名詞句など",
+    "pickRange": "最初の単語をタップしてください。範囲を選ぶには最後の単語もタップします。",
+    "pointerInstructions": "文法タグを選んでから、単語をクリックするか範囲をドラッグしてタグを付けます。",
+    "rangeHelp": "タグ付け範囲の案内",
+    "redo": "やり直す",
+    "reset": "保存時の状態に戻す",
+    "resetConfirm": "最後に保存した状態に戻しますか？",
+    "sampleSentences": "サンプル英文",
+    "save": "タグを保存",
+    "saveConfirm": "タグの変更を保存しますか？",
+    "saved": "タグを保存しました",
+    "selectedRange": "選択範囲：{{range}}語目",
+    "sentenceList": "英文の一覧",
+    "sentenceRegion": "英文の構造",
+    "sentenceRemoved": "別のタブで英文が削除されたため保存できません。",
+    "tagTooltip": "タグのツールチップ",
+    "tapInstructions": "タグを選び、単語をタップしてから「適用」を押してください。",
+    "tapToDelete": "削除するタグの略語をタップしてください。",
+    "toolbar": "タグ付けツールバー",
+    "undo": "元に戻す",
+    "userSentences": "追加した英文",
+    "wordLabel": "{{index}}語目：{{token}}"
+  },
+  "generator": {
+    "addTopic": "トピックを追加",
+    "copied": "クリップボードにコピーしました",
+    "copyError": "英文をコピーできませんでした",
+    "copyInstructions": "生成した英文を選ぶとクリップボードにコピーされます",
+    "copySentence": "英文をコピー：{{sentence}}",
+    "count": "英文の数",
+    "decreaseCount": "英文の数を減らす",
+    "generate": "英文を生成",
+    "heading": "ランダム英文生成",
+    "increaseCount": "英文の数を増やす",
+    "keyword": "英語のキーワード",
+    "maxTopics": "最大{{limit}}件のトピックを追加して英文をランダムに生成できます",
+    "randomTopics": "トピックを追加しない場合は、テーマがランダムに選ばれます",
+    "removeTopic": "トピックを削除：{{topic}}"
+  },
+  "home": {
+    "analyzerDescription": "英文を入力してモデルを選ぶと、主語・動詞・目的語などの関係を確認できます。",
+    "analyzerImage": "構文分析画面",
+    "analyzerTitle": "ワンクリックで\n構文を分析",
+    "appTitle": "英語構文アナライザー",
+    "editorDescription": "30種類以上の文法タグで単語・句・節に印を付け、英文の構造を確認できます。",
+    "editorImage": "構文編集画面",
+    "editorTitle": "タグで読み解く\n英文の構造",
+    "generatorDescription": "最大3つのトピックを選び、英語の練習用に英文を生成できます。",
+    "generatorImage": "ランダム英文の生成画面",
+    "generatorTitle": "好きなテーマで\n英文をランダム生成",
+    "heroDescription": "AIが分析した英文の構造をひと目で確認できます。単語・句・節の関係を見ながら、自分で分析結果を編集できます。",
+    "heroLead": "AIで英語の構文を分析",
+    "heroTitle": "英語構文\nアナライザー",
+    "scrollDown": "下へスクロール",
+    "tryNow": "今すぐ試す"
+  },
+  "nav": {
+    "analyzer": "分析",
+    "donate": "コーヒーをおごる",
+    "editor": "編集",
+    "github": "GitHub リポジトリ",
+    "home": "ホーム",
+    "language": "言語を変更（現在：{{language}}）",
+    "languages": "言語",
+    "main": "メインナビゲーション",
+    "moreLinks": "その他のリンク",
+    "toggleTheme": "配色モードを切り替え"
+  },
+  "tags": {
+    "tag1": {
+      "description": "文が誰や何について述べているかを示す語や句",
+      "name": "主語"
+    },
+    "tag10": {
+      "description": "toと動詞の原形からなる形式",
+      "name": "to不定詞"
+    },
+    "tag11": {
+      "description": "名詞として使われる動詞の-ing形",
+      "name": "動名詞"
+    },
+    "tag12": {
+      "description": "動詞の現在分詞または過去分詞の形",
+      "name": "分詞"
+    },
+    "tag13": {
+      "description": "語・句・節を結び付ける語",
+      "name": "接続詞"
+    },
+    "tag14": {
+      "description": "分詞を中心とする句",
+      "name": "分詞句"
+    },
+    "tag15": {
+      "description": "前置詞とその目的語からなる句",
+      "name": "前置詞句"
+    },
+    "tag16": {
+      "description": "名詞を中心とし、修飾語などを含む句",
+      "name": "名詞句"
+    },
+    "tag17": {
+      "description": "文の中で副詞の働きをする句",
+      "name": "副詞句"
+    },
+    "tag18": {
+      "description": "動詞を中心とする句",
+      "name": "動詞句"
+    },
+    "tag19": {
+      "description": "文の中で形容詞の働きをする句",
+      "name": "形容詞句"
+    },
+    "tag2": {
+      "description": "動作や状態を表す語",
+      "name": "動詞"
+    },
+    "tag20": {
+      "description": "動名詞を中心とする句",
+      "name": "動名詞句"
+    },
+    "tag21": {
+      "description": "不定詞とそれに関係する語からなる句",
+      "name": "不定詞句"
+    },
+    "tag22": {
+      "description": "文法上対等な別の節と結び付いた節",
+      "name": "等位節"
+    },
+    "tag23": {
+      "description": "別の節と同じ文法構造を持つ節",
+      "name": "並行節"
+    },
+    "tag24": {
+      "description": "文の中で名詞の働きをする節",
+      "name": "名詞節"
+    },
+    "tag25": {
+      "description": "文の中で形容詞の働きをする節",
+      "name": "形容詞節"
+    },
+    "tag26": {
+      "description": "文の中で副詞の働きをする節",
+      "name": "副詞節"
+    },
+    "tag27": {
+      "description": "別の節の中に挿入された節",
+      "name": "挿入節"
+    },
+    "tag28": {
+      "description": "関連する名詞や表現について詳しく説明する節",
+      "name": "関係節"
+    },
+    "tag29": {
+      "description": "完全な文を作るために別の節を必要とする節",
+      "name": "従属節"
+    },
+    "tag3": {
+      "description": "他の動詞とともに使い、能力・可能性・義務などを表す語",
+      "name": "法助動詞"
+    },
+    "tag30": {
+      "description": "単独で完全な文として成り立つ節",
+      "name": "独立節"
+    },
+    "tag31": {
+      "description": "動詞・形容詞・他の副詞を修飾する語",
+      "name": "副詞"
+    },
+    "tag4": {
+      "description": "動詞が表す動作の対象となる語や句",
+      "name": "目的語"
+    },
+    "tag5": {
+      "description": "動作の受け手や恩恵を受ける人などを表す語や句",
+      "name": "間接目的語"
+    },
+    "tag6": {
+      "description": "動詞が表す動作の直接の対象となる語や句",
+      "name": "直接目的語"
+    },
+    "tag7": {
+      "description": "前置詞に続いてその対象を示す語や句",
+      "name": "前置詞の目的語"
+    },
+    "tag8": {
+      "description": "主語や目的語を説明し、その意味を補う語や句",
+      "name": "補語"
+    },
+    "tag9": {
+      "description": "目的語を説明し、その意味を補う語や句",
+      "name": "目的格補語"
+    }
+  },
+  "validation": {
+    "englishOnly": "英字または句読点のみ入力できます",
+    "keywordMax": "{{limit}}文字以内で入力してください",
+    "keywordMin": "{{limit}}文字以上入力してください",
+    "keywordRequired": "英語のキーワードを入力してください",
+    "sentenceMax": "{{limit}}文字以内で入力してください",
+    "sentenceMin": "{{limit}}語以上の英文を入力してください",
+    "sentenceRequired": "英文を入力してください",
+    "topicDuplicate": "同じキーワードは追加できません",
+    "topicMax": "キーワードは最大{{limit}}件まで追加できます"
+  }
+}

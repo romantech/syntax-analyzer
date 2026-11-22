@@ -1,5 +1,6 @@
 import { Group, IconButton, NumberInput } from '@chakra-ui/react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 
 import {
@@ -10,6 +11,7 @@ import {
 } from '@/features/syntax-analyzer';
 
 export default function SentenceCountPicker() {
+  const { t } = useTranslation();
   const { control } = useFormContext<RandomSentenceFormValues>();
 
   return (
@@ -30,7 +32,7 @@ export default function SentenceCountPicker() {
           <Group attached flexShrink={0} h={SENTENCE_CONTROL_HEIGHT}>
             <NumberInput.DecrementTrigger asChild>
               <IconButton
-                aria-label="문장 수 줄리기"
+                aria-label={t('generator.decreaseCount')}
                 variant="outline"
                 size="sm"
                 h="full"
@@ -42,7 +44,7 @@ export default function SentenceCountPicker() {
             <NumberInput.Input
               ref={field.ref}
               onBlur={field.onBlur}
-              aria-label="Sentence count picker"
+              aria-label={t('generator.count')}
               w={10}
               h="full"
               px={0}
@@ -51,7 +53,7 @@ export default function SentenceCountPicker() {
             />
             <NumberInput.IncrementTrigger asChild>
               <IconButton
-                aria-label="문장 수 늘리기"
+                aria-label={t('generator.increaseCount')}
                 variant="outline"
                 size="sm"
                 h="full"

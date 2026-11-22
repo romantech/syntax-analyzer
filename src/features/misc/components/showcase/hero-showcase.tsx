@@ -1,4 +1,5 @@
 import { Heading, Stack, type StackProps, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import ScrollDownButton from './scroll-down-button';
 
 interface TitleSectionProps extends StackProps {
@@ -6,6 +7,7 @@ interface TitleSectionProps extends StackProps {
 }
 
 export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSectionProps) {
+  const { t } = useTranslation();
   return (
     <Stack justify="center" scrollSnapAlign="start" {...stackProps}>
       <Stack>
@@ -19,7 +21,7 @@ export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSecti
             _light: { w: 'fit-content', '--showcase-stop': '90%' },
           }}
         >
-          Interpreting English Structure with AI
+          {t('home.heroLead')}
         </Heading>
         <Heading
           as="h1"
@@ -29,7 +31,7 @@ export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSecti
           whiteSpace="pre-line"
           fontWeight="extrabold"
         >
-          {`english syntax\nanalyzer`}
+          {t('home.heroTitle')}
         </Heading>
       </Stack>
       <Text
@@ -38,9 +40,7 @@ export default function HeroShowcase({ onScrollDown, ...stackProps }: TitleSecti
         fontSize={{ base: '1.0625rem', lg: 'xl' }}
         lineHeight={{ base: '1.6875rem', lg: 'base' }}
       >
-        Dive into the elegance of language as AI-analyzed English sentences unfold in a clear
-        hierarchical visualization. Grasp the intricacies at a glance, and harness the freedom to
-        directly edit and adapt as you see fit.
+        {t('home.heroDescription')}
       </Text>
       <ScrollDownButton onClick={onScrollDown} hidden={!onScrollDown} />
     </Stack>

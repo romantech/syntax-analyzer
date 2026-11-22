@@ -1,17 +1,19 @@
 import { Button, Field, HStack, Input, InputGroup, type StackProps } from '@chakra-ui/react';
 import type { SubmitEventHandler } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { CiShoppingTag } from 'react-icons/ci';
 import { ValidationError } from 'yup';
-
 import {
   addTopicSchema,
   MAX_TOPIC_LENGTH,
   type RandomSentenceFormValues,
   SENTENCE_CONTROL_HEIGHT,
 } from '@/features/syntax-analyzer';
+import { translateValidationMessage } from '../../schemes/validation-messages';
 
 export default function AddTopicForm(stackProps: StackProps) {
+  const { t } = useTranslation();
   const { register, clearErrors, getValues, setValue, resetField, setError, formState } =
     useFormContext<RandomSentenceFormValues>();
   const keywordField = register('keyword');
@@ -51,15 +53,17 @@ export default function AddTopicForm(stackProps: StackProps) {
             h={SENTENCE_CONTROL_HEIGHT}
             ps={SENTENCE_CONTROL_HEIGHT}
             maxLength={MAX_TOPIC_LENGTH}
-            aria-label="영문 키워드"
-            placeholder="영문 키워드"
+            aria-label={t('generator.keyword')}
+            placeholder={t('generator.keyword')}
             enterKeyHint="done"
           />
         </InputGroup>
-        <Field.ErrorText aria-live="polite">{errors.keyword?.message}</Field.ErrorText>
+        <Field.ErrorText aria-live="polite">
+          {errors.keyword?.message && translateValidationMessage(t, errors.keyword.message)}
+        </Field.ErrorText>
       </Field.Root>
       <Button flexShrink={0} h={SENTENCE_CONTROL_HEIGHT} fontSize="md" type="submit">
-        토픽 등록
+        {t('generator.addTopic')}
       </Button>
     </HStack>
   );

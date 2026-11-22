@@ -1,6 +1,7 @@
 import { Box, Stack } from '@chakra-ui/react';
 import { useIsMutating } from '@tanstack/react-query';
 import { Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Layout } from '@/base';
 import {
@@ -14,6 +15,7 @@ import {
 } from '@/features/syntax-analyzer';
 
 export default function SyntaxAnalyzer() {
+  const { t } = useTranslation();
   const isMutating = useIsMutating({ mutationKey: CREATE_ANALYSIS_BASE_KEY });
 
   return (
@@ -37,7 +39,7 @@ export default function SyntaxAnalyzer() {
             <AnalysisForm />
           </Suspense>
           <Box w="full" maxW={630}>
-            <FieldGroupHeader>랜덤 문장 생성</FieldGroupHeader>
+            <FieldGroupHeader>{t('generator.heading')}</FieldGroupHeader>
             <RandomSentenceForm />
           </Box>
         </Stack>

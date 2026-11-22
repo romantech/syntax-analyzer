@@ -10,6 +10,7 @@ import {
   Spacer,
 } from '@chakra-ui/react';
 import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
 import { BsGithub } from 'react-icons/bs';
 import { FiCoffee, FiMoreHorizontal } from 'react-icons/fi';
 import { MdModeNight, MdOutlineLightMode } from 'react-icons/md';
@@ -17,26 +18,28 @@ import { NavLink, useLocation } from 'react-router';
 
 import { SITE_URLS } from '@/routes/paths';
 
-const NAV_LINKS = [
-  { label: 'Home', path: SITE_URLS.ROOT },
-  { label: 'Analyzer', path: SITE_URLS.ANALYZER.ROOT },
-  { label: 'Editor', path: SITE_URLS.EDITOR.ROOT },
-] as const;
-
-const EXTERNAL_LINKS = [
-  {
-    label: 'Buy me a coffee',
-    href: 'https://www.buymeacoffee.com/colorfilter',
-    icon: FiCoffee,
-  },
-  {
-    label: 'GitHub repository',
-    href: 'https://github.com/romantech/syntax-analyzer',
-    icon: BsGithub,
-  },
-] as const;
+import { LanguageMenu } from './language-menu';
 
 export function Header() {
+  const { t } = useTranslation();
+  const navLinks = [
+    { label: t('nav.home'), path: SITE_URLS.ROOT },
+    { label: t('nav.analyzer'), path: SITE_URLS.ANALYZER.ROOT },
+    { label: t('nav.editor'), path: SITE_URLS.EDITOR.ROOT },
+  ] as const;
+
+  const externalLinks = [
+    {
+      label: t('nav.donate'),
+      href: 'https://www.buymeacoffee.com/colorfilter',
+      icon: FiCoffee,
+    },
+    {
+      label: t('nav.github'),
+      href: 'https://github.com/romantech/syntax-analyzer',
+      icon: BsGithub,
+    },
+  ] as const;
   const { pathname } = useLocation();
   const { theme, setTheme } = useTheme();
 
@@ -45,8 +48,7 @@ export function Header() {
   return (
     <Box
       as="nav"
-      lang="en"
-      aria-label="Main navigation"
+      aria-label={t('nav.main')}
       position={{ base: 'sticky', lg: pathname === SITE_URLS.ROOT ? 'fixed' : 'sticky' }}
       w="full"
       top={0}
@@ -61,8 +63,8 @@ export function Header() {
       boxShadow="sm"
     >
       <HStack maxW="8xl" mx="auto" gap={{ base: 0, sm: 2 }}>
-        <HStack gap={{ base: 1, sm: 2 }}>
-          {NAV_LINKS.map(({ label, path }) => (
+        <HStack gap={{ base: 0, sm: 2 }}>
+          {navLinks.map(({ label, path }) => (
             <Flex
               asChild
               key={path}
@@ -75,7 +77,7 @@ export function Header() {
               minH={{ base: '44px', lg: 10 }}
               borderRadius="xl"
               fontWeight="semibold"
-              fontSize={{ base: '0.9375rem', lg: 'md' }}
+              fontSize={{ base: '0.875rem', sm: '0.9375rem', lg: 'md' }}
               lineHeight={{ base: '1.25rem', lg: 'base' }}
               _hover={{
                 '&:not([aria-current=page])': {
@@ -96,7 +98,7 @@ export function Header() {
                   display="flex"
                   alignItems="center"
                   h={{ base: 10, lg: 'auto' }}
-                  px={{ base: 2.5, sm: 4, lg: 0 }}
+                  px={{ base: 1.5, sm: 4, lg: 0 }}
                   borderRadius="xl"
                 >
                   {label}
@@ -106,9 +108,9 @@ export function Header() {
           ))}
         </HStack>
         <Spacer />
-        <Flex align="center" gap={{ base: 1, lg: 0 }}>
+        <Flex align="center" gap={0} flexShrink={0}>
           <Flex display={{ base: 'none', sm: 'flex' }}>
-            {EXTERNAL_LINKS.map(({ label, href, icon }) => (
+            {externalLinks.map(({ label, href, icon }) => (
               <Button key={href} asChild variant="ghost">
                 <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}>
                   <Icon as={icon} boxSize="1.2rem" />
@@ -116,10 +118,11 @@ export function Header() {
               </Button>
             ))}
           </Flex>
+          <LanguageMenu />
           <Button
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
             variant="ghost"
-            aria-label="Toggle color mode"
+            aria-label={t('nav.toggleTheme')}
             minW={{ base: '44px', lg: 10 }}
             minH={{ base: '44px', lg: 10 }}
             px={{ base: 0, sm: 4 }}
@@ -130,7 +133,7 @@ export function Header() {
             <Menu.Trigger asChild>
               <IconButton
                 display={{ base: 'inline-flex', sm: 'none' }}
-                aria-label="More links"
+                aria-label={t('nav.moreLinks')}
                 variant="ghost"
                 boxSize="44px"
               >
@@ -140,7 +143,6 @@ export function Header() {
             <Portal>
               <Menu.Positioner>
                 <Menu.Content
-                  lang="en"
                   _focusVisible={{
                     '& [data-highlighted]': {
                       outline: '2px solid',
@@ -149,7 +151,7 @@ export function Header() {
                     },
                   }}
                 >
-                  {EXTERNAL_LINKS.map(({ label, href, icon: LinkIcon }) => (
+                  {externalLinks.map(({ label, href, icon: LinkIcon }) => (
                     <Menu.Item key={href} value={href} asChild minH="44px">
                       <a href={href} target="_blank" rel="noopener noreferrer">
                         <LinkIcon />

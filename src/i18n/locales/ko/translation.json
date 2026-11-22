@@ -1,0 +1,269 @@
+{
+  "analyzer": {
+    "advancedModel": "고급 모델",
+    "advancedModelDescription": "정확도가 조금 더 높아요",
+    "analyze": "분석",
+    "basicModel": "기본 모델",
+    "basicModelDescription": "대부분의 문장을 잘 분석해요",
+    "chooseModel": "AI 모델 선택",
+    "confirmBody": "입력한 영어 문장을 분석하시겠습니까?",
+    "confirmTitle": "문장 분석 요청",
+    "contractions": "축약 표현은 자동으로 풀어져요 (I'll → I will)",
+    "dailyLimit": "하루 최대 {{limit}}회까지 분석할 수 있어요 (고급 모델은 요청당 {{cost}}회 차감)",
+    "enterSentence": "영어 문장 입력",
+    "exhausted": "사용량을 모두 소진했어요. 내일 다시 시도해 주세요.",
+    "loading": "문장 분석 중",
+    "loadingTime": "최대 <time>1분</time>까지 소요될 수 있어요",
+    "modelCost": "고급 모델은 분석 횟수가 {{cost}}회 필요해요.",
+    "recommended": "추천",
+    "remaining": "남은 분석 횟수 {{remaining}}회",
+    "remainingLabel": "남은 분석 횟수",
+    "sentence": "영어 문장",
+    "success": "문장 분석을 완료했습니다"
+  },
+  "common": {
+    "cancel": "취소",
+    "close": "닫기",
+    "confirm": "확인",
+    "errorHeading": "문제가 생겼어요",
+    "genericError": "문제가 발생했어요",
+    "goBack": "돌아가기",
+    "notifications": "알림",
+    "reload": "새로고침",
+    "reloadError": "화면을 불러오지 못했어요. 새로고침해 주세요.",
+    "requestError": "오류가 발생했어요. 잠시 후 다시 시도해 주세요.",
+    "tryAgain": "다시 시도하기"
+  },
+  "editor": {
+    "abbreviationTooltip": "약어 툴팁",
+    "add": "추가",
+    "addConfirm": "입력한 영어 문장을 추가하시겠습니까?",
+    "addTitle": "영어 문장 추가",
+    "apply": "적용",
+    "chooseSentenceConfirm": "선택한 문장을 편집하시겠습니까?",
+    "chooseSentenceTitle": "영어 문장 선택",
+    "chooseTag": "태그 선택",
+    "clauseTags": "절",
+    "clauseTagsHelp": "독립절/종속절 등",
+    "clearSelection": "선택 취소",
+    "closeTagPicker": "태그 선택 닫기",
+    "constituentLabel": "{{abbr}}: {{label}} ({{begin}}~{{end}} 단어)",
+    "crossingRange": "구/절은 서로 교차할 수 없어요",
+    "currentTag": "태그 선택 (현재 {{tag}})",
+    "deleteSentenceConfirm": "선택한 문장을 삭제하시겠습니까?",
+    "deleteSentenceLabel": "문장 삭제: {{sentence}}",
+    "deleteSentenceTitle": "문장 삭제",
+    "deleteTag": "태그 삭제",
+    "generalTags": "일반",
+    "generalTagsHelp": "주어/동사/목적어 등",
+    "instructions": "문장을 직접 추가하거나 선택한 후 편집할 수 있어요",
+    "newBadge": "신규",
+    "noSelectedSentence": "선택한 문장이 없어요",
+    "noUserSentences": "아직 추가한 문장이 없어요",
+    "phraseTags": "구",
+    "phraseTagsHelp": "전치사구/동명사구 등",
+    "pickRange": "시작 단어를 탭하세요. 범위를 선택하려면 끝 단어도 탭하세요.",
+    "pointerInstructions": "문법 요소를 선택한 후 단어를 클릭하거나 드래그하면 태깅할 수 있어요",
+    "rangeHelp": "태깅 범위 안내",
+    "redo": "다시 실행",
+    "reset": "저장 상태로 초기화",
+    "resetConfirm": "저장 상태로 초기화하시겠습니까?",
+    "sampleSentences": "샘플 문장",
+    "save": "태깅 저장",
+    "saveConfirm": "현재 태깅 내용을 저장하시겠습니까?",
+    "saved": "저장 성공",
+    "selectedRange": "{{range}}번째 단어",
+    "sentenceList": "문장 목록",
+    "sentenceRegion": "구문 문장",
+    "sentenceRemoved": "다른 탭에서 문장이 삭제되어 저장할 수 없어요.",
+    "tagTooltip": "태그 툴팁",
+    "tapInstructions": "태그를 고르고 단어를 탭한 뒤 적용하세요.",
+    "tapToDelete": "지울 태그의 약어를 탭하세요.",
+    "toolbar": "태깅 도구막대",
+    "undo": "실행 취소",
+    "userSentences": "추가한 문장",
+    "wordLabel": "{{index}}번째 단어: {{token}}"
+  },
+  "generator": {
+    "addTopic": "토픽 등록",
+    "copied": "클립보드에 복사되었습니다",
+    "copyError": "문장을 복사할 수 없어요",
+    "copyInstructions": "생성한 문장을 선택하면 클립보드에 복사돼요",
+    "copySentence": "문장 복사: {{sentence}}",
+    "count": "문장 수",
+    "decreaseCount": "문장 수 줄리기",
+    "generate": "문장 생성",
+    "heading": "랜덤 문장 생성",
+    "increaseCount": "문장 수 늘리기",
+    "keyword": "영문 키워드",
+    "maxTopics": "최대 {{limit}}개의 토픽을 추가해서 랜덤 문장을 생성할 수 있어요",
+    "randomTopics": "토픽을 등록하지 않으면 랜덤한 주제로 문장을 생성해요",
+    "removeTopic": "토픽 삭제: {{topic}}"
+  },
+  "home": {
+    "analyzerDescription": "문장을 입력하고 모델을 고르면 주어, 동사, 목적어 등 문장 성분의 관계를 확인할 수 있어요.",
+    "analyzerImage": "구문 분석기 화면",
+    "analyzerTitle": "한 번의 클릭으로\n문장 구조 분석",
+    "appTitle": "영어 구문 분석기",
+    "editorDescription": "30개 이상의 문법 태그로 단어, 구, 절을 직접 표시하고 문장 구조를 살펴보세요.",
+    "editorImage": "구문 편집기 화면",
+    "editorTitle": "태그로 살펴보는\n영어 문장 구조",
+    "generatorDescription": "최대 세 가지 토픽을 골라 영어 연습에 쓸 문장을 생성해 보세요.",
+    "generatorImage": "랜덤 문장 생성 화면",
+    "generatorTitle": "원하는 주제로\n랜덤 문장 생성",
+    "heroDescription": "AI가 분석한 영어 문장 구조를 한눈에 살펴보세요. 단어, 구, 절의 관계를 시각적으로 확인하고 직접 편집할 수 있어요.",
+    "heroLead": "AI로 영어 문장 구조 분석",
+    "heroTitle": "영어 구문\n분석기",
+    "scrollDown": "아래로 스크롤",
+    "tryNow": "지금 해보기"
+  },
+  "nav": {
+    "analyzer": "분석기",
+    "donate": "커피 후원",
+    "editor": "편집기",
+    "github": "GitHub 저장소",
+    "home": "홈",
+    "language": "언어 변경 (현재 {{language}})",
+    "languages": "언어",
+    "main": "주 메뉴",
+    "moreLinks": "외부 링크 더 보기",
+    "toggleTheme": "테마 전환"
+  },
+  "tags": {
+    "tag1": {
+      "description": "문장의 주체를 나타내는 단어나 구",
+      "name": "주어"
+    },
+    "tag10": {
+      "description": "'to'와 함께 사용되는 동사의 기본형",
+      "name": "to 부정사"
+    },
+    "tag11": {
+      "description": "동사에 -ing를 붙여 명사로 사용하는 형태",
+      "name": "동명사"
+    },
+    "tag12": {
+      "description": "동사의 과거 분사나 현재 분사 형태",
+      "name": "분사"
+    },
+    "tag13": {
+      "description": "문법적으로 연결하는 단어",
+      "name": "접속사"
+    },
+    "tag14": {
+      "description": "분사와 그 관련 구성요소로 이루어진 구문",
+      "name": "분사구"
+    },
+    "tag15": {
+      "description": "전치사와 그 객체로 이루어진 구",
+      "name": "전치사구"
+    },
+    "tag16": {
+      "description": "명사와 그와 관련된 수식어들로 이루어진 구",
+      "name": "명사구"
+    },
+    "tag17": {
+      "description": "문장 내에서 부사의 역할을 하는 구",
+      "name": "부사구"
+    },
+    "tag18": {
+      "description": "문장 내에서 동사의 역할을 하는 구",
+      "name": "동사구"
+    },
+    "tag19": {
+      "description": "문장 내에서 형용사의 역할을 하는 구",
+      "name": "형용사구"
+    },
+    "tag2": {
+      "description": "문장의 동작이나 상태를 나타내는 단어",
+      "name": "동사"
+    },
+    "tag20": {
+      "description": "동명사와 그와 관련된 단어들로 이루어진 구",
+      "name": "동명사구"
+    },
+    "tag21": {
+      "description": "'to'와 동사 기본형 및 관련 구성요소로 이루어진 구",
+      "name": "부정사구"
+    },
+    "tag22": {
+      "description": "동일한 중요도를 가진 두 개 이상의 절",
+      "name": "등위절"
+    },
+    "tag23": {
+      "description": "동일한 문법 구조를 갖는 두 개 이상의 절",
+      "name": "병렬절"
+    },
+    "tag24": {
+      "description": "문장에서 명사 역할을 하는 절",
+      "name": "명사절"
+    },
+    "tag25": {
+      "description": "문장에서 형용사 역할을 하는 절",
+      "name": "형용사절"
+    },
+    "tag26": {
+      "description": "문장에서 부사 역할을 하는 절",
+      "name": "부사절"
+    },
+    "tag27": {
+      "description": "다른 절 속에 삽입된 절",
+      "name": "삽입절"
+    },
+    "tag28": {
+      "description": "주절에 관계된 세부 정보를 제공하는 절",
+      "name": "관계절"
+    },
+    "tag29": {
+      "description": "다른 절에 의존하여 완전한 의미를 가질 수 없는 절",
+      "name": "종속절"
+    },
+    "tag3": {
+      "description": "다른 동사와 쓰여 의미를 부여하는 동사",
+      "name": "조동사"
+    },
+    "tag30": {
+      "description": "독립적으로 완전한 의미를 가진 절",
+      "name": "독립절"
+    },
+    "tag31": {
+      "description": "동사, 형용사, 부사를 수식하는 단어",
+      "name": "부사"
+    },
+    "tag4": {
+      "description": "동사의 동작이나 상태에 영향을 받는 단어나 구",
+      "name": "목적어"
+    },
+    "tag5": {
+      "description": "동사의 동작이 미치는 대상을 나타내는 단어나 구",
+      "name": "간접 목적어"
+    },
+    "tag6": {
+      "description": "동사의 동작이 직접적으로 영향을 주는 단어나 구",
+      "name": "직접 목적어"
+    },
+    "tag7": {
+      "description": "전치사에 의해 소개되는 단어나 구",
+      "name": "전치사 목적어"
+    },
+    "tag8": {
+      "description": "주어나 목적어를 설명하거나 보완하는 단어나 구",
+      "name": "보어"
+    },
+    "tag9": {
+      "description": "목적어를 설명하거나 보완하는 단어나 구",
+      "name": "목적보어"
+    }
+  },
+  "validation": {
+    "englishOnly": "영어 혹은 문장 부호만 입력할 수 있어요",
+    "keywordMax": "최대 {{limit}}자까지 입력할 수 있어요",
+    "keywordMin": "최소 {{limit}}자 이상 입력해 주세요",
+    "keywordRequired": "영문 키워드를 입력해 주세요",
+    "sentenceMax": "최대 {{limit}}자까지만 입력할 수 있어요",
+    "sentenceMin": "최소 {{limit}} 단어로 이루어진 문장을 입력해 주세요",
+    "sentenceRequired": "영어 문장을 입력해 주세요",
+    "topicDuplicate": "키워드는 중복될 수 없어요",
+    "topicMax": "키워드는 최대 {{limit}}개까지 추가할 수 있어요"
+  }
+}

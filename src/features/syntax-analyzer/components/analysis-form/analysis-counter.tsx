@@ -8,6 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import type { PropsWithChildren, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CenteredDivider } from '@/base';
 import {
@@ -18,6 +19,7 @@ import {
 } from '@/features/syntax-analyzer';
 
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
+  const { t } = useTranslation();
   const { data: count } = useRemainingCountQuery({
     select: ({ analysis }) => analysis,
   });
@@ -25,7 +27,7 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
   return (
     <AnalysisCounterBox
       {...stackProps}
-      countLabel={<Text fontWeight="bold">남은 분석 횟수 {count}회</Text>}
+      countLabel={<Text fontWeight="bold">{t('analyzer.remaining', { remaining: count })}</Text>}
     >
       <ProgressCircle.Root
         colorPalette="teal"
@@ -33,7 +35,7 @@ export default function AnalysisCounter({ ...stackProps }: StackProps) {
         value={remainingCountInPercent(count)}
       >
         <ProgressCircle.Circle
-          aria-label="Remaining analysis count"
+          aria-label={t('analyzer.remainingLabel')}
           css={{ '--size': '50px', '--thickness': '5px' }}
         >
           <ProgressCircle.Track _light={{ stroke: 'teal.subtle' }} />
@@ -55,6 +57,7 @@ const AnalysisCounterBox = ({
   countLabel,
   ...stackProps
 }: PropsWithChildren<StackProps & { countLabel: ReactNode }>) => {
+  const { t } = useTranslation();
   return (
     <HStack w="full" maxW={660} borderWidth={1} borderRadius="2xl" p={4} {...stackProps}>
       {children}
@@ -62,8 +65,10 @@ const AnalysisCounterBox = ({
       <Box minW={0}>
         {countLabel}
         <Text>
-          하루 최대 {DAILY_ANALYSIS_LIMIT}회까지 분석할 수 있어요 (고급 모델은 요청당{' '}
-          {ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY]}회 차감)
+          {t('analyzer.dailyLimit', {
+            limit: DAILY_ANALYSIS_LIMIT,
+            cost: ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY],
+          })}
         </Text>
       </Box>
     </HStack>

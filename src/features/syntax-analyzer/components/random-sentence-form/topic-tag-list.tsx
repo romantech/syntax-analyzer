@@ -1,10 +1,12 @@
 import { HStack, type StackProps, Tag } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import type { RandomSentenceFormValues } from '@/features/syntax-analyzer';
 
 export default function TopicTagList(stackProps: StackProps) {
+  const { t } = useTranslation();
   const { control, setValue } = useFormContext<RandomSentenceFormValues>();
   const topics = useWatch({ name: 'topics', control });
   const [parent] = useAutoAnimate({ duration: 200 });
@@ -39,7 +41,7 @@ export default function TopicTagList(stackProps: StackProps) {
             {topic}
           </Tag.Label>
           <Tag.CloseTrigger
-            aria-label={`${topic} 토픽 삭제`}
+            aria-label={t('generator.removeTopic', { topic })}
             w={{ base: '2.75rem', lg: 8 }}
             h={{ base: '2.75rem', lg: 6 }}
             flexShrink={0}

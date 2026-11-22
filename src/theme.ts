@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react/anatomy';
 
 const fontFamily =
-  '"Pretendard Variable", system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  'var(--app-font-family, "Pretendard Variable", system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif)';
 
 const config = defineConfig({
   // next-themes puts one explicit mode on <html>, the root of the semantic tokens.
@@ -255,6 +255,16 @@ const config = defineConfig({
   },
   globalCss: {
     html: { color: 'fg', bg: 'bg' },
+    '[lang]:lang(ja)': {
+      '--app-font-family':
+        '"Hiragino Sans", "Yu Gothic", "Noto Sans CJK JP", system-ui, sans-serif',
+      fontFamily: 'var(--app-font-family)',
+    },
+    '[lang]:lang(zh-Hans)': {
+      '--app-font-family':
+        '"PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif',
+      fontFamily: 'var(--app-font-family)',
+    },
     body: {
       paddingLeft: 'env(safe-area-inset-left, 0px)',
       paddingRight: 'env(safe-area-inset-right, 0px)',
