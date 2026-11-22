@@ -1,5 +1,6 @@
 import { IconButton, type IconButtonProps } from '@chakra-ui/react';
 import { motion, type Variants } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { FaAnglesDown } from 'react-icons/fa6';
 
 import { usePrefersReducedMotion } from '@/base';
@@ -23,6 +24,7 @@ const motionVariants: Variants = {
 };
 
 export default function ScrollDownButton(buttonProps: ScrollDownButtonProps) {
+  const { t } = useTranslation();
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
@@ -35,7 +37,7 @@ export default function ScrollDownButton(buttonProps: ScrollDownButtonProps) {
       minW={{ base: '44px', lg: 10 }}
       minH={{ base: '44px', lg: 10 }}
       fontSize="xl"
-      aria-label="Scroll down"
+      aria-label={t('home.scrollDown')}
       variant="subtle"
       css={{ translate: '-50% 0' }}
       variants={motionVariants}

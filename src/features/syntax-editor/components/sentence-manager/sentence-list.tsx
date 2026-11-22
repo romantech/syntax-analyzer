@@ -2,6 +2,7 @@ import { Card, Stack, StackSeparator, Tabs, useDisclosure } from '@chakra-ui/rea
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Fragment, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TbMoodEmpty } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { ConfirmModal, TextPlaceholder } from '@/base';
@@ -20,12 +21,12 @@ interface SentenceListProps {
   onTabChange: (value: string) => void;
 }
 
-const TAB_LIST: { label: string; source: AnalysisSource }[] = [
-  { label: '추가한 문장', source: 'user' },
-  { label: '샘플 문장', source: 'sample' },
-];
-
 export default function SentenceList({ activeTab, onTabChange }: SentenceListProps) {
+  const { t } = useTranslation();
+  const tabs: { label: string; source: AnalysisSource }[] = [
+    { label: t('editor.userSentences'), source: 'user' },
+    { label: t('editor.sampleSentences'), source: 'sample' },
+  ];
   const selectedAnalysis = useRef<AnalysisInfo | null>(null);
   const { open, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
@@ -56,15 +57,15 @@ export default function SentenceList({ activeTab, onTabChange }: SentenceListPro
         onValueChange={({ value }) => onTabChange(value)}
         colorPalette="teal"
       >
-        <Tabs.List aria-label="문장 목록">
-          {TAB_LIST.map(({ label, source }) => (
+        <Tabs.List aria-label={t('editor.sentenceList')}>
+          {tabs.map(({ label, source }) => (
             <Tabs.Trigger value={source} key={source}>
               {label}
             </Tabs.Trigger>
           ))}
         </Tabs.List>
 
-        {TAB_LIST.map(({ source }) => (
+        {tabs.map(({ source }) => (
           <Tabs.Content value={source} pt={4} px={0} pb={0} key={source}>
             <Card.Root variant="outline" maxH={460} overflowY="auto">
               <Card.Body px={2.5} py={0.5}>
@@ -78,7 +79,7 @@ export default function SentenceList({ activeTab, onTabChange }: SentenceListPro
                     <TextPlaceholder
                       px={1.5}
                       py={3.5}
-                      text="아직 추가한 문장이 없어요"
+                      text={t('editor.noUserSentences')}
                       endIcon={TbMoodEmpty}
                     />
                   )}
@@ -103,8 +104,8 @@ export default function SentenceList({ activeTab, onTabChange }: SentenceListPro
         isOpen={open}
         onClose={onClose}
         onConfirm={onSelectSentenceConfirm}
-        headerContent="영어 문장 선택"
-        bodyContent="선택한 문장을 편집하시겠습니까?"
+        headerContent={t('editor.chooseSentenceTitle')}
+        bodyContent={t('editor.chooseSentenceConfirm')}
       />
     </Fragment>
   );

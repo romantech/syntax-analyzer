@@ -1,5 +1,6 @@
 import { Popover, Portal, Text, type TextProps } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
+import { useTranslation } from 'react-i18next';
 
 import {
   CONSTITUENT_DATA_ATTRS,
@@ -16,6 +17,7 @@ interface TokenProps extends TextProps {
 }
 
 export default function Token({ token, index, isTapMode, ...textProps }: TokenProps) {
+  const { t, i18n } = useTranslation();
   const invalidIndex = useAtomValue(invalidRangeIndexAtom);
   const range = useAtomValue(selectedTokenRangeAtom);
   const selectedTag = useAtomValue(selectedTagAtom);
@@ -35,9 +37,9 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
           display={isTapMode ? 'inline-block' : undefined}
           minH={isTapMode ? '44px' : undefined}
           role={canSelect ? 'button' : undefined}
+          lang={canSelect ? i18n.resolvedLanguage : undefined}
           tabIndex={canSelect ? 0 : undefined}
-          lang={canSelect ? 'ko' : undefined}
-          aria-label={canSelect ? `${index + 1}번째 단어: ${token}` : undefined}
+          aria-label={canSelect ? t('editor.wordLabel', { index: index + 1, token }) : undefined}
           aria-pressed={canSelect ? !!isSelected : undefined}
           bg={isSelected ? 'teal.muted' : undefined}
           color={isSelected ? 'teal.fg' : undefined}
@@ -54,13 +56,13 @@ export default function Token({ token, index, isTapMode, ...textProps }: TokenPr
           {...dataAttrs}
           {...textProps}
         >
-          {token}
+          {canSelect ? <span lang="en">{token}</span> : token}
         </Text>
       </Popover.Anchor>
       <Portal>
         <Popover.Positioner>
-          <Popover.Content w="fit-content" aria-label="태깅 범위 안내">
-            <Popover.Body role="alert">구/절은 서로 교차할 수 없어요</Popover.Body>
+          <Popover.Content w="fit-content" aria-label={t('editor.rangeHelp')}>
+            <Popover.Body role="alert">{t('editor.crossingRange')}</Popover.Body>
           </Popover.Content>
         </Popover.Positioner>
       </Portal>

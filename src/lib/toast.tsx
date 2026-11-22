@@ -1,4 +1,5 @@
 import { CloseButton, createToaster, Icon, Portal, Toast, Toaster } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { BsCheckCircleFill, BsExclamationCircleFill } from 'react-icons/bs';
 
 type ToastOptions = {
@@ -22,9 +23,10 @@ export function showToast({ title, status, duration = 3000 }: ToastOptions): voi
 }
 
 export function AppToaster() {
+  const { t } = useTranslation();
   return (
     <Portal>
-      <Toaster toaster={toaster}>
+      <Toaster toaster={toaster} label={t('common.notifications')}>
         {(toast) => (
           <Toast.Root
             w="fit-content"
@@ -57,7 +59,12 @@ export function AppToaster() {
               {toast.title}
             </Toast.Title>
             <Toast.CloseTrigger asChild>
-              <CloseButton size="xs" color="inherit" _icon={{ boxSize: 4 }} />
+              <CloseButton
+                aria-label={t('common.close')}
+                size="xs"
+                color="inherit"
+                _icon={{ boxSize: 4 }}
+              />
             </Toast.CloseTrigger>
           </Toast.Root>
         )}

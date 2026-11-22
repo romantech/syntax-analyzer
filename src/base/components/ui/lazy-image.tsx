@@ -35,7 +35,8 @@ export default function LazyImage({
           h="full"
           objectFit="cover"
           src={placeholderSrc}
-          alt={`${alt} (Placeholder)`}
+          alt=""
+          aria-hidden
         />
         <Image
           position="absolute"

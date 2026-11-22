@@ -1,0 +1,269 @@
+{
+  "analyzer": {
+    "advancedModel": "Advanced model",
+    "advancedModelDescription": "Offers slightly higher accuracy",
+    "analyze": "Analyze",
+    "basicModel": "Basic model",
+    "basicModelDescription": "Works well for most sentences",
+    "chooseModel": "Choose an AI model",
+    "confirmBody": "Analyze the English sentence you entered?",
+    "confirmTitle": "Analyze sentence",
+    "contractions": "Contractions expand automatically (I'll → I will)",
+    "dailyLimit": "Up to {{limit}} analyses per day ({{cost}} per advanced-model request)",
+    "enterSentence": "Enter an English sentence",
+    "exhausted": "You've reached the daily limit. Please try again tomorrow.",
+    "loading": "Analyzing the sentence",
+    "loadingTime": "This can take up to <time>1 minute</time>",
+    "modelCost": "The advanced model uses {{cost}} analyses per request.",
+    "recommended": "Recommended",
+    "remaining": "Analyses remaining: {{remaining}}",
+    "remainingLabel": "Remaining analysis count",
+    "sentence": "English sentence",
+    "success": "Sentence analyzed"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirm": "Confirm",
+    "errorHeading": "Something went wrong",
+    "genericError": "An error occurred.",
+    "goBack": "Go back",
+    "notifications": "Notifications",
+    "reload": "Reload",
+    "reloadError": "Couldn't load this page. Please reload and try again.",
+    "requestError": "Something went wrong. Please try again shortly.",
+    "tryAgain": "Try again"
+  },
+  "editor": {
+    "abbreviationTooltip": "Abbreviation tooltips",
+    "add": "Add",
+    "addConfirm": "Add the English sentence you entered?",
+    "addTitle": "Add an English sentence",
+    "apply": "Apply",
+    "chooseSentenceConfirm": "Edit the selected sentence?",
+    "chooseSentenceTitle": "Select an English sentence",
+    "chooseTag": "Choose a tag",
+    "clauseTags": "Clauses",
+    "clauseTagsHelp": "Independent and dependent clauses, and more",
+    "clearSelection": "Clear selection",
+    "closeTagPicker": "Close tag picker",
+    "constituentLabel": "{{abbr}}: {{label}} (words {{begin}}–{{end}})",
+    "crossingRange": "Phrases and clauses cannot cross",
+    "currentTag": "Choose a tag (current: {{tag}})",
+    "deleteSentenceConfirm": "Delete the selected sentence?",
+    "deleteSentenceLabel": "Delete sentence: {{sentence}}",
+    "deleteSentenceTitle": "Delete sentence",
+    "deleteTag": "Delete tag",
+    "generalTags": "General",
+    "generalTagsHelp": "Subject, verb, object, and more",
+    "instructions": "Add your own sentence or select one to edit",
+    "newBadge": "New",
+    "noSelectedSentence": "No sentence selected",
+    "noUserSentences": "You haven't added any sentences yet",
+    "phraseTags": "Phrases",
+    "phraseTagsHelp": "Prepositional and gerund phrases, and more",
+    "pickRange": "Tap the first word. To select a range, tap the last word too.",
+    "pointerInstructions": "Choose a grammar tag, then click or drag across the words to apply it.",
+    "rangeHelp": "Tagging range guidance",
+    "redo": "Redo",
+    "reset": "Reset to saved state",
+    "resetConfirm": "Reset to the last saved state?",
+    "sampleSentences": "Sample sentences",
+    "save": "Save tags",
+    "saveConfirm": "Save your changes to the tags?",
+    "saved": "Tags saved",
+    "selectedRange": "Word selection: {{range}}",
+    "sentenceList": "Sentence list",
+    "sentenceRegion": "Sentence structure",
+    "sentenceRemoved": "This sentence was deleted in another tab and can't be saved.",
+    "tagTooltip": "Tag tooltips",
+    "tapInstructions": "Choose a tag, tap the words, then select Apply.",
+    "tapToDelete": "Tap the abbreviation of the tag you want to delete.",
+    "toolbar": "Tagging toolbar",
+    "undo": "Undo",
+    "userSentences": "My sentences",
+    "wordLabel": "Word {{index}}: {{token}}"
+  },
+  "generator": {
+    "addTopic": "Add topic",
+    "copied": "Copied to the clipboard",
+    "copyError": "Couldn't copy the sentence",
+    "copyInstructions": "Select a generated sentence to copy it to your clipboard",
+    "copySentence": "Copy sentence: {{sentence}}",
+    "count": "Number of sentences",
+    "decreaseCount": "Decrease sentence count",
+    "generate": "Generate sentences",
+    "heading": "Random sentence generator",
+    "increaseCount": "Increase sentence count",
+    "keyword": "English keyword",
+    "maxTopics": "Add up to {{limit}} topics to generate random sentences",
+    "randomTopics": "If you skip topics, the generator picks them at random",
+    "removeTopic": "Remove topic: {{topic}}"
+  },
+  "home": {
+    "analyzerDescription": "Enter a sentence and choose a model to see how the subject, verb, object, and other parts relate.",
+    "analyzerImage": "Syntax analyzer preview",
+    "analyzerTitle": "Analyze a sentence\nin one click",
+    "appTitle": "Syntax Analyzer",
+    "editorDescription": "Use over 30 grammar tags to mark words, phrases, and clauses and explore sentence structure.",
+    "editorImage": "Syntax editor preview",
+    "editorTitle": "Explore sentence structure\nwith tags",
+    "generatorDescription": "Choose up to three topics to generate sentences for English practice.",
+    "generatorImage": "Random sentence generator preview",
+    "generatorTitle": "Generate sentences\non topics you choose",
+    "heroDescription": "See how an English sentence fits together. Explore the structure of words, phrases, and clauses, then edit the analysis yourself.",
+    "heroLead": "Explore English syntax with AI",
+    "heroTitle": "English Syntax\nAnalyzer",
+    "scrollDown": "Scroll down",
+    "tryNow": "Try it now"
+  },
+  "nav": {
+    "analyzer": "Analyzer",
+    "donate": "Buy me a coffee",
+    "editor": "Editor",
+    "github": "GitHub repository",
+    "home": "Home",
+    "language": "Change language (current: {{language}})",
+    "languages": "Languages",
+    "main": "Main navigation",
+    "moreLinks": "More links",
+    "toggleTheme": "Toggle color mode"
+  },
+  "tags": {
+    "tag1": {
+      "description": "The word or phrase that tells who or what the sentence is about.",
+      "name": "Subject"
+    },
+    "tag10": {
+      "description": "The base form of a verb preceded by “to”.",
+      "name": "To-infinitive"
+    },
+    "tag11": {
+      "description": "An -ing form of a verb used as a noun.",
+      "name": "Gerund"
+    },
+    "tag12": {
+      "description": "A present or past participle form of a verb.",
+      "name": "Participle"
+    },
+    "tag13": {
+      "description": "A word that connects words, phrases, or clauses.",
+      "name": "Conjunction"
+    },
+    "tag14": {
+      "description": "A phrase headed by a participle.",
+      "name": "Participle phrase"
+    },
+    "tag15": {
+      "description": "A phrase consisting of a preposition and its object.",
+      "name": "Prepositional phrase"
+    },
+    "tag16": {
+      "description": "A phrase headed by a noun, along with any modifiers.",
+      "name": "Noun phrase"
+    },
+    "tag17": {
+      "description": "A phrase that functions as an adverb.",
+      "name": "Adverbial phrase"
+    },
+    "tag18": {
+      "description": "A phrase headed by a verb.",
+      "name": "Verb phrase"
+    },
+    "tag19": {
+      "description": "A phrase that functions as an adjective.",
+      "name": "Adjectival phrase"
+    },
+    "tag2": {
+      "description": "A word that expresses an action or a state.",
+      "name": "Verb"
+    },
+    "tag20": {
+      "description": "A phrase headed by a gerund.",
+      "name": "Gerund phrase"
+    },
+    "tag21": {
+      "description": "A phrase consisting of an infinitive and related words.",
+      "name": "Infinitive phrase"
+    },
+    "tag22": {
+      "description": "A clause joined to another clause of equal grammatical status.",
+      "name": "Coordinating clause"
+    },
+    "tag23": {
+      "description": "A clause that follows the same grammatical pattern as another clause.",
+      "name": "Parallel clause"
+    },
+    "tag24": {
+      "description": "A clause that functions as a noun.",
+      "name": "Noun clause"
+    },
+    "tag25": {
+      "description": "A clause that functions as an adjective.",
+      "name": "Adjectival clause"
+    },
+    "tag26": {
+      "description": "A clause that functions as an adverb.",
+      "name": "Adverbial clause"
+    },
+    "tag27": {
+      "description": "A clause inserted into another clause.",
+      "name": "Inserted clause"
+    },
+    "tag28": {
+      "description": "A clause that supplies information about a related noun or expression.",
+      "name": "Relative clause"
+    },
+    "tag29": {
+      "description": "A clause that depends on another clause to form a complete sentence.",
+      "name": "Dependent clause"
+    },
+    "tag3": {
+      "description": "A verb used with another verb to express ideas such as ability, possibility, or obligation.",
+      "name": "Modal verb"
+    },
+    "tag30": {
+      "description": "A clause that can stand on its own as a complete sentence.",
+      "name": "Independent clause"
+    },
+    "tag31": {
+      "description": "A word that modifies a verb, an adjective, or another adverb.",
+      "name": "Adverb"
+    },
+    "tag4": {
+      "description": "A word or phrase affected by the action of a verb.",
+      "name": "Object"
+    },
+    "tag5": {
+      "description": "A word or phrase that identifies the recipient or beneficiary of an action.",
+      "name": "Indirect object"
+    },
+    "tag6": {
+      "description": "A word or phrase directly affected by the action of a verb.",
+      "name": "Direct object"
+    },
+    "tag7": {
+      "description": "A word or phrase governed by a preposition.",
+      "name": "Prepositional object"
+    },
+    "tag8": {
+      "description": "A word or phrase that describes or completes a subject or object.",
+      "name": "Complement"
+    },
+    "tag9": {
+      "description": "A word or phrase that describes or completes an object.",
+      "name": "Object complement"
+    }
+  },
+  "validation": {
+    "englishOnly": "Use English letters or punctuation only",
+    "keywordMax": "Use at most {{limit}} characters",
+    "keywordMin": "Enter at least {{limit}} characters",
+    "keywordRequired": "Enter an English keyword",
+    "sentenceMax": "Use at most {{limit}} characters",
+    "sentenceMin": "Enter a sentence with at least {{limit}} words",
+    "sentenceRequired": "Enter an English sentence",
+    "topicDuplicate": "This keyword is already in the list",
+    "topicMax": "Add up to {{limit}} keywords"
+  }
+}

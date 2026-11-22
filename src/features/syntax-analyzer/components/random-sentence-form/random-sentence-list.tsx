@@ -1,5 +1,6 @@
 import { Button, Highlight, Presence, StackSeparator, VStack } from '@chakra-ui/react';
 import { useIsFetching } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import { RANDOM_SENTENCE_BASE_KEY } from '@/features/syntax-analyzer';
 import { COPY_SENTENCE_SUCCESS_TOAST_DURATION } from '@/features/syntax-editor/constants/settings';
@@ -11,17 +12,18 @@ interface RandomSentenceListProps {
 }
 
 export default function RandomSentenceList({ data, query }: RandomSentenceListProps) {
+  const { t } = useTranslation();
   const isFetching = useIsFetching({ queryKey: RANDOM_SENTENCE_BASE_KEY });
   const copySentence = async (sentence: string) => {
     try {
       await navigator.clipboard.writeText(sentence);
       showToast({
-        title: '클립보드에 복사되었습니다',
+        title: t('generator.copied'),
         status: 'success',
         duration: COPY_SENTENCE_SUCCESS_TOAST_DURATION,
       });
     } catch {
-      showToast({ title: '문장을 복사할 수 없어요', status: 'error' });
+      showToast({ title: t('generator.copyError'), status: 'error' });
     }
   };
 
@@ -43,7 +45,7 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
         {data?.map((sentence) => (
           <Button
             key={sentence}
-            aria-label={`문장 복사: ${sentence}`}
+            aria-label={t('generator.copySentence', { sentence })}
             variant="plain"
             borderRadius="none"
             display="block"

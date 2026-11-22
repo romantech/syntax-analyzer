@@ -1,25 +1,8 @@
 import { Accordion, Heading, HStack, Text, Wrap, WrapItem } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { type ConstituentWithoutId, SelectableTagButton } from '@/features/syntax-editor';
 import { groupedConstituentsByType } from '@/features/syntax-editor/data';
-
-const CONSTITUENT_CATEGORIES = [
-  {
-    label: 'general',
-    desc: '주어/동사/목적어 등',
-    constituents: groupedConstituentsByType.token,
-  },
-  {
-    label: 'phrase',
-    desc: '전치사구/동명사구 등',
-    constituents: groupedConstituentsByType.phrase,
-  },
-  {
-    label: 'clause',
-    desc: '독립절/종속절 등',
-    constituents: groupedConstituentsByType.clause,
-  },
-];
 
 interface TagListAccordionProps extends Accordion.RootProps {
   onTagSelect?: (tag: ConstituentWithoutId) => void;
@@ -29,10 +12,32 @@ export default function TagListAccordion({
   onTagSelect,
   ...accordionProps
 }: TagListAccordionProps) {
+  const { t } = useTranslation();
+  const categories = [
+    {
+      id: 'general',
+      label: t('editor.generalTags'),
+      desc: t('editor.generalTagsHelp'),
+      constituents: groupedConstituentsByType.token,
+    },
+    {
+      id: 'phrase',
+      label: t('editor.phraseTags'),
+      desc: t('editor.phraseTagsHelp'),
+      constituents: groupedConstituentsByType.phrase,
+    },
+    {
+      id: 'clause',
+      label: t('editor.clauseTags'),
+      desc: t('editor.clauseTagsHelp'),
+      constituents: groupedConstituentsByType.clause,
+    },
+  ];
+
   return (
     <Accordion.Root defaultValue={['general']} collapsible {...accordionProps}>
-      {CONSTITUENT_CATEGORIES.map((category) => (
-        <Accordion.Item key={category.label} value={category.label}>
+      {categories.map((category) => (
+        <Accordion.Item key={category.id} value={category.id}>
           <Accordion.ItemTrigger minH={onTagSelect ? '44px' : undefined}>
             <HStack flex="1" textAlign="left" textTransform="uppercase" py={2} flexWrap="wrap">
               <Heading as="span" fontSize="xl" lineHeight={1.2}>

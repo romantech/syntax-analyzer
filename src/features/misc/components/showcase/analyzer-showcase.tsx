@@ -6,16 +6,15 @@ import { withShowcase } from './with-showcase';
 const baseUrl = import.meta.env.VITE_IMAGE_KIT_BASE_URL;
 const src = `${baseUrl}/syntax-analyzer/analysis.png`;
 
-const AnalyzerShowcase = withShowcase(ShowcaseTemplate, {
+const AnalyzerShowcase = withShowcase(ShowcaseTemplate, (t) => ({
   imageProps: {
     src,
     placeholderSrc: getImageKitPlaceholder(src),
-    alt: 'Analyzer Overview',
+    alt: t('home.analyzerImage'),
   },
-  title: `Syntax Unpacked\n with a Single Click`,
-  description:
-    'Input a sentence, choose your model, and see it deftly unravel the complex ties between subjects, verbs, objects, and beyond.',
+  title: t('home.analyzerTitle'),
+  description: t('home.analyzerDescription'),
   linkUrl: SITE_URLS.ANALYZER.ROOT,
-});
+}));
 
 export default AnalyzerShowcase;

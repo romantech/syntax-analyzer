@@ -1,4 +1,5 @@
 import { Flex, type FlexProps, Heading, Link, Stack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 
 import { LazyImage, type LazyImageProps } from '@/base';
@@ -22,6 +23,7 @@ export const ShowcaseTemplate = ({
   imageFirst = true,
   ...flexProps
 }: ShowcaseTemplateProps) => {
+  const { t } = useTranslation();
   return (
     <Flex direction="column" align="center" justify="center" scrollSnapAlign="start" {...flexProps}>
       <Stack
@@ -58,7 +60,7 @@ export const ShowcaseTemplate = ({
               alignItems="center"
               minH={{ base: '44px', lg: 'auto' }}
             >
-              <NavLink to={linkUrl}>Try it now</NavLink>
+              <NavLink to={linkUrl}>{t('home.tryNow')}</NavLink>
             </Link>
           </Stack>
         </Stack>

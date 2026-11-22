@@ -11,16 +11,16 @@ import { englishInputSchema } from './english-sentence-schema';
 
 const keywordSchema = englishInputSchema
   .lowercase()
-  .min(MIN_TOPIC_LENGTH, `최소 ${MIN_TOPIC_LENGTH}자 이상 입력 해주세요`)
-  .max(MAX_TOPIC_LENGTH, `최대 ${MAX_TOPIC_LENGTH}자 까지 입력할 수 있어요`)
+  .min(MIN_TOPIC_LENGTH, 'validation.keywordMin')
+  .max(MAX_TOPIC_LENGTH, 'validation.keywordMax')
   .ensure(); // 기본값 빈 문자열로 설정하고 null/undefined 는 빈 문자열로 변환
 
 const topicsSchema = yup
   .array()
   .required()
-  .of(keywordSchema.required())
-  .max(MAX_TOPIC_ADDITION, `키워드는 최대 ${MAX_TOPIC_ADDITION}개까지 추가할 수 있어요`)
-  .test('unique', '키워드는 중복될 수 없어요', (list) => {
+  .of(keywordSchema.required('validation.keywordRequired'))
+  .max(MAX_TOPIC_ADDITION, 'validation.topicMax')
+  .test('unique', 'validation.topicDuplicate', (list) => {
     return list.length === new Set(list).size;
   })
   .ensure(); // 기본값 빈 배열로 설정하고 null/undefined 는 빈 배열로 변환

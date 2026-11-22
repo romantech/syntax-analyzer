@@ -16,6 +16,7 @@ import {
   addUserAnalysisActionAtom,
   analysisStore,
 } from '@/features/syntax-editor/store/analysis-store';
+import i18n from '@/i18n';
 import { showToast } from '@/lib';
 import { getSyntaxEditorPath } from '@/routes';
 
@@ -56,7 +57,7 @@ export const useAnalysisForm = () => {
       analysisStore.set(addUserAnalysisActionAtom, analysis);
 
       navigate(getSyntaxEditorPath('user', 0));
-      showToast({ title: '문장 분석을 완료했습니다', status: 'success', duration: 4000 });
+      showToast({ title: i18n.t('analyzer.success'), status: 'success', duration: 4000 });
     },
     meta: { invalidateQueries: REMAINING_COUNT_BASE_KEY },
   });

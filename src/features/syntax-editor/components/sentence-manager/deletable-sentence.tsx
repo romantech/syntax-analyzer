@@ -1,5 +1,6 @@
 import { Badge, Button, HStack, Stack, type StackProps, useDisclosure } from '@chakra-ui/react';
 import { useId } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ConfirmModal, DateChip, DeleteButtonIcon, isLessThanAgo, tokenJoiner } from '@/base';
 import { NEW_BADGE_DISPLAY_DURATION } from '@/features/syntax-editor';
@@ -22,6 +23,7 @@ export default function DeletableSentence({
   hideDeleteButton = false,
   ...stackProps
 }: DeletableSentenceProps) {
+  const { t } = useTranslation();
   const { open, onOpen, onClose } = useDisclosure();
   const metadataId = useId();
   const sentenceText = typeof sentence === 'string' ? sentence : tokenJoiner(sentence);
@@ -32,7 +34,7 @@ export default function DeletableSentence({
         <HStack as="span" id={metadataId} gap={1.5}>
           <DateChip date={createdAt} h={5} />
           {isLessThanAgo(createdAt, NEW_BADGE_DISPLAY_DURATION) && (
-            <Badge colorPalette="teal">New</Badge>
+            <Badge colorPalette="teal">{t('editor.newBadge')}</Badge>
           )}
           {showGPTBadge && <Badge colorPalette="orange">GPT</Badge>}
         </HStack>
@@ -57,7 +59,7 @@ export default function DeletableSentence({
       </Stack>
       {!hideDeleteButton && (
         <DeleteButtonIcon
-          aria-label={`문장 삭제: ${sentenceText}`}
+          aria-label={t('editor.deleteSentenceLabel', { sentence: sentenceText })}
           onClick={onOpen}
           boxSize={{ base: '2.75rem', lg: 8 }}
           flexShrink={0}
@@ -72,8 +74,8 @@ export default function DeletableSentence({
           onClose();
           onDelete();
         }}
-        headerContent="문장 삭제"
-        bodyContent="선택한 문장을 삭제하시겠습니까?"
+        headerContent={t('editor.deleteSentenceTitle')}
+        bodyContent={t('editor.deleteSentenceConfirm')}
       />
     </HStack>
   );

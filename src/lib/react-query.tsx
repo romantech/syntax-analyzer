@@ -8,6 +8,8 @@ import {
 } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
 
+import i18n from '@/i18n';
+
 import { showToast } from './toast';
 
 /**
@@ -36,7 +38,7 @@ const defaultOptions: DefaultOptions = {
 export const ConfiguredQueryProvider = ({ children }: PropsWithChildren) => {
   const showErrorToast = () => {
     showToast({
-      title: '에러가 발생했어요, 잠시 후 다시 시도해주세요',
+      title: i18n.t('common.requestError'),
       status: 'error',
     });
   };

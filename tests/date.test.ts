@@ -1,13 +1,16 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { getFormattedKoDate, isLessThanAgo } from '../src/base/utils/date.ts';
+import { getFormattedDate, isLessThanAgo } from '../src/base/utils/date.ts';
 import { NEW_BADGE_DISPLAY_DURATION } from '../src/features/syntax-editor/constants/settings.ts';
 
-test('저장된 ISO 타임스탬프를 현지 시간의 한국어 날짜로 표시한다', () => {
+test('저장된 ISO 타임스탬프를 현지 시간의 언어별 날짜로 표시한다', () => {
   const savedAt = new Date(2026, 10, 19, 3, 4, 5).toISOString();
 
-  assert.equal(getFormattedKoDate(savedAt), '2026년 11월 19일(목) 03:04');
+  assert.equal(getFormattedDate(savedAt, 'ko'), '2026년 11월 19일(목) 03:04');
+  assert.match(getFormattedDate(savedAt, 'en'), /Thursday, November 19/);
+  assert.match(getFormattedDate(savedAt, 'ja'), /2026年11月19日木曜日/);
+  assert.match(getFormattedDate(savedAt, 'zh-Hans'), /2026年11月19日 星期四/);
 });
 
 test('저장 후 5분까지 New 배지를 표시하고 5분이 지나면 숨긴다', (t) => {

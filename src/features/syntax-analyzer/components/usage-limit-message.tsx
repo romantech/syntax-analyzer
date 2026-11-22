@@ -1,9 +1,11 @@
 import { Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 
 export default function UsageLimitMessage() {
+  const { t } = useTranslation();
   return (
     <Text color="fg.muted" fontSize="sm">
-      사용량을 모두 소진했어요. 내일 다시 시도해 주세요.
+      {t('analyzer.exhausted')}
     </Text>
   );
 }

@@ -1,5 +1,6 @@
 import { Button, ButtonGroup, Popover, Portal, Tooltip } from '@chakra-ui/react';
 import { type ReactElement, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ConfirmPopoverProps {
   onConfirm: () => void;
@@ -16,6 +17,7 @@ export default function ConfirmPopover({
   tooltipDelay,
   children,
 }: ConfirmPopoverProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
@@ -41,8 +43,8 @@ export default function ConfirmPopover({
             </Popover.Header>
             <Popover.Footer justifyContent="flex-end" border="0">
               <ButtonGroup size="sm">
-                <Popover.CloseTrigger asChild aria-label="취소">
-                  <Button variant="subtle">취소</Button>
+                <Popover.CloseTrigger asChild aria-label={t('common.cancel')}>
+                  <Button variant="subtle">{t('common.cancel')}</Button>
                 </Popover.CloseTrigger>
                 <Button
                   variant="outline"
@@ -53,7 +55,7 @@ export default function ConfirmPopover({
                     setOpen(false);
                   }}
                 >
-                  확인
+                  {t('common.confirm')}
                 </Button>
               </ButtonGroup>
             </Popover.Footer>

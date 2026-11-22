@@ -1,5 +1,6 @@
 import { HStack, Switch } from '@chakra-ui/react';
 import { useAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
 
 import { abbrInfoModeAtom, tagInfoModeAtom } from '@/features/syntax-editor/store';
 
@@ -36,12 +37,17 @@ function TooltipSwitch({
 }
 
 export default function TooltipSwitches({ isTapMode = false }: { isTapMode?: boolean }) {
+  const { t } = useTranslation();
   const gap = isTapMode ? 2.5 : 2;
 
   return (
     <HStack gap={4} flexWrap="wrap">
-      <TooltipSwitch label="태그 툴팁" preferenceAtom={tagInfoModeAtom} gap={gap} />
-      <TooltipSwitch label="약어 툴팁" preferenceAtom={abbrInfoModeAtom} gap={gap} />
+      <TooltipSwitch label={t('editor.tagTooltip')} preferenceAtom={tagInfoModeAtom} gap={gap} />
+      <TooltipSwitch
+        label={t('editor.abbreviationTooltip')}
+        preferenceAtom={abbrInfoModeAtom}
+        gap={gap}
+      />
     </HStack>
   );
 }

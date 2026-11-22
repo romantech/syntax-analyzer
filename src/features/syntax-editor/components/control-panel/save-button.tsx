@@ -1,6 +1,7 @@
 import { IconButton } from '@chakra-ui/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IoSaveSharp } from 'react-icons/io5';
 
 import { ConfirmPopover } from '@/base';
@@ -14,6 +15,7 @@ import {
 import { showToast } from '@/lib';
 
 export default function SaveButton() {
+  const { t } = useTranslation();
   const isTouched = useAtomValue(isSegmentTouchedAtom);
   const saveHistorySegment = useSetAtom(saveHistorySegmentAtom);
 
@@ -21,7 +23,7 @@ export default function SaveButton() {
 
   const onSave = () => {
     if (!saveHistorySegment()) {
-      showToast({ title: '다른 탭에서 문장이 삭제되어 저장할 수 없어요.', status: 'error' });
+      showToast({ title: t('editor.sentenceRemoved'), status: 'error' });
       return;
     }
 
@@ -29,7 +31,7 @@ export default function SaveButton() {
     setTimeout(() => {
       setIsLoading(false);
       showToast({
-        title: '저장 성공',
+        title: t('editor.saved'),
         status: 'success',
         duration: SAVE_SEGMENT_SUCCESS_TOAST_DURATION,
       });
@@ -39,13 +41,13 @@ export default function SaveButton() {
   return (
     <ConfirmPopover
       onConfirm={onSave}
-      headerText="현재 태깅 내용을 저장하시겠습니까?"
-      tooltipLabel="태깅 저장"
+      headerText={t('editor.saveConfirm')}
+      tooltipLabel={t('editor.save')}
       tooltipDelay={CONTROL_OPEN_POPUP_DELAY}
     >
       <IconButton
         variant="subtle"
-        aria-label="Save your tagging result"
+        aria-label={t('editor.save')}
         disabled={!isTouched}
         loading={isLoading}
       >

@@ -1,27 +1,11 @@
 import { Badge, HStack, RadioGroup, Stack, Text } from '@chakra-ui/react';
 import { type Control, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import {
   ANALYSIS_DECREMENT_COUNT,
   AnalysisModel,
 } from '@/features/syntax-analyzer/constants/settings';
 import type { AnalysisFormValues } from '@/features/syntax-analyzer/hooks/use-analysis-form';
-
-const MODEL_FIELDS = [
-  {
-    value: AnalysisModel.FAST_FT,
-    label: '기본 모델',
-    desc: '대부분의 문장을 잘 분석해요',
-    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.FAST_FT],
-    recommend: true,
-  },
-  {
-    value: AnalysisModel.PRIMARY,
-    label: '고급 모델',
-    desc: '정확도가 조금 더 높아요',
-    count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY],
-    recommend: false,
-  },
-];
 
 interface ModelChoiceGroupProps {
   control: Control<AnalysisFormValues>;
@@ -29,13 +13,30 @@ interface ModelChoiceGroupProps {
 }
 
 export default function ModelChoiceGroup({ control, remainingCount }: ModelChoiceGroupProps) {
+  const { t } = useTranslation();
+  const modelFields = [
+    {
+      value: AnalysisModel.FAST_FT,
+      label: t('analyzer.basicModel'),
+      desc: t('analyzer.basicModelDescription'),
+      count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.FAST_FT],
+      recommend: true,
+    },
+    {
+      value: AnalysisModel.PRIMARY,
+      label: t('analyzer.advancedModel'),
+      desc: t('analyzer.advancedModelDescription'),
+      count: ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY],
+      recommend: false,
+    },
+  ];
   return (
     <Controller
       name="model"
       control={control}
       render={({ field: { name, onBlur, onChange, ref, value } }) => (
         <RadioGroup.Root
-          aria-label="AI 모델 선택"
+          aria-label={t('analyzer.chooseModel')}
           name={name}
           onValueChange={({ value }) => onChange(value)}
           value={value}
@@ -44,7 +45,7 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
           alignItems="start"
           gap={2}
         >
-          {MODEL_FIELDS.map((field) => (
+          {modelFields.map((field) => (
             <Stack key={field.value} gap={1} align="start">
               <HStack>
                 <RadioGroup.Item
@@ -67,7 +68,7 @@ export default function ModelChoiceGroup({ control, remainingCount }: ModelChoic
                   _light={{ color: 'teal.700' }}
                   hidden={!field.recommend}
                 >
-                  recommended
+                  {t('analyzer.recommended')}
                 </Badge>
               </HStack>
               <Text id={`model-description-${field.value}`} ml={6} fontSize={14} color="fg.muted">

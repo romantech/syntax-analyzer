@@ -10,11 +10,10 @@ import {
 } from '@chakra-ui/react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { type RefObject, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FiChevronUp } from 'react-icons/fi';
-
 import {
   applySelectedTagAtom,
-  CONSTITUENT_TRANSLATIONS,
   deleteModeAtom,
   invalidRangeIndexAtom,
   selectedAnalysisAtom,
@@ -22,6 +21,7 @@ import {
   selectedTokenRangeAtom,
   TagListAccordion,
 } from '@/features/syntax-editor';
+import { getConstituentTranslation } from '../../helpers/constituent-translation';
 
 import { EditorActions } from './control-panel';
 
@@ -30,6 +30,7 @@ export default function TapSelectionControls({
 }: {
   sentenceRegionRef: RefObject<HTMLDivElement | null>;
 }) {
+  const { t } = useTranslation();
   const [selectedTag, setSelectedTag] = useAtom(selectedTagActionAtom);
   const sentence = useAtomValue(selectedAnalysisAtom)?.sentence;
   const isDeleteMode = useAtomValue(deleteModeAtom);
@@ -42,7 +43,7 @@ export default function TapSelectionControls({
 
   const begin = range ? Math.min(...range) : 0;
   const end = range ? Math.max(...range) + 1 : 0;
-  const tagName = selectedTag && CONSTITUENT_TRANSLATIONS[selectedTag.label].ko;
+  const tagName = selectedTag && getConstituentTranslation(t, selectedTag).name;
   const focusSentence = () => sentenceRegionRef.current?.focus({ preventScroll: true });
   const cancelRange = () => {
     setRange(null);
@@ -64,7 +65,7 @@ export default function TapSelectionControls({
     >
       <Stack
         as="section"
-        aria-label="태깅 도구막대"
+        aria-label={t('editor.toolbar')}
         position="sticky"
         bottom={0}
         zIndex="sticky"
@@ -81,11 +82,18 @@ export default function TapSelectionControls({
         }}
       >
         <Text role="status" fontSize="sm" color="fg.muted" lineClamp={2} overflowWrap="anywhere">
-          {isDeleteMode && '지울 태그의 약어를 탭하세요.'}
+          {isDeleteMode && t('editor.tapToDelete')}
           {selectedTag &&
-            (range
-              ? `${begin + 1 === end ? end : `${begin + 1}~${end}`}번째 단어 · ${sentence?.slice(begin, end).join(' ')}`
-              : '시작 단어를 탭하세요. 범위를 선택하려면 끝 단어도 탭하세요.')}
+            (range ? (
+              <>
+                {t('editor.selectedRange', {
+                  range: begin + 1 === end ? String(end) : `${begin + 1}–${end}`,
+                })}{' '}
+                · <span lang="en">{sentence?.slice(begin, end).join(' ')}</span>
+              </>
+            ) : (
+              t('editor.pickRange')
+            ))}
         </Text>
         <HStack>
           <Drawer.Trigger asChild>
@@ -95,12 +103,14 @@ export default function TapSelectionControls({
               minH="44px"
               px={3}
               justifyContent="space-between"
-              aria-label={tagName ? `태그 선택 (현재 ${tagName})` : '태그 선택'}
+              aria-label={
+                tagName ? t('editor.currentTag', { tag: tagName }) : t('editor.chooseTag')
+              }
               disabled={!sentence}
               ref={triggerRef}
             >
               <Text as="span" truncate>
-                {selectedTag ? `${tagName} · ${selectedTag.abbreviation}` : '태그 선택'}
+                {selectedTag ? `${tagName} · ${selectedTag.abbreviation}` : t('editor.chooseTag')}
               </Text>
               <FiChevronUp />
             </Button>
@@ -114,15 +124,15 @@ export default function TapSelectionControls({
               focusSentence();
             }}
           >
-            적용
+            {t('editor.apply')}
           </Button>
           <Button minH="44px" px={3} variant="subtle" disabled={!range} onClick={cancelRange}>
-            선택 취소
+            {t('editor.clearSelection')}
           </Button>
         </HStack>
         {range && invalidIndex === end - 1 && (
           <Text role="alert" color="fg.muted" fontSize="sm">
-            구/절은 서로 교차할 수 없어요
+            {t('editor.crossingRange')}
           </Text>
         )}
         <EditorActions isTapMode />
@@ -139,11 +149,11 @@ export default function TapSelectionControls({
             pb="env(safe-area-inset-bottom, 0px)"
           >
             <Drawer.Header pr={16}>
-              <Drawer.Title>태그 선택</Drawer.Title>
+              <Drawer.Title>{t('editor.chooseTag')}</Drawer.Title>
             </Drawer.Header>
             <Drawer.CloseTrigger asChild>
               <CloseButton
-                aria-label="태그 선택 닫기"
+                aria-label={t('editor.closeTagPicker')}
                 boxSize="44px"
                 right="calc(var(--chakra-spacing-2) + env(safe-area-inset-right, 0px))"
               />

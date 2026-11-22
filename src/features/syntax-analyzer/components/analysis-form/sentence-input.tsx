@@ -1,9 +1,10 @@
 import { Box, Field, Input, InputGroup, type InputProps } from '@chakra-ui/react';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PiTextTBold } from 'react-icons/pi';
-
 import { MAX_SENTENCE_LENGTH, SENTENCE_CONTROL_HEIGHT } from '@/features/syntax-analyzer/constants';
+import { translateValidationMessage } from '../../schemes/validation-messages';
 
 interface SentenceInputProps extends InputProps {
   errorMessage?: string;
@@ -13,6 +14,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
   { errorMessage, size = 'lg', ...inputProps },
   ref,
 ) {
+  const { t } = useTranslation();
   const [parent] = useAutoAnimate({ duration: 180 });
 
   return (
@@ -27,9 +29,9 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
         }}
       >
         <Input
-          aria-label="영어 문장"
+          aria-label={t('analyzer.sentence')}
           enterKeyHint="done"
-          placeholder="영어 문장 입력"
+          placeholder={t('analyzer.enterSentence')}
           h={SENTENCE_CONTROL_HEIGHT}
           ps={SENTENCE_CONTROL_HEIGHT}
           size={size}
@@ -41,7 +43,7 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
         />
       </InputGroup>
       <Field.ErrorText aria-live="polite" mt={2}>
-        {errorMessage}
+        {errorMessage && translateValidationMessage(t, errorMessage)}
       </Field.ErrorText>
     </Box>
   );

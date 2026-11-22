@@ -5,10 +5,10 @@ import {
   DEFAULT_PICKER_COUNT,
   MAX_PICKER_SENTENCE,
   MIN_PICKER_SENTENCE,
-  REMAINING_COUNT_BASE_KEY,
-  randomSentenceFormSchema,
-} from '@/features/syntax-analyzer';
-import { useRandomSentenceQuery } from '@/features/syntax-analyzer/api';
+} from '@/features/syntax-analyzer/constants';
+import { useRandomSentenceQuery } from '../api/get-random-sentences';
+import { REMAINING_COUNT_BASE_KEY } from '../api/get-remaining-counts';
+import { randomSentenceFormSchema } from '../schemes/random-sentence-form-schema';
 
 /**
  * yup 스키마의 cast 기능을 이용해 기본값 설정

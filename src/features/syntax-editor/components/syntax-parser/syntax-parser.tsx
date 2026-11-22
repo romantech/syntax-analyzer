@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TbMoodEmpty } from 'react-icons/tb';
 
 import { TextPlaceholder, ThreeDotsWave, useTransitionLoading } from '@/base';
@@ -23,6 +24,7 @@ import '@/features/syntax-editor/styles/constituent.scss';
  * 완전히 불러온 후에만 false 로 변경되도록 보장할 수 있음.
  * */
 export default function SyntaxParser({ isTapMode = false }: { isTapMode?: boolean }) {
+  const { t } = useTranslation();
   const sentenceRef = useRef<HTMLParagraphElement>(null);
 
   const { segment, sentence } = useSyntaxParserAnalysis();
@@ -42,7 +44,7 @@ export default function SyntaxParser({ isTapMode = false }: { isTapMode?: boolea
         fontSize="3xl"
         fontWeight="bold"
         pl={4}
-        text="선택한 문장이 없어요"
+        text={t('editor.noSelectedSentence')}
         endIcon={TbMoodEmpty}
       />
     );

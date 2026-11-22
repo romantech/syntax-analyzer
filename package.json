@@ -35,7 +35,10 @@
     "test": "node --test tests/*.test.ts",
     "lint:fix": "biome check --write .",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "i18n:extract": "i18next-cli extract",
+    "i18n:types": "i18next-cli types",
+    "i18n:check": "i18next-cli extract --ci --dry-run && i18next-cli status && i18next-cli types --ci"
   },
   "dependencies": {
     "@chakra-ui/react": "3.38.0",
@@ -53,6 +56,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "framer-motion": "^11.18.2",
+    "i18next": "^27.2.2",
     "jotai": "^3.0.2",
     "nanoid": "^5.1.16",
     "next-themes": "0.4.6",
@@ -61,6 +65,7 @@
     "react-dom": "^19.3.1",
     "react-error-boundary": "^6.1.6",
     "react-hook-form": "^7.92.0",
+    "react-i18next": "^18.0.3",
     "react-icons": "^5.7.0",
     "react-router": "^8.5.1",
     "sass": "^1.108.2",
@@ -77,6 +82,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.3.0",
     "husky": "^9.1.7",
+    "i18next-cli": "^1.93.0",
     "jotai-babel": "^0.1.0",
     "jotai-devtools": "^0.15.1",
     "lint-staged": "^16.4.0",
