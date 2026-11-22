@@ -36,11 +36,27 @@
 
 ## 호환성과 배포 순서
 
-1. 기존 화면이 보낼 요청과 읽을 응답을 확인한다. 필드 이름이나 필수 여부가 바뀐다면 서버에서 기존 요청과 새 요청을 함께 처리하고, 기존 화면이 읽는 응답 필드를 유지하는 구간을 둔다.
-2. 기존 프런트엔드와 변경된 서버의 조합을 검증한 뒤 서버를 먼저 배포한다. 새 서버 동작에 의존하는 프런트엔드는 새 조합을 검증한 뒤 배포한다.
-3. 기존 프런트엔드로 되돌릴 가능성과 열린 탭, PWA 캐시를 고려해 호환 동작을 제거할 시점을 정한다. 웹과 API를 함께 바꾸는 PR에 배포 순서와 롤백 시 사용할 조합을 기록한다.
+Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 API 계약에 의존하면 API 변경과 웹 전환을 별도 PR로 나눈다. Vercel은 저장소 루트의 [설정](../vercel.json)으로 웹을 빌드하고 `apps/web/dist`를 배포한다.
 
-Vercel은 저장소 루트의 [설정](../vercel.json)으로 웹을 빌드하고 `apps/web/dist`를 배포한다.
+### API 선배포와 웹 전환
+
+1. **API PR을 먼저 머지한다.** API는 기존 요청과 새 요청을 모두 처리하고 기존 웹이 읽는 응답 필드를 유지한다. 머지 전에 두 계약의 요청·응답과 기존 웹의 동작을 검증한다. 현재 정상인 Vercel·Koyeb 배포 ID와 커밋 SHA를 PR에 기록한다. 웹은 이 단계에서 기존 계약을 계속 사용한다.
+2. **Koyeb 운영 배포를 확인한다.** 해당 커밋의 배포가 `Healthy`이고 운영 트래픽을 받는지 확인한다. 운영 API에서 `/health`의 HTTP 200과 `/analyzer/remaining-counts`의 `analysis`, `random_sentence` 응답을 확인한다. 기존 운영 웹에서 분석과 랜덤 문장 생성, 잔여 횟수 갱신을 확인하고 변경된 API 경로는 기존 형식과 새 형식 각각의 요청·응답을 확인한다. 검증에 실패하면 웹 PR 머지를 보류한다.
+3. **웹 PR을 머지한다.** API 운영 검증이 끝나면 새 계약을 지원하는 API와 Vercel 프리뷰를 연결해 새 웹을 검증한다. 브라우저 네트워크 탭에서 API 주소와 새 요청·응답 형식을 확인한다. 머지 후에는 해당 Vercel 배포가 운영 도메인에 연결됐는지 확인하고, 운영 웹에서 변경 경로와 오류 응답을 다시 확인한다. 같은 머지로 Koyeb가 다시 배포되면 활성 API에서도 기존 계약과 새 계약을 확인한다. [배포 전후 확인](#배포-전후-확인)
+
+### 호환 기간과 기존 계약 제거
+
+호환 기간은 두 계약을 지원하는 API가 운영에 배포된 시점부터 시작한다. 배포 PR에 호환 종료 예정일과 되돌릴 수 있는 웹·API 조합을 기록한다. 새 웹을 검증한 뒤에도 이전 웹으로 되돌릴 가능성, 열려 있는 탭, PWA에 캐시된 웹을 고려해 두 계약을 유지한다. 기존 형식의 호출이 남아 있는지 확인하고, 롤백 대상 웹도 새 계약을 사용할 수 있게 된 뒤 별도 API PR에서 기존 계약을 제거한다. 기존 웹이 계속 요청할 수 있거나 전환 여부를 확인하기 어렵다면 호환 기간을 연장한다.
+
+### 롤백 순서
+
+- **새 웹 공개 전 API 문제.** Koyeb API를 이전 정상 배포로 되돌려 기존 웹과 이전 API 조합으로 복구한다.
+- **새 웹 공개 후 웹 문제.** Vercel 웹을 되돌리고 두 계약을 지원하는 API를 유지한다. API에서 기존 계약을 이미 제거했다면 호환 API를 먼저 복구한 뒤 이전 웹을 배포한다.
+- **새 웹 공개 후 API 문제.** 현재 웹과 아직 사용 중인 이전 웹을 모두 지원하는 정상 API 배포로 되돌린다. 해당 배포를 사용할 수 없다면 웹을 먼저 되돌리고 두 계약을 지원하는 API를 수정 배포한다. 열린 탭과 PWA에서 새 웹의 호출이 종료된 것을 확인한 뒤에는 이전 웹과 이전 API 조합으로 되돌릴 수 있다.
+
+- Vercel의 `Instant Rollback`에서는 호환되는 운영 배포를 선택한다. 복구 후 운영 도메인과 커밋을 확인한다. `Instant Rollback` 이후에는 운영 도메인 자동 할당이 중지되므로 수정 배포를 검증한 뒤 `Undo Rollback`에서 해당 배포를 승격한다. [Vercel Instant Rollback](https://vercel.com/docs/instant-rollback)
+- Koyeb의 `Deployments`에서 호환되는 정상 배포를 선택해 다시 배포한다. 활성 배포의 커밋과 설정을 확인한다. 해당 빌드로 복구할 수 없다면 호환 계약을 유지하는 수정 또는 되돌리기 PR로 복구한다. 이후 `main` 자동 배포가 문제 버전을 다시 올리지 않도록 원인 변경도 수정하거나 되돌린다. [Koyeb GitHub 배포](https://www.koyeb.com/docs/build-and-deploy/deploy-with-git)
+- 각 복구 단계가 끝날 때마다 운영 API의 `/health`와 잔여 횟수 응답을 확인하고, 해당 웹에서 변경 경로를 다시 검증한 뒤 다음 단계로 진행한다.
 
 ### Koyeb API 배포
 
@@ -49,9 +65,9 @@ Vercel은 저장소 루트의 [설정](../vercel.json)으로 웹을 빌드하고
 - 기존 도메인, HTTP 포트 `8000`, 헬스 체크와 [런타임 환경 변수](../apps/api/.env.example)를 유지한다. `NODE_ENV=production`과 포트가 기존 서비스 설정과 일치하는지 확인한다.
 - 배포 전 로컬에서는 저장소 루트에서 `docker build -f apps/api/Dockerfile -t syntax-analyzer-api .`로 같은 이미지를 빌드할 수 있다.
 - 새 배포가 Healthy 상태가 되면 기존 API 주소의 `/health`와 `/analyzer/remaining-counts`를 확인하고 웹에서 분석과 랜덤 문장 생성을 검증한다.
-- 전환 직후 문제가 생기면 Koyeb Deployments에서 `romantech/project-server`의 마지막 Healthy 배포 설정을 선택해 다시 배포한다. 이전 설정의 GitHub 소스와 빌드팩이 적용됐는지 확인한 뒤 기존 API 주소에서 동일한 검증을 반복한다. 전환 이후에는 마지막 정상 모노레포 배포를 같은 방법으로 되돌린다.
+- 모노레포 전환 자체를 되돌려야 하면 Koyeb `Deployments`에서 `romantech/project-server`의 마지막 `Healthy` 배포 설정을 선택해 다시 배포한다. 이전 설정의 GitHub 소스와 빌드팩이 적용됐는지 확인한 뒤 기존 API 주소에서 동일한 검증을 반복한다. 모노레포 전환 이후 API 계약 변경에는 위 [롤백 순서](#롤백-순서)를 따른다.
 
-[Koyeb GitHub 배포 및 롤백](https://www.koyeb.com/docs/build-and-deploy/deploy-with-git) · [Koyeb 모노레포 설정](https://www.koyeb.com/docs/build-and-deploy/monorepo)
+[Koyeb 모노레포 설정](https://www.koyeb.com/docs/build-and-deploy/monorepo)
 
 ## 배포 전후 확인
 
