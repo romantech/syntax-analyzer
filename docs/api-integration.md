@@ -64,9 +64,11 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 
 - 기존 서비스의 GitHub 소스로 `romantech/syntax-analyzer`의 `main`을 선택한다.
 - 빌더는 Dockerfile을 선택하고 경로는 `apps/api/Dockerfile`로 설정한다. 루트 `pnpm-lock.yaml`과 워크스페이스 설정을 사용하므로 Work directory는 비운다. Entrypoint와 Command는 Dockerfile의 기본값을 사용한다.
-- 기존 도메인, HTTP 포트 `8000`, 헬스 체크와 [런타임 환경 변수](../apps/api/.env.example)를 유지한다. `NODE_ENV=production`과 포트가 기존 서비스 설정과 일치하는지 확인한다.
+- 기존 도메인, HTTP 포트 `8000`과 [런타임 환경 변수](../apps/api/.env.example)를 유지한다. `NODE_ENV=production`과 포트가 기존 서비스 설정과 일치하는지 확인한다.
+- Koyeb 서비스의 `Settings` → `Health checks`에서 포트 `8000`의 검사 방식을 `HTTP`, 메서드를 `GET`, 경로를 `/health`로 지정하고 `Deploy`로 적용한다. [Koyeb 헬스 체크](https://www.koyeb.com/docs/run-and-scale/health-checks)
+- API는 시작 시 Redis `PING`이 성공한 뒤 포트 `8000`에서 요청을 받는다. `PING`이 실패하거나 10초 안에 응답하지 않으면 포트를 열기 전에 종료한다. 새 배포가 `Healthy`가 되지 않으면 인스턴스 로그에서 Redis 초기화 오류를 확인한다.
 - 배포 전 로컬에서는 저장소 루트에서 `docker build -f apps/api/Dockerfile -t syntax-analyzer-api .`로 같은 이미지를 빌드할 수 있다.
-- 새 배포가 Healthy 상태가 되면 기존 API 주소의 `/health`와 `/analyzer/remaining-counts`를 확인하고 웹에서 분석과 랜덤 문장 생성을 검증한다.
+- 새 배포가 `Healthy` 상태가 되면 기존 API 주소의 `/health`가 HTTP 200을 반환하고 `/analyzer/remaining-counts`에 `analysis`, `random_sentence`가 있는지 확인한다. 웹에서 분석과 랜덤 문장 생성도 검증한다.
 - 모노레포 전환 자체를 되돌려야 하면 Koyeb `Deployments`에서 `romantech/project-server`의 마지막 `Healthy` 배포 설정을 선택해 다시 배포한다. 이전 설정의 GitHub 소스와 빌드팩이 적용됐는지 확인한 뒤 기존 API 주소에서 동일한 검증을 반복한다. 모노레포 전환 이후 API 계약 변경에는 위 [롤백 순서](#롤백-순서)를 따른다.
 
 [Koyeb 모노레포 설정](https://www.koyeb.com/docs/build-and-deploy/monorepo)

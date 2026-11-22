@@ -7,11 +7,10 @@ export const redis = new Redis({
   port: envConfig.redis.port,
   username: envConfig.redis.username,
   password: envConfig.redis.password,
+  connectionName: `project-server-${envConfig.isProd ? 'prod' : 'dev'}`,
 });
 
 redis.on('connect', () => {
-  const suffix = envConfig.isProd ? 'prod' : 'dev';
-  redis.client('SETNAME', `project-server-${suffix}`);
   logger.info('Successfully connected to Redis');
 });
 
