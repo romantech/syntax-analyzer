@@ -213,15 +213,16 @@ GET /analyzer/random-sentences
 
 ### Shared quota behavior
 
+- The first balance lookup, analysis request, or random sentence request initializes both IP balances if the IP quota is missing or expired. The IP quota expires 24 hours after initialization.
 - Each model request reserves credits from both the IP-based and shared quotas before calling the model. Random sentence generation reserves one credit per request regardless of the number of sentences.
 - If either quota has insufficient credits, the API returns HTTP 400 with `{"status":"error","message":"No remaining request count available."}`.
 - The first balance lookup or reservation on a new date in Korea Standard Time resets both shared balances atomically. Redis provides the clock and stores the period across API restarts.
 - An existing shared balance without a recorded reset date is initialized on its first lookup or reservation after the update.
-- A failed model request returns credits to the quota buckets that still match the reservation. Each IP quota expires 24 hours after initialization.
+- A failed model request returns credits to the quota buckets that still match the reservation and preserves the existing IP expiry.
 
 ### Check remaining counts
 
-This endpoint initializes the IP quota on first use and returns the smaller of the IP and shared balances for each operation. In-flight reservations are included in the balance.
+This endpoint returns the smaller of the IP and shared balances for each operation after deducting any in-flight reservations.
 
 #### Endpoint
 
