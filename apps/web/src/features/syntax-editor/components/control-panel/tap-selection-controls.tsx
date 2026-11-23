@@ -143,6 +143,7 @@ export default function TapSelectionControls({
           <Drawer.Content
             borderTopRadius="xl"
             maxH="85dvh"
+            bg="bg.overlayPanel"
             pl="env(safe-area-inset-left, 0px)"
             pr="env(safe-area-inset-right, 0px)"
             pb="env(safe-area-inset-bottom, 0px)"

@@ -41,6 +41,8 @@ const config = defineConfig({
         bg: {
           DEFAULT: { value: { _dark: '{colors.gray.950}' } },
           panel: { value: { _dark: '{colors.gray.900}' } },
+          overlayPanel: { value: { base: '{colors.bg.panel}', _dark: '#1e1e21' } },
+          overlayButton: { value: { _dark: '#2f2f33' } },
           subtle: { value: { _dark: '{colors.gray.900}' } },
           muted: { value: { _dark: '{colors.gray.800}' } },
         },
@@ -103,7 +105,7 @@ const config = defineConfig({
               _hover: { _disabled: { bg: 'colorPalette.subtle' } },
               _active: { bg: 'colorPalette.emphasized' },
               _dark: {
-                bg: 'colorPalette.muted',
+                bg: 'var(--subtle-button-bg, {colors.colorPalette.muted})',
                 _hover: {
                   bg: 'colorPalette.emphasized',
                   _disabled: { bg: 'colorPalette.muted' },

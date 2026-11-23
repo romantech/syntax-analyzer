@@ -35,7 +35,7 @@ export default function ConfirmModal({
       <Portal>
         <Dialog.Backdrop bg="blackAlpha.600" />
         <Dialog.Positioner px={4}>
-          <Dialog.Content textStyle="md" borderRadius="md">
+          <Dialog.Content textStyle="md" borderRadius="md" bg="bg.overlayPanel">
             <Dialog.Header pt={4}>
               <Dialog.Title fontSize="lg" lineHeight="base" fontWeight="bold">
                 {headerContent}
@@ -53,7 +53,12 @@ export default function ConfirmModal({
               {bodyContent}
             </Dialog.Body>
             <Dialog.Footer pt={4}>
-              <Button ref={cancelRef} variant="subtle" onClick={onClose}>
+              <Button
+                ref={cancelRef}
+                variant="subtle"
+                css={{ '--subtle-button-bg': 'colors.bg.overlayButton' }}
+                onClick={onClose}
+              >
                 {t('common.cancel')}
               </Button>
               <Button
