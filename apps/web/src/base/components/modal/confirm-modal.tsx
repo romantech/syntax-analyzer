@@ -6,6 +6,8 @@ interface ConfirmModalProps {
   onConfirm: () => void;
   headerContent: ReactNode;
   bodyContent: ReactNode;
+  confirmLabel: string;
+  destructive?: boolean;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -16,6 +18,8 @@ export default function ConfirmModal({
   onClose,
   headerContent,
   bodyContent,
+  confirmLabel,
+  destructive = false,
 }: ConfirmModalProps) {
   const { t } = useTranslation();
   const cancelRef = useRef<HTMLButtonElement>(null);
@@ -63,11 +67,11 @@ export default function ConfirmModal({
               </Button>
               <Button
                 variant="outline"
-                colorPalette="teal"
-                _light={{ color: 'teal.700' }}
+                colorPalette={destructive ? 'red' : 'teal'}
+                _light={{ color: destructive ? 'red.700' : 'teal.700' }}
                 onClick={onConfirm}
               >
-                {t('common.confirm')}
+                {confirmLabel}
               </Button>
             </Dialog.Footer>
           </Dialog.Content>

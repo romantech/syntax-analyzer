@@ -24,7 +24,8 @@
   "common": {
     "cancel": "キャンセル",
     "close": "閉じる",
-    "confirm": "確認",
+    "delete": "削除",
+    "edit": "編集",
     "errorHeading": "エラーが発生しました",
     "genericError": "エラーが発生しました。",
     "goBack": "戻る",
@@ -32,6 +33,8 @@
     "reload": "再読み込み",
     "reloadError": "ページを読み込めませんでした。再読み込みしてください。",
     "requestError": "エラーが発生しました。しばらくしてから再試行してください。",
+    "reset": "リセット",
+    "save": "保存",
     "tryAgain": "再試行"
   },
   "editor": {

@@ -24,7 +24,8 @@
   "common": {
     "cancel": "Cancel",
     "close": "Close",
-    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
     "errorHeading": "Something went wrong",
     "genericError": "An error occurred.",
     "goBack": "Go back",
@@ -32,6 +33,8 @@
     "reload": "Reload",
     "reloadError": "Couldn't load this page. Please reload and try again.",
     "requestError": "Something went wrong. Please try again shortly.",
+    "reset": "Reset",
+    "save": "Save",
     "tryAgain": "Try again"
   },
   "editor": {

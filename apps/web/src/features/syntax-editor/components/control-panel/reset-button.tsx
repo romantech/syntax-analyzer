@@ -19,6 +19,7 @@ export default function ResetButton() {
     <ConfirmPopover
       onConfirm={initializer}
       headerText={t('editor.resetConfirm')}
+      confirmLabel={t('common.reset')}
       tooltipLabel={t('editor.reset')}
       tooltipDelay={CONTROL_OPEN_POPUP_DELAY}
     >

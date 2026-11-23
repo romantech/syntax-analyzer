@@ -76,6 +76,8 @@ export default function DeletableSentence({
         }}
         headerContent={t('editor.deleteSentenceTitle')}
         bodyContent={t('editor.deleteSentenceConfirm')}
+        confirmLabel={t('common.delete')}
+        destructive
       />
     </HStack>
   );

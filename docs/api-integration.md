@@ -37,7 +37,7 @@ Redis 할당량 통합 테스트는 전용 로컬 Redis를 실행한 뒤 `REDIS_
 ### 샘플 분석 확인
 
 1. `/analyzer`에서 문장을 생성하고 첫 번째 문장인 `The idea that she proposed was innovative.`를 분석 입력에 넣는다.
-2. 분석을 실행하고 편집기에서 주어·동사 태그와 명사구 안의 관계절 `that she proposed`가 표시되는지 확인한다.
+2. 확인 모달에서 `분석`을 누르고 편집기에서 주어·동사 태그와 명사구 안의 관계절 `that she proposed`가 표시되는지 확인한다.
 3. `/analyzer`로 돌아가 `I will read.`를 분석하고 편집기에 문장만 표시되는지 확인한다.
 
 ## 호환성과 배포 순서
