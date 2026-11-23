@@ -143,7 +143,6 @@ export default function TapSelectionControls({
           <Drawer.Content
             borderTopRadius="xl"
             maxH="85dvh"
-            _dark={{ bg: 'gray.700' }}
             pl="env(safe-area-inset-left, 0px)"
             pr="env(safe-area-inset-right, 0px)"
             pb="env(safe-area-inset-bottom, 0px)"
