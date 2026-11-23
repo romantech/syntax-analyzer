@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.3](https://github.com/romantech/syntax-analyzer/compare/v1.4.2...v1.4.3) (2026-11-23)
+
+
+### Bug Fixes
+
+* clarify the language menu icon ([#225](https://github.com/romantech/syntax-analyzer/issues/225)) ([1c1e017](https://github.com/romantech/syntax-analyzer/commit/1c1e017feac2aa1e822f695ac9e789fc64c9779a))
+* preserve spacing in the generation quota ([#223](https://github.com/romantech/syntax-analyzer/issues/223)) ([e01b75f](https://github.com/romantech/syntax-analyzer/commit/e01b75fc24f8ba0ce12b7845f1328b6f25c8ba84))
+* 태그 선택 Drawer와 확인 모달 배경색 통일 ([#226](https://github.com/romantech/syntax-analyzer/issues/226)) ([5e32079](https://github.com/romantech/syntax-analyzer/commit/5e3207959844b3df6ebb8ea31c8e0be9e3a9ad22))
+
 ## [1.4.2](https://github.com/romantech/syntax-analyzer/compare/v1.4.1...v1.4.2) (2026-11-22)
 
 
