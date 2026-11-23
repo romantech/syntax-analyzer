@@ -183,6 +183,8 @@ Omit a parameter to use its default. Supply `sent_count` and `max_chars` once ea
 
 #### Response
 
+The response contains exactly `sent_count` non-blank strings. The `max_chars` limit applies to each returned string, including any leading or trailing whitespace.
+
 <details><summary>200 OK</summary>
 <br />
 
@@ -190,7 +192,7 @@ Omit a parameter to use its default. Supply `sent_count` and `max_chars` once ea
 [
   "Apples are a popular fruit that come in many different varieties.",
   "Apple trees are typically grown in orchards for commercial production.",
-  "Apple cider is a refreshing beverage made from pressed apples.",
+  "Apple cider is a refreshing beverage made from pressed apples."
 ]
 ```
 </details>
@@ -209,6 +211,19 @@ Omit a parameter to use its default. Supply `sent_count` and `max_chars` once ea
       "location": "query"
     }
   ]
+}
+```
+</details>
+
+<details><summary>502 Bad Gateway</summary>
+<br />
+
+If the model returns the wrong number of sentences, a blank sentence, or a sentence that exceeds the character limit, the API refunds the IP and shared quota reservations and returns:
+
+```json
+{
+  "status": "error",
+  "message": "Invalid generated sentences."
 }
 ```
 </details>
