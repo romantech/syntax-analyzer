@@ -52,7 +52,9 @@ export default function SelectableTagButton({ constituent, onSelect }: TagButton
         variant={isSelected ? 'outline' : 'subtle'}
         colorPalette={isSelected ? 'teal' : 'gray'}
         css={
-          onSelect && !isSelected ? { '--subtle-button-bg': 'colors.bg.overlayButton' } : undefined
+          onSelect && !isSelected
+            ? { '--subtle-button-bg': 'colors.bg.tagPickerButton' }
+            : undefined
         }
       >
         {name}
