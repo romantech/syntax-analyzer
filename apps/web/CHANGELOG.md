@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.4](https://github.com/romantech/syntax-analyzer/compare/v1.4.3...v1.4.4) (2026-11-23)
+
+
+### Bug Fixes
+
+* clarify confirmation actions ([#227](https://github.com/romantech/syntax-analyzer/issues/227)) ([166cb98](https://github.com/romantech/syntax-analyzer/commit/166cb9833706024fd99e95c0d4edef9a1bf3c2d1))
+* improve dark overlay contrast ([#229](https://github.com/romantech/syntax-analyzer/issues/229)) ([5514788](https://github.com/romantech/syntax-analyzer/commit/55147881ad13e8c6d7fe55efe0d2f4740bdb9751))
+
 ## [1.4.3](https://github.com/romantech/syntax-analyzer/compare/v1.4.2...v1.4.3) (2026-11-23)
 
 
