@@ -26,7 +26,8 @@ export default interface Resources {
     "common": {
       "cancel": "취소",
       "close": "닫기",
-      "confirm": "확인",
+      "delete": "삭제",
+      "edit": "편집",
       "errorHeading": "문제가 생겼어요",
       "genericError": "문제가 발생했어요",
       "goBack": "돌아가기",
@@ -34,6 +35,8 @@ export default interface Resources {
       "reload": "새로고침",
       "reloadError": "화면을 불러오지 못했어요. 새로고침해 주세요.",
       "requestError": "오류가 발생했어요. 잠시 후 다시 시도해 주세요.",
+      "reset": "초기화",
+      "save": "저장",
       "tryAgain": "다시 시도하기"
     },
     "editor": {

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 interface ConfirmPopoverProps {
   onConfirm: () => void;
   headerText: string;
+  confirmLabel: string;
   tooltipLabel: string;
   tooltipDelay: number;
   children: ReactElement;
@@ -13,6 +14,7 @@ interface ConfirmPopoverProps {
 export default function ConfirmPopover({
   onConfirm,
   headerText,
+  confirmLabel,
   tooltipLabel,
   tooltipDelay,
   children,
@@ -55,7 +57,7 @@ export default function ConfirmPopover({
                     setOpen(false);
                   }}
                 >
-                  {t('common.confirm')}
+                  {confirmLabel}
                 </Button>
               </ButtonGroup>
             </Popover.Footer>

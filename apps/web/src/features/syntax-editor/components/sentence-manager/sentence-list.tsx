@@ -104,6 +104,7 @@ export default function SentenceList({ activeTab, onTabChange }: SentenceListPro
         isOpen={open}
         onClose={onClose}
         onConfirm={onSelectSentenceConfirm}
+        confirmLabel={t('common.edit')}
         headerContent={t('editor.chooseSentenceTitle')}
         bodyContent={t('editor.chooseSentenceConfirm')}
       />

@@ -77,6 +77,7 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
         isOpen={isModalOpen}
         onClose={closeModal}
         onConfirm={onSubmitConfirm}
+        confirmLabel={t('analyzer.analyze')}
         headerContent={t('analyzer.confirmTitle')}
         bodyContent={t('analyzer.confirmBody')}
       />

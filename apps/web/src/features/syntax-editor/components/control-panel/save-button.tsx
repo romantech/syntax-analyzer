@@ -42,6 +42,7 @@ export default function SaveButton() {
     <ConfirmPopover
       onConfirm={onSave}
       headerText={t('editor.saveConfirm')}
+      confirmLabel={t('common.save')}
       tooltipLabel={t('editor.save')}
       tooltipDelay={CONTROL_OPEN_POPUP_DELAY}
     >

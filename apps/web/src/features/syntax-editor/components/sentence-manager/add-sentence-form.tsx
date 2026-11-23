@@ -55,6 +55,7 @@ export default function AddSentenceForm({ onConfirmEffect, ...boxProps }: AddSen
         isOpen={open}
         onClose={onClose}
         onConfirm={onConfirm}
+        confirmLabel={t('editor.add')}
         headerContent={t('editor.addTitle')}
         bodyContent={t('editor.addConfirm')}
       />
