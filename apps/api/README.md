@@ -17,7 +17,7 @@ POST /analyzer
 | Field      | Type            | Options                              | Required | Description                                | Constraints                                  |
 | ---------- | --------------- | ------------------------------------ | -------- | ------------------------------------------ | -------------------------------------------- |
 | `model`    | `string`        | `primary`, `primary-ft`, `fast-ft` | Yes      | Analysis model key (provider model alias) | One of: `primary`, `primary-ft`, `fast-ft` |
-| `sentence` | `Array<string>` | N/A                                  | Yes      | Tokens for analysis                        | Range: 2~20 tokens                           |
+| `sentence` | `Array<string>` | N/A                                  | Yes      | Tokens for analysis                        | 2–20 tokens, each a non-blank string of up to 80 characters |
 
 > Example Request
 
@@ -175,9 +175,11 @@ GET /analyzer/random-sentences
 
 | Field        | Type            | Required | Default | Description                    | Constraints  |
 | ------------ | --------------- | -------- | ------- | ------------------------------ | ------------ |
-| `sent_count` | `number`        | No       | `3`     | Quantity of sentences          | Range: 1~5   |
-| `max_chars`  | `number`        | No       | `80`    | Character limit per sentence   | Range: 10~80 |
-| `topics`     | `Array<string>` | No       | `[]`    | Topics to include in sentences | Max 3 topics |
+| `sent_count` | `integer`       | No       | `3`     | Quantity of sentences          | 1–5 |
+| `max_chars`  | `integer`       | No       | `80`    | Character limit per sentence   | 10–80 |
+| `topics`     | `Array<string>` | No       | `[]`    | Topics to include in sentences | Up to 3 topics, each a non-blank string of up to 20 characters |
+
+Omit a parameter to use its default. Supply `sent_count` and `max_chars` once each. Use `topics=sports&topics=travel` or `topics[]=sports&topics[]=travel` for multiple topics.
 
 #### Response
 
@@ -211,9 +213,14 @@ GET /analyzer/random-sentences
 ```
 </details>
 
+### Request body errors
+
+The server returns `{"status":"error","message":"Invalid request body."}` with HTTP 400 when it cannot parse JSON. Requests over the 100 KiB body limit return HTTP 413 with `{"status":"error","message":"Request body too large."}`. Field validation errors return the `errors` array shown above.
+
 ### Shared quota behavior
 
 - The first balance lookup, analysis request, or random sentence request initializes both IP balances if the IP quota is missing or expired. The IP quota expires 24 hours after initialization.
+- The API validates inputs before reserving credits or calling a model.
 - Each model request reserves credits from both the IP-based and shared quotas before calling the model. Random sentence generation reserves one credit per request regardless of the number of sentences.
 - If either quota has insufficient credits, the API returns HTTP 400 with `{"status":"error","message":"No remaining request count available."}`.
 - The first balance lookup or reservation on a new date in Korea Standard Time resets both shared balances atomically. Redis provides the clock and stores the period across API restarts.
