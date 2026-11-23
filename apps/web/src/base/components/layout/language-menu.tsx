@@ -1,7 +1,6 @@
 import { IconButton, Menu, Portal } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { FiGlobe } from 'react-icons/fi';
-import { LuCheck } from 'react-icons/lu';
+import { LuCheck, LuLanguages } from 'react-icons/lu';
 
 import { changeLanguage, getActiveLanguage } from '@/i18n';
 import { LANGUAGES } from '@/i18n/languages';
@@ -21,7 +20,7 @@ export function LanguageMenu() {
           boxSize={{ base: '44px', lg: 10 }}
           minW={{ base: '44px', lg: 10 }}
         >
-          <FiGlobe />
+          <LuLanguages />
         </IconButton>
       </Menu.Trigger>
       <Portal>
