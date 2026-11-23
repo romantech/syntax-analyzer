@@ -41,8 +41,9 @@ const config = defineConfig({
         bg: {
           DEFAULT: { value: { _dark: '{colors.gray.950}' } },
           panel: { value: { _dark: '{colors.gray.900}' } },
-          overlayPanel: { value: { base: '{colors.bg.panel}', _dark: '#1e1e21' } },
+          overlayPanel: { value: { base: '{colors.bg.panel}', _dark: '#242427' } },
           overlayButton: { value: { _dark: '#2f2f33' } },
+          tagPickerButton: { value: { _dark: '#36363a' } },
           subtle: { value: { _dark: '{colors.gray.900}' } },
           muted: { value: { _dark: '{colors.gray.800}' } },
         },
