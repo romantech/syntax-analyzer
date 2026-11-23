@@ -6,6 +6,22 @@ import { CustomError } from '@/utils';
 const { SERVER_ERROR } = ERROR_MESSAGES;
 /* next 파라미터(4번째)가 없으면 에러처리 미들웨어 인식하지 않으므로 주의 */
 export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
+  switch (err.type) {
+    case 'entity.parse.failed':
+    case 'querystring.parse.rangeError':
+    case 'request.size.invalid':
+      res
+        .status(400)
+        .json({ status: 'error', message: 'Invalid request body.' });
+      return;
+    case 'entity.too.large':
+    case 'parameters.too.many':
+      res
+        .status(413)
+        .json({ status: 'error', message: 'Request body too large.' });
+      return;
+  }
+
   const isCustomError = err instanceof CustomError;
   const status = isCustomError ? err.status : 500;
   const message = isCustomError ? err.message : SERVER_ERROR;
