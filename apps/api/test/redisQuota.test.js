@@ -163,10 +163,48 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
     assert.equal(await redis.hget(REMAINING.TOTAL, FIELDS.ANALYSIS), '48');
   });
 
-  for (const [field, cost] of [
-    [FIELDS.ANALYSIS, 2],
-    [FIELDS.RANDOM_SENTENCE, 1],
+  await context.test(
+    'preserves the balance and expiration of a legacy IP quota',
+    async () => {
+      const field = FIELDS.ANALYSIS;
+      const userKey = REMAINING.USER(firstIP);
+      await seed(field, 50, 4);
+      await redis.hdel(userKey, periodField);
+      const expiresAt = await redis.pexpiretime(userKey);
+
+      await withAnalyzerQuota(firstIP, field, 2, async () => {});
+      assert.equal(await redis.hget(userKey, field), '2');
+      assert.equal(await redis.pexpiretime(userKey), expiresAt);
+    },
+  );
+
+  for (const [field, cost, initialBalance] of [
+    [FIELDS.ANALYSIS, 2, 10],
+    [FIELDS.RANDOM_SENTENCE, 1, 20],
   ]) {
+    await context.test(
+      `${field} reserves credits for a new or expired IP without a balance lookup`,
+      async () => {
+        now = beforeMidnight;
+        await clearKeys();
+        const userKey = REMAINING.USER(firstIP);
+        for (const stage of ['new', 'expired']) {
+          if (stage === 'expired') await redis.pexpireat(userKey, 1);
+          assert.equal(await redis.exists(userKey), 0);
+          assert.equal(
+            await withAnalyzerQuota(firstIP, field, cost, async () => 'done'),
+            'done',
+          );
+          assert.equal(
+            await redis.hget(userKey, field),
+            String(initialBalance - cost),
+          );
+          const ttl = await redis.pttl(userKey);
+          assert(ttl > 86390000 && ttl <= 86400000);
+        }
+      },
+    );
+
     for (const sameUser of [true, false]) {
       await context.test(
         `${field} admits one concurrent request at the ${sameUser ? 'IP' : 'shared'} limit`,
@@ -249,6 +287,67 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
   }
 
   await context.test(
+    'concurrent first requests share one IP quota and expiration',
+    async () => {
+      now = beforeMidnight;
+      await clearKeys();
+      const field = FIELDS.ANALYSIS;
+      const userKey = REMAINING.USER(firstIP);
+      const responses = await Promise.allSettled(
+        Array.from({ length: 6 }, () =>
+          withAnalyzerQuota(firstIP, field, 2, async () =>
+            redis.pexpiretime(userKey),
+          ),
+        ),
+      );
+      const expiresAt = await redis.pexpiretime(userKey);
+      assert(expiresAt > 0);
+      assert.deepEqual(
+        responses.filter((response) => response.status === 'fulfilled'),
+        Array.from({ length: 5 }, () => ({
+          status: 'fulfilled',
+          value: expiresAt,
+        })),
+      );
+      const rejected = responses.filter(
+        (response) => response.status === 'rejected',
+      );
+      assert.equal(rejected.length, 1);
+      assert.equal(rejected[0].reason.status, exhausted.status);
+      assert.equal(rejected[0].reason.message, exhausted.message);
+      assert.equal(await redis.hget(REMAINING.TOTAL, field), '40');
+      assert.deepEqual(await getAnalyzerRemainingCounts(firstIP), {
+        analysis: 0,
+        random_sentence: 20,
+      });
+      assert.equal(await redis.pexpiretime(userKey), expiresAt);
+    },
+  );
+
+  await context.test(
+    'refunding a first reservation restores the credits and keeps its expiration',
+    async () => {
+      now = beforeMidnight;
+      await clearKeys();
+      const field = FIELDS.ANALYSIS;
+      const userKey = REMAINING.USER(firstIP);
+      const modelError = new Error('Model request failed');
+      let expiresAt;
+      await assert.rejects(
+        withAnalyzerQuota(firstIP, field, 2, async () => {
+          expiresAt = await redis.pexpiretime(userKey);
+          assert(expiresAt > 0);
+          throw modelError;
+        }),
+        (error) => error === modelError,
+      );
+      assert.equal(await redis.hget(REMAINING.TOTAL, field), '50');
+      assert.equal(await redis.hget(userKey, field), '10');
+      assert.equal(await redis.pexpiretime(userKey), expiresAt);
+    },
+  );
+
+  await context.test(
     'a late refund leaves the reset shared balance unchanged',
     async () => {
       const field = FIELDS.ANALYSIS;
@@ -275,7 +374,6 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       await assert.rejects(
         withAnalyzerQuota(firstIP, field, 1, async () => {
           await redis.pexpire(userKey, 0);
-          await getAnalyzerRemainingCounts(firstIP);
           await withAnalyzerQuota(firstIP, field, 1, async () => {});
           throw new Error('Model request failed');
         }),
