@@ -3,20 +3,20 @@ import { atomWithReset, atomWithStorage, RESET } from 'jotai/utils';
 
 import type { NumberTuple } from '@/base';
 import { type ConstituentWithoutId, hasAddedTagAtom } from '@/features/syntax-editor';
-import { DEFAULT_ABBR_INFO_MODE, DEFAULT_TAG_INFO_MODE } from '@/features/syntax-editor/constants';
+import { DEFAULT_TAG_INFO_MODE } from '@/features/syntax-editor/constants';
 
 export const selectedTagAtom = atomWithReset<ConstituentWithoutId | null>(null);
-export const hoveredConstituentAtom = atomWithReset<number | null>(null);
 export const deleteModeAtom = atomWithReset(false);
 export const selectedTokenRangeAtom = atomWithReset<NumberTuple | null>(null);
 
 /** 로컬 스토리지에서 키 값을 먼저 찾고 없다면 두번째 인자에 명시한 초기값으로 설정 */
 export const tagInfoModeAtom = atomWithStorage('tagInfoMode', DEFAULT_TAG_INFO_MODE);
-export const abbrInfoModeAtom = atomWithStorage('abbrInfoMode', DEFAULT_ABBR_INFO_MODE);
+export const showFullTagNamesAtom = atomWithStorage('showFullTagNames', true, undefined, {
+  getOnInit: true,
+});
 
 export const resetControlPanelAtom = atom(null, (_get, set) => {
   set(selectedTagAtom, RESET);
-  set(hoveredConstituentAtom, RESET);
   set(deleteModeAtom, RESET);
   set(selectedTokenRangeAtom, RESET);
 });
@@ -42,9 +42,3 @@ export const selectedTagActionAtom = atom(
     set(selectedTokenRangeAtom, RESET);
   },
 );
-
-export const isAbbrTooltipVisibleAtom = atom((get) => {
-  const isAbbrInfoMode = get(abbrInfoModeAtom);
-  const isDeleteMode = get(deleteModeAtom);
-  return isAbbrInfoMode && !isDeleteMode;
-});

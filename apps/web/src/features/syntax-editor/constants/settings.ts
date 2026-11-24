@@ -2,7 +2,6 @@ export const INVALID_POPUP_DELAY = 800;
 export const CONTROL_OPEN_POPUP_DELAY = 600;
 
 export const DEFAULT_TAG_INFO_MODE = true;
-export const DEFAULT_ABBR_INFO_MODE = false;
 export const DEFAULT_SENTENCE_LIST_TAB = 'sample';
 
 export const SAVE_SEGMENT_DELAY = 500;

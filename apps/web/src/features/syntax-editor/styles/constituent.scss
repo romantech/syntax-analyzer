@@ -17,7 +17,9 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 .constituent {
   --constituent-label-size: 2rem;
   --constituent-label-surface-inset: 3px;
+  --constituent-label-inline-space: 0px;
   position: relative;
+  padding-inline: var(--constituent-label-inline-space);
 
   > .constituent-labels {
     position: absolute;
@@ -52,14 +54,12 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   min-height: var(--constituent-label-size);
   padding-inline: 0.375rem;
   border-radius: 0.375rem;
-  font-size: 1rem;
-  font-style: italic;
-  font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: 600;
 
-  &[data-overview-label] {
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 600;
+  &[data-abbreviated] {
+    font-style: italic;
+    font-weight: 500;
   }
 
   > svg {
@@ -99,7 +99,11 @@ button.constituent-label {
 
   .constituent.token-group[data-token-group-lv="#{$i}"] {
     margin-inline: var(--constituent-inline-margin, #{$constituent-margin});
-    padding: 0 var(--constituent-inline-padding, #{$constituent-margin}) $offset;
+    padding-block: 0 $offset;
+    padding-inline: calc(
+      var(--constituent-inline-padding, #{$constituent-margin}) +
+        var(--constituent-label-inline-space)
+    );
 
     // 문장 성분 라벨
     > .constituent-labels {

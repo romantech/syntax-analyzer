@@ -7,6 +7,8 @@ interface UseCalculateNestedLevelProps {
   segment: TSegment;
   isTapMode: boolean;
   overviewDetails: ReadonlySet<number> | undefined;
+  showFullTagNames: boolean;
+  language: string | undefined;
 }
 
 export const useCalculateNestingLevel = ({
@@ -14,9 +16,14 @@ export const useCalculateNestingLevel = ({
   segment,
   isTapMode,
   overviewDetails,
+  showFullTagNames,
+  language,
 }: UseCalculateNestedLevelProps) => {
-  // biome-ignore lint/correctness/useExhaustiveDependencies: segment and overviewDetails change the rendered tags.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: rendered tags and label text determine the layout.
   useLayoutEffect(() => {
-    calculateNestingLevel(targetRef, isTapMode);
-  }, [segment, overviewDetails, targetRef, isTapMode]);
+    const updateLayout = () => calculateNestingLevel(targetRef, isTapMode);
+    updateLayout();
+    document.fonts.addEventListener('loadingdone', updateLayout);
+    return () => document.fonts.removeEventListener('loadingdone', updateLayout);
+  }, [segment, overviewDetails, showFullTagNames, language, targetRef, isTapMode]);
 };

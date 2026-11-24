@@ -7,6 +7,8 @@ import {
   getNumberAttr,
 } from '@/features/syntax-editor';
 
+const LABEL_GAP = 4;
+
 const assignCalculatedLevel = (element: HTMLElement) => {
   if (element.classList.contains('constituent-labels')) return 0;
   let maxChildLevel = 0;
@@ -26,12 +28,30 @@ const assignCalculatedLevel = (element: HTMLElement) => {
     }
   });
 
+  if (isConstituent) {
+    const labels = element.querySelector(':scope > .constituent-labels');
+    const extraWidth =
+      (labels?.getBoundingClientRect().width ?? 0) +
+      LABEL_GAP -
+      element.getBoundingClientRect().width;
+    if (extraWidth > 0) {
+      element.style.setProperty('--constituent-label-inline-space', `${extraWidth / 2}px`);
+    }
+  }
+
   return currentLevel;
 };
 
 export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapMode = false) => {
   const sentence = ref.current;
   if (!sentence) return;
+
+  // Recompute from the original token widths when a shorter label replaces a longer one.
+  for (const constituent of sentence.querySelectorAll<HTMLElement>(
+    `.${CONSTITUENT_CLASSES.CONSTITUENT}`,
+  )) {
+    constituent.style.removeProperty('--constituent-label-inline-space');
+  }
 
   Array.from(sentence.children).forEach((span) => {
     const spanElement = span as HTMLElement;

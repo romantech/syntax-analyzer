@@ -1,6 +1,6 @@
 import { Box, Button } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TbMoodEmpty } from 'react-icons/tb';
 
@@ -9,6 +9,7 @@ import {
   deleteModeAtom,
   Sentence,
   selectedTagAtom,
+  showFullTagNamesAtom,
   type TAnalysis,
   TokenList,
   type TSegment,
@@ -56,8 +57,10 @@ function AnalysisSentence({
   segment: TSegment;
   isTapMode: boolean;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const sentenceRef = useRef<HTMLParagraphElement>(null);
+  const sentenceId = useId();
+  const showFullTagNames = useAtomValue(showFullTagNamesAtom);
   const [showAllTags, setShowAllTags] = useState(false);
   const [{ expanded, entering }, setDetails] = useState<{
     expanded: ReadonlySet<number>;
@@ -94,6 +97,8 @@ function AnalysisSentence({
     segment,
     isTapMode,
     overviewDetails: allTagsVisible ? undefined : expanded,
+    showFullTagNames,
+    language: i18n.resolvedLanguage,
   });
 
   return (
@@ -105,15 +110,19 @@ function AnalysisSentence({
             minH={isTapMode ? '44px' : undefined}
             variant={allTagsVisible ? 'subtle' : 'outline'}
             colorPalette={allTagsVisible ? 'teal' : 'gray'}
-            aria-pressed={allTagsVisible}
+            aria-expanded={allTagsVisible}
+            aria-controls={sentenceId}
             disabled={isEditing}
-            onClick={() => setShowAllTags((previous) => !previous)}
+            onClick={() => {
+              if (showAllTags) setDetails({ expanded: new Set(), entering: null });
+              setShowAllTags(!showAllTags);
+            }}
           >
-            {t('editor.allTags')}
+            {allTagsVisible ? t('editor.collapseAllTags') : t('editor.expandAllTags')}
           </Button>
         </Box>
       )}
-      <Sentence ref={sentenceRef} isTapMode={isTapMode}>
+      <Sentence ref={sentenceRef} id={sentenceId} isTapMode={isTapMode}>
         <SegmentList
           segment={segment}
           tokenElements={TokenList({ sentence: analysis.sentence, isTapMode })}
