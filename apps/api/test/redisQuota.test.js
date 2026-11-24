@@ -153,7 +153,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
           FIELDS.ANALYSIS,
           FIELDS.RANDOM_SENTENCE,
         ),
-        ['28', '59'],
+        ['8', '19'],
       );
 
       const moved = await request(remaining, { cookie, ip: secondIP });
@@ -164,16 +164,27 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
 
       const tamperedCookie = `${cookie.slice(0, -1)}${cookie.endsWith('a') ? 'b' : 'a'}`;
       const second = await request(remaining, { cookie: tamperedCookie });
-      assert.notEqual(second.headers.get('set-cookie')?.split(';')[0], cookie);
-      assert.match(
-        second.headers.get('set-cookie'),
-        /^__Host-analyzer_browser=/,
-      );
-      assert.deepEqual(await second.json(), initialCounts);
+      const replacement = second.headers.get('set-cookie');
+      assert.match(replacement, /^__Host-analyzer_browser=/);
+      const secondCookie = replacement.split(';')[0];
+      assert.notEqual(secondCookie, cookie);
+      assert.deepEqual(await second.json(), {
+        analysis: 8,
+        random_sentence: 19,
+      });
+
+      const secondMoved = await request(remaining, {
+        cookie: secondCookie,
+        ip: secondIP,
+      });
+      assert.deepEqual(await secondMoved.json(), initialCounts);
 
       const legacy = await request(remaining, { cookie, legacy: true });
       assert.equal(legacy.headers.has('set-cookie'), false);
-      assert.deepEqual(await legacy.json(), initialCounts);
+      assert.deepEqual(await legacy.json(), {
+        analysis: 8,
+        random_sentence: 19,
+      });
       await clearKeys();
     },
   );
@@ -224,7 +235,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         );
         assert.equal(
           results.filter(({ status }) => status === 'fulfilled').length,
-          sameIP ? 15 : 25,
+          sameIP ? 5 : 25,
         );
         for (const result of results.filter(
           ({ status }) => status === 'rejected',
