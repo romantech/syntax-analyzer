@@ -19,7 +19,7 @@ const testEnv = {
   NODE_ENV: 'test',
   PORT: '0',
   OPENAI_API_KEY: 'test',
-  MODEL_FAST: 'gpt-4.1-mini',
+  MODEL_FAST: 'gpt-6-luna',
 };
 
 test('serves public routes and the default 404 from the assembled app', async (context) => {

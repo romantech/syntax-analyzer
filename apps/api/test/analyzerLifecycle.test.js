@@ -65,7 +65,7 @@ const fixture = async (context) => {
       REDIS_PORT: redisPort,
       REDIS_USERNAME: '',
       REDIS_PASSWORD: '',
-      MODEL_FAST: 'gpt-4.1-mini',
+      MODEL_FAST: 'gpt-6-luna',
       MODEL_ANALYSIS_BASIC: 'gpt-6-luna',
       KOYEB_APP_ID: '',
     },
