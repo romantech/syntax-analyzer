@@ -6,18 +6,31 @@ import { throwCustomError } from '@/utils/customError';
 
 export const jsonOutputParser = new JsonOutputParser();
 
-export const createJSONChatOpenAI = (config: ChatOpenAIFields) => {
+export const createChatOpenAI = (config: ChatOpenAIFields) => {
   return new ChatOpenAI({
     ...config,
-    configuration: { ...config.configuration, logLevel: 'off' },
+    // The OpenAI SDK also observes the request signal during retry backoff.
+    maxRetries: 0,
+    configuration: { ...config.configuration, maxRetries: 2, logLevel: 'off' },
+  });
+};
+
+export const createJSONChatOpenAI = (config: ChatOpenAIFields) => {
+  return createChatOpenAI({
+    ...config,
     modelKwargs: { response_format: { type: 'json_object' } },
   });
 };
 
-const strategies: ((json: string) => Promise<unknown>)[] = [
+type JSONRepairStrategy = (
+  json: string,
+  signal: AbortSignal,
+) => Promise<unknown>;
+
+const strategies: JSONRepairStrategy[] = [
   async (json) => JSON.parse(json),
   async (json) => JSON.parse(jsonrepair(json)),
-  async (json) => {
+  async (json, signal) => {
     const jsonOutputLLM = createJSONChatOpenAI({
       temperature: 0,
       model: AI_MODEL[AIModelKey.FAST],
@@ -34,16 +47,21 @@ const strategies: ((json: string) => Promise<unknown>)[] = [
       `Invalid JSON:\n${json}`,
     ].join('\n');
 
-    const response = await jsonOutputLLM.invoke(prompt);
+    const response = await jsonOutputLLM.invoke(prompt, { signal });
     return await jsonOutputParser.parse(response.text);
   },
 ];
 
-export const validateAndRepairJSON = async (jsonString: string) => {
+export const validateAndRepairJSON = async (
+  jsonString: string,
+  signal: AbortSignal,
+) => {
   for (const strategy of strategies) {
+    signal.throwIfAborted();
     try {
-      return await strategy(jsonString);
+      return await strategy(jsonString, signal);
     } catch {
+      signal.throwIfAborted();
       // Parser and provider errors can contain the original model output.
     }
   }

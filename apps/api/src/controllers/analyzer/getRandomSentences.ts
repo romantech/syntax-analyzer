@@ -1,5 +1,4 @@
 import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { ChatOpenAI } from '@langchain/openai';
 import { matchedData } from 'express-validator';
 import {
   ERROR_MESSAGES,
@@ -14,6 +13,7 @@ import {
   redis,
   withAnalyzerQuota,
 } from '@/services';
+import { createChatOpenAI } from '@/services/openAI/openAIUtils';
 import { asyncHandler, throwCustomError } from '@/utils';
 import {
   checkMaxCharField,
@@ -33,11 +33,15 @@ export const getRandomSentences = [
   validateClientIP,
   asyncHandler(async (req, res) => {
     const clientIP = req.clientIP ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
-    const sentences = await withAnalyzerQuota(
-      clientIP,
-      FIELDS.RANDOM_SENTENCE,
-      RANDOM_SENTENCE_COST,
-      () => generateRandomSentences(matchedData<RandomSentenceParams>(req)),
+    const query = matchedData<RandomSentenceParams>(req);
+    const sentences = await req.app.locals.analyzerRequests.run(res, (signal) =>
+      withAnalyzerQuota(
+        clientIP,
+        FIELDS.RANDOM_SENTENCE,
+        RANDOM_SENTENCE_COST,
+        () => generateRandomSentences(query, signal),
+        signal,
+      ),
     );
 
     res.status(200).json(sentences);
@@ -52,13 +56,17 @@ const retrieveRandomSentencePrompt = async (query: RandomSentenceParams) => {
   return await prompt.invoke({ ...query, topics: query.topics });
 };
 
-const generateRandomSentences = async (query: RandomSentenceParams) => {
+const generateRandomSentences = async (
+  query: RandomSentenceParams,
+  signal: AbortSignal,
+) => {
   const prompt = await retrieveRandomSentencePrompt(query);
-  const llm = new ChatOpenAI(RANDOM_SENTENCE_CONFIG).withStructuredOutput(
+  signal.throwIfAborted();
+  const llm = createChatOpenAI(RANDOM_SENTENCE_CONFIG).withStructuredOutput(
     sentencesSchema,
   );
 
-  const { sentences } = await llm.invoke(prompt);
+  const { sentences } = await llm.invoke(prompt, { signal });
   if (
     sentences.length !== query.sent_count ||
     sentences.some(

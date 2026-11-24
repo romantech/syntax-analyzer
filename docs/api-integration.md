@@ -79,6 +79,12 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 
 [Koyeb 모노레포 설정](https://www.koyeb.com/docs/build-and-deploy/monorepo)
 
+#### AI 요청 시간 제한과 서버 종료
+
+- 분석과 랜덤 문장 생성에는 요청마다 45초를 적용한다. 최초 모델 호출, 재시도, 분석 결과의 JSON 복구가 이 시간을 공유한다. 시간 안에 끝나지 않으면 API는 모델 호출을 취소하고 Redis 할당량을 원복한 뒤 HTTP 504를 반환한다. 클라이언트가 먼저 연결을 닫아도 호출을 취소하고 원복한다.
+- `SIGTERM` 또는 `SIGINT`를 받으면 신규 연결 수신을 중단하고 진행 중인 요청에 최대 20초를 준다. 그때까지 끝나지 않은 AI 요청은 취소하고, 아직 연결된 클라이언트에는 원복 후 HTTP 503을 반환한다. 완료된 요청의 차감은 유지한다.
+- HTTP 연결과 할당량 원복을 기다린 뒤 Redis 연결을 닫는다. Redis 장애 등으로 신호 수신 후 25초 안에 정리가 끝나지 않으면 남은 연결을 강제로 닫고 오류를 기록한다. 이때 Redis에 반영되기 전인 원복은 유실될 수 있다. [Koyeb 인스턴스 종료](https://www.koyeb.com/docs/reference/instances#what-happened-when-an-instance-stops)
+
 ### IP별 할당량과 운영 도메인
 
 - Koyeb가 주입하는 `KOYEB_APP_ID`가 있으면 분석·문장 생성·잔여량 조회는 공용 HTTP 엣지가 추가한 `X-Forwarded-For`의 마지막 주소만 사용한다. 이 주소가 없거나 IP 형식이 아니면 HTTP 400을 반환한다. `KOYEB_APP_ID`는 로컬이나 다른 환경에 수동으로 설정하지 않는다. [엣지 헤더 정책](https://www.koyeb.com/docs/reference/edge-network#headers-that-koyeb-sets) · [Koyeb 기본 환경 변수](https://www.koyeb.com/docs/build-and-deploy/environment-variables)
