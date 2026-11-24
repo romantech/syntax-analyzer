@@ -3,11 +3,15 @@ require('module-alias/register');
 const assert = require('node:assert/strict');
 const { BlockList } = require('node:net');
 const { test } = require('node:test');
-const { startApp } = require('../test-support/app');
+const {
+  startApp,
+  modelAnalysis,
+  analysisPromptValues,
+} = require('../test-support/app');
 const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
 
 const { KEYS } = ANALYZER_REDIS_SCHEMA;
-const analysis = { id: 'analysis-result' };
+const analysisTokens = ['I', 'walk.'];
 const sentences = ['I walk.'];
 const counts = { analysis: 4, random_sentence: 3 };
 const quotaKeys = [];
@@ -20,8 +24,8 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
     {
       path: '',
       method: 'POST',
-      body: JSON.stringify({ model: 'primary', sentence: ['I', 'walk.'] }),
-      expected: analysis,
+      body: JSON.stringify({ model: 'primary', sentence: analysisTokens }),
+      expected: analysisTokens,
     },
     { path: '/random-sentences?sent_count=1', expected: sentences },
     { path: '/remaining-counts', expected: counts },
@@ -108,6 +112,7 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
         cloudflarePeers,
         redis: {
           hget: async () => 'Follow the instruction.',
+          hmget: async () => analysisPromptValues,
           eval: async (_script, keyCount, _totalKey, userKey, ipKey) => {
             assert.equal(ipKey, KEYS.REMAINING.IP(ip));
             quotaKeys.push(userKey);
@@ -124,7 +129,7 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
           },
         },
         createModel: () => ({
-          pipe: () => ({ invoke: async () => JSON.stringify(analysis) }),
+          invoke: async () => modelAnalysis(),
           withStructuredOutput: () => ({
             invoke: async () => ({ sentences }),
           }),
@@ -144,8 +149,9 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
           body,
         });
         assert.equal(response.status, ip ? 200 : 400);
+        const data = await response.json();
         assert.deepEqual(
-          await response.json(),
+          ip && body ? data.sentence : data,
           ip
             ? expected
             : {

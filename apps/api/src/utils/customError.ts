@@ -1,6 +1,6 @@
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 
-type ModelErrorType = 'invalid-model-output' | 'model-json-repair-failed';
+type ModelErrorType = 'invalid-model-output';
 
 export class CustomError extends Error {
   constructor(

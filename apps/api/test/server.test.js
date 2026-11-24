@@ -19,10 +19,7 @@ const testEnv = {
   NODE_ENV: 'test',
   PORT: '0',
   OPENAI_API_KEY: 'test',
-  MODEL_PRIMARY: 'gpt-4.1',
-  MODEL_FAST: 'gpt-4.1-mini',
-  MODEL_PRIMARY_FT: 'ft:gpt-4.1:example::abc',
-  MODEL_FAST_FT: 'ft:gpt-4.1-mini:example::abc',
+  MODEL_FAST: 'gpt-6-luna',
 };
 
 test('serves public routes and the default 404 from the assembled app', async (context) => {
@@ -59,7 +56,13 @@ test('validates ports and model settings for the selected environment', () => {
   });
   assert.equal(devConfig.port, 3001);
   assert.equal(devConfig.redis.port, 6379);
-  assert.equal(devConfig.models['fast-ft'], testEnv.MODEL_FAST_FT);
+  assert.equal(devConfig.models.analysis, 'gpt-6-luna');
+  assert.equal(devConfig.models.fast, testEnv.MODEL_FAST);
+  assert.equal(
+    loadEnvironment({ ...testEnv, MODEL_ANALYSIS_BASIC: ' gpt-6.1-terra ' })
+      .models.analysis,
+    'gpt-6.1-terra',
+  );
   assert.equal(loadEnvironment({ ...testEnv, PORT: '0' }).port, 0);
 
   const prod = { ...testEnv, NODE_ENV: 'production' };
@@ -72,9 +75,8 @@ test('validates ports and model settings for the selected environment', () => {
     ['PORT', '65536'],
     ['REDIS_PORT', '0x18eb'],
     ['MODEL_FAST', undefined],
-    ['MODEL_PRIMARY', 'bad model name'],
-    ['MODEL_FAST_FT', ''],
-    ['MODEL_PRIMARY_FT', ''],
+    ['MODEL_ANALYSIS_BASIC', 'bad model name'],
+    ['MODEL_ANALYSIS_BASIC', 'legacy'],
     ['ANALYZER_COOKIE_SECRET', 'short'],
     ['ANALYZER_CLOUDFLARE_CIDRS', '0.0.0.0/0'],
     ['ANALYZER_CLOUDFLARE_CIDRS', '2001:db8::/129'],
@@ -116,7 +118,7 @@ test('rejects invalid configuration before connecting to Redis', async (context)
           REDIS_HOST: host,
           REDIS_PORT: String(redis.address().port),
           MODEL_FAST: 'PRIVATE INVALID VALUE',
-          MODEL_PRIMARY_FT: '',
+          MODEL_ANALYSIS_BASIC: 'bad name',
         },
         timeout: 5_000,
       },
@@ -126,7 +128,7 @@ test('rejects invalid configuration before connecting to Redis', async (context)
       const output = error.stdout + error.stderr;
       assert.match(
         output,
-        /Missing or invalid environment variables: MODEL_FAST, MODEL_PRIMARY_FT/,
+        /Missing or invalid environment variables: MODEL_ANALYSIS_BASIC, MODEL_FAST/,
       );
       assert.doesNotMatch(output, /PRIVATE INVALID VALUE|Server is running/);
       return true;

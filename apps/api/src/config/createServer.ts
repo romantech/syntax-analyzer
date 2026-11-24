@@ -35,7 +35,7 @@ const corsOptions: CorsOptions = {
 };
 
 export interface AnalyzerDependencies {
-  redis: Pick<Redis, 'eval' | 'hget' | 'ping' | 'status'>;
+  redis: Pick<Redis, 'eval' | 'hget' | 'hmget' | 'ping' | 'status'>;
   createModel: CreateChatModel;
   models: Environment['models'];
 }

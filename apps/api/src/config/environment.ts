@@ -49,6 +49,10 @@ export const loadEnvironment = (env: NodeJS.ProcessEnv) => {
       );
     }
   }
+  const analysisModel = env.MODEL_ANALYSIS_BASIC?.trim() || 'gpt-6-luna';
+  if (analysisModel === 'legacy' || !MODEL_ID.test(analysisModel)) {
+    invalid.add('MODEL_ANALYSIS_BASIC');
+  }
   const config = {
     isProd,
     isKoyeb: Boolean(env.KOYEB_APP_ID),
@@ -68,9 +72,7 @@ export const loadEnvironment = (env: NodeJS.ProcessEnv) => {
     },
     models: {
       fast: required('MODEL_FAST', MODEL_ID),
-      primary: required('MODEL_PRIMARY', MODEL_ID),
-      'fast-ft': required('MODEL_FAST_FT', MODEL_ID),
-      'primary-ft': required('MODEL_PRIMARY_FT', MODEL_ID),
+      analysis: analysisModel,
     },
   };
 

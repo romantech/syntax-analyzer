@@ -16,39 +16,90 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
 .constituent {
   --constituent-label-size: 2rem;
+  --constituent-label-surface-inset: 3px;
+  --constituent-label-inline-space: 0px;
   position: relative;
+  padding-inline: var(--constituent-label-inline-space);
 
-  // 문장 성분 라벨
-  > .constituent-label {
+  > .constituent-labels {
     position: absolute;
     z-index: 2;
-    min-width: var(--constituent-label-size);
-    min-height: var(--constituent-label-size);
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-    user-select: none;
-    width: fit-content;
+    display: inline-flex;
+    align-items: center;
     left: 50%;
-    padding: 0;
     transform: translateX(-50%);
-    border-radius: 0.5rem;
+    isolation: isolate;
+    white-space: nowrap;
+    user-select: none;
 
-    font-size: 1rem;
+    &::before {
+      content: "";
+      position: absolute;
+      inset: var(--constituent-label-surface-inset) 0;
+      z-index: -1;
+      border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+      border-radius: 0.5rem;
+      background-color: color-mix(in srgb, currentColor 10%, var(--chakra-colors-bg));
+      pointer-events: none;
+    }
+  }
+}
+
+.constituent-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  min-width: var(--constituent-label-size);
+  min-height: var(--constituent-label-size);
+  padding-inline: 0.375rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+
+  &[data-abbreviated] {
     font-style: italic;
     font-weight: 500;
 
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+    &:not(:only-child) {
+      min-width: var(--constituent-grouped-label-min-width, 1.5rem);
 
-    > span {
-      display: inline-block;
-      // 이탤릭 글자가 오른쪽 아래로 치우쳐 보이는 정도를 보정한다.
-      padding-block: 0.1rem 0.2rem;
-      padding-inline: 0.3rem 0.5rem;
-      border-radius: 0.3rem;
+      &:first-child {
+        justify-content: start;
+      }
+
+      &:last-child {
+        justify-content: end;
+      }
     }
+  }
+
+  > svg {
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}
+
+button.constituent-label {
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .constituent-label[data-entering] {
+    animation: constituent-label-in 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
+
+@keyframes constituent-label-in {
+  from {
+    opacity: 0;
+    translate: 0 3px;
   }
 }
 
@@ -60,10 +111,14 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
   .constituent.token-group[data-token-group-lv="#{$i}"] {
     margin-inline: var(--constituent-inline-margin, #{$constituent-margin});
-    padding: 0 var(--constituent-inline-padding, #{$constituent-margin}) $offset;
+    padding-block: 0 $offset;
+    padding-inline: calc(
+      var(--constituent-inline-padding, #{$constituent-margin}) +
+        var(--constituent-label-inline-space)
+    );
 
     // 문장 성분 라벨
-    > .constituent-label {
+    > .constituent-labels {
       top: $line-center;
       transform: translate(-50%, calc(-50% + 1px));
     }
@@ -90,27 +145,17 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
   .constituent.token[data-token-lv="#{$i}"] {
     // 문장 성분 라벨
-    > .constituent-label {
+    > .constituent-labels {
       top: calc(#{$token-top} + #{$offset});
     }
-  }
-}
-
-html.light {
-  .constituent > .constituent-label > span {
-    background-color: var(--chakra-colors-gray-100);
-  }
-}
-
-html.dark {
-  .constituent > .constituent-label > span {
-    background-color: var(--chakra-colors-gray-900);
   }
 }
 
 @media (max-width: 61.99em), (pointer: coarse) {
   .constituent {
     --constituent-label-size: 44px;
+    --constituent-grouped-label-min-width: 44px;
+    --constituent-label-surface-inset: 8px;
     --constituent-height: 2.75rem;
     --token-spacing: 2.75rem;
     --constituent-inline-margin: 0px;

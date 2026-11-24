@@ -4,7 +4,7 @@
 
 ![Syntax Analyzer](https://github.com/romantech/syntax-analyzer/assets/8604840/747803a5-7670-4c18-99b8-07c4245b5312)
 
-Syntax Analyzer is a web app that automatically analyzes English sentence structure and lets you edit the results. It uses more than 30 common grammar tags to show how complex sentences fit together. It can also generate random sentences on the topics you enter. The analyzer uses an OpenAI model fine-tuned for this project.
+Syntax Analyzer is a web app that automatically analyzes English sentence structure and lets you edit the results. It uses more than 30 common grammar tags to show how complex sentences fit together. It can also generate random sentences on the topics you enter. Syntax analysis uses GPT-6 Luna.
 
 - Web app · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API reference](apps/api/README.md)
@@ -25,7 +25,7 @@ Syntax Analyzer is a web app that automatically analyzes English sentence struct
 # Features
 
 > [!NOTE]
-> Before analysis, the app expands contractions such as `I'll` to `I will`.\
+> Before analysis, the app expands contractions such as `I'll` to `I will`. It keeps ambiguous `'s` endings as written.\
 > It also removes all commas from numbers, so `6,500` becomes `6500`.
 
 1. Analyze English sentences to identify subjects, verbs, objects, phrases, clauses, and other constituents.
@@ -82,16 +82,13 @@ sequenceDiagram
         end
 
         else Continue
-            S->>+R: Retrieve prompt
-            R-->>-S: Return prompt
-
             critical Process with OpenAI
                 S->>+O: Create chat completion
                 O-->>-S: Return analysis result
             end
 
             S->>R: Update request count
-            Note over S,R: GPT 3.5 reduced by 1#59; GPT 4 reduced by 5 #32;#32;#32;
+            Note over S,R: Analysis uses 1 credit
 
             S-->>C: 200 OK with analysis data
             deactivate S
@@ -113,7 +110,9 @@ The diagram below shows how the segments for `Global warming is a significant is
 
 # Tagging Rules
 
-On mobile, tap **Choose a tag** in the bottom toolbar. Tap the first word, then tap **Apply** to tag just that word. To tag a range, tap the first and last words before applying the tag. Tap **Clear selection** to clear the range. For long sentences, swipe horizontally on the sentence or the blank space below the tags. When the stack of tags is taller than the screen, swipe vertically in the same area. When the content overflows, the vertical scrollbar appears to the right of the tag area and the horizontal scrollbar appears below it. In delete mode, tap the abbreviation of the tag you want to remove.
+AI analyses initially show the main parts of the sentence, such as the subject, verb, object, and complement, along with modifiers at that level, such as adverbs, adverbial phrases, and prepositional phrases. Select a tag to see its details. Use **Expand all tags** to see every tag and **Collapse all tags** to return to the overview. All tags are visible while adding or deleting a tag. Tags use **Full names** in the current language by default. Turn off **Full names** to show abbreviations. Your choice is saved across reloads.
+
+On mobile, tap **Choose a tag** in the bottom toolbar. Tap the first word, then tap **Apply** to tag just that word. To tag a range, tap the first and last words before applying the tag. Tap **Clear selection** to clear the range. For long sentences, swipe horizontally on the sentence or the blank space below the tags. When the stack of tags is taller than the screen, swipe vertically in the same area. When the content overflows, the vertical scrollbar appears to the right of the tag area and the horizontal scrollbar appears below it. In delete mode, tap the tag you want to remove.
 
 Your tags are saved to the sentence you started editing even if another tab changes the order of the list. If that sentence was deleted, the editor tells you that it cannot save your changes.
 
@@ -132,7 +131,7 @@ Disallowed: warming is / is a / is a significant
 
 # Sentence Constituents
 
-The analyzer uses the grammatical categories below, and the editor uses them as tags. The editor tooltips show abbreviations and descriptions. A single word is a token. Groups of two or more words are classified as phrases or clauses according to their grammatical structure.
+The analyzer uses the grammatical categories below, and the editor uses them as tags. Tooltips in the tag picker describe each grammatical category. A single word is a token. Groups of two or more words are classified as phrases or clauses according to their grammatical structure.
 
 | Label                | Abbreviation | Type   | Description                                                                       |
 | -------------------- | ------------ | ------ | --------------------------------------------------------------------------------- |

@@ -13,7 +13,7 @@ Readiness responses are served with `Cache-Control: no-store`.
 
 ### Analyze Sentence Syntax
 
-This endpoint uses specified AI models to analyze the syntax of tokenized sentences, breaking them down into grammatical elements for detailed structural insights.
+Analyzes the syntax of a tokenized English sentence using GPT-6 Luna by default.
 
 #### Endpoint
 
@@ -25,7 +25,7 @@ POST /analyzer
 
 | Field      | Type            | Options                              | Required | Description                                | Constraints                                  |
 | ---------- | --------------- | ------------------------------------ | -------- | ------------------------------------------ | -------------------------------------------- |
-| `model`    | `string`        | `primary`, `primary-ft`, `fast-ft` | Yes      | Analysis model key (provider model alias) | One of: `primary`, `primary-ft`, `fast-ft` |
+| `model`    | `string`        | `primary`, `primary-ft`, `fast-ft` | Yes      | Compatibility key for existing clients | One of: `primary`, `primary-ft`, `fast-ft` |
 | `sentence` | `Array<string>` | N/A                                  | Yes      | Tokens for analysis                        | 2–20 tokens, each a non-blank string of up to 80 characters |
 
 > Example Request
@@ -39,9 +39,7 @@ POST /analyzer
 
 #### Quota Consumption
 
-- `model=primary`: 2 analysis credits
-- `model=primary-ft`: 2 analysis credits
-- `model=fast-ft`: 1 analysis credit
+Each successful analysis uses one credit. All accepted request keys use the configured syntax analysis model.
 
 #### Response
 

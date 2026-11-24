@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   type ButtonProps,
   Field,
@@ -8,10 +7,8 @@ import {
   Skeleton,
   Stack,
   type StackProps,
-  Text,
 } from '@chakra-ui/react';
 import type { PropsWithChildren } from 'react';
-import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { BsMagic } from 'react-icons/bs';
 import { GiMagicLamp } from 'react-icons/gi';
@@ -21,12 +18,9 @@ import { TbArrowAutofitWidth } from 'react-icons/tb';
 
 import { ConfirmModal } from '@/base';
 import {
-  ANALYSIS_DECREMENT_COUNT,
-  AnalysisModel,
   FieldGroupHeader,
   MAX_SENTENCE_LENGTH,
   MIN_SENTENCE_WORDS,
-  ModelChoiceGroup,
   SENTENCE_CONTROL_HEIGHT,
   SentenceInput,
   UsageLimitMessage,
@@ -36,7 +30,6 @@ import {
 export default function AnalysisForm({ ...stackProps }: StackProps) {
   const { t } = useTranslation();
   const {
-    control,
     register,
     remainingCount,
     isPending,
@@ -46,20 +39,10 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
     closeModal,
     formState: { errors },
   } = useAnalysisForm();
-  const model = useWatch({ control, name: 'model' });
-  const canAnalyze = remainingCount >= ANALYSIS_DECREMENT_COUNT[model];
+  const canAnalyze = remainingCount > 0;
 
   return (
     <AnalysisFormBox as="form" onSubmit={onSubmit} {...stackProps}>
-      <Box>
-        <FieldGroupHeader>{t('analyzer.chooseModel')}</FieldGroupHeader>
-        <ModelChoiceGroup control={control} remainingCount={remainingCount} />
-        {remainingCount > 0 && remainingCount < ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY] && (
-          <Text mt={2} color="fg.muted" fontSize="sm">
-            {t('analyzer.modelCost', { cost: ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY] })}
-          </Text>
-        )}
-      </Box>
       <Field.Root invalid={!!errors.sentence} gap={0}>
         <FieldGroupHeader>{t('analyzer.enterSentence')}</FieldGroupHeader>
         <SentenceInputRow>
@@ -157,13 +140,6 @@ const AnalysisFormSkeleton = (stackProps: StackProps) => {
   const { t } = useTranslation();
   return (
     <AnalysisFormBox {...stackProps}>
-      <Box>
-        <FieldGroupHeader>{t('analyzer.chooseModel')}</FieldGroupHeader>
-        <Stack>
-          <Skeleton aria-hidden maxW={192} h="49px" borderRadius="md" />
-          <Skeleton aria-hidden maxW={156} h="49px" borderRadius="md" />
-        </Stack>
-      </Box>
       <Field.Root gap={0}>
         <FieldGroupHeader>{t('analyzer.enterSentence')}</FieldGroupHeader>
         <SentenceInputRow>

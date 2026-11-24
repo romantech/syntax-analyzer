@@ -5,9 +5,7 @@ const { createServer } = require('../dist/config/createServer');
 
 const models = {
   fast: 'test-fast',
-  primary: 'test-primary',
-  'fast-ft': 'test-fast-ft',
-  'primary-ft': 'test-primary-ft',
+  analysis: 'test-analysis',
 };
 
 const startApp = async (context, options = {}) => {
@@ -27,4 +25,14 @@ const startApp = async (context, options = {}) => {
   return `http://127.0.0.1:${server.address().port}`;
 };
 
-module.exports = { startApp };
+const modelAnalysis = () => ({
+  response_metadata: { finish_reason: 'stop' },
+  text: '{"spans":[]}',
+});
+
+const analysisPromptValues = [
+  'Fixture analysis prompt.',
+  'Fixture retry instruction.',
+];
+
+module.exports = { startApp, modelAnalysis, analysisPromptValues };

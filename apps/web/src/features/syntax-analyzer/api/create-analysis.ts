@@ -1,20 +1,20 @@
 import { type UseMutationOptions, useMutation } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
-import type { AnalysisModel } from '@/features/syntax-analyzer';
 import type { TAnalysis } from '@/features/syntax-editor';
 import { axios } from '@/lib';
 
 export type CreateAnalysisResponse = TAnalysis;
 export type CreateAnalysisPayload = {
-  model: AnalysisModel;
   sentence: string[];
 };
 
-export const createAnalysis = async <T = CreateAnalysisResponse, K = CreateAnalysisPayload>(
-  payload: K,
-) => {
-  const { data } = await axios.post<T>('analyzer', payload);
+export const createAnalysis = async ({ sentence }: CreateAnalysisPayload) => {
+  // Keep the request compatible with API deployments that still require a model key.
+  const { data } = await axios.post<CreateAnalysisResponse>('analyzer', {
+    sentence,
+    model: 'fast-ft',
+  });
   return data;
 };
 
@@ -26,8 +26,8 @@ export const createAnalysis = async <T = CreateAnalysisResponse, K = CreateAnaly
  * */
 export const CREATE_ANALYSIS_BASE_KEY = ['analysis'];
 
-export const useCreateAnalysisMutation = <TData = TAnalysis, TVariables = CreateAnalysisPayload>(
-  options?: UseMutationOptions<TData, AxiosError, TVariables>,
+export const useCreateAnalysisMutation = (
+  options?: UseMutationOptions<CreateAnalysisResponse, AxiosError, CreateAnalysisPayload>,
 ) => {
   return useMutation({
     mutationFn: createAnalysis,

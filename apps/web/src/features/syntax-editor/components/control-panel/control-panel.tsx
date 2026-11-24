@@ -9,7 +9,7 @@ import {
   UndoButton,
 } from '@/features/syntax-editor';
 
-import TooltipSwitches from './tooltip-switches';
+import TagDisplayControls from './tag-display-controls';
 
 export function EditorActions({ isTapMode = false }: { isTapMode?: boolean }) {
   return (
@@ -48,7 +48,7 @@ export default function ControlPanel() {
 
   return (
     <Skeleton
-      h={129}
+      h={isMounted ? undefined : 129}
       w={{ base: 'full', lg: 288 }}
       maxW="full"
       flexShrink={0}
@@ -57,7 +57,7 @@ export default function ControlPanel() {
     >
       <Card.Root p={3} variant="outline">
         <VStack align="stretch" gap={2}>
-          <TooltipSwitches />
+          <TagDisplayControls />
           <Separator />
           <EditorActions />
         </VStack>

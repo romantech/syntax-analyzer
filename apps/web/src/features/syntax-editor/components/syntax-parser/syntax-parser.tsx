@@ -1,44 +1,32 @@
-import { Box } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { Box, Button } from '@chakra-ui/react';
+import { useAtomValue } from 'jotai';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TbMoodEmpty } from 'react-icons/tb';
 
 import { TextPlaceholder, ThreeDotsWave, useTransitionLoading } from '@/base';
 import {
-  SegmentList,
+  deleteModeAtom,
   Sentence,
+  selectedTagAtom,
+  showFullTagNamesAtom,
+  type TAnalysis,
   TokenList,
+  type TSegment,
   useCalculateNestingLevel,
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
+import SegmentList, { hasOverviewTags } from './segment-list';
 import '@/features/syntax-editor/styles/constituent.scss';
 
-/**
- * 데이터(초기값 null)를 받아오는 과정에서 TextPlaceholder 가 잠깐 보이는 문제 발생
- * 이를 해결하기 위해 isLoading 상태 변화를 지연시켜서 데이터를 완전히 불러오기 전까진
- * 스피너를 표시하고, 데이터를 모두 불러온 후 결과에 따라 플레이스 홀더 표시하도록 처리.
- * Transition 에 등록한 상태는 우선순위가 낮은 업데이트로 작동하고, 우선 순위가 낮은
- * 업데이트는 우선순위가 높은 업데이트에 의해 즉시 중단될 수 있음. useEffect 종속성
- * 배열에 데이터를 등록해서, 데이터가 변경될 때마다 이펙트 함수가 호출되고, 이때마다
- * 진행중이던 isLoading 상태 업데이트가 중단됨. 이런식으로 항상 isLoading 상태가 데이터를
- * 완전히 불러온 후에만 false 로 변경되도록 보장할 수 있음.
- * */
 export default function SyntaxParser({ isTapMode = false }: { isTapMode?: boolean }) {
   const { t } = useTranslation();
-  const sentenceRef = useRef<HTMLParagraphElement>(null);
-
-  const { segment, sentence } = useSyntaxParserAnalysis();
-  const isLoading = useTransitionLoading([segment, sentence]);
-  const isNestingLevelCalculated = useCalculateNestingLevel({
-    targetRef: sentenceRef,
-    segment,
-    isPending: isLoading,
-    isTapMode,
-  });
+  const { analysis, segment } = useSyntaxParserAnalysis();
+  const isLoading = useTransitionLoading([analysis, segment]);
 
   if (isLoading) return <ThreeDotsWave delay={300} />;
 
-  if (!segment || !sentence) {
+  if (!segment || !analysis) {
     return (
       <TextPlaceholder
         fontSize="3xl"
@@ -51,14 +39,96 @@ export default function SyntaxParser({ isTapMode = false }: { isTapMode?: boolea
   }
 
   return (
-    <Box
-      opacity={isNestingLevelCalculated ? 1 : 0}
-      transition="opacity 0.2s ease-out"
-      _motionReduce={{ transition: 'none' }}
-    >
-      <Sentence ref={sentenceRef} isTapMode={isTapMode}>
-        <SegmentList segment={segment} tokenElements={TokenList({ sentence, isTapMode })} />
+    <AnalysisSentence
+      key={analysis.id}
+      analysis={analysis}
+      segment={segment}
+      isTapMode={isTapMode}
+    />
+  );
+}
+
+function AnalysisSentence({
+  analysis,
+  segment,
+  isTapMode,
+}: {
+  analysis: TAnalysis;
+  segment: TSegment;
+  isTapMode: boolean;
+}) {
+  const { t, i18n } = useTranslation();
+  const sentenceRef = useRef<HTMLParagraphElement>(null);
+  const sentenceId = useId();
+  const showFullTagNames = useAtomValue(showFullTagNamesAtom);
+  const [showAllTags, setShowAllTags] = useState(false);
+  const [{ expanded, entering }, setDetails] = useState<{
+    expanded: ReadonlySet<number>;
+    entering: number | null;
+  }>(() => ({ expanded: new Set(), entering: null }));
+  const selectedTag = useAtomValue(selectedTagAtom);
+  const deleteMode = useAtomValue(deleteModeAtom);
+  const isEditing = !!selectedTag || deleteMode;
+  const hasOverview = analysis.isAnalyzedByGPT && hasOverviewTags(segment);
+  const allTagsVisible = !hasOverview || showAllTags || isEditing;
+
+  const toggle = (segmentId: number, animate: boolean) =>
+    setDetails((previous) => {
+      const next = new Set(previous.expanded);
+      const opening = !next.has(segmentId);
+      if (!opening) next.delete(segmentId);
+      else next.add(segmentId);
+      return { expanded: next, entering: opening && animate ? segmentId : null };
+    });
+
+  useEffect(() => {
+    if (entering === null) return;
+    // Clear the entrance state once the label animation has finished.
+    const timeout = window.setTimeout(() => {
+      setDetails((previous) =>
+        previous.entering === entering ? { ...previous, entering: null } : previous,
+      );
+    }, 200);
+    return () => window.clearTimeout(timeout);
+  }, [entering]);
+
+  useCalculateNestingLevel({
+    targetRef: sentenceRef,
+    segment,
+    isTapMode,
+    overviewDetails: allTagsVisible ? undefined : expanded,
+    showFullTagNames,
+    language: i18n.resolvedLanguage,
+  });
+
+  return (
+    <>
+      {hasOverview && (
+        <Box position="sticky" insetInlineStart={0} w="fit-content" mb={2} zIndex={3}>
+          <Button
+            size="sm"
+            minH={isTapMode ? '44px' : undefined}
+            variant={allTagsVisible ? 'subtle' : 'outline'}
+            colorPalette={allTagsVisible ? 'teal' : 'gray'}
+            aria-expanded={allTagsVisible}
+            aria-controls={sentenceId}
+            disabled={isEditing}
+            onClick={() => {
+              if (showAllTags) setDetails({ expanded: new Set(), entering: null });
+              setShowAllTags(!showAllTags);
+            }}
+          >
+            {allTagsVisible ? t('editor.collapseAllTags') : t('editor.expandAllTags')}
+          </Button>
+        </Box>
+      )}
+      <Sentence ref={sentenceRef} id={sentenceId} isTapMode={isTapMode}>
+        <SegmentList
+          segment={segment}
+          tokenElements={TokenList({ sentence: analysis.sentence, isTapMode })}
+          overview={allTagsVisible ? undefined : { expanded, entering, toggle }}
+        />
       </Sentence>
-    </Box>
+    </>
   );
 }

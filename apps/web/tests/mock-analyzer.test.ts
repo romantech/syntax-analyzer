@@ -39,11 +39,11 @@ test('목 API는 요청한 문장과 분석 토큰을 반환하고 성공한 요
   assert.equal(sentences.length, 4);
   assert.equal(sentences[0], 'The idea that she proposed was innovative.');
 
-  const analyze = async (sentence: string[]) => {
+  const analyze = async (sentence: string[], model = 'fast-ft') => {
     const response = await fetch(`${base}api/analyzer`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'primary', sentence }),
+      body: JSON.stringify({ model, sentence }),
     });
     assert.equal(response.status, 200);
     return response.json();
@@ -56,7 +56,7 @@ test('목 API는 요청한 문장과 분석 토큰을 반환하고 성공한 요
   assert.equal(sample.isAnalyzedByGPT, true);
 
   const sentence = ['The', 'idea', 'that', 'she', 'proposed', 'was', 'bold', '.'];
-  const analysis = await analyze(sentence);
+  const analysis = await analyze(sentence, 'primary');
   assert.deepEqual(analysis.sentence, sentence);
   assert.equal(analysis.source, 'user');
   assert.equal(analysis.rootSegment.begin, 0);
@@ -64,7 +64,7 @@ test('목 API는 요청한 문장과 분석 토큰을 반환하고 성공한 요
   assert.deepEqual(analysis.rootSegment.constituents, []);
   assert.deepEqual(analysis.rootSegment.children, []);
   assert.deepEqual(await remaining(), {
-    analysis: before.analysis - 4,
+    analysis: before.analysis - 2,
     random_sentence: before.random_sentence - 1,
   });
 });

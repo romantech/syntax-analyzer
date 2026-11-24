@@ -1,6 +1,9 @@
 import { body, query } from 'express-validator';
-import { ERROR_MESSAGES, RandomSentenceParam } from '@/constants';
-import { ANALYSIS_MODEL } from '@/services/openAI/openAI';
+import {
+  ANALYSIS_REQUEST_MODEL_KEYS,
+  ERROR_MESSAGES,
+  RandomSentenceParam,
+} from '@/constants';
 
 const { MISSING_FIELD } = ERROR_MESSAGES;
 const { SENT_COUNT, TOPICS, MAX_CHARS } = RandomSentenceParam;
@@ -27,10 +30,10 @@ export const checkSentenceField = body('sentence')
 export const checkModelField = body('model')
   .custom(
     (value: unknown) =>
-      typeof value === 'string' && ANALYSIS_MODEL.includes(value),
+      typeof value === 'string' && ANALYSIS_REQUEST_MODEL_KEYS.includes(value),
   )
   .withMessage(
-    `Invalid model value. Allowed values are '${ANALYSIS_MODEL.join(', ')}'`,
+    `Invalid model value. Allowed values are '${ANALYSIS_REQUEST_MODEL_KEYS.join(', ')}'`,
   );
 
 const integerQuery = (

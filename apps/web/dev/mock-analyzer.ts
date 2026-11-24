@@ -5,8 +5,6 @@ import type { Plugin } from 'vite';
 import { generateNumberID } from '../src/base/utils/identifier.ts';
 import { tokenJoiner } from '../src/base/utils/string.ts';
 import {
-  ANALYSIS_DECREMENT_COUNT,
-  type AnalysisModel,
   DAILY_ANALYSIS_LIMIT,
   DAILY_SENTENCE_LIMIT,
   DEFAULT_PICKER_COUNT,
@@ -92,7 +90,7 @@ export const mockAnalyzer = (scenario = 'success'): Plugin => ({
       const { model, sentence } = payload;
       if (
         typeof model !== 'string' ||
-        !Object.hasOwn(ANALYSIS_DECREMENT_COUNT, model) ||
+        !['fast-ft', 'primary', 'primary-ft'].includes(model) ||
         !Array.isArray(sentence) ||
         sentence.length < 2 ||
         sentence.length > 20 ||
@@ -101,9 +99,8 @@ export const mockAnalyzer = (scenario = 'success'): Plugin => ({
         return fail(400, 'Invalid analysis request.');
       }
 
-      const cost = ANALYSIS_DECREMENT_COUNT[model as AnalysisModel];
-      if (counts.analysis < cost) return fail(400, 'No remaining request count available.');
-      counts.analysis -= cost;
+      if (counts.analysis === 0) return fail(400, 'No remaining request count available.');
+      counts.analysis -= 1;
 
       const matchesSample =
         sentence.length === RELATIVE_CLAUSE_SAMPLE.sentence.length &&

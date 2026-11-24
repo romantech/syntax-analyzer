@@ -1,10 +1,10 @@
 export const ABBREVIATIONS: Record<string, string> = {
+  // Leave ambiguous 's in place so the analyzer can distinguish possession, is, and has.
   "'ll": ' will',
   "'ve": ' have',
   "'re": ' are',
   "'d": ' would',
   "'m": ' am',
-  "'s": ' is',
   "can't": 'cannot',
   "couldn't": 'could not',
   "shouldn't": 'should not',
@@ -21,7 +21,6 @@ export const ABBREVIATIONS: Record<string, string> = {
   "hasn't": 'has not',
   "haven't": 'have not',
   "isn't": 'is not',
-  "it's": 'it is', // or 'it has' based on context
   "i'm": 'I am',
   "i've": 'I have',
   "i'd": 'I would', // or 'I had' based on context
@@ -31,8 +30,6 @@ export const ABBREVIATIONS: Record<string, string> = {
   "you'd": 'you would', // or 'you had' based on context
   "you'll": 'you will',
   "let's": 'let us',
-  "he's": 'he is', // or 'he has' based on context
-  "she's": 'she is', // or 'she has' based on context
   "they're": 'they are',
   "they've": 'they have',
   "they'd": 'they would', // or 'they had' based on context

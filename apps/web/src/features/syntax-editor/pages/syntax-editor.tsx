@@ -9,9 +9,9 @@ import {
   ControlPanel,
   isSegmentTouchedAtom,
   SyntaxParser,
+  TagDisplayControls,
   TagListAccordion,
   TapSelectionControls,
-  TooltipSwitches,
   useAnalysisDataLoader,
   useSyntaxEditorInitializer,
 } from '@/features/syntax-editor';
@@ -69,7 +69,7 @@ export default function SyntaxEditor() {
           text={isTapMode ? t('editor.tapInstructions') : t('editor.pointerInstructions')}
         />
         {isTapMode ? (
-          <TooltipSwitches isTapMode />
+          <TagDisplayControls isTapMode />
         ) : (
           <>
             <TagListAccordion minW={0} />

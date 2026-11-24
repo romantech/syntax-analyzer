@@ -1,28 +1,29 @@
-import { type RefObject, useEffect, useState } from 'react';
+import { type RefObject, useLayoutEffect } from 'react';
 
 import { calculateNestingLevel, type TSegment } from '@/features/syntax-editor';
 
 interface UseCalculateNestedLevelProps {
   targetRef: RefObject<HTMLElement | null>;
-  segment: TSegment | null;
-  isPending?: boolean;
-  isTapMode?: boolean;
+  segment: TSegment;
+  isTapMode: boolean;
+  overviewDetails: ReadonlySet<number> | undefined;
+  showFullTagNames: boolean;
+  language: string | undefined;
 }
 
 export const useCalculateNestingLevel = ({
   targetRef,
   segment,
-  isPending = false,
-  isTapMode = false,
+  isTapMode,
+  overviewDetails,
+  showFullTagNames,
+  language,
 }: UseCalculateNestedLevelProps) => {
-  const [isNestingLevelCalculated, setNestingLevelCalculated] = useState(false);
-
-  useEffect(() => {
-    if (isPending || !segment || !targetRef.current) return;
-
-    calculateNestingLevel(targetRef, isTapMode);
-    setNestingLevelCalculated(true);
-  }, [isPending, segment, targetRef, isTapMode]);
-
-  return isNestingLevelCalculated;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: rendered tags and label text determine the layout.
+  useLayoutEffect(() => {
+    const updateLayout = () => calculateNestingLevel(targetRef, isTapMode);
+    updateLayout();
+    document.fonts.addEventListener('loadingdone', updateLayout);
+    return () => document.fonts.removeEventListener('loadingdone', updateLayout);
+  }, [segment, overviewDetails, showFullTagNames, language, targetRef, isTapMode]);
 };

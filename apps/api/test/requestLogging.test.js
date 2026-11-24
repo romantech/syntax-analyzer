@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const { test } = require('node:test');
 const { ReplyError } = require('ioredis');
 const { APIError } = require('openai');
-const { startApp } = require('../test-support/app');
+const { startApp, analysisPromptValues } = require('../test-support/app');
 const { logger } = require('../dist/config/logger');
 
 const sensitive = {
@@ -20,15 +20,15 @@ const sensitive = {
 let quotaExhausted = false;
 
 const createModel = () => ({
-  pipe: () => ({
-    invoke: async () => `{"value":"${sensitive.model}"} trailing`,
-  }),
   withStructuredOutput: () => ({
     invoke: async () => {
       throw new APIError(503, { message: sensitive.providerError });
     },
   }),
-  invoke: async () => ({ text: sensitive.model }),
+  invoke: async () => ({
+    response_metadata: { finish_reason: 'stop' },
+    text: sensitive.model,
+  }),
 });
 
 test('logs only allowed request metadata across successful and failed requests', async (context) => {
@@ -40,6 +40,7 @@ test('logs only allowed request metadata across successful and failed requests',
   const baseUrl = await startApp(context, {
     redis: {
       hget: async () => 'Generate sentences about {topics}',
+      hmget: async () => analysisPromptValues,
       eval: async (_script, keyCount) => {
         if (keyCount === 3) throw new ReplyError(sensitive.redisError);
         return quotaExhausted ? 0 : 1;
@@ -107,9 +108,9 @@ test('logs only allowed request metadata across successful and failed requests',
   await checkRequest({
     url: '/analyzer',
     options: analysis,
-    status: 500,
+    status: 502,
     level: 'error',
-    errorType: 'model-json-repair-failed',
+    errorType: 'invalid-model-output',
   });
   await checkRequest({
     url: `/analyzer/random-sentences?topics=${sensitive.topic}`,

@@ -1,11 +1,8 @@
 import { useAtomValue } from 'jotai';
 import { type MouseEvent, useRef } from 'react';
 
-import { getNearestElementByClass } from '@/base';
 import { deleteModeAtom } from '@/features/syntax-editor';
-import { CONSTITUENT_CLASSES } from '@/features/syntax-editor/constants';
-
-const { CONSTITUENT } = CONSTITUENT_CLASSES;
+import { CONSTITUENT_DATA_ATTRS } from '@/features/syntax-editor/constants';
 
 export const useSegmentMouseEvent = () => {
   const hoverRef = useRef<HTMLElement | null>(null);
@@ -31,7 +28,7 @@ export const useSegmentMouseEvent = () => {
 
     if (target !== hoverRef.current) {
       restoreOriginalColor();
-      swapColor(getNearestElementByClass(target, CONSTITUENT));
+      swapColor(target.closest(`[${CONSTITUENT_DATA_ATTRS.ID}]`));
     }
   };
 
