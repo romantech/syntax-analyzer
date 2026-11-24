@@ -60,6 +60,18 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   &[data-abbreviated] {
     font-style: italic;
     font-weight: 500;
+
+    &:not(:only-child) {
+      min-width: var(--constituent-grouped-label-min-width, 1.5rem);
+
+      &:first-child {
+        justify-content: start;
+      }
+
+      &:last-child {
+        justify-content: end;
+      }
+    }
   }
 
   > svg {
@@ -142,6 +154,7 @@ button.constituent-label {
 @media (max-width: 61.99em), (pointer: coarse) {
   .constituent {
     --constituent-label-size: 44px;
+    --constituent-grouped-label-min-width: 44px;
     --constituent-label-surface-inset: 8px;
     --constituent-height: 2.75rem;
     --token-spacing: 2.75rem;

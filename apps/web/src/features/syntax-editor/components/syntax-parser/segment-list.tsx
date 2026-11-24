@@ -2,10 +2,25 @@ import { Fragment, type ReactNode } from 'react';
 
 import { Constituent, type TSegment } from '@/features/syntax-editor';
 
-// Keep core clause roles and exposed adverbs visible while nested tags stay collapsed.
-const overviewRoles = new Set([1, 2, 3, 4, 5, 6, 8, 9, 26, 31]);
-const getOverviewTag = (segment: TSegment) =>
-  segment.constituents.find(({ elementId }) => overviewRoles.has(elementId));
+const overviewRoles = new Set([
+  'subject',
+  'verb',
+  'modal verb',
+  'auxiliary verb',
+  'object',
+  'indirect object',
+  'direct object',
+  'complement',
+  'object complement',
+  'adverb',
+  'adverbial clause',
+]);
+
+// Prefer the function over the form when both describe the same words.
+const getOverviewTag = ({ constituents }: TSegment) =>
+  constituents.find(({ label }) => overviewRoles.has(label)) ??
+  constituents.find(({ label }) => label === 'adverbial phrase') ??
+  constituents.find(({ label }) => label === 'prepositional phrase');
 
 export const hasOverviewTags = (segment: TSegment): boolean =>
   !!getOverviewTag(segment) || segment.children.some(hasOverviewTags);
