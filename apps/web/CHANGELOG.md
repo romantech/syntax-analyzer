@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/romantech/syntax-analyzer/compare/v1.4.4...v1.5.0) (2026-11-24)
+
+
+### Features
+
+* **web:** 분석 API 요청에 익명 할당량 쿠키 전달 ([#240](https://github.com/romantech/syntax-analyzer/issues/240)) ([93a25f5](https://github.com/romantech/syntax-analyzer/commit/93a25f524914055433a21038908f1888cb480372)), closes [#235](https://github.com/romantech/syntax-analyzer/issues/235)
+
 ## [1.4.4](https://github.com/romantech/syntax-analyzer/compare/v1.4.3...v1.4.4) (2026-11-23)
 
 
