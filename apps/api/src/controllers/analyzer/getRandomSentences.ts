@@ -1,5 +1,6 @@
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { matchedData } from 'express-validator';
+import type { AnalyzerDependencies } from '@/config/createServer';
 import {
   ERROR_MESSAGES,
   type RandomSentenceParams,
@@ -7,13 +8,8 @@ import {
 } from '@/constants';
 import { handleValidationErrors } from '@/middlewares/handleValidationErrors';
 import { validateClientIP } from '@/middlewares/validateClientIP';
-import {
-  ANALYZER_REDIS_SCHEMA,
-  RANDOM_SENTENCE_CONFIG,
-  redis,
-  withAnalyzerQuota,
-} from '@/services';
-import { createChatOpenAI } from '@/services/openAI/openAIUtils';
+import { RANDOM_SENTENCE_CONFIG } from '@/services/openAI/openAI';
+import { ANALYZER_REDIS_SCHEMA } from '@/services/redis/redisKeys';
 import { asyncHandler, throwCustomError } from '@/utils';
 import {
   checkMaxCharField,
@@ -34,12 +30,13 @@ export const getRandomSentences = [
   asyncHandler(async (req, res) => {
     const clientIP = req.clientIP ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
     const query = matchedData<RandomSentenceParams>(req);
-    const sentences = await req.app.locals.analyzerRequests.run(res, (signal) =>
-      withAnalyzerQuota(
+    const { analyzer, analyzerQuota, analyzerRequests } = req.app.locals;
+    const sentences = await analyzerRequests.run(res, (signal) =>
+      analyzerQuota.withAnalyzerQuota(
         clientIP,
         FIELDS.RANDOM_SENTENCE,
         RANDOM_SENTENCE_COST,
-        () => generateRandomSentences(query, signal),
+        () => generateRandomSentences(analyzer, query, signal),
         signal,
       ),
     );
@@ -48,23 +45,21 @@ export const getRandomSentences = [
   }),
 ];
 
-const retrieveRandomSentencePrompt = async (query: RandomSentenceParams) => {
-  const template = await redis.hget(KEYS.PROMPT, FIELDS.RANDOM_SENTENCE);
-  if (!template) return throwCustomError(RETRIEVE_FAILED('template'), 500);
-
-  const prompt = ChatPromptTemplate.fromTemplate(template);
-  return await prompt.invoke({ ...query, topics: query.topics });
-};
-
 const generateRandomSentences = async (
+  { redis, createModel, models }: AnalyzerDependencies,
   query: RandomSentenceParams,
   signal: AbortSignal,
 ) => {
-  const prompt = await retrieveRandomSentencePrompt(query);
+  const template = await redis.hget(KEYS.PROMPT, FIELDS.RANDOM_SENTENCE);
+  if (!template) return throwCustomError(RETRIEVE_FAILED('template'), 500);
+  const prompt = await ChatPromptTemplate.fromTemplate(template).invoke({
+    ...query,
+  });
   signal.throwIfAborted();
-  const llm = createChatOpenAI(RANDOM_SENTENCE_CONFIG).withStructuredOutput(
-    sentencesSchema,
-  );
+  const llm = createModel({
+    ...RANDOM_SENTENCE_CONFIG,
+    model: models.fast,
+  }).withStructuredOutput(sentencesSchema);
 
   const { sentences } = await llm.invoke(prompt, { signal });
   if (

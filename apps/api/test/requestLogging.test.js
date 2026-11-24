@@ -4,10 +4,8 @@ const assert = require('node:assert/strict');
 const { test } = require('node:test');
 const { ReplyError } = require('ioredis');
 const { APIError } = require('openai');
-const { createServer } = require('../dist/config/createServer');
+const { startApp } = require('../test-support/app');
 const { logger } = require('../dist/config/logger');
-const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
-const { throwCustomError } = require('../dist/utils/customError');
 
 const sensitive = {
   sentence: 'PRIVATE_SENTENCE',
@@ -21,51 +19,17 @@ const sensitive = {
 };
 let quotaExhausted = false;
 
-require.cache[require.resolve('@langchain/openai')] = {
-  exports: {
-    ChatOpenAI: class {
-      pipe() {
-        return {
-          invoke: async () => `{"value":"${sensitive.model}"} trailing`,
-        };
-      }
-
-      withStructuredOutput() {
-        return {
-          invoke: async () => {
-            throw new APIError(503, { message: sensitive.providerError });
-          },
-        };
-      }
-
-      async invoke() {
-        return { text: sensitive.model };
-      }
+const createModel = () => ({
+  pipe: () => ({
+    invoke: async () => `{"value":"${sensitive.model}"} trailing`,
+  }),
+  withStructuredOutput: () => ({
+    invoke: async () => {
+      throw new APIError(503, { message: sensitive.providerError });
     },
-  },
-};
-const services = {
-  AI_MODEL: { fast: 'test-model' },
-  AIModelKey: { FAST: 'fast', FAST_FT: 'fast-ft', PRIMARY: 'primary' },
-  ANALYSIS_MODEL: ['fast-ft'],
-  ANALYSIS_MODEL_OPTION: { 'fast-ft': { promptField: 'analysis' } },
-  ANALYZER_REDIS_SCHEMA,
-  RANDOM_SENTENCE_CONFIG: {},
-  redis: { hget: async () => 'Generate sentences about {topics}' },
-  withAnalyzerQuota: async (_ip, _field, _cost, run) => {
-    if (quotaExhausted)
-      throwCustomError('No remaining request count available.', 400);
-    return run();
-  },
-  getAnalyzerRemainingCounts: async () => {
-    throw new ReplyError(sensitive.redisError);
-  },
-};
-require.cache[require.resolve('../dist/services')] = { exports: services };
-Object.assign(services, require('../dist/services/openAI/openAIUtils'));
-
-const { errorHandler, notFoundHandler } = require('../dist/middlewares');
-const { setupRoutes } = require('../dist/routes');
+  }),
+  invoke: async () => ({ text: sensitive.model }),
+});
 
 test('logs only allowed request metadata across successful and failed requests', async (context) => {
   const records = [];
@@ -73,18 +37,16 @@ test('logs only allowed request metadata across successful and failed requests',
   logger.on('data', capture);
   context.after(() => logger.off('data', capture));
 
-  const app = createServer();
-  setupRoutes(app);
-  app.use(notFoundHandler, errorHandler);
-  const server = await new Promise((resolve, reject) => {
-    const listener = app.listen(0, '127.0.0.1', (error) => {
-      if (error) reject(error);
-      else resolve(listener);
-    });
+  const baseUrl = await startApp(context, {
+    redis: {
+      hget: async () => 'Generate sentences about {topics}',
+      eval: async (_script, keyCount) => {
+        if (keyCount === 2) throw new ReplyError(sensitive.redisError);
+        return quotaExhausted ? 0 : 1;
+      },
+    },
+    createModel,
   });
-  context.after(() => server.close());
-
-  const baseUrl = `http://127.0.0.1:${server.address().port}`;
   const headers = {
     Authorization: `Bearer ${sensitive.header}`,
     'X-Request-Id': sensitive.requestId,

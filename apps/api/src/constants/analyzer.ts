@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AIModelKey } from '@/services';
+import { AIModelKey } from '@/services/openAI/openAI';
 
 export const ANALYSIS_DECREMENT_COUNT = {
   [AIModelKey.FAST]: 1,

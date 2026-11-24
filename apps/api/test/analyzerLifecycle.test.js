@@ -55,7 +55,7 @@ const fixture = async (context) => {
     prefix,
     model,
     env: {
-      NODE_ENV: 'production',
+      NODE_ENV: 'test',
       PORT: '0',
       OPENAI_API_KEY: 'test-key',
       OPENAI_API_BASE: `${modelURL}/v1`,
@@ -65,6 +65,8 @@ const fixture = async (context) => {
       REDIS_PASSWORD: '',
       MODEL_PRIMARY: 'gpt-4.1',
       MODEL_FAST: 'gpt-4.1-mini',
+      MODEL_PRIMARY_FT: 'test-primary-ft',
+      MODEL_FAST_FT: 'test-fast-ft',
       KOYEB_APP_ID: '',
     },
     readQuota: (field) =>
@@ -112,18 +114,25 @@ test('model retries, JSON repair and client disconnect use the request cancellat
   timeout: 12_000,
 }, async (context) => {
   const { redis, prefix, model, env, readQuota } = await fixture(context);
-  Object.assign(process.env, env);
+  const previousBaseURL = process.env.OPENAI_API_BASE;
+  process.env.OPENAI_API_BASE = env.OPENAI_API_BASE;
+  context.after(() => {
+    if (previousBaseURL === undefined) delete process.env.OPENAI_API_BASE;
+    else process.env.OPENAI_API_BASE = previousBaseURL;
+  });
   const { createServer } = require('../dist/config/createServer');
+  const { loadEnvironment } = require('../dist/config/environment');
   const { AnalyzerRequests } = require('../dist/services/analyzerRequests');
-  const { redis: appRedis } = require('../dist/services/redis/redis');
-  const { setupRoutes } = require('../dist/routes');
-  const { errorHandler } = require('../dist/middlewares/errorHandler');
-  appRedis.options.keyPrefix = prefix;
-  context.after(() => appRedis.disconnect());
-
-  const app = createServer(new AnalyzerRequests(1_500));
-  setupRoutes(app);
-  app.use(errorHandler);
+  const { createChatOpenAI } = require('../dist/services/openAI/openAIUtils');
+  const config = loadEnvironment(env);
+  const app = createServer({
+    corsOrigins: config.corsOrigins,
+    isKoyeb: config.isKoyeb,
+    models: config.models,
+    redis,
+    createModel: createChatOpenAI(config.openAIKey),
+    analyzerRequests: new AnalyzerRequests(1_500),
+  });
   const server = createHttpServer(app);
   const url = await listen(server);
   context.after(() => {
@@ -205,8 +214,12 @@ test('SIGTERM stops accepting connections and refunds only unfinished requests',
       'module-alias/register',
       '-e',
       `
-    require('./dist/services/redis/redis').redis.options.keyPrefix = process.env.TEST_REDIS_PREFIX;
-    require('./dist/server');
+    const Redis = require('ioredis');
+    const { loadEnvironment } = require('./dist/config/environment');
+    const { startServer } = require('./dist/config/startServer');
+    const config = loadEnvironment(process.env);
+    const redis = new Redis({ ...config.redis, protocol: 2, keyPrefix: process.env.TEST_REDIS_PREFIX });
+    void startServer(config, redis);
   `,
     ],
     {

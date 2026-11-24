@@ -1,50 +1,53 @@
-import { env } from 'node:process';
+const MODEL_ID = /^[a-zA-Z0-9][a-zA-Z0-9._:-]*$/;
 
-// Required Environment Variables
-export enum RequiredEnv {
-  PORT = 'PORT',
-  NODE_ENV = 'NODE_ENV',
-  OPENAI_API_KEY = 'OPENAI_API_KEY',
-}
+export const loadEnvironment = (env: NodeJS.ProcessEnv) => {
+  const invalid = new Set<string>();
+  const required = (name: string, format?: RegExp) => {
+    const value = env[name]?.trim();
+    if (!value || (format && !format.test(value))) invalid.add(name);
+    return value ?? '';
+  };
+  const port = (name: string, fallback?: number, min = 1) => {
+    const value = env[name]?.trim();
+    if (!value && fallback !== undefined) return fallback;
+    const number = Number(value);
+    if (!value || !/^\d+$/.test(value) || number < min || number > 65_535) {
+      invalid.add(name);
+    }
+    return number;
+  };
 
-// Optional Environment Variables
-export enum OptionalEnv {
-  CORS_ORIGIN = 'CORS_ORIGIN',
-
-  REDIS_HOST = 'REDIS_HOST',
-  REDIS_PORT = 'REDIS_PORT',
-  REDIS_PASSWORD = 'REDIS_PASSWORD',
-  REDIS_USERNAME = 'REDIS_USERNAME',
-
-  MODEL_FAST = 'MODEL_FAST',
-  MODEL_PRIMARY = 'MODEL_PRIMARY',
-  MODEL_FAST_FT = 'MODEL_FAST_FT',
-  MODEL_PRIMARY_FT = 'MODEL_PRIMARY_FT',
-}
-
-const loadEnvironment = () => {
-  const isProd = env[RequiredEnv.NODE_ENV] === 'production';
-  const DEFAULT_SERVER_PORT = 3001;
-
-  return {
+  const mode = required('NODE_ENV', /^(development|production|test)$/);
+  const isProd = mode === 'production';
+  const config = {
     isProd,
     isKoyeb: Boolean(env.KOYEB_APP_ID),
-    port: isProd ? Number(env[RequiredEnv.PORT]) : DEFAULT_SERVER_PORT,
-    corsOrigins: env[OptionalEnv.CORS_ORIGIN]?.split(',') ?? [],
-    openAIKey: env[RequiredEnv.OPENAI_API_KEY],
+    port: port('PORT', isProd ? undefined : 3001, mode === 'test' ? 0 : 1),
+    corsOrigins:
+      env.CORS_ORIGIN?.split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean) ?? [],
+    openAIKey: required('OPENAI_API_KEY'),
     redis: {
-      host: env[OptionalEnv.REDIS_HOST],
-      port: Number(env[OptionalEnv.REDIS_PORT]),
-      password: env[OptionalEnv.REDIS_PASSWORD],
-      username: env[OptionalEnv.REDIS_USERNAME],
+      host: env.REDIS_HOST?.trim() || 'localhost',
+      port: port('REDIS_PORT', 6379),
+      username: env.REDIS_USERNAME || undefined,
+      password: env.REDIS_PASSWORD || undefined,
     },
     models: {
-      FAST: env[OptionalEnv.MODEL_FAST],
-      PRIMARY: env[OptionalEnv.MODEL_PRIMARY],
-      FAST_FT: env[OptionalEnv.MODEL_FAST_FT],
-      PRIMARY_FT: env[OptionalEnv.MODEL_PRIMARY_FT],
+      fast: required('MODEL_FAST', MODEL_ID),
+      primary: required('MODEL_PRIMARY', MODEL_ID),
+      'fast-ft': required('MODEL_FAST_FT', MODEL_ID),
+      'primary-ft': required('MODEL_PRIMARY_FT', MODEL_ID),
     },
-  } as const;
+  };
+
+  if (invalid.size) {
+    throw new Error(
+      `Missing or invalid environment variables: ${[...invalid].join(', ')}`,
+    );
+  }
+  return config;
 };
 
-export const envConfig = loadEnvironment();
+export type Environment = ReturnType<typeof loadEnvironment>;

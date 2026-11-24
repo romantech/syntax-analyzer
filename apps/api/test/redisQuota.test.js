@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const { randomUUID } = require('node:crypto');
 const { test } = require('node:test');
 const Redis = require('ioredis');
+const { createAnalyzerQuota } = require('../dist/services/redis/analyzerQuota');
 const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
 
 const { KEYS, FIELDS } = ANALYZER_REDIS_SCHEMA;
@@ -39,21 +40,17 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
   await redis.ping();
 
   let now;
-  require.cache[require.resolve('../dist/services/redis/redis')] = {
-    exports: {
-      redis: {
-        eval: (script, ...args) =>
-          redis.eval(
-            now === undefined
-              ? script
-              : script.replace("redis.call('TIME')[1]", String(now / 1000)),
-            ...args,
-          ),
-      },
-    },
+  const quotaRedis = {
+    eval: (script, ...args) =>
+      redis.eval(
+        now === undefined
+          ? script
+          : script.replace("redis.call('TIME')[1]", String(now / 1000)),
+        ...args,
+      ),
   };
-  const quotaPath = require.resolve('../dist/services/redis/analyzerQuota');
-  const { getAnalyzerRemainingCounts, withAnalyzerQuota } = require(quotaPath);
+  const { getAnalyzerRemainingCounts, withAnalyzerQuota } =
+    createAnalyzerQuota(quotaRedis);
   const exhausted = {
     status: 400,
     message: 'No remaining request count available.',
@@ -133,8 +130,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         [String(midnight), '48', '99'],
       );
 
-      delete require.cache[quotaPath];
-      const restartedQuota = require(quotaPath);
+      const restartedQuota = createAnalyzerQuota(quotaRedis);
       now += 3600000;
       await restartedQuota.getAnalyzerRemainingCounts(secondIP);
       await restartedQuota.withAnalyzerQuota(

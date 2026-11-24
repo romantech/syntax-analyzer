@@ -14,13 +14,15 @@
 
 실제 API와 연동하려면 [서버 환경 변수 예제](../apps/api/.env.example)를 기준으로 `apps/api/.env`에 개발용 Redis와 OpenAI 설정을 입력한다. 루트에서 별도 터미널로 `pnpm dev:api`와 `pnpm dev`를 실행한 뒤 <http://localhost:5173/>을 연다.
 
-Vite 개발 서버는 `/api/`로 시작하는 요청에서 접두사를 제거하고 `http://localhost:3001`로 전달한다. 같은 네트워크의 모바일에서는 Vite가 출력한 `Network` 주소로 접속한다. 웹 `.env.local`에 개발 API 주소를 넣거나 Express의 `CORS_ORIGIN`에 모바일 접속 주소를 추가할 필요가 없다.
+`NODE_ENV`, `OPENAI_API_KEY`와 네 개의 `MODEL_*` 값은 필수다. 개발에서 `PORT`를 생략하면 3001을 사용하고, 운영에서는 서비스 포트를 명시한다. Redis 호스트와 포트를 생략하면 `localhost:6379`를 사용한다. 잘못된 필수 설정이 있으면 API는 변수 이름을 기록하고 Redis에 연결하기 전에 종료한다.
+
+Vite 개발 서버는 `/api/`로 시작하는 요청에서 접두사를 제거하고 기본적으로 `http://localhost:3001`로 전달한다. 개발 API 포트를 바꾸면 아래의 `API_PROXY_TARGET`도 맞춘다. 같은 네트워크의 모바일에서는 Vite가 출력한 `Network` 주소로 접속한다. 웹 `.env.local`에 개발 API 주소를 넣거나 Express의 `CORS_ORIGIN`에 모바일 접속 주소를 추가할 필요가 없다.
 
 로컬 API는 직접 연결과 Vite 프록시 연결에서 Express 소켓의 상대 주소를 IP별 할당량에 사용한다. 같은 Vite 서버를 거친 PC와 모바일은 Vite에서 API로 연결하는 주소를 공유한다. 로컬 API는 전달 헤더를 무시한다.
 
 다른 API 서버를 테스트하려면 `API_PROXY_TARGET=https://api.example.com pnpm dev`로 Vite를 실행한다. 기존 `.env.local`에 `VITE_API_BASE_URL_DEV`가 있으면 제거해도 된다.
 
-Redis 할당량 통합 테스트는 전용 로컬 Redis를 실행한 뒤 `REDIS_TEST_PORT=6379 pnpm --filter syntax-analyzer-api test`로 실행한다. 모델 호출은 테스트에서 대체한다. GitHub Actions는 테스트용 Redis를 제공한다.
+HTTP 테스트는 운영과 같은 `createServer`에서 라우트와 오류 처리 미들웨어를 조립한다. Redis 통합 테스트는 전용 로컬 Redis를 실행한 뒤 `REDIS_TEST_PORT=6379 pnpm --filter syntax-analyzer-api test`로 실행한다. 모델 호출은 테스트에서 대체한다. GitHub Actions는 테스트용 Redis를 제공한다.
 
 ## 로컬 목 모드
 

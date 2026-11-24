@@ -9,36 +9,119 @@ const { test } = require('node:test');
 const { setTimeout: delay } = require('node:timers/promises');
 const { promisify } = require('node:util');
 const Redis = require('ioredis');
-const { createServer } = require('../dist/config/createServer');
-const { healthRouter } = require('../dist/routes/health');
-const { robotsRouter } = require('../dist/routes/robots');
+const { loadEnvironment } = require('../dist/config/environment');
+const { startApp } = require('../test-support/app');
 
 const execFileAsync = promisify(execFile);
 const redisPort = process.env.REDIS_TEST_PORT;
 
-test('serves public routes', async (context) => {
-  const app = createServer();
-  app.use('/', healthRouter);
-  app.use(robotsRouter);
+const testEnv = {
+  NODE_ENV: 'test',
+  PORT: '0',
+  OPENAI_API_KEY: 'test',
+  MODEL_PRIMARY: 'gpt-4.1',
+  MODEL_FAST: 'gpt-4.1-mini',
+  MODEL_PRIMARY_FT: 'ft:gpt-4.1:example::abc',
+  MODEL_FAST_FT: 'ft:gpt-4.1-mini:example::abc',
+};
 
-  const server = await new Promise((resolve, reject) => {
-    const listener = app.listen(0, (error) => {
-      if (error) reject(error);
-      else resolve(listener);
-    });
+test('serves public routes and the default 404 from the assembled app', async (context) => {
+  const baseURL = await startApp(context, {
+    corsOrigins: ['https://example.com'],
+    redis: { status: 'ready', ping: async () => 'PONG' },
   });
-  context.after(() => server.close());
-
-  const address = server.address();
-  assert(address && typeof address !== 'string');
-  const baseURL = `http://127.0.0.1:${address.port}`;
-
-  const health = await fetch(`${baseURL}/health`);
+  const health = await fetch(`${baseURL}/health`, {
+    headers: { Origin: 'https://example.com' },
+  });
   assert.equal(health.status, 200);
   assert.equal((await health.json()).status, 'OK');
+  assert.equal(
+    health.headers.get('access-control-allow-origin'),
+    'https://example.com',
+  );
+  const ready = await fetch(`${baseURL}/ready`);
+  assert.equal(ready.status, 200);
+  assert.deepEqual(await ready.json(), { status: 'OK' });
+  const missing = await fetch(`${baseURL}/unknown`);
+  assert.equal(missing.status, 404);
+  assert.equal((await missing.json()).status, 'error');
 
   const robots = await fetch(`${baseURL}/robots.txt`);
   assert.equal(await robots.text(), 'User-agent: *\nDisallow: /');
+});
+
+test('validates ports and model settings for the selected environment', () => {
+  const devConfig = loadEnvironment({
+    ...testEnv,
+    NODE_ENV: 'development',
+    PORT: '',
+    REDIS_PORT: '',
+  });
+  assert.equal(devConfig.port, 3001);
+  assert.equal(devConfig.redis.port, 6379);
+  assert.equal(devConfig.models['fast-ft'], testEnv.MODEL_FAST_FT);
+  assert.equal(loadEnvironment({ ...testEnv, PORT: '0' }).port, 0);
+
+  const prod = { ...testEnv, NODE_ENV: 'production' };
+  assert.equal(loadEnvironment({ ...prod, PORT: '8000' }).port, 8000);
+  for (const [name, value] of [
+    ['NODE_ENV', 'staging'],
+    ['OPENAI_API_KEY', ' '],
+    ['PORT', undefined],
+    ['PORT', '0'],
+    ['PORT', '65536'],
+    ['REDIS_PORT', '0x18eb'],
+    ['MODEL_FAST', undefined],
+    ['MODEL_PRIMARY', 'bad model name'],
+    ['MODEL_FAST_FT', ''],
+    ['MODEL_PRIMARY_FT', ''],
+  ]) {
+    assert.throws(
+      () => loadEnvironment({ ...prod, PORT: '8000', [name]: value }),
+      { message: `Missing or invalid environment variables: ${name}` },
+    );
+  }
+});
+
+test('rejects invalid configuration before connecting to Redis', async (context) => {
+  let connections = 0;
+  const host = '127.0.0.1';
+  const redis = createTcpServer((socket) => {
+    connections += 1;
+    socket.destroy();
+  });
+  redis.listen(0, host);
+  context.after(() => redis.close());
+  await once(redis, 'listening');
+
+  await assert.rejects(
+    execFileAsync(
+      process.execPath,
+      ['-r', 'module-alias/register', 'dist/server.js'],
+      {
+        env: {
+          ...process.env,
+          ...testEnv,
+          REDIS_HOST: host,
+          REDIS_PORT: String(redis.address().port),
+          MODEL_FAST: 'PRIVATE INVALID VALUE',
+          MODEL_PRIMARY_FT: '',
+        },
+        timeout: 5_000,
+      },
+    ),
+    (error) => {
+      assert.equal(error.code, 1);
+      const output = error.stdout + error.stderr;
+      assert.match(
+        output,
+        /Missing or invalid environment variables: MODEL_FAST, MODEL_PRIMARY_FT/,
+      );
+      assert.doesNotMatch(output, /PRIVATE INVALID VALUE|Server is running/);
+      return true;
+    },
+  );
+  assert.equal(connections, 0);
 });
 
 test('reports Redis stalls and disconnects, then becomes ready after recovery', {
@@ -77,9 +160,7 @@ test('reports Redis stalls and disconnects, then becomes ready after recovery', 
     {
       env: {
         ...process.env,
-        NODE_ENV: 'production',
-        PORT: '0',
-        OPENAI_API_KEY: 'test',
+        ...testEnv,
         REDIS_HOST: host,
         REDIS_PORT: String(proxy.address().port),
         REDIS_USERNAME: '',
@@ -164,9 +245,7 @@ test('exits before listening when Redis rejects PING', {
         {
           env: {
             ...process.env,
-            NODE_ENV: 'production',
-            PORT: '0',
-            OPENAI_API_KEY: 'test',
+            ...testEnv,
             REDIS_HOST: '127.0.0.1',
             REDIS_PORT: redisPort,
             REDIS_USERNAME: username,

@@ -1,6 +1,6 @@
 import { body, query } from 'express-validator';
 import { ERROR_MESSAGES, RandomSentenceParam } from '@/constants';
-import { ANALYSIS_MODEL } from '@/services';
+import { ANALYSIS_MODEL } from '@/services/openAI/openAI';
 
 const { MISSING_FIELD } = ERROR_MESSAGES;
 const { SENT_COUNT, TOPICS, MAX_CHARS } = RandomSentenceParam;

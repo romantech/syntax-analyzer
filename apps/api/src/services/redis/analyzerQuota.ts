@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
+import type Redis from 'ioredis';
 import { logger } from '@/config/logger';
 import { throwCustomError } from '@/utils/customError';
-import { redis } from './redis';
 import { ANALYZER_INIT_COUNTS, ANALYZER_KEY_EXP } from './redisDefaults';
 import { ANALYZER_REDIS_SCHEMA } from './redisKeys';
 
@@ -135,80 +135,84 @@ const runWithCancellation = async <Result>(
   }
 };
 
-export const withAnalyzerQuota = async <Result>(
-  clientIP: string,
-  field: (typeof FIELDS)[keyof typeof FIELDS],
-  cost: number,
-  run: () => Promise<Result>,
-  signal?: AbortSignal,
-): Promise<Result> => {
-  signal?.throwIfAborted();
-  const id = randomUUID();
-  const keys = [
-    REMAINING.TOTAL,
-    REMAINING.USER(clientIP),
-    REMAINING.RESERVATION(id),
-  ];
-
-  try {
-    // Keep the reservation until it expires so a replay cannot debit twice.
-    const reserved = await redis.eval(
-      RESERVE_QUOTA,
-      keys.length,
-      ...keys,
-      ...QUOTA_ARGS,
-      id,
-      field,
-      cost,
-    );
-
-    if (reserved === 1) {
-      return signal ? await runWithCancellation(run, signal) : await run();
-    }
+export const createAnalyzerQuota = (redis: Pick<Redis, 'eval'>) => {
+  const withAnalyzerQuota = async <Result>(
+    clientIP: string,
+    field: (typeof FIELDS)[keyof typeof FIELDS],
+    cost: number,
+    run: () => Promise<Result>,
+    signal?: AbortSignal,
+  ): Promise<Result> => {
     signal?.throwIfAborted();
-  } catch (error) {
-    // A lost Redis reply can leave a reservation even if the client saw an error.
-    try {
-      await redis.eval(
-        REFUND_QUOTA,
-        keys.length,
-        ...keys,
-        field,
-        cost,
-        PERIOD_FIELD,
-      );
-    } catch {
-      logger.error('Failed to refund analyzer quota.');
-    }
-    throw error;
-  }
-
-  return throwCustomError('No remaining request count available.', 400);
-};
-
-export const getAnalyzerRemainingCounts = async (clientIP: string) => {
-  const [totalAnalysis, totalSentences, userAnalysis, userSentences] =
-    (await redis.eval(
-      READ_QUOTA,
-      2,
+    const id = randomUUID();
+    const keys = [
       REMAINING.TOTAL,
       REMAINING.USER(clientIP),
-      ...QUOTA_ARGS,
-      randomUUID(),
-    )) as (string | null)[];
+      REMAINING.RESERVATION(id),
+    ];
 
-  const missingFields = [
-    totalAnalysis === null && FIELDS.ANALYSIS,
-    totalSentences === null && FIELDS.RANDOM_SENTENCE,
-  ].filter(Boolean);
-  if (missingFields.length) {
-    throwCustomError(
-      `Invalid counts for key: ${REMAINING.TOTAL}. Missing fields: ${missingFields.join(', ')}.`,
-    );
-  }
+    try {
+      // Keep the reservation until it expires so a replay cannot debit twice.
+      const reserved = await redis.eval(
+        RESERVE_QUOTA,
+        keys.length,
+        ...keys,
+        ...QUOTA_ARGS,
+        id,
+        field,
+        cost,
+      );
 
-  return {
-    analysis: Math.min(Number(totalAnalysis), Number(userAnalysis)),
-    random_sentence: Math.min(Number(totalSentences), Number(userSentences)),
+      if (reserved === 1) {
+        return signal ? await runWithCancellation(run, signal) : await run();
+      }
+      signal?.throwIfAborted();
+    } catch (error) {
+      // A lost Redis reply can leave a reservation even if the client saw an error.
+      try {
+        await redis.eval(
+          REFUND_QUOTA,
+          keys.length,
+          ...keys,
+          field,
+          cost,
+          PERIOD_FIELD,
+        );
+      } catch {
+        logger.error('Failed to refund analyzer quota.');
+      }
+      throw error;
+    }
+
+    return throwCustomError('No remaining request count available.', 400);
   };
+
+  const getAnalyzerRemainingCounts = async (clientIP: string) => {
+    const [totalAnalysis, totalSentences, userAnalysis, userSentences] =
+      (await redis.eval(
+        READ_QUOTA,
+        2,
+        REMAINING.TOTAL,
+        REMAINING.USER(clientIP),
+        ...QUOTA_ARGS,
+        randomUUID(),
+      )) as (string | null)[];
+
+    const missingFields = [
+      totalAnalysis === null && FIELDS.ANALYSIS,
+      totalSentences === null && FIELDS.RANDOM_SENTENCE,
+    ].filter(Boolean);
+    if (missingFields.length) {
+      throwCustomError(
+        `Invalid counts for key: ${REMAINING.TOTAL}. Missing fields: ${missingFields.join(', ')}.`,
+      );
+    }
+
+    return {
+      analysis: Math.min(Number(totalAnalysis), Number(userAnalysis)),
+      random_sentence: Math.min(Number(totalSentences), Number(userSentences)),
+    };
+  };
+
+  return { withAnalyzerQuota, getAnalyzerRemainingCounts };
 };

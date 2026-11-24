@@ -18,12 +18,12 @@ healthRouter.get(['/', '/health'], (req, res, _next) => {
 });
 
 export const createReadinessHandler = (
-  redis: Pick<Redis, 'ping' | 'status'> | undefined,
+  redis: Pick<Redis, 'ping' | 'status'>,
 ): RequestHandler => {
   let pending: Promise<boolean> | undefined;
 
   const checkRedis = () => {
-    if (redis?.status !== 'ready') return false;
+    if (redis.status !== 'ready') return false;
     // Keep sharing the result until the command settles to avoid queuing PINGs during a stall.
     pending ??= new Promise<boolean>((resolve) => {
       const deadline = setTimeout(resolve, REDIS_READINESS_TIMEOUT_MS, false);
