@@ -4,7 +4,7 @@
 
 ![Syntax Analyzer](https://github.com/romantech/syntax-analyzer/assets/8604840/747803a5-7670-4c18-99b8-07c4245b5312)
 
-Syntax Analyzer 是一款可自动分析英语句子结构并编辑分析结果的网页应用。它使用 30 多种常用语法标签，让复杂的句子结构一目了然。它还可以根据你输入的主题随机生成英语句子。英语句法分析使用本项目微调的 OpenAI 模型。
+Syntax Analyzer 是一款可自动分析英语句子结构并编辑分析结果的网页应用。它使用 30 多种常用语法标签，让复杂的句子结构一目了然。它还可以根据你输入的主题随机生成英语句子。句法分析使用 GPT-6 Luna。
 
 - 网页应用 · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API 文档](apps/api/README.md)
@@ -82,16 +82,13 @@ sequenceDiagram
         end
 
         else 继续处理
-            S->>+R: 获取提示词
-            R-->>-S: 返回提示词
-
             critical 使用 OpenAI 分析
                 S->>+O: 生成聊天补全
                 O-->>-S: 返回分析结果
             end
 
             S->>R: 更新剩余分析次数
-            Note over S,R: GPT 3.5 扣除 1 次，GPT 4 扣除 5 次
+            Note over S,R: 分析扣除 1 次
 
             S-->>C: 200 OK 并返回分析数据
             deactivate S

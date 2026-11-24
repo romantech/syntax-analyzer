@@ -10,11 +10,12 @@ const { test } = require('node:test');
 const { setTimeout: delay } = require('node:timers/promises');
 const Redis = require('ioredis');
 const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
+const { analysisPromptValues } = require('../test-support/app');
 
-const { KEYS, FIELDS } = ANALYZER_REDIS_SCHEMA;
+const { KEYS, FIELDS, PROMPT_FIELDS } = ANALYZER_REDIS_SCHEMA;
 const redisPort = process.env.REDIS_TEST_PORT;
 const clientIP = '127.0.0.1';
-const completedAnalysis = { analysis: 'completed' };
+const analysisSentence = ['She', 'reads', '.'];
 
 const listen = async (server) => {
   server.listen(0, clientIP);
@@ -39,8 +40,9 @@ const fixture = async (context) => {
     }
   });
   await redis.hset(KEYS.PROMPT, {
-    [FIELDS.ANALYSIS]: 'Analyze this sentence.',
     [FIELDS.RANDOM_SENTENCE]: 'Write {sent_count} sentences about {topics}.',
+    [PROMPT_FIELDS.STRUCTURED_ANALYSIS]: analysisPromptValues[0],
+    [PROMPT_FIELDS.STRUCTURED_ANALYSIS_RETRY]: analysisPromptValues[1],
   });
 
   const model = createHttpServer((req) => req.resume());
@@ -63,10 +65,8 @@ const fixture = async (context) => {
       REDIS_PORT: redisPort,
       REDIS_USERNAME: '',
       REDIS_PASSWORD: '',
-      MODEL_PRIMARY: 'gpt-4.1',
       MODEL_FAST: 'gpt-4.1-mini',
-      MODEL_PRIMARY_FT: 'test-primary-ft',
-      MODEL_FAST_FT: 'test-fast-ft',
+      MODEL_ANALYSIS_BASIC: 'gpt-6-luna',
       KOYEB_APP_ID: '',
     },
     readQuota: (field) =>
@@ -81,7 +81,7 @@ const analyze = (url, { headers, signal } = {}) =>
   fetch(`${url}/analyzer`, {
     method: 'POST',
     headers: { ...headers, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'primary', sentence: ['She', 'reads', '.'] }),
+    body: JSON.stringify({ model: 'primary', sentence: analysisSentence }),
     signal,
   });
 
@@ -109,7 +109,7 @@ const complete = (response, content) => {
   );
 };
 
-test('model retries, JSON repair and client disconnect use the request cancellation signal', {
+test('model retries, range validation and client disconnect use the request cancellation signal', {
   skip: !redisPort,
   timeout: 12_000,
 }, async (context) => {
@@ -147,21 +147,24 @@ test('model retries, JSON repair and client disconnect use the request cancellat
   const analysis = analyze(url);
   const first = await firstCall;
   await delay(700);
-  const repairCall = nextModelResponse(model);
-  complete(first, '');
-  const repair = await repairCall;
-  const repairClosed = once(repair, 'close');
-  const repairStarted = performance.now();
+  const analysisRetryCall = nextModelResponse(model);
+  complete(
+    first,
+    JSON.stringify({ spans: [{ begin: 0, end: 5, tags: ['subject'] }] }),
+  );
+  const analysisRetry = await analysisRetryCall;
+  const analysisRetryClosed = once(analysisRetry, 'close');
+  const analysisRetryStarted = performance.now();
   const timedOut = await analysis;
   assert.equal(timedOut.status, 504);
   assert.deepEqual(await timedOut.json(), {
     status: 'error',
     message: 'Analyzer request timed out.',
   });
-  await repairClosed;
+  await analysisRetryClosed;
   assert(
-    performance.now() - repairStarted < 1_300,
-    'repair shares the original deadline',
+    performance.now() - analysisRetryStarted < 1_300,
+    'the second analysis shares the original deadline',
   );
   assert.deepEqual(await readQuota(FIELDS.ANALYSIS), initialAnalysis);
 
@@ -187,7 +190,7 @@ test('model retries, JSON repair and client disconnect use the request cancellat
   const disconnectedModel = once(clientModelResponse, 'close');
   assert.deepEqual(
     await readQuota(FIELDS.ANALYSIS),
-    initialAnalysis.map((value) => String(Number(value) - 2)),
+    initialAnalysis.map((value) => String(Number(value) - 1)),
   );
   abort.abort();
   await assert.rejects(disconnected, { name: 'AbortError' });
@@ -274,7 +277,7 @@ test('SIGTERM stops accepting connections and refunds only unfinished requests',
   const upstreamClosed = once(unfinishedModel, 'close');
   assert.deepEqual(
     await readQuota(FIELDS.ANALYSIS),
-    before.map((value) => String(Number(value) - 4)),
+    before.map((value) => String(Number(value) - 2)),
   );
 
   const shutdownStarted = performance.now();
@@ -286,10 +289,10 @@ test('SIGTERM stops accepting connections and refunds only unfinished requests',
     code: 'ECONNREFUSED',
   });
 
-  complete(finishedModel, JSON.stringify(completedAnalysis));
+  complete(finishedModel, JSON.stringify({ spans: [] }));
   const success = await finishing;
   assert.equal(success.status, 200);
-  assert.deepEqual(await success.json(), completedAnalysis);
+  assert.deepEqual((await success.json()).sentence, analysisSentence);
 
   const cancelled = await unfinished;
   assert.equal(cancelled.status, 503);
@@ -302,7 +305,7 @@ test('SIGTERM stops accepting connections and refunds only unfinished requests',
   assert(performance.now() - shutdownStarted < 25_000);
   assert.deepEqual(
     await readQuota(FIELDS.ANALYSIS),
-    before.map((value) => String(Number(value) - 2)),
+    before.map((value) => String(Number(value) - 1)),
   );
   assert.equal(
     (await redis.keys(`${prefix}${KEYS.REMAINING.RESERVATION('*')}`)).length,

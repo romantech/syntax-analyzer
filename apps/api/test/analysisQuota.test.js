@@ -2,23 +2,22 @@ require('module-alias/register');
 
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
-const { startApp } = require('../test-support/app');
+const {
+  startApp,
+  modelAnalysis,
+  analysisPromptValues,
+} = require('../test-support/app');
 
 const balances = { total: 0, user: 0 };
 let modelCalls = 0;
 let quotaCalls = 0;
 let requestedModel;
-let requestedPrompt;
 const debits = [];
-const analysis = { id: 'analysis-result' };
 
 test('validates analysis requests before reserving quota', async (context) => {
   const baseURL = await startApp(context, {
     redis: {
-      hget: async (_key, promptField) => {
-        requestedPrompt = promptField;
-        return 'Analyze this sentence';
-      },
+      hmget: async () => analysisPromptValues,
       eval: async (_script, keyCount, _totalKey, userKey, ...args) => {
         quotaCalls += 1;
         assert.equal(keyCount, 4);
@@ -30,13 +29,11 @@ test('validates analysis requests before reserving quota', async (context) => {
       },
     },
     createModel: ({ model }) => ({
-      pipe: () => ({
-        invoke: async () => {
-          modelCalls += 1;
-          requestedModel = model;
-          return JSON.stringify(analysis);
-        },
-      }),
+      invoke: async () => {
+        modelCalls += 1;
+        requestedModel = model;
+        return modelAnalysis();
+      },
     }),
   });
   const url = `${baseURL}/analyzer`;
@@ -53,6 +50,7 @@ test('validates analysis requests before reserving quota', async (context) => {
     ['blank token', { sentence: ['She', ' '] }, 'sentence'],
     ['long token', { sentence: ['She', 'a'.repeat(81)] }, 'sentence'],
     ['array model', { model: ['fast-ft'] }, 'model'],
+    ['unknown model', { model: 'unknown' }, 'model'],
   ];
   for (const [name, fields, path] of invalidFields) {
     await context.test(`rejects ${name}`, async () => {
@@ -91,10 +89,10 @@ test('validates analysis requests before reserving quota', async (context) => {
   }
 
   const cases = [
-    { model: 'primary', total: 1, user: 2, expectedCost: 0 },
-    { model: 'primary-ft', total: 2, user: 1, expectedCost: 0 },
-    { model: 'primary', total: 2, user: 2, expectedCost: 2 },
-    { model: 'primary-ft', total: 2, user: 2, expectedCost: 2 },
+    { model: 'primary', total: 0, user: 1, expectedCost: 0 },
+    { model: 'primary-ft', total: 1, user: 0, expectedCost: 0 },
+    { model: 'primary', total: 1, user: 1, expectedCost: 1 },
+    { model: 'primary-ft', total: 1, user: 1, expectedCost: 1 },
     { model: 'fast-ft', total: 1, user: 1, expectedCost: 1 },
   ];
 
@@ -118,13 +116,12 @@ test('validates analysis requests before reserving quota', async (context) => {
           assert.deepEqual(debits, []);
         } else {
           assert.equal(response.status, 200);
-          assert.deepEqual(await response.json(), analysis);
-          assert.equal(modelCalls, 1);
-          assert.equal(requestedModel, `test-${model}`);
-          assert.equal(
-            requestedPrompt,
-            model === 'primary' ? 'analysis' : 'analysis_fine_tuned',
+          assert.deepEqual(
+            (await response.json()).sentence,
+            validBody.sentence,
           );
+          assert.equal(modelCalls, 1);
+          assert.equal(requestedModel, 'test-analysis');
           assert.deepEqual(debits, [{ field: 'analysis', cost: expectedCost }]);
         }
       },

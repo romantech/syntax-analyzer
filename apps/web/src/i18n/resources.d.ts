@@ -2,22 +2,15 @@
 export default interface Resources {
   "translation": {
     "analyzer": {
-      "advancedModel": "고급 모델",
-      "advancedModelDescription": "정확도가 조금 더 높아요",
       "analyze": "분석",
-      "basicModel": "기본 모델",
-      "basicModelDescription": "대부분의 문장을 잘 분석해요",
-      "chooseModel": "AI 모델 선택",
       "confirmBody": "입력한 영어 문장을 분석하시겠습니까?",
       "confirmTitle": "문장 분석 요청",
       "contractions": "축약 표현은 자동으로 풀어져요 (I'll → I will)",
-      "dailyLimit": "하루 최대 {{limit}}회까지 분석할 수 있어요 (고급 모델은 요청당 {{cost}}회 차감)",
+      "dailyLimit": "하루 최대 {{limit}}회까지 분석할 수 있어요",
       "enterSentence": "영어 문장 입력",
       "exhausted": "사용량을 모두 소진했어요. 내일 다시 시도해 주세요.",
       "loading": "문장 분석 중",
       "loadingTime": "최대 <time>1분</time>까지 소요될 수 있어요",
-      "modelCost": "고급 모델은 분석 횟수가 {{cost}}회 필요해요.",
-      "recommended": "추천",
       "remaining": "남은 분석 횟수 {{remaining}}회",
       "remainingLabel": "남은 분석 횟수",
       "sentence": "영어 문장",

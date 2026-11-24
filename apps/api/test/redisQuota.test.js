@@ -4,11 +4,15 @@ const assert = require('node:assert/strict');
 const { randomUUID } = require('node:crypto');
 const { test } = require('node:test');
 const Redis = require('ioredis');
-const { startApp } = require('../test-support/app');
+const {
+  startApp,
+  modelAnalysis,
+  analysisPromptValues,
+} = require('../test-support/app');
 const { createAnalyzerQuota } = require('../dist/services/redis/analyzerQuota');
 const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
 
-const { KEYS, FIELDS } = ANALYZER_REDIS_SCHEMA;
+const { KEYS, FIELDS, PROMPT_FIELDS } = ANALYZER_REDIS_SCHEMA;
 const { REMAINING } = KEYS;
 const periodField = '__quota_period';
 const beforeMidnight = Date.parse('2026-11-22T14:59:59Z');
@@ -72,20 +76,17 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         analyzerCookieSecret: 'integration-test-cookie-signing-secret',
         redis,
         createModel: () => ({
-          pipe: () => ({
-            invoke: async () => JSON.stringify({ id: 'analysis' }),
-          }),
+          invoke: async () => modelAnalysis(),
           withStructuredOutput: () => ({
             invoke: async () => ({ sentences: failModel ? [] : ['I walk.'] }),
           }),
         }),
       });
-      await redis.hset(KEYS.PROMPT, FIELDS.ANALYSIS, 'Analyze the sentence.');
-      await redis.hset(
-        KEYS.PROMPT,
-        FIELDS.RANDOM_SENTENCE,
-        'Generate sentences.',
-      );
+      await redis.hset(KEYS.PROMPT, {
+        [FIELDS.RANDOM_SENTENCE]: 'Generate sentences.',
+        [PROMPT_FIELDS.STRUCTURED_ANALYSIS]: analysisPromptValues[0],
+        [PROMPT_FIELDS.STRUCTURED_ANALYSIS_RETRY]: analysisPromptValues[1],
+      });
 
       const request = (
         path,
@@ -138,7 +139,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       });
       assert.equal(analysis.status, 200);
       assert.equal(analysis.headers.has('set-cookie'), false);
-      assert.deepEqual(await analysis.json(), { id: 'analysis' });
+      assert.deepEqual((await analysis.json()).sentence, ['I', 'walk.']);
 
       const sentences = await request(randomSentences, { cookie });
       assert.equal(sentences.status, 200);
@@ -153,12 +154,12 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
           FIELDS.ANALYSIS,
           FIELDS.RANDOM_SENTENCE,
         ),
-        ['8', '19'],
+        ['9', '19'],
       );
 
       const moved = await request(remaining, { cookie, ip: secondIP });
       assert.deepEqual(await moved.json(), {
-        analysis: 8,
+        analysis: 9,
         random_sentence: 19,
       });
 
@@ -169,7 +170,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       const secondCookie = replacement.split(';')[0];
       assert.notEqual(secondCookie, cookie);
       assert.deepEqual(await second.json(), {
-        analysis: 8,
+        analysis: 9,
         random_sentence: 19,
       });
 
@@ -182,7 +183,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       const legacy = await request(remaining, { cookie, legacy: true });
       assert.equal(legacy.headers.has('set-cookie'), false);
       assert.deepEqual(await legacy.json(), {
-        analysis: 8,
+        analysis: 9,
         random_sentence: 19,
       });
       await clearKeys();

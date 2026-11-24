@@ -8,7 +8,6 @@ import {
 import {
   accordionAnatomy,
   cardAnatomy,
-  radioGroupAnatomy,
   switchAnatomy,
   tabsAnatomy,
 } from '@chakra-ui/react/anatomy';
@@ -208,31 +207,6 @@ const config = defineConfig({
                     '--indicator-offset-y': '-2px',
                   },
                 },
-              },
-            },
-          },
-        },
-      }),
-      radioGroup: defineSlotRecipe({
-        slots: radioGroupAnatomy.keys(),
-        base: {
-          item: { cursor: 'pointer' },
-          itemControl: { cursor: 'inherit' },
-          itemText: { fontSize: 'md', fontWeight: 'normal', lineHeight: 'base' },
-        },
-        variants: {
-          size: { md: { item: { gap: 2 }, itemControl: { boxSize: 4 } } },
-          variant: {
-            solid: {
-              itemControl: {
-                borderWidth: 2,
-                borderColor: 'gray.500',
-                _checked: {
-                  bg: 'teal.accent',
-                  borderColor: 'teal.accent',
-                  _dark: { color: 'black' },
-                },
-                '& .dot': { scale: 0.5 },
               },
             },
           },

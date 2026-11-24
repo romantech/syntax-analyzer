@@ -1,26 +1,13 @@
-import { HumanMessage, SystemMessage } from '@langchain/core/messages';
-import { StringOutputParser } from '@langchain/core/output_parsers';
 import type { AnalyzerDependencies } from '@/config/createServer';
-import { ANALYSIS_DECREMENT_COUNT, ERROR_MESSAGES } from '@/constants';
+import { ERROR_MESSAGES } from '@/constants';
 import { handleValidationErrors } from '@/middlewares/handleValidationErrors';
 import { identifyAnalyzerClient } from '@/middlewares/identifyAnalyzerClient';
-import {
-  ANALYSIS_MODEL_OPTION,
-  type AnalysisModel,
-  createJSONChatOpenAI,
-  validateAndRepairJSON,
-} from '@/services/openAI';
+import { generateStructuredAnalysis } from '@/services/openAI/structuredAnalysis';
 import { ANALYZER_REDIS_SCHEMA } from '@/services/redis/redisKeys';
 import { asyncHandler, throwCustomError } from '@/utils';
 import { checkModelField, checkSentenceField } from '@/validators';
 
-interface RequestBody {
-  sentence: string[];
-  model: AnalysisModel;
-}
-
-const { IP_UNIDENTIFIABLE, RETRIEVE_FAILED } = ERROR_MESSAGES;
-const { KEYS, FIELDS } = ANALYZER_REDIS_SCHEMA;
+const { KEYS, FIELDS, PROMPT_FIELDS } = ANALYZER_REDIS_SCHEMA;
 
 export const createAnalysis = [
   checkSentenceField,
@@ -29,17 +16,17 @@ export const createAnalysis = [
   identifyAnalyzerClient,
   asyncHandler(async (req, res) => {
     const client =
-      req.analyzerClient ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
-    const { sentence, model }: RequestBody = req.body;
+      req.analyzerClient ??
+      throwCustomError(ERROR_MESSAGES.IP_UNIDENTIFIABLE, 400);
+    const { sentence } = req.body as { sentence: string[] };
     const { analyzer, analyzerQuota, analyzerRequests } = req.app.locals;
 
     const analysis = await analyzerRequests.run(res, (signal) =>
       analyzerQuota.withAnalyzerQuota(
         client,
         FIELDS.ANALYSIS,
-        ANALYSIS_DECREMENT_COUNT[model],
-        () =>
-          executeAnalysis(analyzer, JSON.stringify(sentence), model, signal),
+        1,
+        () => analyzeSentence(analyzer, sentence, signal),
         signal,
       ),
     );
@@ -48,33 +35,29 @@ export const createAnalysis = [
   }),
 ];
 
-const executeAnalysis = async (
+const analyzeSentence = async (
   { redis, createModel, models }: AnalyzerDependencies,
-  sentence: string,
-  modelKey: AnalysisModel,
+  sentence: string[],
   signal: AbortSignal,
 ) => {
-  const { temperature, promptField } = ANALYSIS_MODEL_OPTION[modelKey];
-  const prompt = await redis.hget(KEYS.PROMPT, promptField);
-  if (!prompt) return throwCustomError(RETRIEVE_FAILED('prompt'), 500);
+  const [initial, retryInstruction] = await redis.hmget(
+    KEYS.PROMPT,
+    PROMPT_FIELDS.STRUCTURED_ANALYSIS,
+    PROMPT_FIELDS.STRUCTURED_ANALYSIS_RETRY,
+  );
   signal.throwIfAborted();
-  const messages = [new SystemMessage(prompt), new HumanMessage(sentence)];
+  if (!initial?.trim() || !retryInstruction?.trim()) {
+    return throwCustomError(
+      ERROR_MESSAGES.RETRIEVE_FAILED('analysis prompts'),
+      500,
+    );
+  }
 
-  const llm = createJSONChatOpenAI(createModel, {
-    model: models[modelKey],
-    temperature,
-  });
-
-  // StringOutputParser를 LLM에 연결하여 새로운 체인 생성
-  // StringOutputParser는 LLM 응답에서 content 속성만 추출하여 문자열(string)로 반환
-  const chain = llm.pipe(new StringOutputParser());
-  // invoke 결과는 AIMessage 객체 대신 문자열 content 바로 반환
-  const stringContent = await chain.invoke(messages, { signal });
-
-  return await validateAndRepairJSON(
-    stringContent,
-    signal,
+  return generateStructuredAnalysis(
     createModel,
-    models.fast,
+    models.analysis,
+    sentence,
+    { initial, retryInstruction },
+    signal,
   );
 };

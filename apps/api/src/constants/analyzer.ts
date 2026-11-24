@@ -1,12 +1,6 @@
 import { z } from 'zod';
-import { AIModelKey } from '@/services/openAI/openAI';
 
-export const ANALYSIS_DECREMENT_COUNT = {
-  [AIModelKey.FAST]: 1,
-  [AIModelKey.PRIMARY]: 2,
-  [AIModelKey.FAST_FT]: 1,
-  [AIModelKey.PRIMARY_FT]: 2,
-};
+export const ANALYSIS_REQUEST_MODEL_KEYS = ['fast-ft', 'primary', 'primary-ft'];
 
 export enum RandomSentenceParam {
   SENT_COUNT = 'sent_count',

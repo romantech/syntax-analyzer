@@ -66,10 +66,9 @@ export const useAnalysisForm = () => {
   const { mutate } = mutationResults;
 
   const onSubmitConfirm = () => {
-    const { model, sentence } = getValues();
+    const { sentence } = getValues();
     const tokenized = tokenizer(processSentence(sentence));
-    const payload = { model, sentence: tokenized };
-    mutate(payload);
+    mutate({ sentence: tokenized });
   };
 
   const onSubmit = handleSubmit(openModal);

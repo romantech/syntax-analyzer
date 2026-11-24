@@ -25,4 +25,8 @@ const ANALYZER_KEYS = {
 export const ANALYZER_REDIS_SCHEMA = {
   KEYS: ANALYZER_KEYS,
   FIELDS: AnalyzerFields,
+  PROMPT_FIELDS: {
+    STRUCTURED_ANALYSIS: 'analysis_structured',
+    STRUCTURED_ANALYSIS_RETRY: 'analysis_structured_retry',
+  },
 } as const;

@@ -4,7 +4,7 @@
 
 ![Syntax Analyzer](https://github.com/romantech/syntax-analyzer/assets/8604840/747803a5-7670-4c18-99b8-07c4245b5312)
 
-Syntax Analyzer は、英文の構造を自動で分析し、その結果を自由に編集できるウェブアプリです。よく使われる30種類以上の文法タグで、複雑な英文の構造をひと目で確認できます。入力したトピックに沿って英文をランダムに生成することもできます。英文の分析には、このプロジェクトでファインチューニングした OpenAI のモデルを使用しています。
+Syntax Analyzer は、英文の構造を自動で分析し、その結果を自由に編集できるウェブアプリです。よく使われる30種類以上の文法タグで、複雑な英文の構造をひと目で確認できます。入力したトピックに沿って英文をランダムに生成することもできます。英文分析には GPT-6 Luna を使用しています。
 
 - ウェブアプリ · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API リファレンス](apps/api/README.md)
@@ -82,16 +82,13 @@ sequenceDiagram
         end
 
         else 処理を続行
-            S->>+R: プロンプトを取得
-            R-->>-S: プロンプトを返す
-
             critical OpenAI で分析
                 S->>+O: チャット補完を生成
                 O-->>-S: 分析結果を返す
             end
 
             S->>R: 残り分析回数を更新
-            Note over S,R: GPT 3.5 は1回分を消費、GPT 4 は5回分を消費
+            Note over S,R: 分析は1回分を消費
 
             S-->>C: 200 OK と分析データを返す
             deactivate S

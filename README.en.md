@@ -4,7 +4,7 @@
 
 ![Syntax Analyzer](https://github.com/romantech/syntax-analyzer/assets/8604840/747803a5-7670-4c18-99b8-07c4245b5312)
 
-Syntax Analyzer is a web app that automatically analyzes English sentence structure and lets you edit the results. It uses more than 30 common grammar tags to show how complex sentences fit together. It can also generate random sentences on the topics you enter. The analyzer uses an OpenAI model fine-tuned for this project.
+Syntax Analyzer is a web app that automatically analyzes English sentence structure and lets you edit the results. It uses more than 30 common grammar tags to show how complex sentences fit together. It can also generate random sentences on the topics you enter. Syntax analysis uses GPT-6 Luna.
 
 - Web app · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API reference](apps/api/README.md)
@@ -82,16 +82,13 @@ sequenceDiagram
         end
 
         else Continue
-            S->>+R: Retrieve prompt
-            R-->>-S: Return prompt
-
             critical Process with OpenAI
                 S->>+O: Create chat completion
                 O-->>-S: Return analysis result
             end
 
             S->>R: Update request count
-            Note over S,R: GPT 3.5 reduced by 1#59; GPT 4 reduced by 5 #32;#32;#32;
+            Note over S,R: Analysis uses 1 credit
 
             S-->>C: 200 OK with analysis data
             deactivate S

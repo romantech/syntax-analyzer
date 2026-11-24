@@ -11,12 +11,7 @@ import type { PropsWithChildren, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CenteredDivider } from '@/base';
-import {
-  ANALYSIS_DECREMENT_COUNT,
-  AnalysisModel,
-  DAILY_ANALYSIS_LIMIT,
-  useRemainingCountQuery,
-} from '@/features/syntax-analyzer';
+import { DAILY_ANALYSIS_LIMIT, useRemainingCountQuery } from '@/features/syntax-analyzer';
 
 export default function AnalysisCounter({ ...stackProps }: StackProps) {
   const { t } = useTranslation();
@@ -64,12 +59,7 @@ const AnalysisCounterBox = ({
       <CenteredDivider orientation="vertical" height="40px" px={1} />
       <Box minW={0}>
         {countLabel}
-        <Text>
-          {t('analyzer.dailyLimit', {
-            limit: DAILY_ANALYSIS_LIMIT,
-            cost: ANALYSIS_DECREMENT_COUNT[AnalysisModel.PRIMARY],
-          })}
-        </Text>
+        <Text>{t('analyzer.dailyLimit', { limit: DAILY_ANALYSIS_LIMIT })}</Text>
       </Box>
     </HStack>
   );

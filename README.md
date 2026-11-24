@@ -4,7 +4,7 @@
 
 ![og-image](https://github.com/romantech/syntax-analyzer/assets/8604840/747803a5-7670-4c18-99b8-07c4245b5312)
 
-Syntax Analyzer는 영어 문장의 다양한 구문을 자동으로 분석해 주고, 원하는 형태로 구문을 편집할 수 있는 웹 어플리케이션입니다. 자주 사용하는 30여 가지의 문법 태그를 통해 복잡한 문장 구조를 한눈에 파악할 수 있도록 도와줍니다. 입력한 주제와 연관된 랜덤 문장 생성 기능도 제공합니다. 영어 구문 분석은 직접 파인튜닝한 OpenAI 모델을 활용했습니다.
+Syntax Analyzer는 영어 문장의 다양한 구문을 자동으로 분석해 주고, 원하는 형태로 구문을 편집할 수 있는 웹 어플리케이션입니다. 자주 사용하는 30여 가지의 문법 태그를 통해 복잡한 문장 구조를 한눈에 파악할 수 있도록 도와줍니다. 입력한 주제와 연관된 랜덤 문장 생성 기능도 제공합니다. 구문 분석에는 GPT-6 Luna를 사용합니다.
 
 - 어플리케이션 링크: [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API 명세](apps/api/README.md) · [로컬 개발 및 API 변경 가이드](docs/api-integration.md)
@@ -82,16 +82,13 @@ sequenceDiagram
         end
 
         else Continue
-            S->>+R: Retrieve prompt
-            R-->>-S: Return prompt
-
             critical Process with OpenAI
                 S->>+O: Create chat completion
                 O-->>-S: Return analysis result
             end
 
             S->>R: Update request count
-            Note over S,R: GPT 3.5 reduced by 1#59; GPT 4 reduced by 5 #32;#32;#32;
+            Note over S,R: 분석 1회 차감
 
             S-->>C: 200 OK with analysis data
             deactivate S
