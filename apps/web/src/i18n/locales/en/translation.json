@@ -3,7 +3,7 @@
     "analyze": "Analyze",
     "confirmBody": "Analyze the English sentence you entered?",
     "confirmTitle": "Analyze sentence",
-    "contractions": "Contractions expand automatically (I'll → I will)",
+    "contractions": "Some contractions expand automatically (I'll → I will)",
     "dailyLimit": "Up to {{limit}} analyses per day",
     "enterSentence": "Enter an English sentence",
     "exhausted": "You've reached the daily limit. Please try again tomorrow.",

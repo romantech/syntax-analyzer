@@ -5,7 +5,7 @@ export default interface Resources {
       "analyze": "분석",
       "confirmBody": "입력한 영어 문장을 분석하시겠습니까?",
       "confirmTitle": "문장 분석 요청",
-      "contractions": "축약 표현은 자동으로 풀어져요 (I'll → I will)",
+      "contractions": "일부 축약 표현은 풀어서 분석해요 (I'll → I will)",
       "dailyLimit": "하루 최대 {{limit}}회까지 분석할 수 있어요",
       "enterSentence": "영어 문장 입력",
       "exhausted": "사용량을 모두 소진했어요. 내일 다시 시도해 주세요.",

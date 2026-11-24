@@ -25,7 +25,7 @@ Syntax Analyzer is a web app that automatically analyzes English sentence struct
 # Features
 
 > [!NOTE]
-> Before analysis, the app expands contractions such as `I'll` to `I will`.\
+> Before analysis, the app expands contractions such as `I'll` to `I will`. It keeps ambiguous `'s` endings as written.\
 > It also removes all commas from numbers, so `6,500` becomes `6500`.
 
 1. Analyze English sentences to identify subjects, verbs, objects, phrases, clauses, and other constituents.

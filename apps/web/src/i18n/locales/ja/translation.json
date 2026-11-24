@@ -3,7 +3,7 @@
     "analyze": "分析",
     "confirmBody": "入力した英文を分析しますか？",
     "confirmTitle": "英文を分析",
-    "contractions": "短縮形は自動で展開されます（I'll → I will）",
+    "contractions": "一部の短縮形は展開して分析します（I'll → I will）",
     "dailyLimit": "1日最大{{limit}}回まで分析できます",
     "enterSentence": "英文を入力",
     "exhausted": "本日の上限に達しました。明日もう一度お試しください。",

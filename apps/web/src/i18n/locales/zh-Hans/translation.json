@@ -3,7 +3,7 @@
     "analyze": "分析",
     "confirmBody": "要分析输入的英语句子吗？",
     "confirmTitle": "分析句子",
-    "contractions": "缩写形式会自动展开（I'll → I will）",
+    "contractions": "分析前会展开部分缩写形式（I'll → I will）",
     "dailyLimit": "每天最多可分析 {{limit}} 次",
     "enterSentence": "输入英语句子",
     "exhausted": "今日额度已用完，请明天再试。",
