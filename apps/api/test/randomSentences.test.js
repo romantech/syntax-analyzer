@@ -67,7 +67,7 @@ test('random sentence generation', async (context) => {
   app.use(errorHandler);
 
   const server = await new Promise((resolve, reject) => {
-    const listener = app.listen(0, (error) => {
+    const listener = app.listen(0, '127.0.0.1', (error) => {
       if (error) reject(error);
       else resolve(listener);
     });
@@ -198,7 +198,7 @@ test('random sentence generation', async (context) => {
         withAnalyzerQuota,
       );
 
-      const clientIP = '192.0.2.1';
+      const clientIP = '127.0.0.1';
       const field = FIELDS.RANDOM_SENTENCE;
       const readBalances = () =>
         Promise.all([
@@ -207,17 +207,15 @@ test('random sentence generation', async (context) => {
         ]);
       await getAnalyzerRemainingCounts(clientIP);
       const before = await readBalances();
-      const headers = { 'x-forwarded-for': clientIP };
-
       modelSentences = defaultSentences;
-      const valid = await fetch(`${url}${maxLengthQuery}`, { headers });
+      const valid = await fetch(`${url}${maxLengthQuery}`);
       assert.equal(valid.status, 200);
       assert.deepEqual(await valid.json(), defaultSentences);
       const afterSuccess = before.map((balance) => String(Number(balance) - 1));
       assert.deepEqual(await readBalances(), afterSuccess);
 
       modelSentences = ['A sentence that is too long.'];
-      const invalid = await fetch(`${url}${maxLengthQuery}`, { headers });
+      const invalid = await fetch(`${url}${maxLengthQuery}`);
       assert.equal(invalid.status, 502);
       await invalid.json();
       assert.deepEqual(await readBalances(), afterSuccess);

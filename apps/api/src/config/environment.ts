@@ -28,6 +28,7 @@ const loadEnvironment = () => {
 
   return {
     isProd,
+    isKoyeb: Boolean(env.KOYEB_APP_ID),
     port: isProd ? Number(env[RequiredEnv.PORT]) : DEFAULT_SERVER_PORT,
     corsOrigins: env[OptionalEnv.CORS_ORIGIN]?.split(',') ?? [],
     openAIKey: env[RequiredEnv.OPENAI_API_KEY],
