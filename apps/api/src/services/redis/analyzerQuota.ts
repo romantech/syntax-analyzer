@@ -112,12 +112,37 @@ local user = redis.call('HMGET', user_key, analysis_field, sentence_field)
 return {total[1], total[2], user[1], user[2]}
 `;
 
+const runWithCancellation = async <Result>(
+  run: () => Promise<Result>,
+  signal: AbortSignal,
+) => {
+  signal.throwIfAborted();
+
+  const { promise: cancelled, reject } = Promise.withResolvers<never>();
+  const cancel = () => reject(signal.reason);
+  signal.addEventListener('abort', cancel, { once: true });
+
+  try {
+    const operation = Promise.resolve().then(() => {
+      signal.throwIfAborted();
+      return run();
+    });
+    const result = await Promise.race([operation, cancelled]);
+    signal.throwIfAborted();
+    return result;
+  } finally {
+    signal.removeEventListener('abort', cancel);
+  }
+};
+
 export const withAnalyzerQuota = async <Result>(
   clientIP: string,
   field: (typeof FIELDS)[keyof typeof FIELDS],
   cost: number,
   run: () => Promise<Result>,
+  signal?: AbortSignal,
 ): Promise<Result> => {
+  signal?.throwIfAborted();
   const id = randomUUID();
   const keys = [
     REMAINING.TOTAL,
@@ -137,7 +162,10 @@ export const withAnalyzerQuota = async <Result>(
       cost,
     );
 
-    if (reserved === 1) return await run();
+    if (reserved === 1) {
+      return signal ? await runWithCancellation(run, signal) : await run();
+    }
+    signal?.throwIfAborted();
   } catch (error) {
     // A lost Redis reply can leave a reservation even if the client saw an error.
     try {

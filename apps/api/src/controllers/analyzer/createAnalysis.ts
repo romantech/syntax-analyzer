@@ -32,11 +32,14 @@ export const createAnalysis = [
     const clientIP = req.clientIP ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
     const { sentence, model }: RequestBody = req.body;
 
-    const analysis = await withAnalyzerQuota(
-      clientIP,
-      FIELDS.ANALYSIS,
-      ANALYSIS_DECREMENT_COUNT[model],
-      () => executeAnalysis(JSON.stringify(sentence), model),
+    const analysis = await req.app.locals.analyzerRequests.run(res, (signal) =>
+      withAnalyzerQuota(
+        clientIP,
+        FIELDS.ANALYSIS,
+        ANALYSIS_DECREMENT_COUNT[model],
+        () => executeAnalysis(JSON.stringify(sentence), model, signal),
+        signal,
+      ),
     );
 
     res.status(200).json(analysis);
@@ -52,9 +55,14 @@ const retrieveAnalysisPrompt = async (model: AnalysisModel) => {
   return prompt;
 };
 
-const executeAnalysis = async (sentence: string, modelKey: AnalysisModel) => {
+const executeAnalysis = async (
+  sentence: string,
+  modelKey: AnalysisModel,
+  signal: AbortSignal,
+) => {
   const { temperature, model } = ANALYSIS_MODEL_OPTION[modelKey];
   const prompt = await retrieveAnalysisPrompt(modelKey);
+  signal.throwIfAborted();
   const messages = [new SystemMessage(prompt), new HumanMessage(sentence)];
 
   const llm = createJSONChatOpenAI({ model, temperature });
@@ -63,7 +71,7 @@ const executeAnalysis = async (sentence: string, modelKey: AnalysisModel) => {
   // StringOutputParser는 LLM 응답에서 content 속성만 추출하여 문자열(string)로 반환
   const chain = llm.pipe(new StringOutputParser());
   // invoke 결과는 AIMessage 객체 대신 문자열 content 바로 반환
-  const stringContent = await chain.invoke(messages);
+  const stringContent = await chain.invoke(messages, { signal });
 
-  return await validateAndRepairJSON(stringContent);
+  return await validateAndRepairJSON(stringContent, signal);
 };

@@ -1,4 +1,4 @@
-export {};
+import type { AnalyzerRequests } from '@/services/analyzerRequests';
 
 declare global {
   namespace Express {
@@ -7,6 +7,7 @@ declare global {
     }
 
     export interface Locals {
+      analyzerRequests: AnalyzerRequests;
       errorType?: string;
     }
   }

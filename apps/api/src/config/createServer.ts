@@ -5,6 +5,7 @@ import express, { type Application } from 'express';
 import helmet from 'helmet';
 import { envConfig } from '@/config/environment';
 import { requestLogger } from '@/middlewares/requestLogger';
+import { AnalyzerRequests } from '@/services/analyzerRequests';
 
 const corsOptions: CorsOptions = {
   /** Access-Control-Allow-Origin 응답 헤더 설정 (허용할 오리진 목록) */
@@ -29,8 +30,11 @@ const corsOptions: CorsOptions = {
   optionsSuccessStatus: 200,
 };
 
-export const createServer = (): Application => {
+export const createServer = (
+  analyzerRequests = new AnalyzerRequests(),
+): Application => {
   const app = express();
+  app.locals.analyzerRequests = analyzerRequests;
   app.set('query parser', 'extended');
   app.use(requestLogger);
 
@@ -40,6 +44,14 @@ export const createServer = (): Application => {
    * */
   app.use(helmet());
   app.use(cors(corsOptions));
+  app.use((_req, res, next) => {
+    if (analyzerRequests.accepting) return next();
+
+    res.set('Connection', 'close').status(503).json({
+      status: 'error',
+      message: 'Server is shutting down.',
+    });
+  });
 
   /**
    * URL-encoded(Hello World! 문자열을 인코딩하면 Hello+World%21) 문자열 파싱

@@ -18,6 +18,8 @@ const getErrorType = (error: unknown): string => {
 
 /* next 파라미터(4번째)가 없으면 에러처리 미들웨어 인식하지 않으므로 주의 */
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  if (res.destroyed) return;
+
   switch (err.type) {
     case 'entity.parse.failed':
     case 'querystring.parse.rangeError':
