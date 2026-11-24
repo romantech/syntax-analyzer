@@ -1,6 +1,6 @@
 import { Box, Button } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TbMoodEmpty } from 'react-icons/tb';
 
@@ -59,20 +59,35 @@ function AnalysisSentence({
   const { t } = useTranslation();
   const sentenceRef = useRef<HTMLParagraphElement>(null);
   const [showAllTags, setShowAllTags] = useState(false);
-  const [expanded, setExpanded] = useState<ReadonlySet<number>>(() => new Set());
+  const [{ expanded, entering }, setDetails] = useState<{
+    expanded: ReadonlySet<number>;
+    entering: number | null;
+  }>(() => ({ expanded: new Set(), entering: null }));
   const selectedTag = useAtomValue(selectedTagAtom);
   const deleteMode = useAtomValue(deleteModeAtom);
   const isEditing = !!selectedTag || deleteMode;
   const hasOverview = analysis.isAnalyzedByGPT && hasOverviewTags(segment);
   const allTagsVisible = !hasOverview || showAllTags || isEditing;
 
-  const toggle = (segmentId: number) =>
-    setExpanded((previous) => {
-      const next = new Set(previous);
-      if (next.has(segmentId)) next.delete(segmentId);
+  const toggle = (segmentId: number, animate: boolean) =>
+    setDetails((previous) => {
+      const next = new Set(previous.expanded);
+      const opening = !next.has(segmentId);
+      if (!opening) next.delete(segmentId);
       else next.add(segmentId);
-      return next;
+      return { expanded: next, entering: opening && animate ? segmentId : null };
     });
+
+  useEffect(() => {
+    if (entering === null) return;
+    // Clear the entrance state once the label animation has finished.
+    const timeout = window.setTimeout(() => {
+      setDetails((previous) =>
+        previous.entering === entering ? { ...previous, entering: null } : previous,
+      );
+    }, 200);
+    return () => window.clearTimeout(timeout);
+  }, [entering]);
 
   useCalculateNestingLevel({
     targetRef: sentenceRef,
@@ -102,7 +117,7 @@ function AnalysisSentence({
         <SegmentList
           segment={segment}
           tokenElements={TokenList({ sentence: analysis.sentence, isTapMode })}
-          overview={allTagsVisible ? undefined : { expanded, toggle }}
+          overview={allTagsVisible ? undefined : { expanded, entering, toggle }}
         />
       </Sentence>
     </>

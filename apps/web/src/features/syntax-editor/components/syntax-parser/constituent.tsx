@@ -17,13 +17,15 @@ import {
 } from '@/features/syntax-editor';
 import { getConstituentTranslation } from '../../helpers/constituent-translation';
 
-type Disclosure = { expanded: boolean; toggle: () => void };
+type Disclosure = { expanded: boolean; toggle: (animate: boolean) => void };
 
 interface ConstituentProps {
   tags: TConstituent[];
   begin: number;
   end: number;
   overviewTagId?: number;
+  animateLabels: boolean;
+  animateExtraLabels: boolean;
   disclosure?: Disclosure;
 }
 
@@ -33,6 +35,8 @@ export default function Constituent({
   begin,
   end,
   overviewTagId,
+  animateLabels,
+  animateExtraLabels,
   disclosure,
 }: PropsWithChildren<ConstituentProps>) {
   const primary = tags[0];
@@ -63,6 +67,7 @@ export default function Constituent({
             begin={begin}
             end={end}
             overview={tag.id === overviewTagId}
+            entering={animateLabels || (animateExtraLabels && tag.id !== overviewTagId)}
             disclosure={tag.id === overviewTagId ? disclosure : undefined}
           />
         ))}
@@ -76,12 +81,14 @@ function ConstituentLabel({
   begin,
   end,
   overview,
+  entering,
   disclosure,
 }: {
   tag: TConstituent;
   begin: number;
   end: number;
   overview: boolean;
+  entering: boolean;
   disclosure?: Disclosure;
 }) {
   const { t, i18n } = useTranslation();
@@ -93,6 +100,7 @@ function ConstituentLabel({
   const attrs = {
     className: 'constituent-label',
     lang: i18n.resolvedLanguage,
+    'data-entering': entering ? true : undefined,
     [CONSTITUENT_DATA_ATTRS.ID]: tag.id,
     [CONSTITUENT_DATA_ATTRS.LABEL]: tag.label,
     [CONSTITUENT_DATA_ATTRS.ABBR]: tag.abbreviation,
@@ -112,7 +120,7 @@ function ConstituentLabel({
         data-overview-label
         aria-label={t('editor.constituentDetails', { label: name, begin: begin + 1, end })}
         aria-expanded={disclosure.expanded}
-        onClick={disclosure.toggle}
+        onClick={(event) => disclosure.toggle(event.detail > 0)}
       >
         {name}
         {disclosure.expanded ? <LuChevronUp aria-hidden /> : <LuChevronDown aria-hidden />}

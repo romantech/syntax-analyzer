@@ -16,6 +16,7 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
 .constituent {
   --constituent-label-size: 2rem;
+  --constituent-label-surface-inset: 3px;
   position: relative;
 
   > .constituent-labels {
@@ -25,10 +26,20 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
     align-items: center;
     left: 50%;
     transform: translateX(-50%);
-    border-radius: 0.5rem;
-    background-color: var(--chakra-colors-bg-muted);
+    isolation: isolate;
     white-space: nowrap;
     user-select: none;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: var(--constituent-label-surface-inset) 0;
+      z-index: -1;
+      border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+      border-radius: 0.5rem;
+      background-color: color-mix(in srgb, currentColor 10%, var(--chakra-colors-bg));
+      pointer-events: none;
+    }
   }
 }
 
@@ -64,6 +75,19 @@ button.constituent-label {
   &:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: -2px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .constituent-label[data-entering] {
+    animation: constituent-label-in 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+}
+
+@keyframes constituent-label-in {
+  from {
+    opacity: 0;
+    translate: 0 3px;
   }
 }
 
@@ -114,6 +138,7 @@ button.constituent-label {
 @media (max-width: 61.99em), (pointer: coarse) {
   .constituent {
     --constituent-label-size: 44px;
+    --constituent-label-surface-inset: 8px;
     --constituent-height: 2.75rem;
     --token-spacing: 2.75rem;
     --constituent-inline-margin: 0px;
