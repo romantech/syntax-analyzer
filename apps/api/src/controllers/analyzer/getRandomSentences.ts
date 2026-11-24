@@ -7,7 +7,7 @@ import {
   sentencesSchema,
 } from '@/constants';
 import { handleValidationErrors } from '@/middlewares/handleValidationErrors';
-import { validateClientIP } from '@/middlewares/validateClientIP';
+import { identifyAnalyzerClient } from '@/middlewares/identifyAnalyzerClient';
 import { RANDOM_SENTENCE_CONFIG } from '@/services/openAI/openAI';
 import { ANALYZER_REDIS_SCHEMA } from '@/services/redis/redisKeys';
 import { asyncHandler, throwCustomError } from '@/utils';
@@ -26,14 +26,15 @@ export const getRandomSentences = [
   checkTopicsField,
   checkSentenceCountField,
   handleValidationErrors,
-  validateClientIP,
+  identifyAnalyzerClient,
   asyncHandler(async (req, res) => {
-    const clientIP = req.clientIP ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
+    const client =
+      req.analyzerClient ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
     const query = matchedData<RandomSentenceParams>(req);
     const { analyzer, analyzerQuota, analyzerRequests } = req.app.locals;
     const sentences = await analyzerRequests.run(res, (signal) =>
       analyzerQuota.withAnalyzerQuota(
-        clientIP,
+        client,
         FIELDS.RANDOM_SENTENCE,
         RANDOM_SENTENCE_COST,
         () => generateRandomSentences(analyzer, query, signal),

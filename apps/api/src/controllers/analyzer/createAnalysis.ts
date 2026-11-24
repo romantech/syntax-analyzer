@@ -3,7 +3,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers';
 import type { AnalyzerDependencies } from '@/config/createServer';
 import { ANALYSIS_DECREMENT_COUNT, ERROR_MESSAGES } from '@/constants';
 import { handleValidationErrors } from '@/middlewares/handleValidationErrors';
-import { validateClientIP } from '@/middlewares/validateClientIP';
+import { identifyAnalyzerClient } from '@/middlewares/identifyAnalyzerClient';
 import {
   ANALYSIS_MODEL_OPTION,
   type AnalysisModel,
@@ -26,15 +26,16 @@ export const createAnalysis = [
   checkSentenceField,
   checkModelField,
   handleValidationErrors,
-  validateClientIP,
+  identifyAnalyzerClient,
   asyncHandler(async (req, res) => {
-    const clientIP = req.clientIP ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
+    const client =
+      req.analyzerClient ?? throwCustomError(IP_UNIDENTIFIABLE, 400);
     const { sentence, model }: RequestBody = req.body;
     const { analyzer, analyzerQuota, analyzerRequests } = req.app.locals;
 
     const analysis = await analyzerRequests.run(res, (signal) =>
       analyzerQuota.withAnalyzerQuota(
-        clientIP,
+        client,
         FIELDS.ANALYSIS,
         ANALYSIS_DECREMENT_COUNT[model],
         () =>
