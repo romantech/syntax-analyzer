@@ -2,6 +2,15 @@
 
 Below are the API specifications for the [Syntax Analyzer](https://github.com/romantech/syntax-analyzer) project, offering features such as syntax analysis and random sentence generation.
 
+### Check process health and Redis readiness
+
+| Endpoint | Response |
+| --- | --- |
+| `GET /health` | HTTP 200 while the API process is serving HTTP |
+| `GET /ready` | HTTP 200 with `{"status":"OK"}` when Redis answers `PING` within one second, or HTTP 503 with `{"status":"UNAVAILABLE"}` when Redis is disconnected, the command fails, or the deadline expires |
+
+Readiness responses are served with `Cache-Control: no-store`.
+
 ### Analyze Sentence Syntax
 
 This endpoint uses specified AI models to analyze the syntax of tokenized sentences, breaking them down into grammatical elements for detailed structural insights.
