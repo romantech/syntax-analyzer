@@ -14,7 +14,9 @@
 
 실제 API와 연동하려면 [서버 환경 변수 예제](../apps/api/.env.example)를 기준으로 `apps/api/.env`에 개발용 Redis와 OpenAI 설정을 입력한다. 루트에서 별도 터미널로 `pnpm dev:api`와 `pnpm dev`를 실행한 뒤 <http://localhost:5173/>을 연다.
 
-Vite 개발 서버는 `/api/`로 시작하는 요청에서 접두사를 제거하고 `http://localhost:3001`로 전달한다. 같은 네트워크의 모바일에서는 Vite가 출력한 `Network` 주소로 접속한다. 웹 `.env.local`에 개발 API 주소를 넣거나 Express의 `CORS_ORIGIN`에 모바일 접속 주소를 추가할 필요가 없다. 로컬 프록시를 거친 요청은 Express에 같은 IP로 들어오므로 PC와 모바일이 IP별 할당량을 공유한다.
+Vite 개발 서버는 `/api/`로 시작하는 요청에서 접두사를 제거하고 `http://localhost:3001`로 전달한다. 같은 네트워크의 모바일에서는 Vite가 출력한 `Network` 주소로 접속한다. 웹 `.env.local`에 개발 API 주소를 넣거나 Express의 `CORS_ORIGIN`에 모바일 접속 주소를 추가할 필요가 없다.
+
+로컬 API는 직접 연결과 Vite 프록시 연결에서 Express 소켓의 상대 주소를 IP별 할당량에 사용한다. 같은 Vite 서버를 거친 PC와 모바일은 Vite에서 API로 연결하는 주소를 공유한다. 로컬 API는 전달 헤더를 무시한다.
 
 다른 API 서버를 테스트하려면 `API_PROXY_TARGET=https://api.example.com pnpm dev`로 Vite를 실행한다. 기존 `.env.local`에 `VITE_API_BASE_URL_DEV`가 있으면 제거해도 된다.
 
@@ -76,6 +78,14 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 - 모노레포 전환 자체를 되돌려야 하면 Koyeb `Deployments`에서 `romantech/project-server`의 마지막 `Healthy` 배포 설정을 선택해 다시 배포한다. 이전 설정의 GitHub 소스와 빌드팩이 적용됐는지 확인한 뒤 기존 API 주소에서 동일한 검증을 반복한다. 모노레포 전환 이후 API 계약 변경에는 위 [롤백 순서](#롤백-순서)를 따른다.
 
 [Koyeb 모노레포 설정](https://www.koyeb.com/docs/build-and-deploy/monorepo)
+
+### IP별 할당량과 운영 도메인
+
+- Koyeb가 주입하는 `KOYEB_APP_ID`가 있으면 분석·문장 생성·잔여량 조회는 공용 HTTP 엣지가 추가한 `X-Forwarded-For`의 마지막 주소만 사용한다. 이 주소가 없거나 IP 형식이 아니면 HTTP 400을 반환한다. `KOYEB_APP_ID`는 로컬이나 다른 환경에 수동으로 설정하지 않는다. [엣지 헤더 정책](https://www.koyeb.com/docs/reference/edge-network#headers-that-koyeb-sets) · [Koyeb 기본 환경 변수](https://www.koyeb.com/docs/build-and-deploy/environment-variables)
+- API 도메인 앞에 별도 HTTP 프록시가 있으면 Koyeb에 연결한 프록시 주소로 할당량이 집계될 수 있다. 사용자 요청은 Koyeb 공용 HTTP 엣지로 직접 연결하고, Koyeb 내부 메시로 사용자 요청을 중계하지 않는다.
+- 이 정책을 처음 배포하기 전에 Cloudflare DNS에서 `koyeb-api.romantech.net`의 CNAME 대상이 Koyeb Domains에 표시된 값인지 확인하고 프록시 상태를 `DNS only`로 전환한다. DNS 전파 후 같은 운영 주소에서 TLS와 `/health` HTTP 200, 운영 웹의 잔여 횟수 조회를 확인한다. [Koyeb 도메인 연결](https://www.koyeb.com/docs/run-and-scale/domains) · [Cloudflare 프록시 상태](https://developers.cloudflare.com/dns/proxy-status/)
+- 코드 배포 후 서로 다른 공인 IP의 두 네트워크에서 운영 웹으로 접속해, 한쪽의 분석·문장 생성이 해당 IP의 잔여 횟수에 반영되는지 확인한다. 전체 한도가 충분한 상태에서 다른 쪽의 IP별 잔여 횟수도 확인한다. 기존 IP 키 형식을 유지하므로 주소가 같은 사용자는 당일 할당량을 이어서 사용한다.
+- 별도 HTTP 프록시를 복원해야 하면 API를 이전 정상 배포로 되돌린 뒤 프록시 상태를 복원한다.
 
 ### API 요청 로그
 
