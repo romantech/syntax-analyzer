@@ -10,6 +10,7 @@ const loggedPaths = new Set([
   '/analyzer/remaining-counts',
   '/favicon.ico',
   '/health',
+  '/ready',
   '/robots.txt',
 ]);
 

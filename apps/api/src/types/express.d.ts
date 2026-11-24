@@ -1,3 +1,4 @@
+import type Redis from 'ioredis';
 import type { AnalyzerRequests } from '@/services/analyzerRequests';
 
 declare global {
@@ -9,6 +10,7 @@ declare global {
     export interface Locals {
       analyzerRequests: AnalyzerRequests;
       errorType?: string;
+      redis?: Redis;
     }
   }
 }
