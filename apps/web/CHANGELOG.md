@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/romantech/syntax-analyzer/compare/v1.5.0...v1.6.0) (2026-11-24)
+
+
+### Features
+
+* streamline syntax analysis and tagging ([#244](https://github.com/romantech/syntax-analyzer/issues/244)) ([e4e25a9](https://github.com/romantech/syntax-analyzer/commit/e4e25a97209bfd65e4f66d7943fac5c33b60d559))
+
 ## [1.5.0](https://github.com/romantech/syntax-analyzer/compare/v1.4.4...v1.5.0) (2026-11-24)
 
 
