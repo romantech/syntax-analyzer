@@ -33,7 +33,7 @@ test('random sentence generation', async (context) => {
     redis: {
       hget: async () => template,
       eval: async (_script, keyCount, ...args) => {
-        assert.equal(keyCount, 3);
+        assert.equal(keyCount, 4);
         const [field, cost] = args.slice(-2);
         if (args.at(-1) === '__quota_period') return 1; // Refund.
         quotaCalls += 1;

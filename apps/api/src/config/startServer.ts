@@ -76,6 +76,9 @@ export const startServer = async (
   const app = createServer({
     corsOrigins: config.corsOrigins,
     isKoyeb: config.isKoyeb,
+    isProd: config.isProd,
+    analyzerCookieSecret: config.analyzerCookieSecret,
+    cloudflarePeers: config.cloudflarePeers,
     models: config.models,
     redis,
     createModel: createChatOpenAI(config.openAIKey),

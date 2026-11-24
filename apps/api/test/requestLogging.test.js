@@ -41,7 +41,7 @@ test('logs only allowed request metadata across successful and failed requests',
     redis: {
       hget: async () => 'Generate sentences about {topics}',
       eval: async (_script, keyCount) => {
-        if (keyCount === 2) throw new ReplyError(sensitive.redisError);
+        if (keyCount === 3) throw new ReplyError(sensitive.redisError);
         return quotaExhausted ? 0 : 1;
       },
     },

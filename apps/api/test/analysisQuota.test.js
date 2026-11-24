@@ -21,7 +21,7 @@ test('validates analysis requests before reserving quota', async (context) => {
       },
       eval: async (_script, keyCount, _totalKey, userKey, ...args) => {
         quotaCalls += 1;
-        assert.equal(keyCount, 3);
+        assert.equal(keyCount, 4);
         assert.equal(userKey, 'analyzer:remaining:user:127.0.0.1');
         const [field, cost] = args.slice(-2);
         if (balances.total < cost || balances.user < cost) return 0;

@@ -91,10 +91,17 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 ### IP별 할당량과 운영 도메인
 
 - Koyeb가 주입하는 `KOYEB_APP_ID`가 있으면 분석·문장 생성·잔여량 조회는 공용 HTTP 엣지가 추가한 `X-Forwarded-For`의 마지막 주소만 사용한다. 이 주소가 없거나 IP 형식이 아니면 HTTP 400을 반환한다. `KOYEB_APP_ID`는 로컬이나 다른 환경에 수동으로 설정하지 않는다. [엣지 헤더 정책](https://www.koyeb.com/docs/reference/edge-network#headers-that-koyeb-sets) · [Koyeb 기본 환경 변수](https://www.koyeb.com/docs/build-and-deploy/environment-variables)
-- API 도메인 앞에 별도 HTTP 프록시가 있으면 Koyeb에 연결한 프록시 주소로 할당량이 집계될 수 있다. 사용자 요청은 Koyeb 공용 HTTP 엣지로 직접 연결하고, Koyeb 내부 메시로 사용자 요청을 중계하지 않는다.
-- 이 정책을 처음 배포하기 전에 Cloudflare DNS에서 `koyeb-api.romantech.net`의 CNAME 대상이 Koyeb Domains에 표시된 값인지 확인하고 프록시 상태를 `DNS only`로 전환한다. DNS 전파 후 같은 운영 주소에서 TLS와 `/health` HTTP 200, 운영 웹의 잔여 횟수 조회를 확인한다. [Koyeb 도메인 연결](https://www.koyeb.com/docs/run-and-scale/domains) · [Cloudflare 프록시 상태](https://developers.cloudflare.com/dns/proxy-status/)
-- 코드 배포 후 서로 다른 공인 IP의 두 네트워크에서 운영 웹으로 접속해, 한쪽의 분석·문장 생성이 해당 IP의 잔여 횟수에 반영되는지 확인한다. 전체 한도가 충분한 상태에서 다른 쪽의 IP별 잔여 횟수도 확인한다. 기존 IP 키 형식을 유지하므로 주소가 같은 사용자는 당일 할당량을 이어서 사용한다.
-- 별도 HTTP 프록시를 복원해야 하면 API를 이전 정상 배포로 되돌린 뒤 프록시 상태를 복원한다.
+- `koyeb-api.romantech.net`을 Cloudflare `DNS only`로 운영할 때는 CNAME을 Koyeb Domains에 표시된 값으로 지정하고 `ANALYZER_CLOUDFLARE_CIDRS`를 비운다. 사용자 요청은 Koyeb 공용 HTTP 엣지로 전달한다. [Koyeb 도메인 연결](https://www.koyeb.com/docs/run-and-scale/domains) · [Cloudflare 프록시 상태](https://developers.cloudflare.com/dns/proxy-status/)
+- Cloudflare 프록시를 켤 때는 Koyeb의 `ANALYZER_CLOUDFLARE_CIDRS`에 Cloudflare가 공표한 IPv4·IPv6 CIDR을 쉼표로 구분해 설정하고 변경 시 갱신한다. Koyeb가 확인한 마지막 주소가 이 대역에 속한 경우에만 `CF-Connecting-IP`를 사용한다. 이 헤더가 없거나 유효한 IP가 아니면 HTTP 400을 반환한다. 방문자 IP 헤더를 제거하거나 `CF-Connecting-IP`를 덮어쓰는 Cloudflare 설정은 끈다. `/analyzer` 경로는 프록시에서 캐시하지 않는다. [Cloudflare IP 대역](https://www.cloudflare.com/ips/) · [Cloudflare 방문자 IP 헤더](https://developers.cloudflare.com/fundamentals/reference/http-headers/#cf-connecting-ip)
+
+### 브라우저별 할당량
+
+- 세 분석 API에 `X-Analyzer-Browser: 1`을 보내면 API가 서명된 익명 쿠키를 발급하거나 기존 쿠키를 검증한다. 키는 브라우저에 30일간 남으며 같은 브라우저에서 네트워크가 바뀌어도 이어진다. 운영 쿠키는 HTTPS에서 `Secure`, `HttpOnly`, `SameSite=Lax`로 발급한다.
+- 분석·문장 생성의 기본 한도와 IP별 상한은 각각 10·20회다. 같은 IP를 쓰는 브라우저는 이 IP 상한을 공유한다. 서비스 전체 한도는 50·100회다. 브라우저·IP는 24시간 단위로 집계하고 전체 한도는 한국 시간 자정에 갱신한다. 잔여량은 세 값 중 가장 작은 값이다. 모델 처리 실패 시 확보한 할당량을 세 한도에 원복한다.
+- 헤더가 없는 구버전 호출과 서명 시크릿이 비어 있는 환경은 기존 IP 기반 기본 한도와 응답 형식을 사용한다. IP별 상한은 구버전 요청과 새 요청이 공유하며 새 API를 배포한 시점부터 집계한다.
+- API 선배포 시 Koyeb에 `ANALYZER_COOKIE_SECRET`을 설정한다. 32바이트 이상의 무작위 값을 만들어 여러 인스턴스와 재배포에서 같은 값을 사용한다. 값이 바뀌면 기존 쿠키가 무효화된다. 로컬에서도 브라우저 할당량을 확인하려면 `apps/api/.env`에 개발용 시크릿을 설정한다.
+- 운영 웹과 API는 같은 사이트의 HTTPS 주소를 사용한다. `CORS_ORIGIN`에 실제 웹 오리진을 지정하고, 같은 사이트의 웹 주소에서 API 주소로 쿠키가 전송되는 것을 확인한 뒤 웹을 전환한다. [자격 증명을 포함하는 교차 오리진 요청](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS#requests_with_credentials)
+- 배포 후 같은 네트워크의 별도 브라우저 두 개에서 IP 잔여량을 공유하는지 확인한다. 한 브라우저에서 사용한 뒤 다른 네트워크로 바꾸고, 전체 및 IP 상한에 여유가 있을 때 잔여량이 이어지는지 확인한다.
 
 ### API 요청 로그
 

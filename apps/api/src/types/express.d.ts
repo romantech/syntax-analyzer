@@ -1,11 +1,15 @@
+import type { BlockList } from 'node:net';
 import type { AnalyzerDependencies } from '@/config/createServer';
 import type { AnalyzerRequests } from '@/services/analyzerRequests';
-import type { createAnalyzerQuota } from '@/services/redis/analyzerQuota';
+import type {
+  AnalyzerClient,
+  createAnalyzerQuota,
+} from '@/services/redis/analyzerQuota';
 
 declare global {
   namespace Express {
     export interface Request {
-      clientIP?: string;
+      analyzerClient?: AnalyzerClient;
     }
 
     export interface Locals {
@@ -13,6 +17,8 @@ declare global {
       analyzer: AnalyzerDependencies;
       analyzerQuota: ReturnType<typeof createAnalyzerQuota>;
       isKoyeb: boolean;
+      cloudflarePeers?: BlockList;
+      analyzerCookie?: { secure: boolean };
       errorType?: string;
     }
   }
