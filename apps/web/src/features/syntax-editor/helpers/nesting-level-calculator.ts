@@ -8,7 +8,7 @@ import {
 } from '@/features/syntax-editor';
 
 const assignCalculatedLevel = (element: HTMLElement) => {
-  if (element.classList.contains('constituent-label')) return 0;
+  if (element.classList.contains('constituent-labels')) return 0;
   let maxChildLevel = 0;
 
   for (const child of element.children) {
@@ -46,7 +46,7 @@ export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapM
   const labelBottom = Math.max(
     bottom,
     ...Array.from(
-      sentence.querySelectorAll('.constituent-label'),
+      sentence.querySelectorAll('.constituent-labels'),
       (label) => label.getBoundingClientRect().bottom,
     ),
   );

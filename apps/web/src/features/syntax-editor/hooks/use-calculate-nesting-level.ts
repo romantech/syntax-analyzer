@@ -1,28 +1,22 @@
-import { type RefObject, useEffect, useState } from 'react';
+import { type RefObject, useLayoutEffect } from 'react';
 
 import { calculateNestingLevel, type TSegment } from '@/features/syntax-editor';
 
 interface UseCalculateNestedLevelProps {
   targetRef: RefObject<HTMLElement | null>;
-  segment: TSegment | null;
-  isPending?: boolean;
-  isTapMode?: boolean;
+  segment: TSegment;
+  isTapMode: boolean;
+  overviewDetails: ReadonlySet<number> | undefined;
 }
 
 export const useCalculateNestingLevel = ({
   targetRef,
   segment,
-  isPending = false,
-  isTapMode = false,
+  isTapMode,
+  overviewDetails,
 }: UseCalculateNestedLevelProps) => {
-  const [isNestingLevelCalculated, setNestingLevelCalculated] = useState(false);
-
-  useEffect(() => {
-    if (isPending || !segment || !targetRef.current) return;
-
+  // biome-ignore lint/correctness/useExhaustiveDependencies: segment and overviewDetails change the rendered tags.
+  useLayoutEffect(() => {
     calculateNestingLevel(targetRef, isTapMode);
-    setNestingLevelCalculated(true);
-  }, [isPending, segment, targetRef, isTapMode]);
-
-  return isNestingLevelCalculated;
+  }, [segment, overviewDetails, targetRef, isTapMode]);
 };

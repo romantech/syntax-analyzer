@@ -18,37 +18,52 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   --constituent-label-size: 2rem;
   position: relative;
 
-  // 문장 성분 라벨
-  > .constituent-label {
+  > .constituent-labels {
     position: absolute;
     z-index: 2;
-    min-width: var(--constituent-label-size);
-    min-height: var(--constituent-label-size);
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-    user-select: none;
-    width: fit-content;
+    display: inline-flex;
+    align-items: center;
     left: 50%;
-    padding: 0;
     transform: translateX(-50%);
     border-radius: 0.5rem;
-
-    font-size: 1rem;
-    font-style: italic;
-    font-weight: 500;
-
-    text-overflow: ellipsis;
-    overflow: hidden;
+    background-color: var(--chakra-colors-bg-muted);
     white-space: nowrap;
+    user-select: none;
+  }
+}
 
-    > span {
-      display: inline-block;
-      // 이탤릭 글자가 오른쪽 아래로 치우쳐 보이는 정도를 보정한다.
-      padding-block: 0.1rem 0.2rem;
-      padding-inline: 0.3rem 0.5rem;
-      border-radius: 0.3rem;
-    }
+.constituent-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  min-width: var(--constituent-label-size);
+  min-height: var(--constituent-label-size);
+  padding-inline: 0.375rem;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 500;
+
+  &[data-overview-label] {
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  > svg {
+    flex: none;
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}
+
+button.constituent-label {
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
   }
 }
 
@@ -63,7 +78,7 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
     padding: 0 var(--constituent-inline-padding, #{$constituent-margin}) $offset;
 
     // 문장 성분 라벨
-    > .constituent-label {
+    > .constituent-labels {
       top: $line-center;
       transform: translate(-50%, calc(-50% + 1px));
     }
@@ -90,21 +105,9 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
   .constituent.token[data-token-lv="#{$i}"] {
     // 문장 성분 라벨
-    > .constituent-label {
+    > .constituent-labels {
       top: calc(#{$token-top} + #{$offset});
     }
-  }
-}
-
-html.light {
-  .constituent > .constituent-label > span {
-    background-color: var(--chakra-colors-gray-100);
-  }
-}
-
-html.dark {
-  .constituent > .constituent-label > span {
-    background-color: var(--chakra-colors-gray-900);
   }
 }
 

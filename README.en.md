@@ -110,6 +110,8 @@ The diagram below shows how the segments for `Global warming is a significant is
 
 # Tagging Rules
 
+AI analyses initially show the main parts of the sentence, such as the subject, verb, object, and complement. Select a tag to see its details, or choose **Show all tags**. All tags are visible while adding or deleting a tag.
+
 On mobile, tap **Choose a tag** in the bottom toolbar. Tap the first word, then tap **Apply** to tag just that word. To tag a range, tap the first and last words before applying the tag. Tap **Clear selection** to clear the range. For long sentences, swipe horizontally on the sentence or the blank space below the tags. When the stack of tags is taller than the screen, swipe vertically in the same area. When the content overflows, the vertical scrollbar appears to the right of the tag area and the horizontal scrollbar appears below it. In delete mode, tap the abbreviation of the tag you want to remove.
 
 Your tags are saved to the sentence you started editing even if another tab changes the order of the list. If that sentence was deleted, the editor tells you that it cannot save your changes.

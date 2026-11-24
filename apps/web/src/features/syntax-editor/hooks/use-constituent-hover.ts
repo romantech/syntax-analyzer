@@ -2,9 +2,8 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
 import type { SyntheticEvent } from 'react';
 
-import { getNearestElementByClass } from '@/base';
 import {
-  CONSTITUENT_CLASSES,
+  CONSTITUENT_DATA_ATTRS,
   hoveredConstituentAtom,
   isAbbrTooltipVisibleAtom,
 } from '@/features/syntax-editor';
@@ -16,10 +15,8 @@ export const useConstituentHover = () => {
   const onMouseOver = ({ target }: SyntheticEvent) => {
     if (!isAbbrTooltipVisible) return;
 
-    const element = getNearestElementByClass(
-      target as HTMLElement,
-      CONSTITUENT_CLASSES.CONSTITUENT,
-    );
+    const element =
+      target instanceof Element && target.closest<HTMLElement>(`[${CONSTITUENT_DATA_ATTRS.ID}]`);
 
     if (element) {
       const constituentId = Number(element.dataset.constituentId);
