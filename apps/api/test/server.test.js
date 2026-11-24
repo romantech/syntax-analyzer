@@ -75,12 +75,23 @@ test('validates ports and model settings for the selected environment', () => {
     ['MODEL_PRIMARY', 'bad model name'],
     ['MODEL_FAST_FT', ''],
     ['MODEL_PRIMARY_FT', ''],
+    ['ANALYZER_COOKIE_SECRET', 'short'],
+    ['ANALYZER_CLOUDFLARE_CIDRS', '0.0.0.0/0'],
+    ['ANALYZER_CLOUDFLARE_CIDRS', '2001:db8::/129'],
   ]) {
     assert.throws(
       () => loadEnvironment({ ...prod, PORT: '8000', [name]: value }),
       { message: `Missing or invalid environment variables: ${name}` },
     );
   }
+
+  const { cloudflarePeers } = loadEnvironment({
+    ...testEnv,
+    ANALYZER_CLOUDFLARE_CIDRS: '192.0.2.0/24, 2001:db8::/32',
+  });
+  assert.equal(cloudflarePeers.check('192.0.2.1'), true);
+  assert.equal(cloudflarePeers.check('2001:db8::1', 'ipv6'), true);
+  assert.equal(cloudflarePeers.check('203.0.113.1'), false);
 });
 
 test('rejects invalid configuration before connecting to Redis', async (context) => {

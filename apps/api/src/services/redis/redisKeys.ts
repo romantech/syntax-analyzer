@@ -13,6 +13,8 @@ const ANALYZER_KEYS = {
     USER: (ip: string) => {
       return `${Namespace.ANALYZER}:remaining:user:${ip}` as const;
     },
+    BROWSER: (id: string) => `${Namespace.ANALYZER}:remaining:browser:${id}`,
+    IP: (ip: string) => `${Namespace.ANALYZER}:remaining:ip:${ip}`,
     RESERVATION: (id: string) => {
       return `${Namespace.ANALYZER}:remaining:reservation:${id}` as const;
     },

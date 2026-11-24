@@ -1,6 +1,7 @@
 require('module-alias/register');
 
 const assert = require('node:assert/strict');
+const { BlockList } = require('node:net');
 const { test } = require('node:test');
 const { startApp } = require('../test-support/app');
 const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
@@ -10,6 +11,9 @@ const analysis = { id: 'analysis-result' };
 const sentences = ['I walk.'];
 const counts = { analysis: 4, random_sentence: 3 };
 const quotaKeys = [];
+const cloudflarePeers = new BlockList();
+cloudflarePeers.addSubnet('198.51.100.0', 24, 'ipv4');
+cloudflarePeers.addSubnet('2001:db8:1::', 48, 'ipv6');
 
 test('analyzer endpoints use the same quota IP policy', async (context) => {
   const requests = [
@@ -43,6 +47,44 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
       forwardedFor: '2001:db8::1',
       ip: '2001:db8::1',
     },
+    {
+      name: 'Koyeb edge after a trusted Cloudflare hop',
+      isKoyeb: true,
+      forwardedFor: '192.0.2.10, 198.51.100.8',
+      cloudflarePeers,
+      visitorIP: '203.0.113.4',
+      ip: '203.0.113.4',
+    },
+    {
+      name: 'Koyeb edge after an IPv6 Cloudflare hop',
+      isKoyeb: true,
+      forwardedFor: '2001:db8:1::2',
+      cloudflarePeers,
+      visitorIP: '2001:db8:2::8',
+      ip: '2001:db8:2::8',
+    },
+    {
+      name: 'Koyeb edge ignores a Cloudflare header from an untrusted peer',
+      isKoyeb: true,
+      forwardedFor: '198.51.100.8, 192.0.2.10',
+      cloudflarePeers,
+      visitorIP: '203.0.113.4',
+      ip: '192.0.2.10',
+    },
+    {
+      name: 'Koyeb edge rejects a missing Cloudflare visitor address',
+      isKoyeb: true,
+      forwardedFor: '198.51.100.8',
+      cloudflarePeers,
+      visitorIP: '',
+    },
+    {
+      name: 'Koyeb edge rejects an invalid Cloudflare visitor address',
+      isKoyeb: true,
+      forwardedFor: '198.51.100.8',
+      cloudflarePeers,
+      visitorIP: '203.0.113.4, 203.0.113.5',
+    },
     { name: 'missing Koyeb edge address', isKoyeb: true },
     {
       name: 'invalid Koyeb edge address',
@@ -51,17 +93,28 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
     },
   ];
 
-  for (const { name, isKoyeb, forwardedFor, ip } of cases) {
+  for (const {
+    name,
+    isKoyeb,
+    forwardedFor,
+    ip,
+    cloudflarePeers,
+    visitorIP = '203.0.113.4',
+  } of cases) {
     await context.test(name, async (testContext) => {
       quotaKeys.length = 0;
       const baseURL = await startApp(testContext, {
         isKoyeb,
+        cloudflarePeers,
         redis: {
           hget: async () => 'Follow the instruction.',
-          eval: async (_script, keyCount, _totalKey, userKey) => {
+          eval: async (_script, keyCount, _totalKey, userKey, ipKey) => {
+            assert.equal(ipKey, KEYS.REMAINING.IP(ip));
             quotaKeys.push(userKey);
-            return keyCount === 2
+            return keyCount === 3
               ? [
+                  counts.analysis,
+                  counts.random_sentence,
                   counts.analysis,
                   counts.random_sentence,
                   counts.analysis,
@@ -83,7 +136,7 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
         if (body) headers.set('Content-Type', 'application/json');
         if (forwardedFor) {
           headers.set('X-Forwarded-For', forwardedFor);
-          headers.set('CF-Connecting-IP', '203.0.113.4');
+          if (visitorIP) headers.set('CF-Connecting-IP', visitorIP);
         }
         const response = await fetch(`${baseURL}/analyzer${path}`, {
           method,

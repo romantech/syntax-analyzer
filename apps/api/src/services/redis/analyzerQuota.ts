@@ -12,19 +12,32 @@ const PERIOD_FIELD = '__quota_period';
 const QUOTA_ARGS = [
   PERIOD_FIELD,
   FIELDS.ANALYSIS,
-  ANALYSIS.TOTAL,
-  ANALYSIS.PER_USER,
   FIELDS.RANDOM_SENTENCE,
+  ANALYSIS.TOTAL,
   RANDOM_SENTENCE.TOTAL,
+  ANALYSIS.PER_USER,
   RANDOM_SENTENCE.PER_USER,
+  ANALYSIS.PER_IP,
+  RANDOM_SENTENCE.PER_IP,
   ANALYZER_KEY_EXP,
 ] as const;
 
+export interface AnalyzerClient {
+  ip: string;
+  browserId?: string;
+}
+
+const quotaKeys = ({ ip, browserId }: AnalyzerClient) => [
+  REMAINING.TOTAL,
+  browserId ? REMAINING.BROWSER(browserId) : REMAINING.USER(ip),
+  REMAINING.IP(ip),
+];
+
 const QUOTA_SETUP = `
-local total_key, user_key, reservation_key = unpack(KEYS)
-local period_field, analysis_field, analysis_limit, user_analysis_limit,
-  sentence_field, sentence_limit, user_sentence_limit, ttl, new_user_period,
-  field, cost = unpack(ARGV)
+local total_key, user_key, ip_key = unpack(KEYS)
+local period_field, analysis_field, sentence_field, analysis_limit, sentence_limit,
+  user_analysis_limit, user_sentence_limit, ip_analysis_limit, ip_sentence_limit,
+  ttl, new_period = unpack(ARGV)
 
 local function ensure_total_quota()
   local seconds_per_day = 86400
@@ -41,47 +54,67 @@ local function ensure_total_quota()
   return period
 end
 
-local function ensure_user_quota()
-  local period = redis.call('HGET', user_key, period_field)
+local function ensure_quota(key, analysis, sentences)
+  local period = redis.call('HGET', key, period_field)
   if period then
     return period
   end
 
-  if redis.call('EXISTS', user_key) == 0 then
-    redis.call('HSET', user_key, period_field, new_user_period,
-      analysis_field, user_analysis_limit, sentence_field, user_sentence_limit)
-    redis.call('EXPIRE', user_key, ttl)
+  if redis.call('EXISTS', key) == 0 then
+    redis.call('HSET', key, period_field, new_period,
+      analysis_field, analysis, sentence_field, sentences)
+    redis.call('EXPIRE', key, ttl)
   else
     -- Keys created by the old lookup may have balances and an expiry but no period.
-    redis.call('HSET', user_key, period_field, new_user_period)
+    redis.call('HSET', key, period_field, new_period)
   end
-  return new_user_period
+  return new_period
+end
+
+local function read_quota(key, analysis, sentences)
+  if redis.call('EXISTS', key) == 0 then
+    return {analysis, sentences}
+  end
+  return redis.call('HMGET', key, analysis_field, sentence_field)
 end
 `;
 
 const RESERVE_QUOTA = `${QUOTA_SETUP}
-cost = tonumber(cost)
+local reservation_key = KEYS[4]
+local field = ARGV[12]
+local cost = tonumber(ARGV[13])
 local total_period = ensure_total_quota()
 
 if redis.call('EXISTS', reservation_key) == 1 then
   return 1
 end
 
-local user_period = ensure_user_quota()
 local total = tonumber(redis.call('HGET', total_key, field))
+if not total or total < cost then
+  return 0
+end
+
+local ip_period = ensure_quota(ip_key, ip_analysis_limit, ip_sentence_limit)
+local ip = tonumber(redis.call('HGET', ip_key, field))
+if not ip or ip < cost then
+  return 0
+end
+
+local user_period = ensure_quota(user_key, user_analysis_limit, user_sentence_limit)
 local user = tonumber(redis.call('HGET', user_key, field))
-if not total or not user or total < cost or user < cost then
+if not user or user < cost then
   return 0
 end
 
 redis.call('HSET', total_key, field, total - cost)
 redis.call('HSET', user_key, field, user - cost)
-redis.call('SET', reservation_key, cjson.encode({total_period, user_period}), 'EX', ttl)
+redis.call('HSET', ip_key, field, ip - cost)
+redis.call('SET', reservation_key, cjson.encode({total_period, user_period, ip_period}), 'EX', ttl)
 return 1
 `;
 
 const REFUND_QUOTA = `
-local total_key, user_key, reservation_key = unpack(KEYS)
+local reservation_key = KEYS[4]
 local field, cost, period_field = unpack(ARGV)
 local reservation = redis.call('GET', reservation_key)
 if not reservation then
@@ -89,13 +122,12 @@ if not reservation then
 end
 
 local periods = cjson.decode(reservation)
-local total = redis.call('HMGET', total_key, period_field, field)
-local user = redis.call('HMGET', user_key, period_field, field)
-if total[1] == periods[1] and tonumber(total[2]) then
-  redis.call('HSET', total_key, field, tonumber(total[2]) + tonumber(cost))
-end
-if user[1] == periods[2] and tonumber(user[2]) then
-  redis.call('HSET', user_key, field, tonumber(user[2]) + tonumber(cost))
+for index = 1, 3 do
+  local key = KEYS[index]
+  local quota = redis.call('HMGET', key, period_field, field)
+  if quota[1] == periods[index] and tonumber(quota[2]) then
+    redis.call('HSET', key, field, tonumber(quota[2]) + tonumber(cost))
+  end
 end
 return redis.call('DEL', reservation_key)
 `;
@@ -104,12 +136,13 @@ const READ_QUOTA = `${QUOTA_SETUP}
 ensure_total_quota()
 local total = redis.call('HMGET', total_key, analysis_field, sentence_field)
 
-if total[1] and total[2] then
-  ensure_user_quota()
+if ARGV[12] == 'legacy' and total[1] and total[2] then
+  ensure_quota(user_key, user_analysis_limit, user_sentence_limit)
 end
 
-local user = redis.call('HMGET', user_key, analysis_field, sentence_field)
-return {total[1], total[2], user[1], user[2]}
+local user = read_quota(user_key, user_analysis_limit, user_sentence_limit)
+local ip = read_quota(ip_key, ip_analysis_limit, ip_sentence_limit)
+return {total[1], total[2], user[1], user[2], ip[1], ip[2]}
 `;
 
 const runWithCancellation = async <Result>(
@@ -137,7 +170,7 @@ const runWithCancellation = async <Result>(
 
 export const createAnalyzerQuota = (redis: Pick<Redis, 'eval'>) => {
   const withAnalyzerQuota = async <Result>(
-    clientIP: string,
+    client: AnalyzerClient,
     field: (typeof FIELDS)[keyof typeof FIELDS],
     cost: number,
     run: () => Promise<Result>,
@@ -145,11 +178,7 @@ export const createAnalyzerQuota = (redis: Pick<Redis, 'eval'>) => {
   ): Promise<Result> => {
     signal?.throwIfAborted();
     const id = randomUUID();
-    const keys = [
-      REMAINING.TOTAL,
-      REMAINING.USER(clientIP),
-      REMAINING.RESERVATION(id),
-    ];
+    const keys = [...quotaKeys(client), REMAINING.RESERVATION(id)];
 
     try {
       // Keep the reservation until it expires so a replay cannot debit twice.
@@ -187,16 +216,23 @@ export const createAnalyzerQuota = (redis: Pick<Redis, 'eval'>) => {
     return throwCustomError('No remaining request count available.', 400);
   };
 
-  const getAnalyzerRemainingCounts = async (clientIP: string) => {
-    const [totalAnalysis, totalSentences, userAnalysis, userSentences] =
-      (await redis.eval(
-        READ_QUOTA,
-        2,
-        REMAINING.TOTAL,
-        REMAINING.USER(clientIP),
-        ...QUOTA_ARGS,
-        randomUUID(),
-      )) as (string | null)[];
+  const getAnalyzerRemainingCounts = async (client: AnalyzerClient) => {
+    const keys = quotaKeys(client);
+    const [
+      totalAnalysis,
+      totalSentences,
+      userAnalysis,
+      userSentences,
+      ipAnalysis,
+      ipSentences,
+    ] = (await redis.eval(
+      READ_QUOTA,
+      keys.length,
+      ...keys,
+      ...QUOTA_ARGS,
+      randomUUID(),
+      client.browserId ? 'browser' : 'legacy',
+    )) as (string | null)[];
 
     const missingFields = [
       totalAnalysis === null && FIELDS.ANALYSIS,
@@ -209,8 +245,16 @@ export const createAnalyzerQuota = (redis: Pick<Redis, 'eval'>) => {
     }
 
     return {
-      analysis: Math.min(Number(totalAnalysis), Number(userAnalysis)),
-      random_sentence: Math.min(Number(totalSentences), Number(userSentences)),
+      analysis: Math.min(
+        Number(totalAnalysis),
+        Number(userAnalysis),
+        Number(ipAnalysis),
+      ),
+      random_sentence: Math.min(
+        Number(totalSentences),
+        Number(userSentences),
+        Number(ipSentences),
+      ),
     };
   };
 

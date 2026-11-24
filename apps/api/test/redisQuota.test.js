@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const { randomUUID } = require('node:crypto');
 const { test } = require('node:test');
 const Redis = require('ioredis');
+const { startApp } = require('../test-support/app');
 const { createAnalyzerQuota } = require('../dist/services/redis/analyzerQuota');
 const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
 
@@ -14,6 +15,8 @@ const beforeMidnight = Date.parse('2026-11-22T14:59:59Z');
 const midnight = Date.parse('2026-11-22T15:00:00Z');
 const firstIP = '192.0.2.1';
 const secondIP = '192.0.2.2';
+const firstClient = { ip: firstIP };
+const secondClient = { ip: secondIP };
 const redisPort = process.env.REDIS_TEST_PORT;
 
 test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
@@ -56,11 +59,130 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
     message: 'No remaining request count available.',
   };
 
+  await context.test(
+    'shares counters across analyzer routes using a signed cookie',
+    async (testContext) => {
+      await clearKeys();
+      const origin = 'https://syntax-analyzer.example.com';
+      let failModel = false;
+      const baseURL = await startApp(testContext, {
+        corsOrigins: [origin],
+        isKoyeb: true,
+        isProd: true,
+        analyzerCookieSecret: 'integration-test-cookie-signing-secret',
+        redis,
+        createModel: () => ({
+          pipe: () => ({
+            invoke: async () => JSON.stringify({ id: 'analysis' }),
+          }),
+          withStructuredOutput: () => ({
+            invoke: async () => ({ sentences: failModel ? [] : ['I walk.'] }),
+          }),
+        }),
+      });
+      await redis.hset(KEYS.PROMPT, FIELDS.ANALYSIS, 'Analyze the sentence.');
+      await redis.hset(
+        KEYS.PROMPT,
+        FIELDS.RANDOM_SENTENCE,
+        'Generate sentences.',
+      );
+
+      const request = (
+        path,
+        { cookie, ip = firstIP, legacy = false, body } = {},
+      ) =>
+        fetch(`${baseURL}/analyzer${path}`, {
+          method: body ? 'POST' : 'GET',
+          headers: {
+            Origin: origin,
+            'X-Forwarded-For': ip,
+            ...(legacy ? {} : { 'X-Analyzer-Browser': '1' }),
+            ...(cookie ? { Cookie: cookie } : {}),
+            ...(body ? { 'Content-Type': 'application/json' } : {}),
+          },
+          body: body && JSON.stringify(body),
+        });
+      const remaining = '/remaining-counts';
+      const randomSentences = '/random-sentences?sent_count=1';
+      const preflight = await fetch(`${baseURL}/analyzer`, {
+        method: 'OPTIONS',
+        headers: {
+          Origin: origin,
+          'Access-Control-Request-Method': 'POST',
+          'Access-Control-Request-Headers': 'content-type,x-analyzer-browser',
+        },
+      });
+      assert.equal(preflight.status, 200);
+      assert.match(
+        preflight.headers.get('access-control-allow-headers'),
+        /x-analyzer-browser/i,
+      );
+
+      const first = await request(remaining);
+      assert.equal(first.headers.get('access-control-allow-origin'), origin);
+      assert.equal(
+        first.headers.get('access-control-allow-credentials'),
+        'true',
+      );
+      assert.equal(first.headers.get('cache-control'), 'private, no-store');
+      const setCookie = first.headers.get('set-cookie');
+      assert.match(setCookie, /^__Host-analyzer_browser=/);
+      assert.match(setCookie, /; Path=\/;.*; HttpOnly; Secure; SameSite=Lax$/);
+      const cookie = setCookie.split(';')[0];
+      const initialCounts = { analysis: 10, random_sentence: 20 };
+      assert.deepEqual(await first.json(), initialCounts);
+
+      const analysis = await request('', {
+        cookie,
+        body: { model: 'primary', sentence: ['I', 'walk.'] },
+      });
+      assert.equal(analysis.status, 200);
+      assert.equal(analysis.headers.has('set-cookie'), false);
+      assert.deepEqual(await analysis.json(), { id: 'analysis' });
+
+      const sentences = await request(randomSentences, { cookie });
+      assert.equal(sentences.status, 200);
+      assert.deepEqual(await sentences.json(), ['I walk.']);
+      failModel = true;
+      const failure = await request(randomSentences, { cookie });
+      assert.equal(failure.status, 502);
+      await failure.json();
+      assert.deepEqual(
+        await redis.hmget(
+          REMAINING.IP(firstIP),
+          FIELDS.ANALYSIS,
+          FIELDS.RANDOM_SENTENCE,
+        ),
+        ['28', '59'],
+      );
+
+      const moved = await request(remaining, { cookie, ip: secondIP });
+      assert.deepEqual(await moved.json(), {
+        analysis: 8,
+        random_sentence: 19,
+      });
+
+      const tamperedCookie = `${cookie.slice(0, -1)}${cookie.endsWith('a') ? 'b' : 'a'}`;
+      const second = await request(remaining, { cookie: tamperedCookie });
+      assert.notEqual(second.headers.get('set-cookie')?.split(';')[0], cookie);
+      assert.match(
+        second.headers.get('set-cookie'),
+        /^__Host-analyzer_browser=/,
+      );
+      assert.deepEqual(await second.json(), initialCounts);
+
+      const legacy = await request(remaining, { cookie, legacy: true });
+      assert.equal(legacy.headers.has('set-cookie'), false);
+      assert.deepEqual(await legacy.json(), initialCounts);
+      await clearKeys();
+    },
+  );
+
   const seed = async (field, total, user) => {
     now = beforeMidnight;
     await clearKeys();
-    await getAnalyzerRemainingCounts(firstIP);
-    await getAnalyzerRemainingCounts(secondIP);
+    await getAnalyzerRemainingCounts(firstClient);
+    await getAnalyzerRemainingCounts(secondClient);
     await redis.hset(REMAINING.TOTAL, field, total);
     await redis.hset(REMAINING.USER(firstIP), field, user);
   };
@@ -69,7 +191,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
     'initializes a missing shared quota using Redis time',
     async () => {
       const [secondsBefore] = await redis.time();
-      assert.deepEqual(await getAnalyzerRemainingCounts(firstIP), {
+      assert.deepEqual(await getAnalyzerRemainingCounts(firstClient), {
         analysis: 10,
         random_sentence: 20,
       });
@@ -81,18 +203,60 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
     },
   );
 
+  for (const [name, sameIP] of [
+    ['IP', true],
+    ['service', false],
+  ]) {
+    await context.test(
+      `concurrent new browsers cannot exceed the ${name} cap`,
+      async () => {
+        now = beforeMidnight;
+        await clearKeys();
+        const field = FIELDS.ANALYSIS;
+        const requests = Array.from({ length: 26 }, (_, index) => ({
+          ip: sameIP ? firstIP : `192.0.2.${index + 1}`,
+          browserId: randomUUID(),
+        }));
+        const results = await Promise.allSettled(
+          requests.map((client) =>
+            withAnalyzerQuota(client, field, 2, async () => {}),
+          ),
+        );
+        assert.equal(
+          results.filter(({ status }) => status === 'fulfilled').length,
+          sameIP ? 15 : 25,
+        );
+        for (const result of results.filter(
+          ({ status }) => status === 'rejected',
+        )) {
+          assert.equal(result.reason.message, exhausted.message);
+        }
+        const freshBrowser = { ip: firstIP, browserId: randomUUID() };
+        assert.equal(
+          (await getAnalyzerRemainingCounts(freshBrowser))[field],
+          0,
+        );
+        assert.equal((await getAnalyzerRemainingCounts(firstClient))[field], 0);
+        await assert.rejects(
+          withAnalyzerQuota(freshBrowser, field, 2, async () => {}),
+          exhausted,
+        );
+      },
+    );
+  }
+
   await context.test(
     'the first read after midnight resets both shared balances',
     async () => {
       await seed(FIELDS.ANALYSIS, 0, 2);
       await redis.hset(REMAINING.TOTAL, FIELDS.RANDOM_SENTENCE, 0);
-      assert.deepEqual(await getAnalyzerRemainingCounts(firstIP), {
+      assert.deepEqual(await getAnalyzerRemainingCounts(firstClient), {
         analysis: 0,
         random_sentence: 0,
       });
 
       now = midnight;
-      assert.deepEqual(await getAnalyzerRemainingCounts(firstIP), {
+      assert.deepEqual(await getAnalyzerRemainingCounts(firstClient), {
         analysis: 2,
         random_sentence: 20,
       });
@@ -116,9 +280,14 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
 
       now = midnight;
       await Promise.all([
-        withAnalyzerQuota(firstIP, FIELDS.ANALYSIS, 2, async () => {}),
-        getAnalyzerRemainingCounts(firstIP),
-        withAnalyzerQuota(secondIP, FIELDS.RANDOM_SENTENCE, 1, async () => {}),
+        withAnalyzerQuota(firstClient, FIELDS.ANALYSIS, 2, async () => {}),
+        getAnalyzerRemainingCounts(firstClient),
+        withAnalyzerQuota(
+          secondClient,
+          FIELDS.RANDOM_SENTENCE,
+          1,
+          async () => {},
+        ),
       ]);
       assert.deepEqual(
         await redis.hmget(
@@ -132,9 +301,9 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
 
       const restartedQuota = createAnalyzerQuota(quotaRedis);
       now += 3600000;
-      await restartedQuota.getAnalyzerRemainingCounts(secondIP);
+      await restartedQuota.getAnalyzerRemainingCounts(secondClient);
       await restartedQuota.withAnalyzerQuota(
-        secondIP,
+        secondClient,
         FIELDS.ANALYSIS,
         2,
         async () => {},
@@ -154,8 +323,8 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
   await context.test('initializes an old undated quota only once', async () => {
     await seed(FIELDS.ANALYSIS, 0, 2);
     await redis.hset(REMAINING.TOTAL, periodField, randomUUID());
-    await withAnalyzerQuota(firstIP, FIELDS.ANALYSIS, 2, async () => {});
-    await getAnalyzerRemainingCounts(firstIP);
+    await withAnalyzerQuota(firstClient, FIELDS.ANALYSIS, 2, async () => {});
+    await getAnalyzerRemainingCounts(firstClient);
     assert.equal(await redis.hget(REMAINING.TOTAL, FIELDS.ANALYSIS), '48');
   });
 
@@ -168,7 +337,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       await redis.hdel(userKey, periodField);
       const expiresAt = await redis.pexpiretime(userKey);
 
-      await withAnalyzerQuota(firstIP, field, 2, async () => {});
+      await withAnalyzerQuota(firstClient, field, 2, async () => {});
       assert.equal(await redis.hget(userKey, field), '2');
       assert.equal(await redis.pexpiretime(userKey), expiresAt);
     },
@@ -188,7 +357,12 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
           if (stage === 'expired') await redis.pexpireat(userKey, 1);
           assert.equal(await redis.exists(userKey), 0);
           assert.equal(
-            await withAnalyzerQuota(firstIP, field, cost, async () => 'done'),
+            await withAnalyzerQuota(
+              firstClient,
+              field,
+              cost,
+              async () => 'done',
+            ),
             'done',
           );
           assert.equal(
@@ -210,7 +384,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
           const started = Promise.withResolvers();
           const finish = Promise.withResolvers();
           const firstRequest = withAnalyzerQuota(
-            firstIP,
+            firstClient,
             field,
             cost,
             async () => {
@@ -224,7 +398,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
             await Promise.race([started.promise, firstRequest]);
             await assert.rejects(
               withAnalyzerQuota(
-                sameUser ? firstIP : secondIP,
+                sameUser ? firstClient : secondClient,
                 field,
                 cost,
                 async () => {
@@ -233,7 +407,10 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
               ),
               exhausted,
             );
-            assert.equal((await getAnalyzerRemainingCounts(firstIP))[field], 0);
+            assert.equal(
+              (await getAnalyzerRemainingCounts(firstClient))[field],
+              0,
+            );
             assert.equal(
               await redis.hget(REMAINING.TOTAL, field),
               sameUser ? String(cost) : '0',
@@ -254,11 +431,11 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         await seed(field, cost, cost);
         const modelError = new Error('Model request failed');
         await assert.rejects(
-          withAnalyzerQuota(firstIP, field, cost, async () => {
+          withAnalyzerQuota(firstClient, field, cost, async () => {
             assert.equal(await redis.hget(REMAINING.TOTAL, field), '0');
             assert.equal(await redis.hget(REMAINING.USER(firstIP), field), '0');
             assert.equal(
-              (await getAnalyzerRemainingCounts('192.0.2.3'))[field],
+              (await getAnalyzerRemainingCounts({ ip: '192.0.2.3' }))[field],
               0,
             );
             throw modelError;
@@ -271,11 +448,16 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
           String(cost),
         );
         assert.equal(
-          (await getAnalyzerRemainingCounts('192.0.2.3'))[field],
+          (await getAnalyzerRemainingCounts({ ip: '192.0.2.3' }))[field],
           cost,
         );
         assert.equal(
-          await withAnalyzerQuota(firstIP, field, cost, async () => 'retry'),
+          await withAnalyzerQuota(
+            firstClient,
+            field,
+            cost,
+            async () => 'retry',
+          ),
           'retry',
         );
       },
@@ -291,7 +473,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       const userKey = REMAINING.USER(firstIP);
       const responses = await Promise.allSettled(
         Array.from({ length: 6 }, () =>
-          withAnalyzerQuota(firstIP, field, 2, async () =>
+          withAnalyzerQuota(firstClient, field, 2, async () =>
             redis.pexpiretime(userKey),
           ),
         ),
@@ -312,7 +494,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       assert.equal(rejected[0].reason.status, exhausted.status);
       assert.equal(rejected[0].reason.message, exhausted.message);
       assert.equal(await redis.hget(REMAINING.TOTAL, field), '40');
-      assert.deepEqual(await getAnalyzerRemainingCounts(firstIP), {
+      assert.deepEqual(await getAnalyzerRemainingCounts(firstClient), {
         analysis: 0,
         random_sentence: 20,
       });
@@ -330,7 +512,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       const modelError = new Error('Model request failed');
       let expiresAt;
       await assert.rejects(
-        withAnalyzerQuota(firstIP, field, 2, async () => {
+        withAnalyzerQuota(firstClient, field, 2, async () => {
           expiresAt = await redis.pexpiretime(userKey);
           assert(expiresAt > 0);
           throw modelError;
@@ -349,9 +531,9 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       const field = FIELDS.ANALYSIS;
       await seed(field, 2, 2);
       await assert.rejects(
-        withAnalyzerQuota(firstIP, field, 2, async () => {
+        withAnalyzerQuota(firstClient, field, 2, async () => {
           now = midnight;
-          await withAnalyzerQuota(secondIP, field, 2, async () => {});
+          await withAnalyzerQuota(secondClient, field, 2, async () => {});
           throw new Error('Model request failed');
         }),
         /Model request failed/,
@@ -368,9 +550,9 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       const userKey = REMAINING.USER(firstIP);
       await seed(field, 2, 1);
       await assert.rejects(
-        withAnalyzerQuota(firstIP, field, 1, async () => {
+        withAnalyzerQuota(firstClient, field, 1, async () => {
           await redis.pexpire(userKey, 0);
-          await withAnalyzerQuota(firstIP, field, 1, async () => {});
+          await withAnalyzerQuota(firstClient, field, 1, async () => {});
           throw new Error('Model request failed');
         }),
         /Model request failed/,
@@ -392,7 +574,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         return runScript(...args);
       });
       await assert.rejects(
-        withAnalyzerQuota(firstIP, field, 2, async () => {
+        withAnalyzerQuota(firstClient, field, 2, async () => {
           assert.equal(await redis.hget(REMAINING.TOTAL, field), '2');
           assert.equal(await redis.hget(REMAINING.USER(firstIP), field), '2');
           throw new Error('Model request failed');
@@ -422,7 +604,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       );
       let modelCalls = 0;
       await assert.rejects(
-        withAnalyzerQuota(firstIP, field, 2, async () => {
+        withAnalyzerQuota(firstClient, field, 2, async () => {
           modelCalls += 1;
         }),
         (error) => error === redisError,

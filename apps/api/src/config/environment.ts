@@ -1,3 +1,5 @@
+import { BlockList, isIP } from 'node:net';
+
 const MODEL_ID = /^[a-zA-Z0-9][a-zA-Z0-9._:-]*$/;
 
 export const loadEnvironment = (env: NodeJS.ProcessEnv) => {
@@ -19,9 +21,39 @@ export const loadEnvironment = (env: NodeJS.ProcessEnv) => {
 
   const mode = required('NODE_ENV', /^(development|production|test)$/);
   const isProd = mode === 'production';
+  const analyzerCookieSecret = env.ANALYZER_COOKIE_SECRET?.trim() || undefined;
+  if (analyzerCookieSecret && Buffer.byteLength(analyzerCookieSecret) < 32) {
+    invalid.add('ANALYZER_COOKIE_SECRET');
+  }
+
+  const cloudflareCIDRs = env.ANALYZER_CLOUDFLARE_CIDRS?.trim();
+  const cloudflarePeers = cloudflareCIDRs ? new BlockList() : undefined;
+  if (cloudflarePeers && cloudflareCIDRs) {
+    for (const cidr of cloudflareCIDRs.split(',')) {
+      const [address, bits, extra] = cidr.trim().split('/');
+      const version = isIP(address);
+      const prefix = Number(bits);
+      if (
+        !version ||
+        extra !== undefined ||
+        !/^[1-9]\d*$/.test(bits ?? '') ||
+        prefix > (version === 4 ? 32 : 128)
+      ) {
+        invalid.add('ANALYZER_CLOUDFLARE_CIDRS');
+        break;
+      }
+      cloudflarePeers.addSubnet(
+        address,
+        prefix,
+        version === 4 ? 'ipv4' : 'ipv6',
+      );
+    }
+  }
   const config = {
     isProd,
     isKoyeb: Boolean(env.KOYEB_APP_ID),
+    analyzerCookieSecret,
+    cloudflarePeers,
     port: port('PORT', isProd ? undefined : 3001, mode === 'test' ? 0 : 1),
     corsOrigins:
       env.CORS_ORIGIN?.split(',')

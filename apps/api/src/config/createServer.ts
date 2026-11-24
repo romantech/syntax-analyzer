@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import type Redis from 'ioredis';
 import type { Environment } from '@/config/environment';
 import { errorHandler, notFoundHandler } from '@/middlewares';
+import { ANALYZER_BROWSER_HEADER } from '@/middlewares/identifyAnalyzerClient';
 import { requestLogger } from '@/middlewares/requestLogger';
 import { setupRoutes } from '@/routes';
 import { AnalyzerRequests } from '@/services/analyzerRequests';
@@ -16,7 +17,7 @@ const corsOptions: CorsOptions = {
   /** Access-Control-Allow-Methods 응답 헤더 설정 (허용할 HTTP 메서드 목록) */
   methods: ['GET', 'POST'],
   /** Access-Control-Allow-Headers 응답 헤더 설정 (허용할 요청 헤더 목록) */
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', ANALYZER_BROWSER_HEADER],
   /**
    * Access-Control-Allow-Credentials 응답 헤더 설정
    * 기본적으로 자격증명이 포함된 응답은 JS 에서 접근할 수 없음.
@@ -45,9 +46,15 @@ export const createServer = ({
   models,
   corsOrigins,
   isKoyeb,
+  isProd = false,
+  analyzerCookieSecret,
+  cloudflarePeers,
   analyzerRequests = new AnalyzerRequests(),
 }: AnalyzerDependencies &
-  Pick<Environment, 'corsOrigins' | 'isKoyeb'> & {
+  Pick<Environment, 'corsOrigins' | 'isKoyeb'> &
+  Partial<
+    Pick<Environment, 'isProd' | 'analyzerCookieSecret' | 'cloudflarePeers'>
+  > & {
     analyzerRequests?: AnalyzerRequests;
   }): Application => {
   const app = express();
@@ -55,6 +62,10 @@ export const createServer = ({
   app.locals.analyzer = { redis, createModel, models };
   app.locals.analyzerQuota = createAnalyzerQuota(redis);
   app.locals.isKoyeb = isKoyeb;
+  app.locals.cloudflarePeers = cloudflarePeers;
+  app.locals.analyzerCookie = analyzerCookieSecret
+    ? { secure: isProd }
+    : undefined;
   app.set('query parser', 'extended');
   app.use(requestLogger);
 
@@ -82,7 +93,7 @@ export const createServer = ({
   app.use(express.json());
 
   app.use(compression());
-  app.use(cookieParser());
+  app.use(cookieParser(analyzerCookieSecret));
 
   /**
    * X-Powered-By 헤더는 백엔드 프레임워크, 언어 등에 대한 정보를 나타냄
