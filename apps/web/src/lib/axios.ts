@@ -7,4 +7,8 @@ export const paramsSerializer = <T>(params: T) => {
   return stringify(params, { arrayFormat: 'repeat' });
 };
 
-export const axios = axiosLib.create({ baseURL });
+export const axios = axiosLib.create({
+  baseURL,
+  withCredentials: true,
+  headers: { 'X-Analyzer-Browser': '1' },
+});
