@@ -2,56 +2,16 @@ require('module-alias/register');
 
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
-const { createServer } = require('../dist/config/createServer');
-const { envConfig } = require('../dist/config/environment');
+const { startApp } = require('../test-support/app');
 const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
 
-const { FIELDS, KEYS } = ANALYZER_REDIS_SCHEMA;
+const { KEYS } = ANALYZER_REDIS_SCHEMA;
 const analysis = { id: 'analysis-result' };
 const sentences = ['I walk.'];
 const counts = { analysis: 4, random_sentence: 3 };
 const quotaKeys = [];
 
-require.cache[require.resolve('../dist/services')] = {
-  exports: {
-    AIModelKey: {
-      FAST: 'fast',
-      PRIMARY: 'primary',
-      FAST_FT: 'fast-ft',
-      PRIMARY_FT: 'primary-ft',
-    },
-    ANALYSIS_MODEL: ['primary'],
-    ANALYZER_REDIS_SCHEMA,
-    withAnalyzerQuota: async (ip, field) => {
-      quotaKeys.push(KEYS.REMAINING.USER(ip));
-      return field === FIELDS.ANALYSIS ? analysis : sentences;
-    },
-    getAnalyzerRemainingCounts: async (ip) => {
-      quotaKeys.push(KEYS.REMAINING.USER(ip));
-      return counts;
-    },
-  },
-};
-
-const { setupRoutes } = require('../dist/routes');
-const { errorHandler } = require('../dist/middlewares/errorHandler');
-
 test('analyzer endpoints use the same quota IP policy', async (context) => {
-  const app = createServer();
-  setupRoutes(app);
-  app.use(errorHandler);
-
-  const server = await new Promise((resolve, reject) => {
-    const listener = app.listen(0, '127.0.0.1', (error) => {
-      if (error) reject(error);
-      else resolve(listener);
-    });
-  });
-  context.after(() => server.close());
-
-  const address = server.address();
-  assert(address && typeof address !== 'string');
-  const baseURL = `http://127.0.0.1:${address.port}/analyzer`;
   const requests = [
     {
       path: '',
@@ -93,8 +53,30 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
 
   for (const { name, isKoyeb, forwardedFor, ip } of cases) {
     await context.test(name, async (testContext) => {
-      testContext.mock.property(envConfig, 'isKoyeb', isKoyeb);
       quotaKeys.length = 0;
+      const baseURL = await startApp(testContext, {
+        isKoyeb,
+        redis: {
+          hget: async () => 'Follow the instruction.',
+          eval: async (_script, keyCount, _totalKey, userKey) => {
+            quotaKeys.push(userKey);
+            return keyCount === 2
+              ? [
+                  counts.analysis,
+                  counts.random_sentence,
+                  counts.analysis,
+                  counts.random_sentence,
+                ]
+              : 1;
+          },
+        },
+        createModel: () => ({
+          pipe: () => ({ invoke: async () => JSON.stringify(analysis) }),
+          withStructuredOutput: () => ({
+            invoke: async () => ({ sentences }),
+          }),
+        }),
+      });
 
       for (const { path, method, body, expected } of requests) {
         const headers = new Headers();
@@ -103,7 +85,7 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
           headers.set('X-Forwarded-For', forwardedFor);
           headers.set('CF-Connecting-IP', '203.0.113.4');
         }
-        const response = await fetch(`${baseURL}${path}`, {
+        const response = await fetch(`${baseURL}/analyzer${path}`, {
           method,
           headers,
           body,
@@ -122,7 +104,7 @@ test('analyzer endpoints use the same quota IP policy', async (context) => {
 
       assert.deepEqual(
         quotaKeys,
-        ip ? requests.map(() => `analyzer:remaining:user:${ip}`) : [],
+        ip ? requests.map(() => KEYS.REMAINING.USER(ip)) : [],
       );
     });
   }

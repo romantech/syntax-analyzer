@@ -4,11 +4,9 @@ const assert = require('node:assert/strict');
 const { randomUUID } = require('node:crypto');
 const { test } = require('node:test');
 const Redis = require('ioredis');
-const { createServer } = require('../dist/config/createServer');
+const { startApp } = require('../test-support/app');
 const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
 
-const servicesPath = require.resolve('../dist/services');
-const openAIPath = require.resolve('@langchain/openai');
 const redisPort = process.env.REDIS_TEST_PORT;
 const { KEYS, FIELDS } = ANALYZER_REDIS_SCHEMA;
 const defaultSentences = ['I walk.', 'We read.', 'Birds fly.'];
@@ -18,65 +16,34 @@ let modelSentences = defaultSentences;
 let quotaCalls = 0;
 let quotaDebit;
 
-require.cache[servicesPath] = {
-  exports: {
-    AIModelKey: {
-      FAST: 'fast',
-      PRIMARY: 'primary',
-      FAST_FT: 'fast-ft',
-      PRIMARY_FT: 'primary-ft',
+const template =
+  'Generate {sent_count} sentences with up to {max_chars} characters about {topics}';
+const createModel = () => ({
+  withStructuredOutput: () => ({
+    invoke: async (prompt) => {
+      llmCalls += 1;
+      llmPrompt = prompt.toString();
+      return { sentences: modelSentences };
     },
-    ANALYSIS_MODEL: [],
-    ANALYZER_REDIS_SCHEMA,
-    RANDOM_SENTENCE_CONFIG: {},
-    withAnalyzerQuota: async (_ip, field, cost, run) => {
-      quotaCalls += 1;
-      quotaDebit = { field, cost };
-      return run();
-    },
-    redis: {
-      hget: async () =>
-        'Generate {sent_count} sentences with up to {max_chars} characters about {topics}',
-    },
-  },
-};
-require.cache[openAIPath] = {
-  exports: {
-    ChatOpenAI: class {
-      withStructuredOutput() {
-        return {
-          invoke: async (prompt) => {
-            llmCalls += 1;
-            llmPrompt = prompt.toString();
-            return { sentences: modelSentences };
-          },
-        };
-      }
-    },
-  },
-};
-
-const {
-  getRandomSentences,
-} = require('../dist/controllers/analyzer/getRandomSentences');
-const { errorHandler } = require('../dist/middlewares/errorHandler');
+  }),
+});
 
 test('random sentence generation', async (context) => {
-  const app = createServer();
-  app.get('/analyzer/random-sentences', ...getRandomSentences);
-  app.use(errorHandler);
-
-  const server = await new Promise((resolve, reject) => {
-    const listener = app.listen(0, '127.0.0.1', (error) => {
-      if (error) reject(error);
-      else resolve(listener);
-    });
+  const baseURL = await startApp(context, {
+    redis: {
+      hget: async () => template,
+      eval: async (_script, keyCount, ...args) => {
+        assert.equal(keyCount, 3);
+        const [field, cost] = args.slice(-2);
+        if (args.at(-1) === '__quota_period') return 1; // Refund.
+        quotaCalls += 1;
+        quotaDebit = { field, cost };
+        return 1;
+      },
+    },
+    createModel,
   });
-  context.after(() => server.close());
-
-  const address = server.address();
-  assert(address && typeof address !== 'string');
-  const url = `http://127.0.0.1:${address.port}/analyzer/random-sentences`;
+  const url = `${baseURL}/analyzer/random-sentences`;
   const maxLengthQuery = '?sent_count=3&max_chars=10';
   const invalidQueries = [
     ['sent_count=1.5', 'sent_count'],
@@ -185,18 +152,9 @@ test('random sentence generation', async (context) => {
           redis.disconnect();
         }
       });
-      require.cache[require.resolve('../dist/services/redis/redis')] = {
-        exports: { redis },
-      };
-      const {
-        getAnalyzerRemainingCounts,
-        withAnalyzerQuota,
-      } = require('../dist/services/redis/analyzerQuota');
-      testContext.mock.method(
-        require.cache[servicesPath].exports,
-        'withAnalyzerQuota',
-        withAnalyzerQuota,
-      );
+      await redis.hset(KEYS.PROMPT, FIELDS.RANDOM_SENTENCE, template);
+      const baseURL = await startApp(testContext, { redis, createModel });
+      const url = `${baseURL}/analyzer/random-sentences`;
 
       const clientIP = '127.0.0.1';
       const field = FIELDS.RANDOM_SENTENCE;
@@ -205,7 +163,9 @@ test('random sentence generation', async (context) => {
           redis.hget(KEYS.REMAINING.USER(clientIP), field),
           redis.hget(KEYS.REMAINING.TOTAL, field),
         ]);
-      await getAnalyzerRemainingCounts(clientIP);
+      const counts = await fetch(`${baseURL}/analyzer/remaining-counts`);
+      assert.equal(counts.status, 200);
+      await counts.json();
       const before = await readBalances();
       modelSentences = defaultSentences;
       const valid = await fetch(`${url}${maxLengthQuery}`);

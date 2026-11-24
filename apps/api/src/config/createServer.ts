@@ -3,13 +3,16 @@ import cookieParser from 'cookie-parser';
 import cors, { type CorsOptions } from 'cors';
 import express, { type Application } from 'express';
 import helmet from 'helmet';
-import { envConfig } from '@/config/environment';
+import type Redis from 'ioredis';
+import type { Environment } from '@/config/environment';
+import { errorHandler, notFoundHandler } from '@/middlewares';
 import { requestLogger } from '@/middlewares/requestLogger';
+import { setupRoutes } from '@/routes';
 import { AnalyzerRequests } from '@/services/analyzerRequests';
+import type { CreateChatModel } from '@/services/openAI/openAIUtils';
+import { createAnalyzerQuota } from '@/services/redis/analyzerQuota';
 
 const corsOptions: CorsOptions = {
-  /** Access-Control-Allow-Origin 응답 헤더 설정 (허용할 오리진 목록) */
-  origin: envConfig.corsOrigins,
   /** Access-Control-Allow-Methods 응답 헤더 설정 (허용할 HTTP 메서드 목록) */
   methods: ['GET', 'POST'],
   /** Access-Control-Allow-Headers 응답 헤더 설정 (허용할 요청 헤더 목록) */
@@ -30,11 +33,28 @@ const corsOptions: CorsOptions = {
   optionsSuccessStatus: 200,
 };
 
-export const createServer = (
+export interface AnalyzerDependencies {
+  redis: Pick<Redis, 'eval' | 'hget' | 'ping' | 'status'>;
+  createModel: CreateChatModel;
+  models: Environment['models'];
+}
+
+export const createServer = ({
+  redis,
+  createModel,
+  models,
+  corsOrigins,
+  isKoyeb,
   analyzerRequests = new AnalyzerRequests(),
-): Application => {
+}: AnalyzerDependencies &
+  Pick<Environment, 'corsOrigins' | 'isKoyeb'> & {
+    analyzerRequests?: AnalyzerRequests;
+  }): Application => {
   const app = express();
   app.locals.analyzerRequests = analyzerRequests;
+  app.locals.analyzer = { redis, createModel, models };
+  app.locals.analyzerQuota = createAnalyzerQuota(redis);
+  app.locals.isKoyeb = isKoyeb;
   app.set('query parser', 'extended');
   app.use(requestLogger);
 
@@ -43,7 +63,7 @@ export const createServer = (
    * Strict-Transport-Security(HTTPS 강제), X-Frame-Options(클릭 재킹 방지) 등
    * */
   app.use(helmet());
-  app.use(cors(corsOptions));
+  app.use(cors({ ...corsOptions, origin: corsOrigins }));
   app.use((_req, res, next) => {
     if (analyzerRequests.accepting) return next();
 
@@ -70,6 +90,10 @@ export const createServer = (
    * 보안을 위해 X-Powered-By 헤더 제거
    * */
   app.disable('x-powered-by');
+
+  setupRoutes(app, redis);
+  app.use(notFoundHandler);
+  app.use(errorHandler);
 
   return app;
 };

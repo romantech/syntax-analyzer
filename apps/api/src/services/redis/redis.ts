@@ -1,23 +1,25 @@
 import Redis from 'ioredis';
-import { envConfig, logger } from '@/config';
+import type { Environment } from '@/config/environment';
+import { logger } from '@/config/logger';
 
-export const redis = new Redis({
-  protocol: 2,
-  host: envConfig.redis.host,
-  port: envConfig.redis.port,
-  username: envConfig.redis.username,
-  password: envConfig.redis.password,
-  connectionName: `project-server-${envConfig.isProd ? 'prod' : 'dev'}`,
-});
+export const createRedis = ({ redis: options, isProd }: Environment) => {
+  const redis = new Redis({
+    ...options,
+    protocol: 2,
+    connectionName: `project-server-${isProd ? 'prod' : 'dev'}`,
+  });
 
-redis.on('connect', () => {
-  logger.info('Successfully connected to Redis');
-});
+  redis.on('connect', () => {
+    logger.info('Successfully connected to Redis');
+  });
 
-redis.on('ready', () => {
-  logger.info('Redis is ready for use');
-});
+  redis.on('ready', () => {
+    logger.info('Redis is ready for use');
+  });
 
-redis.on('error', () => {
-  logger.error('Error connecting to Redis.');
-});
+  redis.on('error', () => {
+    logger.error('Error connecting to Redis.');
+  });
+
+  return redis;
+};

@@ -2,81 +2,44 @@ require('module-alias/register');
 
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
-const { createServer } = require('../dist/config/createServer');
+const { startApp } = require('../test-support/app');
 
 const balances = { total: 0, user: 0 };
 let modelCalls = 0;
 let quotaCalls = 0;
+let requestedModel;
+let requestedPrompt;
 const debits = [];
 const analysis = { id: 'analysis-result' };
 
-require.cache[require.resolve('../dist/services')] = {
-  exports: {
-    AIModelKey: {
-      FAST: 'fast',
-      PRIMARY: 'primary',
-      FAST_FT: 'fast-ft',
-      PRIMARY_FT: 'primary-ft',
-    },
-    ANALYSIS_MODEL: ['primary', 'primary-ft', 'fast-ft'],
-    ANALYSIS_MODEL_OPTION: {
-      primary: { promptField: 'analysis' },
-      'primary-ft': { promptField: 'analysis_fine_tuned' },
-      'fast-ft': { promptField: 'analysis_fine_tuned' },
-    },
-    ANALYZER_REDIS_SCHEMA: {
-      KEYS: {
-        PROMPT: 'prompt',
-        REMAINING: { TOTAL: 'total', USER: () => 'user' },
-      },
-      FIELDS: { ANALYSIS: 'analysis', RANDOM_SENTENCE: 'random_sentence' },
-    },
+test('validates analysis requests before reserving quota', async (context) => {
+  const baseURL = await startApp(context, {
     redis: {
-      hget: async () => 'Analyze this sentence',
+      hget: async (_key, promptField) => {
+        requestedPrompt = promptField;
+        return 'Analyze this sentence';
+      },
+      eval: async (_script, keyCount, _totalKey, userKey, ...args) => {
+        quotaCalls += 1;
+        assert.equal(keyCount, 3);
+        assert.equal(userKey, 'analyzer:remaining:user:127.0.0.1');
+        const [field, cost] = args.slice(-2);
+        if (balances.total < cost || balances.user < cost) return 0;
+        debits.push({ field, cost });
+        return 1;
+      },
     },
-    createJSONChatOpenAI: () => ({
+    createModel: ({ model }) => ({
       pipe: () => ({
         invoke: async () => {
           modelCalls += 1;
+          requestedModel = model;
           return JSON.stringify(analysis);
         },
       }),
     }),
-    validateAndRepairJSON: JSON.parse,
-    withAnalyzerQuota: async (ip, field, cost, run) => {
-      quotaCalls += 1;
-      assert.equal(ip, '127.0.0.1');
-      if (balances.total < cost || balances.user < cost) {
-        const { throwCustomError } = require('../dist/utils/customError');
-        throwCustomError('No remaining request count available.', 400);
-      }
-      debits.push({ field, cost });
-      return run();
-    },
-  },
-};
-
-const {
-  createAnalysis,
-} = require('../dist/controllers/analyzer/createAnalysis');
-const { errorHandler } = require('../dist/middlewares/errorHandler');
-
-test('validates analysis requests before reserving quota', async (context) => {
-  const app = createServer();
-  app.post('/analyzer', ...createAnalysis);
-  app.use(errorHandler);
-
-  const server = await new Promise((resolve, reject) => {
-    const listener = app.listen(0, '127.0.0.1', (error) => {
-      if (error) reject(error);
-      else resolve(listener);
-    });
   });
-  context.after(() => server.close());
-
-  const address = server.address();
-  assert(address && typeof address !== 'string');
-  const url = `http://127.0.0.1:${address.port}/analyzer`;
+  const url = `${baseURL}/analyzer`;
   const validBody = { model: 'fast-ft', sentence: ['She', 'reads', '.'] };
   const post = (body) =>
     fetch(url, {
@@ -131,6 +94,7 @@ test('validates analysis requests before reserving quota', async (context) => {
     { model: 'primary', total: 1, user: 2, expectedCost: 0 },
     { model: 'primary-ft', total: 2, user: 1, expectedCost: 0 },
     { model: 'primary', total: 2, user: 2, expectedCost: 2 },
+    { model: 'primary-ft', total: 2, user: 2, expectedCost: 2 },
     { model: 'fast-ft', total: 1, user: 1, expectedCost: 1 },
   ];
 
@@ -156,6 +120,11 @@ test('validates analysis requests before reserving quota', async (context) => {
           assert.equal(response.status, 200);
           assert.deepEqual(await response.json(), analysis);
           assert.equal(modelCalls, 1);
+          assert.equal(requestedModel, `test-${model}`);
+          assert.equal(
+            requestedPrompt,
+            model === 'primary' ? 'analysis' : 'analysis_fine_tuned',
+          );
           assert.deepEqual(debits, [{ field: 'analysis', cost: expectedCost }]);
         }
       },
