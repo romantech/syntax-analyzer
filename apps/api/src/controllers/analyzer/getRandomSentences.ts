@@ -59,5 +59,14 @@ const generateRandomSentences = async (query: RandomSentenceParams) => {
   );
 
   const { sentences } = await llm.invoke(prompt);
+  if (
+    sentences.length !== query.sent_count ||
+    sentences.some(
+      (sentence) => sentence.trim() === '' || sentence.length > query.max_chars,
+    )
+  ) {
+    return throwCustomError('Invalid generated sentences.', 502);
+  }
+
   return sentences;
 };
