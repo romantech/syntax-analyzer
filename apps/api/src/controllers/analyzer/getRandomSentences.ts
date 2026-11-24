@@ -65,7 +65,11 @@ const generateRandomSentences = async (query: RandomSentenceParams) => {
       (sentence) => sentence.trim() === '' || sentence.length > query.max_chars,
     )
   ) {
-    return throwCustomError('Invalid generated sentences.', 502);
+    return throwCustomError(
+      'Invalid generated sentences.',
+      502,
+      'invalid-model-output',
+    );
   }
 
   return sentences;

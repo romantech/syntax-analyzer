@@ -3,10 +3,9 @@ import cookieParser from 'cookie-parser';
 import cors, { type CorsOptions } from 'cors';
 import express, { type Application } from 'express';
 import helmet from 'helmet';
-import morgan from 'morgan';
 import { envConfig } from '@/config/environment';
+import { requestLogger } from '@/middlewares/requestLogger';
 
-const morganFormat = envConfig.isProd ? 'combined' : 'dev';
 const corsOptions: CorsOptions = {
   /** Access-Control-Allow-Origin 응답 헤더 설정 (허용할 오리진 목록) */
   origin: envConfig.corsOrigins,
@@ -33,6 +32,7 @@ const corsOptions: CorsOptions = {
 export const createServer = (): Application => {
   const app = express();
   app.set('query parser', 'extended');
+  app.use(requestLogger);
 
   /**
    * Helmet 라이브러리를 이용해 보안 관련 HTTP 헤더 자동 설정
@@ -50,7 +50,6 @@ export const createServer = (): Application => {
   app.use(express.json());
 
   app.use(compression());
-  app.use(morgan(morganFormat));
   app.use(cookieParser());
 
   /**

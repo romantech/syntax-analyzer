@@ -229,9 +229,6 @@ importers:
       module-alias:
         specifier: ^2.3.5
         version: 2.3.5
-      morgan:
-        specifier: ^1.12.1
-        version: 1.12.1(supports-color@7.2.0)
       openai:
         specifier: ^7.55.0
         version: 7.55.0(zod@4.6.7)
@@ -269,9 +266,6 @@ importers:
       '@types/module-alias':
         specifier: ^2.0.4
         version: 2.0.4
-      '@types/morgan':
-        specifier: ^1.9.10
-        version: 1.9.10
       '@types/node':
         specifier: ^24.19.2
         version: 24.19.2
@@ -2348,9 +2342,6 @@ packages:
   '@types/module-alias@2.0.4':
     resolution: {integrity: sha512-5+G/QXO/DvHZw60FjvbDzO4JmlD/nG5m2/vVGt25VN1eeP3w2bCoks1Wa7VuptMPM1TxJdx6RjO70N9Fw0nZPA==}
 
-  '@types/morgan@1.9.10':
-    resolution: {integrity: sha512-sS4A1zheMvsADRVfT0lYbJ4S9lmsey8Zo2F7cnbYjWHP67Q0AwMYuuzLlkIM2N8gAbb9cubhIVFwcIN2XyYCkA==}
-
   '@types/node@24.19.2':
     resolution: {integrity: sha512-93d49wCWJkCyN87MxLpNN6KXPCwFw7bVUg79mGUV1OS40JGWwVCr8n61DXCSqz7CV6/VfPkb7xec7uP2M+QHWQ==}
 
@@ -2919,10 +2910,6 @@ packages:
     resolution: {integrity: sha512-QYph+vfurmaxhNwi9FprfmtkT5cx2Keg8FzZ0vnjO8ukscIybVyZGMFwdllKGlTI6qyU8ck43OM9UXh+IFJihQ==}
     engines: {node: '>=6.0.0'}
     hasBin: true
-
-  basic-auth@2.0.1:
-    resolution: {integrity: sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg==}
-    engines: {node: '>= 0.8'}
 
   body-parser@2.4.0:
     resolution: {integrity: sha512-Ifk1KcLrxaGt1occQagQNFNNOqRt1LFuehEnHHzB8Z6cRgIxRU1TBaiIsUiCdA+gy5PL7Y1IX31DNKkRmxtXjQ==}
@@ -3968,10 +3955,6 @@ packages:
   moment@2.31.0:
     resolution: {integrity: sha512-0acOTfMiWOheYS4eoWb80yYMb/JLvVv9SHbs2PehaDzfUG0Bw855SKyk0IKTnPGa5+U2bmi3W68l1+sGLX/pvw==}
 
-  morgan@1.12.1:
-    resolution: {integrity: sha512-tljKC0ex20AjO58Ob/eZ53JloycbVswbVNCHx6V6VLGzqt/w8dIynVGL0G8qVjNKwiA7sYSogCrN6QtJ82IV+g==}
-    engines: {node: '>= 0.8.0'}
-
   motion-dom@11.18.1:
     resolution: {integrity: sha512-g76KvA001z+atjfxczdRtw/RXOM3OMSdd1f4DL77qCTF/+avrRJiawSG4yDibEQ215sr9kpinSlX2pCTJ9zbhw==}
 
@@ -4429,9 +4412,6 @@ packages:
   safe-array-concat@1.1.4:
     resolution: {integrity: sha512-wtZlHyOje6OZTGqAoaDKxFkgRtkF9CnHAVnCHKfuj200wAgL+bSJhdsCD2l0Qx/2ekEXjPWcyKkfGb5CPboslg==}
     engines: {node: '>=0.4'}
-
-  safe-buffer@5.1.2:
-    resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
 
   safe-buffer@5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
@@ -6916,10 +6896,6 @@ snapshots:
 
   '@types/module-alias@2.0.4': {}
 
-  '@types/morgan@1.9.10':
-    dependencies:
-      '@types/node': 24.19.2
-
   '@types/node@24.19.2':
     dependencies:
       undici-types: 7.24.6
@@ -7723,10 +7699,6 @@ snapshots:
   base64-js@1.5.1: {}
 
   baseline-browser-mapping@2.11.37: {}
-
-  basic-auth@2.0.1:
-    dependencies:
-      safe-buffer: 5.1.2
 
   body-parser@2.4.0(supports-color@7.2.0):
     dependencies:
@@ -8829,16 +8801,6 @@ snapshots:
 
   moment@2.31.0: {}
 
-  morgan@1.12.1(supports-color@7.2.0):
-    dependencies:
-      basic-auth: 2.0.1
-      debug: 2.6.9(supports-color@7.2.0)
-      depd: 2.0.0
-      on-finished: 2.4.2
-      on-headers: 1.1.0
-    transitivePeerDependencies:
-      - supports-color
-
   motion-dom@11.18.1:
     dependencies:
       motion-utils: 11.18.1
@@ -9282,8 +9244,6 @@ snapshots:
       get-intrinsic: 1.3.0
       has-symbols: 1.1.0
       isarray: 2.0.5
-
-  safe-buffer@5.1.2: {}
 
   safe-buffer@5.2.1: {}
 

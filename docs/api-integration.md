@@ -77,6 +77,11 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 
 [Koyeb 모노레포 설정](https://www.koyeb.com/docs/build-and-deploy/monorepo)
 
+### API 요청 로그
+
+- 응답의 `X-Request-Id`로 인스턴스 로그에서 해당 요청을 찾는다. 요청 로그에는 서버가 생성한 ID, HTTP 메서드, 허용된 경로, 상태 코드, 처리 시간과 분류 가능한 오류 유형을 기록한다.
+- 4xx는 `warn`, 5xx는 `error` 수준으로 기록한다. 쿼리, 요청 본문, 요청 헤더, 모델 응답과 외부 오류 원문은 요청 로그에 포함하지 않는다.
+
 ## 배포 전후 확인
 
 - 프리뷰를 포함한 운영 모드 빌드는 `VITE_API_BASE_URL_PROD`를 사용한다. 배포 환경에 맞는 값을 설정하고 브라우저 네트워크 탭에서 요청 주소를 확인한다.
