@@ -149,8 +149,8 @@ export const withAnalyzerQuota = async <Result>(
         cost,
         PERIOD_FIELD,
       );
-    } catch (refundError) {
-      logger.error('Failed to refund analyzer quota.', { error: refundError });
+    } catch {
+      logger.error('Failed to refund analyzer quota.');
     }
     throw error;
   }

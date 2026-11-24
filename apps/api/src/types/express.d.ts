@@ -5,5 +5,9 @@ declare global {
     export interface Request {
       clientIP?: string;
     }
+
+    export interface Locals {
+      errorType?: string;
+    }
   }
 }

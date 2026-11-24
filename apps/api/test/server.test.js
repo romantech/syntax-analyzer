@@ -71,7 +71,8 @@ test('exits before listening when Redis rejects PING', {
         assert.equal(error.code, 1);
         const output = error.stdout + error.stderr;
         assert.match(output, /Failed to check the Redis connection/);
-        assert.match(output, /NOPERM/);
+        assert.match(output, /redis-reply-error/);
+        assert.doesNotMatch(output, /NOPERM/);
         assert.doesNotMatch(output, /Server is running/);
         return true;
       },

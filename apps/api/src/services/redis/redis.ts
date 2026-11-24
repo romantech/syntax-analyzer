@@ -18,6 +18,6 @@ redis.on('ready', () => {
   logger.info('Redis is ready for use');
 });
 
-redis.on('error', (error) => {
-  logger.error('Error connecting to Redis:', error);
+redis.on('error', () => {
+  logger.error('Error connecting to Redis.');
 });

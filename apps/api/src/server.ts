@@ -1,3 +1,4 @@
+import { ReplyError } from 'ioredis';
 import { createServer, envConfig, logger } from '@/config';
 import { errorHandler, notFoundHandler } from '@/middlewares';
 import { setupRoutes } from '@/routes';
@@ -16,18 +17,25 @@ const REDIS_STARTUP_TIMEOUT_MS = 10_000;
 const initServer = async () => {
   checkEnvVariables();
 
+  const timeoutError = new Error('Redis PING timed out during startup');
   let startupTimeout: ReturnType<typeof setTimeout> | undefined;
   try {
     await Promise.race([
       redis.ping(),
       new Promise<never>((_, reject) => {
         startupTimeout = setTimeout(() => {
-          reject(new Error('Redis PING timed out during startup'));
+          reject(timeoutError);
         }, REDIS_STARTUP_TIMEOUT_MS);
       }),
     ]);
   } catch (err) {
-    logger.error('Failed to check the Redis connection:', err);
+    const errorType =
+      err === timeoutError
+        ? 'redis-startup-timeout'
+        : err instanceof ReplyError
+          ? 'redis-reply-error'
+          : 'redis-startup-error';
+    logger.error('Failed to check the Redis connection.', { errorType });
     redis.disconnect();
     process.exitCode = 1;
     return;
