@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { useAtomValue } from 'jotai';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LuChevronDown, LuChevronUp } from 'react-icons/lu';
+import { IoCaretDownSharp } from 'react-icons/io5';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_COLORS,
@@ -14,6 +14,7 @@ import {
   type TConstituent,
 } from '@/features/syntax-editor';
 import { getConstituentTranslation } from '../../helpers/constituent-translation';
+import { useLabelWidth } from './use-label-width';
 
 type Disclosure = { expanded: boolean; toggle: (animate: boolean) => void };
 
@@ -22,8 +23,7 @@ interface ConstituentProps {
   begin: number;
   end: number;
   overviewTagId?: number;
-  animateLabels: boolean;
-  animateExtraLabels: boolean;
+  previouslyVisibleTags?: ReadonlySet<number>;
   disclosure?: Disclosure;
 }
 
@@ -33,8 +33,7 @@ export default function Constituent({
   begin,
   end,
   overviewTagId,
-  animateLabels,
-  animateExtraLabels,
+  previouslyVisibleTags,
   disclosure,
 }: PropsWithChildren<ConstituentProps>) {
   const primary = tags[0];
@@ -42,6 +41,8 @@ export default function Constituent({
   const showFullTagNames = useAtomValue(showFullTagNamesAtom);
   const isDeleteMode = useAtomValue(deleteModeAtom);
   const isMultipleTokenRange = isMultipleTokensInRange(begin, end);
+  const { labelRef, width } = useLabelWidth(!!disclosure);
+  const entering = previouslyVisibleTags && tags.every(({ id }) => !previouslyVisibleTags.has(id));
 
   return (
     <Text
@@ -55,21 +56,28 @@ export default function Constituent({
       data-constituent-id={primary.id}
       data-segment-begin={begin}
       data-segment-end={end}
+      data-entering={entering || undefined}
     >
       {children}
-      <span className="constituent-labels">
-        {tags.map((tag) => (
-          <ConstituentLabel
-            key={tag.id}
-            tag={tag}
-            begin={begin}
-            end={end}
-            abbreviated={!showFullTagNames}
-            isDeleteMode={isDeleteMode}
-            entering={animateLabels || (animateExtraLabels && tag.id !== overviewTagId)}
-            disclosure={tag.id === overviewTagId ? disclosure : undefined}
-          />
-        ))}
+      <span
+        className="constituent-labels"
+        data-disclosure={!!disclosure || undefined}
+        style={{ width }}
+      >
+        <span className="constituent-label-content" ref={labelRef}>
+          {tags.map((tag) => (
+            <ConstituentLabel
+              key={tag.id}
+              tag={tag}
+              begin={begin}
+              end={end}
+              abbreviated={!showFullTagNames}
+              isDeleteMode={isDeleteMode}
+              entering={previouslyVisibleTags?.has(tag.id) === false}
+              disclosure={tag.id === overviewTagId ? disclosure : undefined}
+            />
+          ))}
+        </span>
       </span>
     </Text>
   );
@@ -117,7 +125,7 @@ function ConstituentLabel({
         onClick={(event) => disclosure.toggle(event.detail > 0)}
       >
         {text}
-        {disclosure.expanded ? <LuChevronUp aria-hidden /> : <LuChevronDown aria-hidden />}
+        <IoCaretDownSharp aria-hidden />
       </chakra.button>
     );
   }

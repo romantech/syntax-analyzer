@@ -1,4 +1,4 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,7 @@ import { TbMoodEmpty } from 'react-icons/tb';
 
 import { TextPlaceholder, ThreeDotsWave, useTransitionLoading } from '@/base';
 import {
+  CONSTITUENT_DATA_ATTRS,
   deleteModeAtom,
   Sentence,
   selectedTagAtom,
@@ -16,6 +17,7 @@ import {
   useCalculateNestingLevel,
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
+import AllTagsButton from './all-tags-button';
 import SegmentList, { hasOverviewTags } from './segment-list';
 import '@/features/syntax-editor/styles/constituent.scss';
 
@@ -57,40 +59,46 @@ function AnalysisSentence({
   segment: TSegment;
   isTapMode: boolean;
 }) {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const sentenceRef = useRef<HTMLParagraphElement>(null);
   const sentenceId = useId();
   const showFullTagNames = useAtomValue(showFullTagNamesAtom);
   const [showAllTags, setShowAllTags] = useState(false);
-  const [{ expanded, entering }, setDetails] = useState<{
-    expanded: ReadonlySet<number>;
-    entering: number | null;
-  }>(() => ({ expanded: new Set(), entering: null }));
+  const [expanded, setExpanded] = useState<ReadonlySet<number>>(() => new Set());
+  const [previouslyVisibleTags, setPreviouslyVisibleTags] = useState<ReadonlySet<number>>();
   const selectedTag = useAtomValue(selectedTagAtom);
   const deleteMode = useAtomValue(deleteModeAtom);
   const isEditing = !!selectedTag || deleteMode;
   const hasOverview = analysis.isAnalyzedByGPT && hasOverviewTags(segment);
   const allTagsVisible = !hasOverview || showAllTags || isEditing;
 
-  const toggle = (segmentId: number, animate: boolean) =>
-    setDetails((previous) => {
-      const next = new Set(previous.expanded);
-      const opening = !next.has(segmentId);
-      if (!opening) next.delete(segmentId);
+  const markRevealedTags = (animate: boolean) => {
+    if (!animate || !sentenceRef.current) {
+      setPreviouslyVisibleTags(undefined);
+      return;
+    }
+
+    const labels = sentenceRef.current.querySelectorAll('.constituent-label');
+    setPreviouslyVisibleTags(
+      new Set(Array.from(labels, (label) => Number(label.getAttribute(CONSTITUENT_DATA_ATTRS.ID)))),
+    );
+  };
+
+  const toggle = (segmentId: number, animate: boolean) => {
+    markRevealedTags(animate && !expanded.has(segmentId));
+    setExpanded((previous) => {
+      const next = new Set(previous);
+      if (next.has(segmentId)) next.delete(segmentId);
       else next.add(segmentId);
-      return { expanded: next, entering: opening && animate ? segmentId : null };
+      return next;
     });
+  };
 
   useEffect(() => {
-    if (entering === null) return;
-    // Clear the entrance state once the label animation has finished.
-    const timeout = window.setTimeout(() => {
-      setDetails((previous) =>
-        previous.entering === entering ? { ...previous, entering: null } : previous,
-      );
-    }, 200);
+    if (!previouslyVisibleTags) return;
+    const timeout = window.setTimeout(() => setPreviouslyVisibleTags(undefined), 200);
     return () => window.clearTimeout(timeout);
-  }, [entering]);
+  }, [previouslyVisibleTags]);
 
   useCalculateNestingLevel({
     targetRef: sentenceRef,
@@ -105,28 +113,25 @@ function AnalysisSentence({
     <>
       {hasOverview && (
         <Box position="sticky" insetInlineStart={0} w="fit-content" mb={2} zIndex={3}>
-          <Button
-            size="sm"
-            minH={isTapMode ? '44px' : undefined}
-            variant={allTagsVisible ? 'subtle' : 'outline'}
-            colorPalette={allTagsVisible ? 'teal' : 'gray'}
-            aria-expanded={allTagsVisible}
-            aria-controls={sentenceId}
+          <AllTagsButton
+            expanded={allTagsVisible}
+            sentenceId={sentenceId}
             disabled={isEditing}
-            onClick={() => {
-              if (showAllTags) setDetails({ expanded: new Set(), entering: null });
+            isTapMode={isTapMode}
+            onClick={(event) => {
+              markRevealedTags(event.detail > 0 && !showAllTags);
+              if (showAllTags) setExpanded(new Set());
               setShowAllTags(!showAllTags);
             }}
-          >
-            {allTagsVisible ? t('editor.collapseAllTags') : t('editor.expandAllTags')}
-          </Button>
+          />
         </Box>
       )}
       <Sentence ref={sentenceRef} id={sentenceId} isTapMode={isTapMode}>
         <SegmentList
           segment={segment}
           tokenElements={TokenList({ sentence: analysis.sentence, isTapMode })}
-          overview={allTagsVisible ? undefined : { expanded, entering, toggle }}
+          overview={allTagsVisible ? undefined : { expanded, toggle }}
+          previouslyVisibleTags={isEditing ? undefined : previouslyVisibleTags}
         />
       </Sentence>
     </>

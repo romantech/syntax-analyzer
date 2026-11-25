@@ -29,7 +29,10 @@ const assignCalculatedLevel = (element: HTMLElement) => {
   });
 
   if (isConstituent) {
-    const labels = element.querySelector(':scope > .constituent-labels');
+    // Reserve space for the labels at their full width while the surrounding box animates.
+    const labels = element.querySelector(
+      ':scope > .constituent-labels > .constituent-label-content',
+    );
     const extraWidth =
       (labels?.getBoundingClientRect().width ?? 0) +
       LABEL_GAP -

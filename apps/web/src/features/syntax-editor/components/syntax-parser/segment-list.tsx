@@ -30,7 +30,6 @@ const hasTags = (segment: TSegment): boolean =>
 
 export interface Overview {
   expanded: ReadonlySet<number>;
-  entering: number | null;
   toggle: (segmentId: number, animate: boolean) => void;
 }
 
@@ -39,7 +38,7 @@ interface SegmentListProps {
   tokenElements: ReactNode[];
   overview?: Overview;
   showForms?: boolean;
-  animateLabels?: boolean;
+  previouslyVisibleTags?: ReadonlySet<number>;
 }
 
 export default function SegmentList({
@@ -47,14 +46,13 @@ export default function SegmentList({
   tokenElements,
   overview,
   showForms = false,
-  animateLabels = false,
+  previouslyVisibleTags,
 }: SegmentListProps) {
   const { id, begin, end } = segment;
   const role = overview
     ? (getOverviewTag(segment) ?? (showForms ? segment.constituents[0] : undefined))
     : undefined;
   const isExpanded = !!overview?.expanded.has(id);
-  const isEntering = overview?.entering === id;
   const canExpand = !!role && (segment.constituents.length > 1 || segment.children.some(hasTags));
 
   const tags = !overview
@@ -78,7 +76,7 @@ export default function SegmentList({
         tokenElements={tokenElements}
         overview={overview}
         showForms={showForms || isExpanded}
-        animateLabels={animateLabels || isEntering}
+        previouslyVisibleTags={previouslyVisibleTags}
       />,
     );
     index = child.end - 1;
@@ -91,8 +89,7 @@ export default function SegmentList({
       end={end}
       tags={tags}
       overviewTagId={role?.id}
-      animateLabels={animateLabels}
-      animateExtraLabels={isEntering}
+      previouslyVisibleTags={previouslyVisibleTags}
       disclosure={
         overview && canExpand
           ? { expanded: isExpanded, toggle: (animate) => overview.toggle(id, animate) }

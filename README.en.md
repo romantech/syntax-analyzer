@@ -110,7 +110,7 @@ The diagram below shows how the segments for `Global warming is a significant is
 
 # Tagging Rules
 
-AI analyses initially show the main parts of the sentence, such as the subject, verb, object, and complement, along with modifiers at that level, such as adverbs, adverbial phrases, and prepositional phrases. Select a tag to see its details. Use **Expand all tags** to see every tag and **Collapse all tags** to return to the overview. All tags are visible while adding or deleting a tag. Tags use **Full names** in the current language by default. Turn off **Full names** to show abbreviations. Your choice is saved across reloads.
+AI analyses initially show the main parts of the sentence, such as the subject, verb, object, and complement, along with modifiers at that level, such as adverbs, adverbial phrases, and prepositional phrases. Select a tag to see its details. Use **Expand all tags** to see every tag and **Collapse all tags** to return to the overview. All tags are visible while adding or deleting a tag. Tags use full names in the current language by default. Turn on **Abbreviations** to show shortened names. Your choice is saved across reloads.
 
 On mobile, tap **Choose a tag** in the bottom toolbar. Tap the first word, then tap **Apply** to tag just that word. To tag a range, tap the first and last words before applying the tag. Tap **Clear selection** to clear the range. For long sentences, swipe horizontally on the sentence or the blank space below the tags. When the stack of tags is taller than the screen, swipe vertically in the same area. When the content overflows, the vertical scrollbar appears to the right of the tag area and the horizontal scrollbar appears below it. In delete mode, tap the tag you want to remove.
 
@@ -131,7 +131,7 @@ Disallowed: warming is / is a / is a significant
 
 # Sentence Constituents
 
-The analyzer uses the grammatical categories below, and the editor uses them as tags. Tooltips in the tag picker describe each grammatical category. A single word is a token. Groups of two or more words are classified as phrases or clauses according to their grammatical structure.
+The analyzer uses the grammatical categories below, and the editor uses them as tags. Turn on **Tag descriptions** to see what each grammatical category means in the tag picker. A single word is a token. Groups of two or more words are classified as phrases or clauses according to their grammatical structure.
 
 | Label                | Abbreviation | Type   | Description                                                                       |
 | -------------------- | ------------ | ------ | --------------------------------------------------------------------------------- |
