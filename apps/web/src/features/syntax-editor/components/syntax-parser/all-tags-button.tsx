@@ -3,6 +3,9 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuChevronsDown, LuChevronsUp } from 'react-icons/lu';
 
+const collapsedBackground = { base: 'teal.50', _dark: '#101e1c' };
+const expandedBackground = { base: 'teal.100', _dark: 'teal.800' };
+
 interface AllTagsButtonProps {
   expanded: boolean;
   sentenceId: string;
@@ -39,14 +42,14 @@ export default function AllTagsButton({
       minH={isTapMode ? 11 : 9}
       variant="outline"
       colorPalette="teal"
-      bg={{ base: 'teal.50', _dark: '#101e1c' }}
+      bg={collapsedBackground}
       color={{ base: 'teal.700', _dark: '#80ecd9' }}
       borderColor={{ base: 'teal.600', _dark: '#52bbad' }}
-      _hover={{ bg: { base: 'teal.100', _dark: 'teal.800' } }}
+      _hover={{ bg: expandedBackground }}
       _expanded={{
-        bg: { base: 'teal.100', _dark: 'teal.800' },
+        bg: expandedBackground,
         color: { _dark: 'teal.200' },
-        _hover: { bg: { base: 'teal.200', _dark: 'teal.700' } },
+        _hover: { bg: collapsedBackground },
       }}
       aria-expanded={expanded}
       aria-controls={sentenceId}
