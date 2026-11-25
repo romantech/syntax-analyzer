@@ -38,7 +38,7 @@ export default function AllTagsButton({
       _expanded={{
         bg: 'color-mix(in srgb, var(--tag-toggle-background) 75%, transparent)',
         color: { _dark: 'teal.200' },
-        _hover: { bg: 'color-mix(in srgb, var(--tag-toggle-background) 85%, transparent)' },
+        _hover: { bg: 'color-mix(in srgb, var(--tag-toggle-background) 100%, transparent)' },
       }}
       aria-expanded={expanded}
       aria-controls={sentenceId}
