@@ -4,9 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { LuChevronsDown } from 'react-icons/lu';
 import { useLabelWidth } from './use-label-width';
 
-const restingBackground = 'color-mix(in srgb, var(--tag-toggle-background) 75%, transparent)';
-const hoverBackground = 'var(--tag-toggle-background)';
-
 interface AllTagsButtonProps {
   expanded: boolean;
   sentenceId: string;
@@ -32,18 +29,16 @@ export default function AllTagsButton({
       variant="outline"
       colorPalette="teal"
       css={{
-        '--tag-toggle-background': expanded
-          ? { base: 'colors.teal.100', _dark: 'colors.teal.800' }
-          : { base: 'colors.teal.50', _dark: '#101e1c' },
+        '--tag-toggle-background': { base: 'colors.teal.100', _dark: 'colors.teal.800' },
       }}
-      bg={restingBackground}
+      bg="color-mix(in srgb, var(--tag-toggle-background) 25%, transparent)"
       color={{ base: 'teal.700', _dark: '#80ecd9' }}
       borderColor={{ base: 'teal.600', _dark: '#52bbad' }}
-      _hover={{ bg: hoverBackground }}
+      _hover={{ bg: 'color-mix(in srgb, var(--tag-toggle-background) 60%, transparent)' }}
       _expanded={{
-        bg: restingBackground,
+        bg: 'color-mix(in srgb, var(--tag-toggle-background) 75%, transparent)',
         color: { _dark: 'teal.200' },
-        _hover: { bg: hoverBackground },
+        _hover: { bg: 'color-mix(in srgb, var(--tag-toggle-background) 85%, transparent)' },
       }}
       aria-expanded={expanded}
       aria-controls={sentenceId}
