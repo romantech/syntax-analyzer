@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/romantech/syntax-analyzer/compare/v1.6.0...v1.6.1) (2026-11-25)
+
+
+### Bug Fixes
+
+* improve all-tags toggle visibility ([#251](https://github.com/romantech/syntax-analyzer/issues/251)) ([031bab3](https://github.com/romantech/syntax-analyzer/commit/031bab32d095af58837cefef61424543ac7fe340)), closes [#246](https://github.com/romantech/syntax-analyzer/issues/246)
+
 ## [1.6.0](https://github.com/romantech/syntax-analyzer/compare/v1.5.0...v1.6.0) (2026-11-24)
 
 
