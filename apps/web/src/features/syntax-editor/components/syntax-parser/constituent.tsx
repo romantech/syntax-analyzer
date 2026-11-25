@@ -23,8 +23,7 @@ interface ConstituentProps {
   begin: number;
   end: number;
   overviewTagId?: number;
-  animateLabels: boolean;
-  animateExtraLabels: boolean;
+  previouslyVisibleTags?: ReadonlySet<number>;
   disclosure?: Disclosure;
 }
 
@@ -34,8 +33,7 @@ export default function Constituent({
   begin,
   end,
   overviewTagId,
-  animateLabels,
-  animateExtraLabels,
+  previouslyVisibleTags,
   disclosure,
 }: PropsWithChildren<ConstituentProps>) {
   const primary = tags[0];
@@ -44,6 +42,7 @@ export default function Constituent({
   const isDeleteMode = useAtomValue(deleteModeAtom);
   const isMultipleTokenRange = isMultipleTokensInRange(begin, end);
   const { labelRef, width } = useLabelWidth(!!disclosure);
+  const entering = previouslyVisibleTags && tags.every(({ id }) => !previouslyVisibleTags.has(id));
 
   return (
     <Text
@@ -57,6 +56,7 @@ export default function Constituent({
       data-constituent-id={primary.id}
       data-segment-begin={begin}
       data-segment-end={end}
+      data-entering={entering || undefined}
     >
       {children}
       <span
@@ -73,7 +73,7 @@ export default function Constituent({
               end={end}
               abbreviated={!showFullTagNames}
               isDeleteMode={isDeleteMode}
-              entering={animateLabels || (animateExtraLabels && tag.id !== overviewTagId)}
+              entering={previouslyVisibleTags?.has(tag.id) === false}
               disclosure={tag.id === overviewTagId ? disclosure : undefined}
             />
           ))}

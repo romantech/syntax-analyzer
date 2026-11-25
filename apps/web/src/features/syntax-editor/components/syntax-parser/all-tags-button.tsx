@@ -1,17 +1,18 @@
 import { Box, Button, Icon } from '@chakra-ui/react';
+import type { MouseEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LuChevronsDown } from 'react-icons/lu';
 import { useLabelWidth } from './use-label-width';
 
-const collapsedBackground = { base: 'teal.50', _dark: '#101e1c' };
-const expandedBackground = { base: 'teal.100', _dark: 'teal.800' };
+const restingBackground = 'color-mix(in srgb, var(--tag-toggle-background) 75%, transparent)';
+const hoverBackground = 'var(--tag-toggle-background)';
 
 interface AllTagsButtonProps {
   expanded: boolean;
   sentenceId: string;
   disabled: boolean;
   isTapMode: boolean;
-  onClick: () => void;
+  onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function AllTagsButton({
@@ -30,14 +31,19 @@ export default function AllTagsButton({
       minH={isTapMode ? 11 : 9}
       variant="outline"
       colorPalette="teal"
-      bg={collapsedBackground}
+      css={{
+        '--tag-toggle-background': expanded
+          ? { base: 'colors.teal.100', _dark: 'colors.teal.800' }
+          : { base: 'colors.teal.50', _dark: '#101e1c' },
+      }}
+      bg={restingBackground}
       color={{ base: 'teal.700', _dark: '#80ecd9' }}
       borderColor={{ base: 'teal.600', _dark: '#52bbad' }}
-      _hover={{ bg: expandedBackground }}
+      _hover={{ bg: hoverBackground }}
       _expanded={{
-        bg: expandedBackground,
+        bg: restingBackground,
         color: { _dark: 'teal.200' },
-        _hover: { bg: collapsedBackground },
+        _hover: { bg: hoverBackground },
       }}
       aria-expanded={expanded}
       aria-controls={sentenceId}
