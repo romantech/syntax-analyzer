@@ -109,19 +109,15 @@ function AnalysisSentence({
           <Button
             size="sm"
             minH={isTapMode ? 11 : 9}
-            variant={allTagsVisible ? 'subtle' : 'solid'}
+            variant="outline"
             colorPalette="teal"
-            color={allTagsVisible ? { _light: 'teal.700' } : { _dark: 'teal.950' }}
-            borderWidth="1px"
-            borderColor={allTagsVisible ? 'teal.accent' : 'transparent'}
-            css={
-              allTagsVisible
-                ? undefined
-                : {
-                    bg: { base: 'teal.700', _dark: 'teal.300' },
-                    _hover: { bg: { base: 'teal.700/90', _dark: 'teal.300/90' } },
-                  }
-            }
+            bg={{ base: 'teal.50', _dark: '#101e1c' }}
+            color={{ base: 'teal.700', _dark: '#80ecd9' }}
+            borderColor={{ base: 'teal.600', _dark: '#52bbad' }}
+            _expanded={{
+              bg: { base: 'teal.100', _dark: 'teal.800' },
+              color: { _dark: 'teal.200' },
+            }}
             aria-expanded={allTagsVisible}
             aria-controls={sentenceId}
             disabled={isEditing}
