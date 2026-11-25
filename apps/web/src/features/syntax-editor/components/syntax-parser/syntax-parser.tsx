@@ -2,6 +2,7 @@ import { Box, Button } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LuChevronsDown, LuChevronsUp } from 'react-icons/lu';
 import { TbMoodEmpty } from 'react-icons/tb';
 
 import { TextPlaceholder, ThreeDotsWave, useTransitionLoading } from '@/base';
@@ -107,9 +108,20 @@ function AnalysisSentence({
         <Box position="sticky" insetInlineStart={0} w="fit-content" mb={2} zIndex={3}>
           <Button
             size="sm"
-            minH={isTapMode ? '44px' : undefined}
-            variant={allTagsVisible ? 'subtle' : 'outline'}
-            colorPalette={allTagsVisible ? 'teal' : 'gray'}
+            minH={isTapMode ? 11 : 9}
+            variant={allTagsVisible ? 'subtle' : 'solid'}
+            colorPalette="teal"
+            color={allTagsVisible ? { _light: 'teal.700' } : { _dark: 'teal.950' }}
+            borderWidth="1px"
+            borderColor={allTagsVisible ? 'teal.accent' : 'transparent'}
+            css={
+              allTagsVisible
+                ? undefined
+                : {
+                    bg: { base: 'teal.700', _dark: 'teal.300' },
+                    _hover: { bg: { base: 'teal.700/90', _dark: 'teal.300/90' } },
+                  }
+            }
             aria-expanded={allTagsVisible}
             aria-controls={sentenceId}
             disabled={isEditing}
@@ -118,6 +130,7 @@ function AnalysisSentence({
               setShowAllTags(!showAllTags);
             }}
           >
+            {allTagsVisible ? <LuChevronsUp aria-hidden /> : <LuChevronsDown aria-hidden />}
             {allTagsVisible ? t('editor.collapseAllTags') : t('editor.expandAllTags')}
           </Button>
         </Box>
