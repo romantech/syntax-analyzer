@@ -32,6 +32,10 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
     white-space: nowrap;
     user-select: none;
 
+    &[data-disclosure] {
+      overflow: clip;
+    }
+
     &::before {
       content: "";
       position: absolute;
@@ -43,6 +47,12 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
       pointer-events: none;
     }
   }
+}
+
+.constituent-label-content {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
 }
 
 .constituent-label {
@@ -76,13 +86,18 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
   > svg {
     flex: none;
-    width: 0.875rem;
-    height: 0.875rem;
+    align-self: center;
+    width: 0.75rem;
+    height: 0.75rem;
   }
 }
 
 button.constituent-label {
   cursor: pointer;
+
+  &[aria-expanded="true"] > svg {
+    transform: rotate(180deg);
+  }
 
   &:focus-visible {
     outline: 2px solid currentColor;
@@ -91,6 +106,14 @@ button.constituent-label {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .constituent-labels[data-disclosure] {
+    transition: width 160ms ease-out;
+  }
+
+  button.constituent-label[aria-expanded] > svg {
+    transition: transform 160ms ease-out;
+  }
+
   .constituent-label[data-entering] {
     animation: constituent-label-in 150ms cubic-bezier(0.23, 1, 0.32, 1);
   }

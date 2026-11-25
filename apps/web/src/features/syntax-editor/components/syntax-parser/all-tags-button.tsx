@@ -1,7 +1,7 @@
-import { Box, Button } from '@chakra-ui/react';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { Box, Button, Icon } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { LuChevronsDown, LuChevronsUp } from 'react-icons/lu';
+import { LuChevronsDown } from 'react-icons/lu';
+import { useLabelWidth } from './use-label-width';
 
 const collapsedBackground = { base: 'teal.50', _dark: '#101e1c' };
 const expandedBackground = { base: 'teal.100', _dark: 'teal.800' };
@@ -22,19 +22,7 @@ export default function AllTagsButton({
   onClick,
 }: AllTagsButtonProps) {
   const { t } = useTranslation();
-  const labelRef = useRef<HTMLSpanElement>(null);
-  const [labelWidth, setLabelWidth] = useState<number>();
-
-  useLayoutEffect(() => {
-    const label = labelRef.current;
-    if (!label) return;
-
-    const measure = () => setLabelWidth(label.getBoundingClientRect().width);
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(label);
-    return () => observer.disconnect();
-  }, []);
+  const { labelRef, width } = useLabelWidth();
 
   return (
     <Button
@@ -56,13 +44,19 @@ export default function AllTagsButton({
       disabled={disabled}
       onClick={onClick}
     >
-      {expanded ? <LuChevronsUp aria-hidden /> : <LuChevronsDown aria-hidden />}
+      <Icon
+        as={LuChevronsDown}
+        aria-hidden
+        transform={expanded ? 'rotate(180deg)' : 'rotate(0deg)'}
+        transition="transform 160ms ease-out"
+        _motionReduce={{ transition: 'none' }}
+      />
       <Box
         as="span"
         display="inline-flex"
         overflow="hidden"
         flexShrink={0}
-        style={{ width: labelWidth }}
+        style={{ width }}
         transition="width 160ms ease-out"
         _motionReduce={{ transition: 'none' }}
       >
