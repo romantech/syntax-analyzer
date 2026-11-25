@@ -7,21 +7,21 @@ import { showFullTagNamesAtom, tagInfoModeAtom } from '@/features/syntax-editor/
 function TagDisplaySwitch({
   label,
   isTapMode,
-  preferenceAtom,
+  checked,
+  onCheckedChange,
 }: {
   label: string;
   isTapMode: boolean;
-  preferenceAtom: typeof tagInfoModeAtom;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
 }) {
-  const [checked, setChecked] = useAtom(preferenceAtom);
-
   return (
     <Switch.Root
       minH={isTapMode ? '44px' : 7}
       cursor="pointer"
       colorPalette="teal"
       checked={checked}
-      onCheckedChange={({ checked }) => setChecked(checked)}
+      onCheckedChange={({ checked }) => onCheckedChange(checked)}
     >
       <Switch.HiddenInput role="switch" />
       <Switch.Label fontSize="sm" fontWeight="medium">
@@ -36,17 +36,21 @@ function TagDisplaySwitch({
 
 export default function TagDisplayControls({ isTapMode = false }: { isTapMode?: boolean }) {
   const { t } = useTranslation();
+  const [showFullTagNames, setShowFullTagNames] = useAtom(showFullTagNamesAtom);
+  const [showTagDescriptions, setShowTagDescriptions] = useAtom(tagInfoModeAtom);
 
   return (
     <Flex align="center" wrap="wrap" columnGap={4} rowGap={isTapMode ? 0 : 1}>
       <TagDisplaySwitch
-        label={t('editor.tagLabelFull')}
-        preferenceAtom={showFullTagNamesAtom}
+        label={t('editor.tagAbbreviations')}
+        checked={!showFullTagNames}
+        onCheckedChange={(checked) => setShowFullTagNames(!checked)}
         isTapMode={isTapMode}
       />
       <TagDisplaySwitch
-        label={t('editor.tagTooltip')}
-        preferenceAtom={tagInfoModeAtom}
+        label={t('editor.tagDescriptions')}
+        checked={showTagDescriptions}
+        onCheckedChange={setShowTagDescriptions}
         isTapMode={isTapMode}
       />
     </Flex>
