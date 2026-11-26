@@ -154,7 +154,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
           FIELDS.ANALYSIS,
           FIELDS.RANDOM_SENTENCE,
         ),
-        ['9', '19'],
+        ['19', '19'],
       );
 
       const moved = await request(remaining, { cookie, ip: secondIP });
@@ -170,7 +170,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       const secondCookie = replacement.split(';')[0];
       assert.notEqual(secondCookie, cookie);
       assert.deepEqual(await second.json(), {
-        analysis: 9,
+        analysis: 10,
         random_sentence: 19,
       });
 
@@ -183,7 +183,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       const legacy = await request(remaining, { cookie, legacy: true });
       assert.equal(legacy.headers.has('set-cookie'), false);
       assert.deepEqual(await legacy.json(), {
-        analysis: 9,
+        analysis: 10,
         random_sentence: 19,
       });
       await clearKeys();
@@ -225,7 +225,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         now = beforeMidnight;
         await clearKeys();
         const field = FIELDS.ANALYSIS;
-        const requests = Array.from({ length: 26 }, (_, index) => ({
+        const requests = Array.from({ length: 51 }, (_, index) => ({
           ip: sameIP ? firstIP : `192.0.2.${index + 1}`,
           browserId: randomUUID(),
         }));
@@ -236,7 +236,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         );
         assert.equal(
           results.filter(({ status }) => status === 'fulfilled').length,
-          sameIP ? 5 : 25,
+          sameIP ? 10 : 50,
         );
         for (const result of results.filter(
           ({ status }) => status === 'rejected',
@@ -279,7 +279,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
           FIELDS.ANALYSIS,
           FIELDS.RANDOM_SENTENCE,
         ),
-        [String(midnight), '50', '100'],
+        [String(midnight), '100', '100'],
       );
     },
   );
@@ -308,7 +308,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
           FIELDS.ANALYSIS,
           FIELDS.RANDOM_SENTENCE,
         ),
-        [String(midnight), '48', '99'],
+        [String(midnight), '98', '99'],
       );
 
       const restartedQuota = createAnalyzerQuota(quotaRedis);
@@ -327,7 +327,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
           FIELDS.ANALYSIS,
           FIELDS.RANDOM_SENTENCE,
         ),
-        [String(midnight), '46', '99'],
+        [String(midnight), '96', '99'],
       );
     },
   );
@@ -337,7 +337,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
     await redis.hset(REMAINING.TOTAL, periodField, randomUUID());
     await withAnalyzerQuota(firstClient, FIELDS.ANALYSIS, 2, async () => {});
     await getAnalyzerRemainingCounts(firstClient);
-    assert.equal(await redis.hget(REMAINING.TOTAL, FIELDS.ANALYSIS), '48');
+    assert.equal(await redis.hget(REMAINING.TOTAL, FIELDS.ANALYSIS), '98');
   });
 
   await context.test(
@@ -505,7 +505,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       assert.equal(rejected.length, 1);
       assert.equal(rejected[0].reason.status, exhausted.status);
       assert.equal(rejected[0].reason.message, exhausted.message);
-      assert.equal(await redis.hget(REMAINING.TOTAL, field), '40');
+      assert.equal(await redis.hget(REMAINING.TOTAL, field), '90');
       assert.deepEqual(await getAnalyzerRemainingCounts(firstClient), {
         analysis: 0,
         random_sentence: 20,
@@ -531,7 +531,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         }),
         (error) => error === modelError,
       );
-      assert.equal(await redis.hget(REMAINING.TOTAL, field), '50');
+      assert.equal(await redis.hget(REMAINING.TOTAL, field), '100');
       assert.equal(await redis.hget(userKey, field), '10');
       assert.equal(await redis.pexpiretime(userKey), expiresAt);
     },
@@ -550,7 +550,7 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         }),
         /Model request failed/,
       );
-      assert.equal(await redis.hget(REMAINING.TOTAL, field), '48');
+      assert.equal(await redis.hget(REMAINING.TOTAL, field), '98');
       assert.equal(await redis.hget(REMAINING.USER(firstIP), field), '2');
     },
   );
