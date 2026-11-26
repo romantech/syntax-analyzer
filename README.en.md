@@ -51,7 +51,7 @@ Syntax Analyzer is a web app that automatically analyzes English sentence struct
 
 # How Analysis Data Is Generated
 
-The Express API validates the request, then reserves one analysis credit in Redis. It returns the validated analysis from OpenAI or refunds the reserved credit if analysis fails.
+When an analysis request comes in, the API validates the input and reserves one analysis credit in Redis. It validates the AI response and retries once if it cannot build a syntax structure from the spans in the response. If the analysis succeeds, the API returns the validated data. If it fails, the API refunds the reserved credit.
 
 [Analysis request sequence diagram](README.md#분석-데이터-생성-흐름)
 
