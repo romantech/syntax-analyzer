@@ -268,4 +268,11 @@ button.constituent-label {
   .constituent.token-group::before {
     pointer-events: none;
   }
+
+  .constituent[data-stacked-labels] > .constituent-labels[data-disclosure] {
+    > .constituent-label-content > .constituent-label:last-child:not(button) {
+      padding-inline: 0.5rem;
+      padding-block-end: 0.375rem;
+    }
+  }
 }
