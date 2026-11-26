@@ -80,20 +80,22 @@ test('개별 태그를 펼치면 같은 범위와 상위 구·절의 태그를 �
 });
 
 test('접힌 상위 태그 아래의 펼침 상태로 구·절이 드러나지 않는다', () => {
-  const sentence = ['We', 'saw', 'what', 'she', 'wrote', '.'];
+  const sentence = ['We', 'saw', 'what', 'the', 'child', 'wrote', '.'];
   const saved = createAnalysis(sentence, [
-    [1, 5, 'verb phrase'],
-    [2, 5, 'object', 'noun clause'],
-    [3, 4, 'subject'],
+    [1, 6, 'verb phrase'],
+    [2, 6, 'object', 'noun clause'],
+    [3, 5, 'subject', 'noun phrase'],
+    [5, 6, 'verb'],
   ]);
-  const [phrase, object, subject] = saved.children;
+  const [phrase, object, subject, verb] = saved.children;
   saved.children = [phrase];
   phrase.children = [object];
-  object.children = [subject];
+  object.children = [subject, verb];
 
   const learning = getLearningSegment(saved, sentence);
   const open = getOverviewDetails(learning, new Set([object.id, subject.id]));
   assert.equal(open.get(subject.id)?.expanded, true);
+  assert.equal(open.get(verb.id)?.canExpand, false);
   assert.deepEqual(
     open.get(phrase.id)?.tags.map(({ label }) => label),
     ['verb phrase'],

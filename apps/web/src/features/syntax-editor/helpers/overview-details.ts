@@ -26,8 +26,10 @@ export function getOverviewDetails(segment: TSegment, expanded: ReadonlySet<numb
 
     let hasExpandedDescendant = false;
     if (!role || isExpanded) {
+      // An expanded parent already reveals the context it shares with every child.
+      const childHasAncestorDetails = !isExpanded && (hasAncestorDetails || contextTags.length > 0);
       for (const child of children) {
-        if (visit(child, showForms || isExpanded, hasAncestorDetails || contextTags.length > 0)) {
+        if (visit(child, showForms || isExpanded, childHasAncestorDetails)) {
           hasExpandedDescendant = true;
         }
       }
