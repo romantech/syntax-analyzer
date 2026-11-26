@@ -6,6 +6,7 @@ import {
   getLearningSegment,
   getOverviewTag,
 } from '../src/features/syntax-editor/helpers/learning-tags.ts';
+import { getOverviewDetails } from '../src/features/syntax-editor/helpers/overview-details.ts';
 import type { TSegment } from '../src/features/syntax-editor/types/analysis';
 
 function createAnalysis(sentence: string[], spans: [number, number, ...string[]][]) {
@@ -35,6 +36,73 @@ function createAnalysis(sentence: string[], spans: [number, number, ...string[]]
 }
 
 const labels = (segment: TSegment) => segment.constituents.map(({ label }) => label);
+
+test('개별 태그를 펼치면 같은 범위와 상위 구·절의 태그를 표시한다', () => {
+  const sentence = ['The', 'child', 'opened', 'it', ',', 'and', 'she', 'left', '.'];
+  const saved = createAnalysis(sentence, [
+    [0, 4, 'independent clause'],
+    [0, 2, 'subject', 'noun phrase'],
+    [2, 4, 'verb phrase'],
+    [2, 3, 'verb'],
+    [3, 4, 'object'],
+    [6, 8, 'independent clause'],
+    [6, 7, 'subject'],
+  ]);
+  const [clause, subject, phrase, verb, object, otherClause, otherSubject] = saved.children;
+  saved.children = [clause, otherClause];
+  clause.children = [subject, phrase];
+  phrase.children = [verb, object];
+  otherClause.children = [otherSubject];
+
+  const learning = getLearningSegment(saved, sentence);
+  const overview = (...ids: number[]) => getOverviewDetails(learning, new Set(ids));
+  const visibleLabels = (details: ReturnType<typeof overview>, segment: TSegment) =>
+    details.get(segment.id)?.tags.map(({ label }) => label);
+
+  const collapsed = overview();
+  assert.equal(collapsed.get(object.id)?.canExpand, true);
+  assert.deepEqual(visibleLabels(collapsed, clause), []);
+
+  const subjectOpen = overview(subject.id);
+  assert.deepEqual(visibleLabels(subjectOpen, subject), ['subject', 'noun phrase']);
+  assert.deepEqual(visibleLabels(subjectOpen, clause), ['independent clause']);
+  assert.deepEqual(visibleLabels(subjectOpen, phrase), []);
+
+  const bothOpen = overview(subject.id, object.id);
+  assert.deepEqual(visibleLabels(bothOpen, phrase), ['verb phrase']);
+  assert.deepEqual(visibleLabels(bothOpen, otherClause), []);
+
+  const objectOpen = overview(object.id);
+  assert.deepEqual(visibleLabels(objectOpen, subject), ['subject']);
+  assert.deepEqual(visibleLabels(objectOpen, clause), ['independent clause']);
+  assert.deepEqual(visibleLabels(objectOpen, phrase), ['verb phrase']);
+  assert.deepEqual(visibleLabels(overview(), phrase), []);
+});
+
+test('접힌 상위 태그 아래의 펼침 상태로 구·절이 드러나지 않는다', () => {
+  const sentence = ['We', 'saw', 'what', 'she', 'wrote', '.'];
+  const saved = createAnalysis(sentence, [
+    [1, 5, 'verb phrase'],
+    [2, 5, 'object', 'noun clause'],
+    [3, 4, 'subject'],
+  ]);
+  const [phrase, object, subject] = saved.children;
+  saved.children = [phrase];
+  phrase.children = [object];
+  object.children = [subject];
+
+  const learning = getLearningSegment(saved, sentence);
+  const open = getOverviewDetails(learning, new Set([object.id, subject.id]));
+  assert.equal(open.get(subject.id)?.expanded, true);
+  assert.deepEqual(
+    open.get(phrase.id)?.tags.map(({ label }) => label),
+    ['verb phrase'],
+  );
+
+  const closed = getOverviewDetails(learning, new Set([subject.id]));
+  assert.equal(closed.has(subject.id), false);
+  assert.deepEqual(closed.get(phrase.id)?.tags, []);
+});
 
 test('기존 분석의 중복 태그를 정리하고 원본 태그를 수정하지 않는다', () => {
   const sentence = ['Mangroves', 'braided', 'the', 'shoreline', '.'];

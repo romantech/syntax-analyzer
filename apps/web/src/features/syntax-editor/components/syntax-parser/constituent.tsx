@@ -37,48 +37,55 @@ export default function Constituent({
   disclosure,
 }: PropsWithChildren<ConstituentProps>) {
   const primary = tags[0];
-  const { dark, light } = CONSTITUENT_COLORS[primary.type];
+  const colors = primary ? CONSTITUENT_COLORS[primary.type] : undefined;
   const showFullTagNames = useAtomValue(showFullTagNamesAtom);
   const isDeleteMode = useAtomValue(deleteModeAtom);
   const isMultipleTokenRange = isMultipleTokensInRange(begin, end);
   const { labelRef, width } = useLabelWidth(!!disclosure);
   const entering = previouslyVisibleTags && tags.every(({ id }) => !previouslyVisibleTags.has(id));
 
+  // Keep descendant disclosure buttons mounted when an ancestor label appears or disappears.
   return (
     <Text
       as="span"
-      color={light}
-      _dark={{ color: dark }}
-      className={clsx(CONSTITUENT_CLASSES.CONSTITUENT, {
-        [CONSTITUENT_CLASSES.TOKEN_GROUP]: isMultipleTokenRange,
-        [CONSTITUENT_CLASSES.TOKEN]: !isMultipleTokenRange,
-      })}
-      data-constituent-id={primary.id}
-      data-segment-begin={begin}
-      data-segment-end={end}
-      data-entering={entering || undefined}
+      display={primary ? undefined : 'contents'}
+      color={colors?.light}
+      _dark={colors && { color: colors.dark }}
+      className={
+        primary &&
+        clsx(CONSTITUENT_CLASSES.CONSTITUENT, {
+          [CONSTITUENT_CLASSES.TOKEN_GROUP]: isMultipleTokenRange,
+          [CONSTITUENT_CLASSES.TOKEN]: !isMultipleTokenRange,
+        })
+      }
+      data-constituent-id={primary?.id}
+      data-segment-begin={primary ? begin : undefined}
+      data-segment-end={primary ? end : undefined}
+      data-entering={primary && entering ? true : undefined}
     >
       {children}
-      <span
-        className="constituent-labels"
-        data-disclosure={!!disclosure || undefined}
-        style={{ width }}
-      >
-        <span className="constituent-label-content" ref={labelRef}>
-          {tags.map((tag) => (
-            <ConstituentLabel
-              key={tag.id}
-              tag={tag}
-              begin={begin}
-              end={end}
-              abbreviated={!showFullTagNames}
-              isDeleteMode={isDeleteMode}
-              entering={previouslyVisibleTags?.has(tag.id) === false}
-              disclosure={tag.id === overviewTagId ? disclosure : undefined}
-            />
-          ))}
+      {primary && (
+        <span
+          className="constituent-labels"
+          data-disclosure={!!disclosure || undefined}
+          style={{ width }}
+        >
+          <span className="constituent-label-content" ref={labelRef}>
+            {tags.map((tag) => (
+              <ConstituentLabel
+                key={tag.id}
+                tag={tag}
+                begin={begin}
+                end={end}
+                abbreviated={!showFullTagNames}
+                isDeleteMode={isDeleteMode}
+                entering={previouslyVisibleTags?.has(tag.id) === false}
+                disclosure={tag.id === overviewTagId ? disclosure : undefined}
+              />
+            ))}
+          </span>
         </span>
-      </span>
+      )}
     </Text>
   );
 }

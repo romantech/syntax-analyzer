@@ -18,6 +18,7 @@ import {
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
 import { getLearningSegment } from '../../helpers/learning-tags';
+import { getOverviewDetails } from '../../helpers/overview-details';
 import AllTagsButton from './all-tags-button';
 import SegmentList, { hasOverviewTags } from './segment-list';
 import '@/features/syntax-editor/styles/constituent.scss';
@@ -77,6 +78,10 @@ function AnalysisSentence({
   const hasOverview = analysis.isAnalyzedByGPT && hasOverviewTags(learningSegment);
   const allTagsVisible = !hasOverview || showAllTags || isEditing;
   const displayedSegment = isEditing ? segment : learningSegment;
+  const overviewDetails = useMemo(
+    () => (allTagsVisible ? undefined : getOverviewDetails(learningSegment, expanded)),
+    [allTagsVisible, learningSegment, expanded],
+  );
 
   const markRevealedTags = (animate: boolean) => {
     if (!animate || !sentenceRef.current) {
@@ -136,7 +141,7 @@ function AnalysisSentence({
         <SegmentList
           segment={displayedSegment}
           tokenElements={TokenList({ sentence: analysis.sentence, isTapMode })}
-          overview={allTagsVisible ? undefined : { expanded, toggle }}
+          overview={overviewDetails && { details: overviewDetails, toggle }}
           previouslyVisibleTags={isEditing ? undefined : previouslyVisibleTags}
         />
       </Sentence>

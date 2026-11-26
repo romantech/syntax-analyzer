@@ -1,11 +1,7 @@
 import type { RefObject } from 'react';
 
 import { kebabToCamel } from '@/base';
-import {
-  CONSTITUENT_CLASSES,
-  CONSTITUENT_DATA_ATTRS,
-  getNumberAttr,
-} from '@/features/syntax-editor';
+import { CONSTITUENT_CLASSES } from '@/features/syntax-editor';
 
 const LABEL_GAP = 4;
 
@@ -56,12 +52,7 @@ export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapM
     constituent.style.removeProperty('--constituent-label-inline-space');
   }
 
-  Array.from(sentence.children).forEach((span) => {
-    const spanElement = span as HTMLElement;
-    if (getNumberAttr(spanElement, CONSTITUENT_DATA_ATTRS.ID)) {
-      assignCalculatedLevel(spanElement);
-    }
-  });
+  assignCalculatedLevel(sentence);
 
   // 절대 위치 라벨도 모바일 문장 스크롤 영역의 높이에 포함한다.
   sentence.style.paddingBottom = '0px';
