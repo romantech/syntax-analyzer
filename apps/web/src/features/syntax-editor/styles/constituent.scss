@@ -216,6 +216,22 @@ button.constituent-label {
         line-height: 1.25;
       }
     }
+
+    > button.constituent-label {
+      position: relative;
+      z-index: 1;
+
+      + .constituent-label {
+        margin-block-start: -0.25rem;
+        padding-block-start: 1px;
+      }
+    }
+
+    > .constituent-label:only-child:not(button) {
+      inline-size: min-content;
+      max-inline-size: var(--constituent-label-max-width);
+      overflow-wrap: break-word;
+    }
   }
 }
 
@@ -226,6 +242,12 @@ button.constituent-label {
 .constituent.token-group[data-detail-only] {
   margin-inline: 0;
   padding-inline: 0;
+}
+
+.constituent.token-group > .constituent.token[data-detail-only]:first-child {
+  > .constituent-labels {
+    margin-inline-start: 0.25rem;
+  }
 }
 
 @media (max-width: 61.99em), (pointer: coarse) {
