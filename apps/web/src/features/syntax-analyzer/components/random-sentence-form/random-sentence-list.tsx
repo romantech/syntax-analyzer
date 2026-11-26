@@ -68,7 +68,9 @@ export default function RandomSentenceList({ data, query }: RandomSentenceListPr
             onClick={() => copySentence(sentence)}
           >
             <span lang="en">
-              <Highlight query={query}>{sentence}</Highlight>
+              <Highlight query={query} ignoreCase>
+                {sentence}
+              </Highlight>
             </span>
           </Button>
         ))}
