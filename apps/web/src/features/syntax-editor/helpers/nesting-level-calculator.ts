@@ -5,7 +5,7 @@ import { CONSTITUENT_CLASSES } from '@/features/syntax-editor';
 
 const LABEL_GAP = 4;
 
-const fitLabelWidth = (element: HTMLElement, isTapMode: boolean): number => {
+const fitLabelWidth = (element: HTMLElement): number => {
   const labels = element.querySelector(':scope > .constituent-labels > .constituent-label-content');
   if (!labels) return 0;
 
@@ -15,11 +15,7 @@ const fitLabelWidth = (element: HTMLElement, isTapMode: boolean): number => {
   let extraRows = 0;
   const primary = labels.firstElementChild;
 
-  if (
-    isTapMode &&
-    primary?.getAttribute('aria-expanded') === 'true' &&
-    labels.children.length > 1
-  ) {
+  if (primary?.getAttribute('aria-expanded') === 'true' && labels.children.length > 1) {
     const { width, height } = primary.getBoundingClientRect();
     const availableWidth = Math.max(segmentWidth - LABEL_GAP, width);
     if (labelWidth > availableWidth) {
@@ -37,12 +33,12 @@ const fitLabelWidth = (element: HTMLElement, isTapMode: boolean): number => {
   return extraRows;
 };
 
-const assignCalculatedLevel = (element: HTMLElement, isTapMode: boolean): number => {
+const assignCalculatedLevel = (element: HTMLElement): number => {
   if (element.classList.contains('constituent-labels')) return 0;
   let maxChildLevel = 0;
 
   for (const child of element.children) {
-    const childLevel = assignCalculatedLevel(child as HTMLElement, isTapMode);
+    const childLevel = assignCalculatedLevel(child as HTMLElement);
     maxChildLevel = Math.max(maxChildLevel, childLevel);
   }
 
@@ -57,7 +53,7 @@ const assignCalculatedLevel = (element: HTMLElement, isTapMode: boolean): number
   });
 
   // Keep the connector aligned with the first row and reserve lower rows for ancestors.
-  return currentLevel + (isConstituent ? fitLabelWidth(element, isTapMode) : 0);
+  return currentLevel + (isConstituent ? fitLabelWidth(element) : 0);
 };
 
 export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapMode = false) => {
@@ -71,7 +67,7 @@ export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapM
     constituent.style.removeProperty('--constituent-label-inline-space');
   }
 
-  assignCalculatedLevel(sentence, isTapMode);
+  assignCalculatedLevel(sentence);
 
   // 절대 위치 라벨도 모바일 문장 스크롤 영역의 높이에 포함한다.
   sentence.style.paddingBottom = '0px';

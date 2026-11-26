@@ -95,6 +95,10 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 button.constituent-label {
   cursor: pointer;
 
+  &[aria-expanded][data-abbreviated] {
+    min-width: var(--constituent-label-size);
+  }
+
   &[aria-expanded="true"] > svg {
     transform: rotate(180deg);
   }
@@ -187,6 +191,30 @@ button.constituent-label {
   }
 }
 
+.constituent[data-stacked-labels] > .constituent-labels[data-disclosure] {
+  --constituent-label-width: max-content;
+  width: max-content;
+  overflow: visible;
+  transition: none;
+
+  > .constituent-label-content {
+    flex-direction: column;
+    max-inline-size: var(--constituent-label-max-width);
+
+    > .constituent-label {
+      max-inline-size: 100%;
+      justify-content: center;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      text-align: center;
+    }
+  }
+}
+
+.constituent.token-group[data-stacked-labels] > .constituent-labels[data-disclosure] {
+  transform: translate(-50%, calc(1px - var(--constituent-label-size) / 2));
+}
+
 @media (max-width: 61.99em), (pointer: coarse) {
   .constituent {
     --constituent-label-size: 44px;
@@ -199,29 +227,5 @@ button.constituent-label {
   }
   .constituent.token-group::before {
     pointer-events: none;
-  }
-
-  .constituent[data-stacked-labels] > .constituent-labels[data-disclosure] {
-    --constituent-label-width: max-content;
-    width: max-content;
-    overflow: visible;
-    transition: none;
-
-    > .constituent-label-content {
-      flex-direction: column;
-      max-inline-size: var(--constituent-label-max-width);
-
-      > .constituent-label {
-        max-inline-size: 100%;
-        justify-content: center;
-        white-space: normal;
-        overflow-wrap: anywhere;
-        text-align: center;
-      }
-    }
-  }
-
-  .constituent.token-group[data-stacked-labels] > .constituent-labels[data-disclosure] {
-    transform: translate(-50%, calc(1px - var(--constituent-label-size) / 2));
   }
 }
