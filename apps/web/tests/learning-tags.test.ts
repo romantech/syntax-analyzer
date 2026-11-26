@@ -111,3 +111,40 @@ test('역할이 확인되는 옛 부사구를 기본 보기에 표시하고 전�
   assert.equal(getOverviewTag(phrase), undefined);
   assert.deepEqual(labels(phrase), ['prepositional phrase']);
 });
+
+test('저장된 동사구 안의 절 수식어를 기본 보기 부사어로 표시한다', () => {
+  const sentence = ['She', 'arrived', 'early', '.'];
+  const saved = createAnalysis(sentence, [
+    [0, 1, 'subject'],
+    [1, 3, 'verb phrase'],
+    [1, 2, 'verb'],
+    [2, 3, 'adverb'],
+  ]);
+  const [subject, phrase, verb, adverb] = saved.children;
+  saved.children = [subject, phrase];
+  phrase.children = [verb, adverb];
+
+  const shown = getLearningSegment(saved, sentence).children[1].children[1];
+  assert.equal(getOverviewTag(shown)?.label, 'adverbial');
+  assert.deepEqual(labels(shown), ['adverbial', 'adverb']);
+  assert.deepEqual(labels(adverb), ['adverb']);
+});
+
+test('명사구와 형용사구 안의 부사는 절 수식어로 올리지 않는다', () => {
+  const sentence = ['She', 'found', 'a', 'very', 'quiet', 'room', '.'];
+  const wrappers: [number, number, string][] = [
+    [2, 6, 'noun phrase'],
+    [3, 5, 'adjectival phrase'],
+  ];
+  for (const wrapper of wrappers) {
+    const saved = createAnalysis(sentence, [[1, 6, 'verb phrase'], wrapper, [3, 4, 'adverb']]);
+    const [verbPhrase, innerPhrase, adverb] = saved.children;
+    saved.children = [verbPhrase];
+    verbPhrase.children = [innerPhrase];
+    innerPhrase.children = [adverb];
+
+    const shown = getLearningSegment(saved, sentence).children[0].children[0].children[0];
+    assert.equal(getOverviewTag(shown), undefined, wrapper[2]);
+    assert.deepEqual(labels(shown), ['adverb']);
+  }
+});

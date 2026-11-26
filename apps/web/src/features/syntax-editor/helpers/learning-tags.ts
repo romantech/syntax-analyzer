@@ -42,7 +42,7 @@ export function getLearningSegment(
 
   const childrenAtClauseLevel =
     constituents.some(({ type }) => type === 'clause') ||
-    (atClauseLevel && constituents.length === 0);
+    (atClauseLevel && constituents.every(({ label }) => label === 'verb phrase'));
   return {
     ...segment,
     constituents,
