@@ -193,6 +193,7 @@ button.constituent-label {
 
 .constituent[data-stacked-labels] > .constituent-labels {
   --constituent-label-width: max-content;
+  --constituent-label-surface-inset: 0px;
   width: max-content;
   overflow: visible;
   transition: none;
@@ -205,8 +206,15 @@ button.constituent-label {
       max-inline-size: 100%;
       justify-content: center;
       white-space: normal;
+      word-break: keep-all;
       overflow-wrap: anywhere;
       text-align: center;
+
+      &:not(button) {
+        min-height: 0;
+        padding: 3px 0.25rem;
+        line-height: 1.25;
+      }
     }
   }
 }

@@ -20,9 +20,9 @@ const fitLabelWidth = (element: HTMLElement): number => {
     const minimumWidth = Number.parseFloat(getComputedStyle(primary).minWidth);
     const availableWidth = Math.max(segmentWidth, minimumWidth);
     if (labelWidth <= availableWidth) return 0;
+    const rowHeight = primary.getBoundingClientRect().height;
     element.style.setProperty('--constituent-label-max-width', `${availableWidth}px`);
     element.dataset.stackedLabels = '';
-    const rowHeight = Number.parseFloat(getComputedStyle(primary).minHeight);
     return Math.ceil(labels.getBoundingClientRect().height / rowHeight) - 1;
   }
 
