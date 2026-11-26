@@ -33,140 +33,55 @@ POST /analyzer
 ```json
 {
   "model": "fast-ft",
-  "sentence": ["My", "name", "is", "John", "."]
+  "sentence": ["Some", "birds", "fly"]
 }
 ```
 
 #### Quota Consumption
 
-Each successful analysis uses one credit. All accepted request keys use the configured syntax analysis model.
+Each successful analysis uses one credit. All accepted request keys use the configured syntax analysis model. See [quota behavior](#shared-quota-behavior) for reservation and refund rules.
 
 #### Response
 
-> Analysis Data Model
-
-```tsx
-type AnalysisSource = 'user' | 'sample';
-type ISODateString = string;
-type ConstituentType = 'clause' | 'phrase' | 'token';
-
-type TConstituent = {
-  id: number; // Random 9-digit number
-  elementId: number; // Constituent ID
-  label: string; // Grammatical label, e.g., "subject"
-  abbreviation: string; // Abbreviation, e.g., "s"
-  type: ConstituentType; // Type of constituent
-};
-
-type TSegment = {
-  id: number; // Random 9-digit number
-  begin: number; // Start index
-  end: number; // End index
-  constituents: TConstituent[]; // Segment constituents
-  children: TSegment[]; // Sub-segments
-};
-
-type TAnalysis = {
-  id: string; // Random 21-byte string
-  source: AnalysisSource; // Data source
-  createdAt: ISODateString; // ISO 8601 timestamp
-  sentence: string[]; // Tokenized sentence
-  rootSegment: TSegment; // Root segment
-  isAnalyzedByGPT: boolean; // AI-analyzed status
-};
-```
-
-<details><summary>200 OK</summary>
-<br />
+HTTP 200 returns [`TAnalysis`](../web/src/features/syntax-editor/types/analysis.ts), with [constituent types](../web/src/features/syntax-editor/types/constituent.ts) including `token-group` for multi-word spans of token tags. The analysis ID is a UUID. Segment ranges use zero-based token indices with an exclusive end.
 
 ```json
 {
-  "id": "YW6AX-AOZb2-xYXt05xkn",
+  "id": "321aef9a-af3b-4457-85a8-6616a372b6e0",
   "source": "user",
-  "createdAt": "2023-05-10T23:08:08.000Z",
-  "sentence": ["My", "name", "is", "John", "."],
+  "createdAt": "2026-11-26T10:00:00.000Z",
+  "isAnalyzedByGPT": true,
+  "sentence": ["Some", "birds", "fly"],
   "rootSegment": {
-    "id": 840296172,
+    "id": 1000000000,
     "begin": 0,
-    "end": 5,
+    "end": 3,
     "constituents": [],
     "children": [
       {
-        "id": 987654321,
+        "id": 1000000001,
         "begin": 0,
         "end": 2,
         "constituents": [
-          {
-            "id": 456789123,
-            "elementId": 1,
-            "label": "subject",
-            "abbreviation": "s",
-            "type": "token"
-          }
+          { "id": 1000000002, "elementId": 1, "label": "subject", "abbreviation": "s", "type": "token-group" }
         ],
         "children": []
       },
       {
-        "id": 789123456,
+        "id": 1000000003,
         "begin": 2,
         "end": 3,
         "constituents": [
-          {
-            "id": 321654987,
-            "elementId": 2,
-            "label": "verb",
-            "abbreviation": "v",
-            "type": "token"
-          }
+          { "id": 1000000004, "elementId": 2, "label": "verb", "abbreviation": "v", "type": "token" }
         ],
-        "children": []
-      },
-      {
-        "id": 654321789,
-        "begin": 3,
-        "end": 4,
-        "constituents": [
-          {
-            "id": 654987321,
-            "elementId": 5,
-            "label": "object",
-            "abbreviation": "o",
-            "type": "token"
-          }
-        ],
-        "children": []
-      },
-      {
-        "id": 321789654,
-        "begin": 4,
-        "end": 5,
-        "constituents": [],
         "children": []
       }
     ]
-  },
-  "isAnalyzedByGPT": true
+  }
 }
 ```
-</details>
 
-<details><summary>400 Bad Request</summary>
-<br />
-
-```json
-{
-  "errors": [
-    {
-      "type": "field",
-      "value": "value that caused the error",
-      "msg": "Error description",
-      "path": "field_name",
-      "location": "body"
-    }
-  ]
-}
-```
-</details>
+If the model fails to produce a valid analysis, the API can return HTTP 502 with `{"status":"error","message":"Invalid sentence analysis."}`. See [request errors](#request-errors) for input validation.
 
 ### Generate random sentences
 
@@ -192,6 +107,8 @@ Omit a parameter to use its default. Supply `sent_count` and `max_chars` once ea
 
 The response contains exactly `sent_count` non-blank strings. The `max_chars` limit applies to each returned string, including any leading or trailing whitespace.
 
+See [request errors](#request-errors) for query validation.
+
 <details><summary>200 OK</summary>
 <br />
 
@@ -204,28 +121,10 @@ The response contains exactly `sent_count` non-blank strings. The `max_chars` li
 ```
 </details>
 
-<details><summary>400 Bad Request</summary>
-<br />
-
-```json
-{
-  "errors": [
-    {
-      "type": "field",
-      "value": "value that caused the error",
-      "msg": "Error description",
-      "path": "field_name",
-      "location": "query"
-    }
-  ]
-}
-```
-</details>
-
 <details><summary>502 Bad Gateway</summary>
 <br />
 
-If the model returns the wrong number of sentences, a blank sentence, or a sentence that exceeds the character limit, the API refunds the IP and shared quota reservations and returns:
+If the model returns the wrong number of sentences, a blank sentence, or a sentence that exceeds the character limit, the API refunds eligible quota reservations and returns:
 
 ```json
 {
@@ -235,23 +134,44 @@ If the model returns the wrong number of sentences, a blank sentence, or a sente
 ```
 </details>
 
-### Request body errors
+### Request errors
 
-The server returns `{"status":"error","message":"Invalid request body."}` with HTTP 400 when it cannot parse JSON. Requests over the 100 KiB body limit return HTTP 413 with `{"status":"error","message":"Request body too large."}`. Field validation errors return the `errors` array shown above.
+Invalid JSON returns HTTP 400 with `{"status":"error","message":"Invalid request body."}`. Bodies over 100 KiB return HTTP 413 with `{"status":"error","message":"Request body too large."}`.
+
+Field validation returns HTTP 400 with an `errors` array. The `location` is `body` for analysis and `query` for random sentence generation.
+
+```json
+{
+  "errors": [
+    {
+      "type": "field",
+      "value": ["Some", 42, "fly"],
+      "msg": "Each token must be a non-blank string of up to 80 characters.",
+      "path": "sentence",
+      "location": "body"
+    }
+  ]
+}
+```
 
 ### Shared quota behavior
 
-- The first balance lookup, analysis request, or random sentence request initializes both IP balances if the IP quota is missing or expired. The IP quota expires 24 hours after initialization.
-- The API validates inputs before reserving credits or calling a model.
-- Each model request reserves credits from both the IP-based and shared quotas before calling the model. Random sentence generation reserves one credit per request regardless of the number of sentences.
-- If either quota has insufficient credits, the API returns HTTP 400 with `{"status":"error","message":"No remaining request count available."}`.
+- The three analyzer endpoints accept `X-Analyzer-Browser: 1`. When cookie signing is configured, the API uses an existing signed anonymous browser cookie or issues a new one. The cookie lasts 30 days and identifies the same browser across networks. In production it uses `Secure`, `HttpOnly`, and `SameSite=Lax`.
+- For requests without browser identification, the per-client balance is keyed by IP. The separate IP cap is shared by browser and legacy requests.
+
+| Operation | Shared | Per browser or legacy IP | Per-IP cap |
+| --- | ---: | ---: | ---: |
+| Syntax analysis | 100 | 10 | 20 |
+| Random sentence generation | 100 | 20 | 20 |
+
+- After validation, each analysis or generation request reserves one credit from all three quotas before calling the model. This also applies to requests that generate multiple sentences.
+- If any quota has insufficient credits, the API returns HTTP 400 with `{"status":"error","message":"No remaining request count available."}`.
 - The first balance lookup or reservation on a new date in Korea Standard Time resets both shared balances atomically. Redis provides the clock and stores the period across API restarts.
-- An existing shared balance without a recorded reset date is initialized on its first lookup or reservation after the update.
-- A failed model request returns credits to the quota buckets that still match the reservation and preserves the existing IP expiry.
+- Per-client and IP quotas expire 24 hours after initialization. A failed operation returns credits to the quota buckets that still match the reservation without extending their expiry.
 
 ### Check remaining counts
 
-This endpoint returns the smaller of the IP and shared balances for each operation after deducting any in-flight reservations.
+For each operation, this endpoint returns the lowest balance across the shared quota, the per-client quota, and the IP cap, with in-flight reservations already deducted.
 
 #### Endpoint
 
