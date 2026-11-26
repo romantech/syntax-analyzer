@@ -4,7 +4,7 @@
 
 ![Syntax Analyzer](https://github.com/romantech/syntax-analyzer/assets/8604840/747803a5-7670-4c18-99b8-07c4245b5312)
 
-Syntax Analyzer は、英文の構造を自動で分析し、その結果を自由に編集できるウェブアプリです。よく使われる30種類以上の文法タグで、複雑な英文の構造をひと目で確認できます。入力したトピックに沿って英文をランダムに生成することもできます。英文分析には GPT-6 Luna を使用しています。
+Syntax Analyzer は、英文の構造を自動で分析し、その結果を自由に編集できるウェブアプリです。よく使われる30種類以上の文法タグで、複雑な英文の構造をひと目で確認できます。入力したトピックに沿って英文をランダムに生成することもできます。
 
 - ウェブアプリ · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API リファレンス](apps/api/README.md)
