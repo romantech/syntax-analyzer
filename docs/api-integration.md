@@ -56,9 +56,9 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 
 ### API 선배포와 웹 전환
 
-1. **API PR을 먼저 머지한다.** API는 기존 요청과 새 요청을 모두 처리하고 기존 웹이 읽는 응답 필드를 유지한다. 머지 전에 두 계약의 요청·응답과 기존 웹의 동작을 검증한다. 현재 정상인 Vercel·Koyeb 배포 ID와 커밋 SHA를 PR에 기록한다. 웹은 이 단계에서 기존 계약을 계속 사용한다.
-2. **Koyeb 운영 배포를 확인한다.** 해당 커밋의 배포가 `Healthy`이고 운영 트래픽을 받는지 확인한다. 운영 API에서 `/health`의 HTTP 200과 `/analyzer/remaining-counts`의 `analysis`, `random_sentence` 응답을 확인한다. 기존 운영 웹에서 분석과 랜덤 문장 생성, 잔여 횟수 갱신을 확인하고 변경된 API 경로는 기존 형식과 새 형식 각각의 요청·응답을 확인한다. 검증에 실패하면 웹 PR 머지를 보류한다.
-3. **웹 PR을 머지한다.** API 운영 검증이 끝나면 새 계약을 지원하는 API와 Vercel 프리뷰를 연결해 새 웹을 검증한다. 브라우저 네트워크 탭에서 API 주소와 새 요청·응답 형식을 확인한다. 머지 후에는 해당 Vercel 배포가 운영 도메인에 연결됐는지 확인하고, 운영 웹에서 변경 경로와 오류 응답을 다시 확인한다. 같은 머지로 Koyeb가 다시 배포되면 활성 API에서도 기존 계약과 새 계약을 확인한다. [배포 전후 확인](#배포-전후-확인)
+1. **API PR을 먼저 머지한다.** 기존 웹이 읽는 응답 필드를 유지하고 두 계약의 요청·응답과 기존 웹 동작을 검증한다. 현재 정상인 Vercel·Koyeb 배포 ID와 커밋 SHA를 PR에 기록한다.
+2. **Koyeb 운영 배포를 확인한다.** 해당 커밋의 배포가 `Healthy`이고 운영 트래픽을 받으면 [공통 체크리스트](#배포-전후-확인)를 실행한다. 운영 API의 두 계약이나 기존 운영 웹 검증에 실패하면 웹 PR 머지를 보류한다.
+3. **웹 PR을 머지한다.** 새 계약을 지원하는 API에 Vercel 프리뷰를 연결해 검증한 뒤 머지한다. 해당 Vercel 배포가 운영 도메인에 연결되면 체크리스트를 다시 실행한다. Koyeb도 다시 배포됐다면 활성 API의 두 계약을 재확인한다.
 
 ### 호환 기간과 기존 계약 제거
 
@@ -72,7 +72,7 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 
 - Vercel의 `Instant Rollback`에서는 호환되는 운영 배포를 선택한다. 복구 후 운영 도메인과 커밋을 확인한다. `Instant Rollback` 이후에는 운영 도메인 자동 할당이 중지되므로 수정 배포를 검증한 뒤 `Undo Rollback`에서 해당 배포를 승격한다. [Vercel Instant Rollback](https://vercel.com/docs/instant-rollback)
 - Koyeb의 `Deployments`에서 호환되는 정상 배포를 선택해 다시 배포한다. 활성 배포의 커밋과 설정을 확인한다. 해당 빌드로 복구할 수 없다면 호환 계약을 유지하는 수정 또는 되돌리기 PR로 복구한다. 이후 `main` 자동 배포가 문제 버전을 다시 올리지 않도록 원인 변경도 수정하거나 되돌린다. [Koyeb GitHub 배포](https://www.koyeb.com/docs/build-and-deploy/deploy-with-git)
-- 각 복구 단계가 끝날 때마다 운영 API의 `/health`와 잔여 횟수 응답을 확인하고, 해당 웹에서 변경 경로를 다시 검증한 뒤 다음 단계로 진행한다.
+- 각 복구 단계가 끝나면 [공통 체크리스트](#배포-전후-확인)로 해당 웹·API 조합을 검증한 뒤 다음 단계로 진행한다.
 
 ### Koyeb API 배포
 
@@ -83,7 +83,7 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 - API는 시작 시 Redis `PING`이 성공한 뒤 포트 `8000`에서 요청을 받는다. `PING`이 실패하거나 10초 안에 응답하지 않으면 포트를 열기 전에 종료한다. 새 배포가 `Healthy`가 되지 않으면 인스턴스 로그에서 Redis 초기화 오류를 확인한다.
 - 운영 배포와 Redis 의존성 모니터링에는 `GET /ready`를 사용한다. [상태 확인 API 명세](../apps/api/README.md#check-process-health-and-redis-readiness)
 - 배포 전 로컬에서는 저장소 루트에서 `docker build -f apps/api/Dockerfile -t syntax-analyzer-api .`로 같은 이미지를 빌드할 수 있다.
-- 새 배포가 `Healthy` 상태가 되면 기존 API 주소의 `/health`와 `/ready`가 HTTP 200을 반환하고 `/analyzer/remaining-counts`에 `analysis`, `random_sentence`가 있는지 확인한다. 웹에서 분석과 랜덤 문장 생성도 검증한다.
+- 새 배포가 `Healthy` 상태가 되면 [공통 체크리스트](#배포-전후-확인)로 운영 API와 연결된 웹을 검증한다.
 
 [Koyeb 모노레포 설정](https://www.koyeb.com/docs/build-and-deploy/monorepo)
 
@@ -115,6 +115,6 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 ## 배포 전후 확인
 
 - 프리뷰를 포함한 운영 모드 빌드는 `VITE_API_BASE_URL_PROD`를 사용한다. 배포 환경에 맞는 값을 설정하고 브라우저 네트워크 탭에서 요청 주소를 확인한다.
+- 대상 API의 `/health`와 `/ready`가 HTTP 200을 반환하고, `/analyzer/remaining-counts`에 `analysis`와 `random_sentence` 잔여량이 있는지 확인한다.
 - 변경된 기능을 정상 입력과 오류 응답으로 확인한다. 분석 결과는 편집기에서 열고, 토큰과 세그먼트 형식이 바뀌었다면 기존에 저장한 분석도 다시 연다.
-- 랜덤 문장은 요청한 개수와 주제 목록이 서버에 전달되는지 확인한다. 분석이나 문장 생성이 성공하면 화면의 잔여 횟수가 갱신되는지 확인한다.
-- 배포 후 실제 화면에서 변경한 경로를 확인한다. 분석과 문장 생성 요청은 할당량을 차감하므로 검증에 필요한 만큼만 호출한다.
+- 웹에서 분석과 랜덤 문장 생성을 실행한다. 생성 요청의 문장 수와 주제, 성공 후 잔여량 갱신을 확인한다. 할당량을 차감하는 요청은 검증에 필요한 만큼 호출한다.

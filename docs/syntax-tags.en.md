@@ -1,6 +1,6 @@
 # Sentence Constituents
 
-The analyzer uses the grammatical categories below, and the editor uses them as tags. Turn on **Tag descriptions** to see what each grammatical category means in the tag picker. A single word is a token. Groups of two or more words are classified as phrases or clauses according to their grammatical structure.
+The analyzer uses the grammatical categories below, and the editor uses them as tags. Turn on **Tag descriptions** to see what each grammatical category means in the tag picker. The table shows each tag’s base type. The analysis uses `token-group` when a `token` tag, such as a subject, spans multiple words.
 
 | Label                 | Abbreviation | Type   | Description                                                                            |
 | --------------------- | ------------ | ------ | -------------------------------------------------------------------------------------- |

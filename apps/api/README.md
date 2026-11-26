@@ -33,7 +33,7 @@ POST /analyzer
 ```json
 {
   "model": "fast-ft",
-  "sentence": ["My", "name", "is", "John", "."]
+  "sentence": ["Some", "birds", "fly"]
 }
 ```
 
@@ -43,130 +43,45 @@ Each successful analysis uses one credit. All accepted request keys use the conf
 
 #### Response
 
-> Analysis Data Model
-
-```tsx
-type AnalysisSource = 'user' | 'sample';
-type ISODateString = string;
-type ConstituentType = 'clause' | 'phrase' | 'token';
-
-type TConstituent = {
-  id: number; // Random 9-digit number
-  elementId: number; // Constituent ID
-  label: string; // Grammatical label, e.g., "subject"
-  abbreviation: string; // Abbreviation, e.g., "s"
-  type: ConstituentType; // Type of constituent
-};
-
-type TSegment = {
-  id: number; // Random 9-digit number
-  begin: number; // Start index
-  end: number; // End index
-  constituents: TConstituent[]; // Segment constituents
-  children: TSegment[]; // Sub-segments
-};
-
-type TAnalysis = {
-  id: string; // Random 21-byte string
-  source: AnalysisSource; // Data source
-  createdAt: ISODateString; // ISO 8601 timestamp
-  sentence: string[]; // Tokenized sentence
-  rootSegment: TSegment; // Root segment
-  isAnalyzedByGPT: boolean; // AI-analyzed status
-};
-```
-
-<details><summary>200 OK</summary>
-<br />
+HTTP 200 returns [`TAnalysis`](../web/src/features/syntax-editor/types/analysis.ts), with [constituent types](../web/src/features/syntax-editor/types/constituent.ts) including `token-group` for multi-word spans of token tags. The analysis ID is a UUID. Segment ranges use zero-based token indices with an exclusive end.
 
 ```json
 {
-  "id": "YW6AX-AOZb2-xYXt05xkn",
+  "id": "321aef9a-af3b-4457-85a8-6616a372b6e0",
   "source": "user",
-  "createdAt": "2023-05-10T23:08:08.000Z",
-  "sentence": ["My", "name", "is", "John", "."],
+  "createdAt": "2026-11-26T10:00:00.000Z",
+  "isAnalyzedByGPT": true,
+  "sentence": ["Some", "birds", "fly"],
   "rootSegment": {
-    "id": 840296172,
+    "id": 1000000000,
     "begin": 0,
-    "end": 5,
+    "end": 3,
     "constituents": [],
     "children": [
       {
-        "id": 987654321,
+        "id": 1000000001,
         "begin": 0,
         "end": 2,
         "constituents": [
-          {
-            "id": 456789123,
-            "elementId": 1,
-            "label": "subject",
-            "abbreviation": "s",
-            "type": "token"
-          }
+          { "id": 1000000002, "elementId": 1, "label": "subject", "abbreviation": "s", "type": "token-group" }
         ],
         "children": []
       },
       {
-        "id": 789123456,
+        "id": 1000000003,
         "begin": 2,
         "end": 3,
         "constituents": [
-          {
-            "id": 321654987,
-            "elementId": 2,
-            "label": "verb",
-            "abbreviation": "v",
-            "type": "token"
-          }
+          { "id": 1000000004, "elementId": 2, "label": "verb", "abbreviation": "v", "type": "token" }
         ],
-        "children": []
-      },
-      {
-        "id": 654321789,
-        "begin": 3,
-        "end": 4,
-        "constituents": [
-          {
-            "id": 654987321,
-            "elementId": 5,
-            "label": "object",
-            "abbreviation": "o",
-            "type": "token"
-          }
-        ],
-        "children": []
-      },
-      {
-        "id": 321789654,
-        "begin": 4,
-        "end": 5,
-        "constituents": [],
         "children": []
       }
     ]
-  },
-  "isAnalyzedByGPT": true
+  }
 }
 ```
-</details>
 
-<details><summary>400 Bad Request</summary>
-<br />
-
-```json
-{
-  "errors": [
-    {
-      "type": "field",
-      "value": "value that caused the error",
-      "msg": "Error description",
-      "path": "field_name",
-      "location": "body"
-    }
-  ]
-}
-```
-</details>
+If the model fails to produce a valid analysis, the API can return HTTP 502 with `{"status":"error","message":"Invalid sentence analysis."}`. See [request errors](#request-errors) for input validation.
 
 ### Generate random sentences
 
@@ -192,6 +107,8 @@ Omit a parameter to use its default. Supply `sent_count` and `max_chars` once ea
 
 The response contains exactly `sent_count` non-blank strings. The `max_chars` limit applies to each returned string, including any leading or trailing whitespace.
 
+See [request errors](#request-errors) for query validation.
+
 <details><summary>200 OK</summary>
 <br />
 
@@ -201,24 +118,6 @@ The response contains exactly `sent_count` non-blank strings. The `max_chars` li
   "Apple trees are typically grown in orchards for commercial production.",
   "Apple cider is a refreshing beverage made from pressed apples."
 ]
-```
-</details>
-
-<details><summary>400 Bad Request</summary>
-<br />
-
-```json
-{
-  "errors": [
-    {
-      "type": "field",
-      "value": "value that caused the error",
-      "msg": "Error description",
-      "path": "field_name",
-      "location": "query"
-    }
-  ]
-}
 ```
 </details>
 
@@ -235,9 +134,25 @@ If the model returns the wrong number of sentences, a blank sentence, or a sente
 ```
 </details>
 
-### Request body errors
+### Request errors
 
-The server returns `{"status":"error","message":"Invalid request body."}` with HTTP 400 when it cannot parse JSON. Requests over the 100 KiB body limit return HTTP 413 with `{"status":"error","message":"Request body too large."}`. Field validation errors return the `errors` array shown above.
+Invalid JSON returns HTTP 400 with `{"status":"error","message":"Invalid request body."}`. Bodies over 100 KiB return HTTP 413 with `{"status":"error","message":"Request body too large."}`.
+
+Field validation returns HTTP 400 with an `errors` array. The `location` is `body` for analysis and `query` for random sentence generation.
+
+```json
+{
+  "errors": [
+    {
+      "type": "field",
+      "value": ["Some", 42, "fly"],
+      "msg": "Each token must be a non-blank string of up to 80 characters.",
+      "path": "sentence",
+      "location": "body"
+    }
+  ]
+}
+```
 
 ### Shared quota behavior
 
