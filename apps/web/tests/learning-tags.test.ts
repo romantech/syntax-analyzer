@@ -80,23 +80,41 @@ test('이중목적어와 목적격 보어의 서로 다른 역할을 유지한�
   ]);
 });
 
-test('기본 보기에는 부사어와 장소 보어를 표시하고 형태와 조동사는 상세에 둔다', () => {
-  const sentence = ['At', 'dawn', ',', 'she', 'has', 'put', 'it', 'there', '.'];
+test('기본 보기에는 부사어와 장소 보어를 표시하고 형태 태그는 상세에 둔다', () => {
+  const sentence = ['At', 'dawn', ',', 'she', 'put', 'it', 'there', '.'];
   const saved = createAnalysis(sentence, [
     [0, 2, 'adverbial', 'prepositional phrase'],
-    [4, 5, 'perfect auxiliary'],
-    [7, 8, 'adverbial', 'locative complement', 'adverb'],
+    [6, 7, 'adverbial', 'locative complement', 'adverb'],
   ]);
   const projected = getLearningSegment(saved, sentence).children;
   assert.deepEqual(
     projected.map((segment) => getOverviewTag(segment)?.label),
-    ['adverbial', undefined, 'locative complement'],
+    ['adverbial', 'locative complement'],
   );
   assert.deepEqual(projected.map(labels), [
     ['adverbial', 'prepositional phrase'],
-    ['perfect auxiliary'],
     ['locative complement', 'adverb'],
   ]);
+});
+
+test('기본 보기에서 독립된 조동사 태그를 표시한다', () => {
+  const examples: [string[], number, string][] = [
+    [
+      ['Did', 'Maya', 'leave', 'her', 'sketchbook', 'beside', 'the', 'window', '?'],
+      0,
+      'do-support auxiliary',
+    ],
+    [['She', 'has', 'left', '.'], 1, 'perfect auxiliary'],
+    [['She', 'is', 'leaving', '.'], 1, 'progressive auxiliary'],
+    [['She', 'was', 'invited', '.'], 1, 'passive auxiliary'],
+  ];
+
+  for (const [sentence, index, label] of examples) {
+    const saved = createAnalysis(sentence, [[index, index + 1, label]]);
+    const [auxiliary] = getLearningSegment(saved, sentence).children;
+
+    assert.equal(getOverviewTag(auxiliary)?.label, label, sentence.join(' '));
+  }
 });
 
 test('역할이 확인되는 옛 부사구를 기본 보기에 표시하고 전치사구의 역할을 추측하지 않는다', () => {
