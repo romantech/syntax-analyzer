@@ -228,6 +228,34 @@
       "description": "A word that modifies a verb, an adjective, or another adverb",
       "name": "Adverb"
     },
+    "tag32": {
+      "description": "A constituent that identifies or describes the subject",
+      "name": "subject complement"
+    },
+    "tag33": {
+      "description": "A constituent that adds information such as time, place, manner, or reason to a clause",
+      "name": "adverbial"
+    },
+    "tag34": {
+      "description": "A constituent that supplies a place or direction required by the verb",
+      "name": "locative complement"
+    },
+    "tag35": {
+      "description": "Have used with a past participle to form the perfect",
+      "name": "perfect auxiliary"
+    },
+    "tag36": {
+      "description": "Be used with a present participle to form the progressive",
+      "name": "progressive auxiliary"
+    },
+    "tag37": {
+      "description": "Be used with a past participle to form the passive",
+      "name": "passive auxiliary"
+    },
+    "tag38": {
+      "description": "Do used to form questions, negation, or emphasis",
+      "name": "do-support auxiliary"
+    },
     "tag4": {
       "description": "A word or phrase affected by the action of a verb",
       "name": "Object"

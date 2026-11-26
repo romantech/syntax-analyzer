@@ -1,26 +1,7 @@
 import { Fragment, type ReactNode } from 'react';
 
 import { Constituent, type TSegment } from '@/features/syntax-editor';
-
-const overviewRoles = new Set([
-  'subject',
-  'verb',
-  'modal verb',
-  'auxiliary verb',
-  'object',
-  'indirect object',
-  'direct object',
-  'complement',
-  'object complement',
-  'adverb',
-  'adverbial clause',
-]);
-
-// Prefer the function over the form when both describe the same words.
-const getOverviewTag = ({ constituents }: TSegment) =>
-  constituents.find(({ label }) => overviewRoles.has(label)) ??
-  constituents.find(({ label }) => label === 'adverbial phrase') ??
-  constituents.find(({ label }) => label === 'prepositional phrase');
+import { getOverviewTag } from '../../helpers/learning-tags';
 
 export const hasOverviewTags = (segment: TSegment): boolean =>
   !!getOverviewTag(segment) || segment.children.some(hasOverviewTags);

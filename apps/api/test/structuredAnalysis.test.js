@@ -9,10 +9,16 @@ test('serves structured basic analyses with existing quota and response fields',
   const sentence = ['The', 'team', 'that', 'won', 'cheered', '.'];
   const validSpans = [
     { begin: 3, end: 4, tags: ['verb'] },
+    { begin: 4, end: 5, tags: ['noun phrase'] },
+    { begin: 0, end: 5, tags: ['independent clause'] },
     { begin: 0, end: 4, tags: ['subject', 'subject'] },
     { begin: 4, end: 5, tags: ['verb'] },
     { begin: 0, end: 4, tags: ['noun phrase'] },
-    { begin: 2, end: 4, tags: ['relative clause'] },
+    {
+      begin: 2,
+      end: 4,
+      tags: ['adjectival clause', 'relative clause', 'dependent clause'],
+    },
   ];
   let completion;
   let retryCompletion;
@@ -60,6 +66,11 @@ test('serves structured basic analyses with existing quota and response fields',
             assert.equal(request.reasoning_effort, 'low');
             assert.equal(request.response_format.type, 'json_schema');
             assert.equal(request.response_format.json_schema.strict, true);
+            const tagEnum =
+              request.response_format.json_schema.schema.properties.spans.items
+                .properties.tags.items.enum;
+            assert.ok(tagEnum.includes('locative complement'));
+            assert.ok(tagEnum.includes('perfect auxiliary'));
             assert.deepEqual(JSON.parse(request.messages[1].content), sentence);
             assert.ok(!Object.hasOwn(request, 'temperature'));
             systemMessages.push(request.messages[0].content);
@@ -106,7 +117,9 @@ test('serves structured basic analyses with existing quota and response fields',
     [0, 6],
   );
 
-  const [subject, verb, period] = analysis.rootSegment.children;
+  const [sentenceSpan, period] = analysis.rootSegment.children;
+  assert.deepEqual(sentenceSpan.constituents, []);
+  const [subject, verb] = sentenceSpan.children;
   assert.deepEqual(
     subject.constituents.map(({ elementId, type }) => [elementId, type]),
     [
@@ -122,7 +135,10 @@ test('serves structured basic analyses with existing quota and response fields',
     ],
   );
   const relative = subject.children[1];
-  assert.equal(relative.constituents[0].abbreviation, 'rel.cl');
+  assert.deepEqual(
+    relative.constituents.map(({ abbreviation }) => abbreviation),
+    ['rel.cl'],
+  );
   assert.deepEqual(
     relative.children.map(({ begin, end }) => [begin, end]),
     [
@@ -130,7 +146,10 @@ test('serves structured basic analyses with existing quota and response fields',
       [3, 4],
     ],
   );
-  assert.equal(verb.constituents[0].type, 'token');
+  assert.deepEqual(
+    verb.constituents.map(({ label, type }) => [label, type]),
+    [['verb', 'token']],
+  );
   assert.deepEqual([period.begin, period.end, period.constituents], [5, 6, []]);
   assert.equal(reserves, 1);
   assert.equal(refunds, 0);
@@ -159,11 +178,19 @@ test('serves structured basic analyses with existing quota and response fields',
   assert.equal(refunds, 0);
   assert.equal(modelCalls, 3);
   assert.equal(promptReads, 2);
-  assert.deepEqual(systemMessages, [
-    analysisPromptValues[0],
-    analysisPromptValues[0],
-    analysisPromptValues.join('\n'),
-  ]);
+  assert.deepEqual(
+    systemMessages.map((message) => message.split('\n\n')[0]),
+    [
+      analysisPromptValues[0],
+      analysisPromptValues[0],
+      analysisPromptValues.join('\n'),
+    ],
+  );
+  for (const message of systemMessages) {
+    assert.match(message, /double-object construction/);
+    assert.match(message, /Tag optional clause-level modifiers/);
+    assert.match(message, /"perfect auxiliary"/);
+  }
 
   for (const spans of badSpans) {
     completion = {

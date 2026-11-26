@@ -1,3 +1,10 @@
+export const ADVERBIAL = {
+  elementId: 33,
+  label: 'adverbial',
+  abbreviation: 'advl',
+  type: 'token',
+} as const;
+
 export const SYNTAX_CONSTITUENTS = [
   {
     elementId: 1,
@@ -183,6 +190,43 @@ export const SYNTAX_CONSTITUENTS = [
     elementId: 31,
     label: 'adverb',
     abbreviation: 'adv',
+    type: 'token',
+  },
+  {
+    elementId: 32,
+    label: 'subject complement',
+    abbreviation: 's.c.',
+    type: 'token',
+  },
+  ADVERBIAL,
+  {
+    elementId: 34,
+    label: 'locative complement',
+    abbreviation: 'loc.c.',
+    type: 'token',
+  },
+  {
+    elementId: 35,
+    label: 'perfect auxiliary',
+    abbreviation: 'perf.aux',
+    type: 'token',
+  },
+  {
+    elementId: 36,
+    label: 'progressive auxiliary',
+    abbreviation: 'prog.aux',
+    type: 'token',
+  },
+  {
+    elementId: 37,
+    label: 'passive auxiliary',
+    abbreviation: 'pass.aux',
+    type: 'token',
+  },
+  {
+    elementId: 38,
+    label: 'do-support auxiliary',
+    abbreviation: 'do.aux',
     type: 'token',
   },
 ] as const;
