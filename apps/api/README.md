@@ -39,7 +39,7 @@ POST /analyzer
 
 #### Quota Consumption
 
-Each successful analysis uses one credit. All accepted request keys use the configured syntax analysis model.
+Each successful analysis uses one credit. All accepted request keys use the configured syntax analysis model. See [quota behavior](#shared-quota-behavior) for reservation and refund rules.
 
 #### Response
 
@@ -225,7 +225,7 @@ The response contains exactly `sent_count` non-blank strings. The `max_chars` li
 <details><summary>502 Bad Gateway</summary>
 <br />
 
-If the model returns the wrong number of sentences, a blank sentence, or a sentence that exceeds the character limit, the API refunds the IP and shared quota reservations and returns:
+If the model returns the wrong number of sentences, a blank sentence, or a sentence that exceeds the character limit, the API refunds eligible quota reservations and returns:
 
 ```json
 {
@@ -241,17 +241,22 @@ The server returns `{"status":"error","message":"Invalid request body."}` with H
 
 ### Shared quota behavior
 
-- The first balance lookup, analysis request, or random sentence request initializes both IP balances if the IP quota is missing or expired. The IP quota expires 24 hours after initialization.
-- The API validates inputs before reserving credits or calling a model.
-- Each model request reserves credits from both the IP-based and shared quotas before calling the model. Random sentence generation reserves one credit per request regardless of the number of sentences.
-- If either quota has insufficient credits, the API returns HTTP 400 with `{"status":"error","message":"No remaining request count available."}`.
+- The three analyzer endpoints accept `X-Analyzer-Browser: 1`. When cookie signing is configured, the API uses an existing signed anonymous browser cookie or issues a new one. The cookie lasts 30 days and identifies the same browser across networks. In production it uses `Secure`, `HttpOnly`, and `SameSite=Lax`.
+- For requests without browser identification, the per-client balance is keyed by IP. The separate IP cap is shared by browser and legacy requests.
+
+| Operation | Shared | Per browser or legacy IP | Per-IP cap |
+| --- | ---: | ---: | ---: |
+| Syntax analysis | 100 | 10 | 20 |
+| Random sentence generation | 100 | 20 | 20 |
+
+- After validation, each analysis or generation request reserves one credit from all three quotas before calling the model. This also applies to requests that generate multiple sentences.
+- If any quota has insufficient credits, the API returns HTTP 400 with `{"status":"error","message":"No remaining request count available."}`.
 - The first balance lookup or reservation on a new date in Korea Standard Time resets both shared balances atomically. Redis provides the clock and stores the period across API restarts.
-- An existing shared balance without a recorded reset date is initialized on its first lookup or reservation after the update.
-- A failed model request returns credits to the quota buckets that still match the reservation and preserves the existing IP expiry.
+- Per-client and IP quotas expire 24 hours after initialization. A failed operation returns credits to the quota buckets that still match the reservation without extending their expiry.
 
 ### Check remaining counts
 
-This endpoint returns the smaller of the IP and shared balances for each operation after deducting any in-flight reservations.
+For each operation, this endpoint returns the lowest balance across the shared quota, the per-client quota, and the IP cap, with in-flight reservations already deducted.
 
 #### Endpoint
 

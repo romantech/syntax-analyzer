@@ -4,9 +4,9 @@
 
 요청 필드, 응답 형식, 검증 규칙을 바꿀 때는 프런트엔드 호출부와 Express 구현을 함께 확인한다. [서버 라우트](../apps/api/src/routes/analyzer.ts) · [입력 검증](../apps/api/src/validators/analyzer.ts) · [API 명세](../apps/api/README.md)
 
-- `POST /analyzer`의 모델 키와 토큰 배열, `TAnalysis` 응답. [분석 요청](../apps/web/src/features/syntax-analyzer/api/create-analysis.ts) · [응답 타입](../apps/web/src/features/syntax-editor/types/analysis.ts)
-- `GET /analyzer/random-sentences`의 정수 쿼리 `sent_count`, `max_chars`, 주제 배열(`topics=A&topics=B` 또는 `topics[]=A&topics[]=B`), 문장 배열 응답. [랜덤 문장 요청](../apps/web/src/features/syntax-analyzer/api/get-random-sentences.ts)
-- `GET /analyzer/remaining-counts`의 `analysis`와 `random_sentence` 수치. [잔여 횟수 요청](../apps/web/src/features/syntax-analyzer/api/get-remaining-counts.ts)
+- `POST /analyzer` [분석 요청](../apps/web/src/features/syntax-analyzer/api/create-analysis.ts) · [응답 타입](../apps/web/src/features/syntax-editor/types/analysis.ts)
+- `GET /analyzer/random-sentences` [랜덤 문장 요청](../apps/web/src/features/syntax-analyzer/api/get-random-sentences.ts)
+- `GET /analyzer/remaining-counts` [잔여 횟수 요청](../apps/web/src/features/syntax-analyzer/api/get-remaining-counts.ts)
 
 ## 로컬 개발
 
@@ -16,21 +16,17 @@
 
 `NODE_ENV`, `OPENAI_API_KEY`, 랜덤 문장 생성용 `MODEL_FAST`가 필요하다. 개발에서 `PORT`를 생략하면 3001을 사용하고, 운영에서는 서비스 포트를 명시한다. Redis 호스트와 포트를 생략하면 `localhost:6379`를 사용한다. 잘못된 필수 설정이 있으면 API는 변수 이름을 기록하고 Redis에 연결하기 전에 종료한다.
 
-분석은 기본값인 `gpt-6-luna`의 `low` 추론 설정과 Structured Outputs를 사용한다. 서버는 검증한 태그 범위로 `TAnalysis`를 구성한다. 다른 호환 모델을 지정하려면 `MODEL_ANALYSIS_BASIC`에 모델 ID를 입력한다. 웹은 이전 API와 호환되는 `fast-ft` 키를 보낸다. API는 기존 클라이언트의 `primary`와 `primary-ft` 요청도 동일한 모델로 분석하고 성공 시 1회 차감한다.
+기본 분석 모델을 바꾸려면 `MODEL_ANALYSIS_BASIC`에 Structured Outputs를 지원하는 모델 ID를 지정한다.
 
 실제 API를 실행하거나 배포하기 전에 Redis의 `analyzer:prompt` 해시에 `analysis_structured`와 `analysis_structured_retry`를 등록한다. 첫 필드에는 분석용 시스템 프롬프트를, 두 번째 필드에는 범위 검증 실패 시 덧붙일 재시도 지시문을 입력한다. 요청마다 두 필드를 함께 읽으므로 저장값이 바뀌면 다음 요청부터 적용된다. 필드가 없거나 공백이면 HTTP 500을 반환하고 할당량을 복구한다.
 
-서버는 기본 프롬프트와 재시도 프롬프트에 [학습용 태그 규칙](../apps/api/src/services/openAI/structuredAnalysis.ts)을 덧붙인다. 새 태그는 기존 `constituents` 배열에 같은 형식으로 들어간다. 기존 Redis 필드를 그대로 사용할 수 있으며, 웹은 이전 API의 응답도 읽으므로 두 앱을 독립적으로 배포할 수 있다.
-
-태그 범위가 유효하지 않으면 같은 분석 요청에서 한 번 다시 생성한다. 응답을 끝내 검증하지 못하면 HTTP 502를 반환하고 할당량을 복구한다.
-
-랜덤 문장 생성은 Redis의 `analyzer:prompt` 해시에서 `random_sentence` 템플릿을 읽는다. 서버가 요청마다 문장별 문법과 상황 힌트를 각각 중복 없이 뽑아 기존 템플릿 뒤에 붙인다. 기존 Redis 설정으로 배포할 수 있다. 전후 출력을 비교할 때는 실제 API에서 같은 주제와 문장 수로 여러 번 생성해 반복 문장, 문법 구조, 표현의 차이를 확인한다.
+서버는 두 분석 프롬프트에 [학습용 태그 규칙](../apps/api/src/services/openAI/structuredAnalysis.ts)을 덧붙인다. 랜덤 문장 생성에 쓸 프롬프트 템플릿은 같은 해시의 `random_sentence` 필드에 등록한다.
 
 Vite 개발 서버는 `/api/`로 시작하는 요청에서 접두사를 제거하고 기본적으로 `http://localhost:3001`로 전달한다. 개발 API 포트를 바꾸면 아래의 `API_PROXY_TARGET`도 맞춘다. 같은 네트워크의 모바일에서는 Vite가 출력한 `Network` 주소로 접속한다. 웹 `.env.local`에 개발 API 주소를 넣거나 Express의 `CORS_ORIGIN`에 모바일 접속 주소를 추가할 필요가 없다.
 
 로컬 API는 직접 연결과 Vite 프록시 연결에서 Express 소켓의 상대 주소를 IP별 할당량에 사용한다. 같은 Vite 서버를 거친 PC와 모바일은 Vite에서 API로 연결하는 주소를 공유한다. 로컬 API는 전달 헤더를 무시한다.
 
-다른 API 서버를 테스트하려면 `API_PROXY_TARGET=https://api.example.com pnpm dev`로 Vite를 실행한다. 기존 `.env.local`에 `VITE_API_BASE_URL_DEV`가 있으면 제거해도 된다.
+다른 API 서버를 테스트하려면 `API_PROXY_TARGET=https://api.example.com pnpm dev`로 Vite를 실행한다.
 
 HTTP 테스트는 운영과 같은 `createServer`에서 라우트와 오류 처리 미들웨어를 조립한다. Redis 통합 테스트는 전용 로컬 Redis를 실행한 뒤 `REDIS_TEST_PORT=6379 pnpm --filter syntax-analyzer-api test`로 실행한다. 모델 호출은 테스트에서 대체한다. GitHub Actions는 테스트용 Redis를 제공한다.
 
@@ -85,10 +81,9 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 - 기존 도메인, HTTP 포트 `8000`과 [런타임 환경 변수](../apps/api/.env.example)를 유지한다. `NODE_ENV=production`과 포트가 기존 서비스 설정과 일치하는지 확인한다.
 - Koyeb 서비스의 `Settings` → `Health checks`에서 포트 `8000`의 검사 방식을 `HTTP`, 메서드를 `GET`, 경로를 `/health`로 지정하고 `Deploy`로 적용한다. `/health`는 API 프로세스의 HTTP 응답을 확인한다. Koyeb는 연속 실패가 설정된 기준에 도달하면 인스턴스를 재시작하므로 Redis 준비 상태는 별도로 확인한다. [Koyeb 헬스 체크](https://www.koyeb.com/docs/run-and-scale/health-checks)
 - API는 시작 시 Redis `PING`이 성공한 뒤 포트 `8000`에서 요청을 받는다. `PING`이 실패하거나 10초 안에 응답하지 않으면 포트를 열기 전에 종료한다. 새 배포가 `Healthy`가 되지 않으면 인스턴스 로그에서 Redis 초기화 오류를 확인한다.
-- `GET /ready`는 운영 배포 확인과 Redis 의존성 모니터링에 사용한다. Redis가 `PING`에 1초 안에 응답하면 HTTP 200, 연결이 끊겼거나 오류가 났거나 응답이 늦으면 HTTP 503을 반환한다. Redis가 복구되면 다음 확인에서 HTTP 200으로 돌아온다.
+- 운영 배포와 Redis 의존성 모니터링에는 `GET /ready`를 사용한다. [상태 확인 API 명세](../apps/api/README.md#check-process-health-and-redis-readiness)
 - 배포 전 로컬에서는 저장소 루트에서 `docker build -f apps/api/Dockerfile -t syntax-analyzer-api .`로 같은 이미지를 빌드할 수 있다.
 - 새 배포가 `Healthy` 상태가 되면 기존 API 주소의 `/health`와 `/ready`가 HTTP 200을 반환하고 `/analyzer/remaining-counts`에 `analysis`, `random_sentence`가 있는지 확인한다. 웹에서 분석과 랜덤 문장 생성도 검증한다.
-- 모노레포 전환 자체를 되돌려야 하면 Koyeb `Deployments`에서 `romantech/project-server`의 마지막 `Healthy` 배포 설정을 선택해 다시 배포한다. 이전 설정의 GitHub 소스와 빌드팩이 적용됐는지 확인한 뒤 기존 API 주소에서 동일한 검증을 반복한다. 모노레포 전환 이후 API 계약 변경에는 위 [롤백 순서](#롤백-순서)를 따른다.
 
 [Koyeb 모노레포 설정](https://www.koyeb.com/docs/build-and-deploy/monorepo)
 
@@ -106,9 +101,8 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 
 ### 브라우저별 할당량
 
-- 세 분석 API에 `X-Analyzer-Browser: 1`을 보내면 API가 서명된 익명 쿠키를 발급하거나 기존 쿠키를 검증한다. 키는 브라우저에 30일간 남으며 같은 브라우저에서 네트워크가 바뀌어도 이어진다. 운영 쿠키는 HTTPS에서 `Secure`, `HttpOnly`, `SameSite=Lax`로 발급한다.
-- 구문 분석은 전체 100회, 브라우저별 10회, IP별 20회다. 랜덤 문장 생성은 전체 100회, 브라우저별 20회, IP별 20회다. 같은 IP를 쓰는 브라우저는 IP별 상한을 공유한다. 브라우저·IP는 24시간 단위로 집계하고 전체 한도는 한국 시간 자정에 갱신한다. 잔여량은 세 값 중 가장 작은 값이다. 모델 처리 실패 시 확보한 할당량을 세 한도에 원복한다.
-- 헤더가 없는 구버전 호출과 서명 시크릿이 비어 있는 환경은 기존 IP 기반 기본 한도와 응답 형식을 사용한다. IP별 상한은 구버전 요청과 새 요청이 공유하며 새 API를 배포한 시점부터 집계한다.
+[쿠키 발급 조건과 할당량 규칙](../apps/api/README.md#shared-quota-behavior)
+
 - API 선배포 시 Koyeb에 `ANALYZER_COOKIE_SECRET`을 설정한다. 32바이트 이상의 무작위 값을 만들어 여러 인스턴스와 재배포에서 같은 값을 사용한다. 값이 바뀌면 기존 쿠키가 무효화된다. 로컬에서도 브라우저 할당량을 확인하려면 `apps/api/.env`에 개발용 시크릿을 설정한다.
 - 운영 웹과 API는 같은 사이트의 HTTPS 주소를 사용한다. `CORS_ORIGIN`에 실제 웹 오리진을 지정하고, 같은 사이트의 웹 주소에서 API 주소로 쿠키가 전송되는 것을 확인한 뒤 웹을 전환한다. [자격 증명을 포함하는 교차 오리진 요청](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS#requests_with_credentials)
 - 배포 후 같은 네트워크의 별도 브라우저 두 개에서 IP 잔여량을 공유하는지 확인한다. 한 브라우저에서 사용한 뒤 다른 네트워크로 바꾸고, 전체 및 IP 상한에 여유가 있을 때 잔여량이 이어지는지 확인한다.
@@ -123,6 +117,4 @@ Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 A
 - 프리뷰를 포함한 운영 모드 빌드는 `VITE_API_BASE_URL_PROD`를 사용한다. 배포 환경에 맞는 값을 설정하고 브라우저 네트워크 탭에서 요청 주소를 확인한다.
 - 변경된 기능을 정상 입력과 오류 응답으로 확인한다. 분석 결과는 편집기에서 열고, 토큰과 세그먼트 형식이 바뀌었다면 기존에 저장한 분석도 다시 연다.
 - 랜덤 문장은 요청한 개수와 주제 목록이 서버에 전달되는지 확인한다. 분석이나 문장 생성이 성공하면 화면의 잔여 횟수가 갱신되는지 확인한다.
-- 문장 수를 비운 상태에서 유효한 토픽을 등록할 수 있고, 중복 또는 최대 개수 초과 시 키워드 입력 아래에 오류가 표시되는지 확인한다.
-- 문장 수 입력을 비운 채 생성하면 `sent_count=3`을 사용한다. 범위를 벗어난 값을 입력하면 1~5 범위의 정수로 보정한 값을 표시하고 전송한다.
 - 배포 후 실제 화면에서 변경한 경로를 확인한다. 분석과 문장 생성 요청은 할당량을 차감하므로 검증에 필요한 만큼만 호출한다.
