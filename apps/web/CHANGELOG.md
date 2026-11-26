@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/romantech/syntax-analyzer/compare/v1.7.0...v1.7.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* reveal ancestor syntax tags in individual details ([#269](https://github.com/romantech/syntax-analyzer/issues/269)) ([a80ba20](https://github.com/romantech/syntax-analyzer/commit/a80ba20945ec5d6135da32cbd83982816f8473f8)), closes [#253](https://github.com/romantech/syntax-analyzer/issues/253)
+
 ## [1.7.0](https://github.com/romantech/syntax-analyzer/compare/v1.6.1...v1.7.0) (2026-11-26)
 
 
