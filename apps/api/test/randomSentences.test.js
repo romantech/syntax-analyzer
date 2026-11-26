@@ -1,7 +1,7 @@
 require('module-alias/register');
 
 const assert = require('node:assert/strict');
-const { randomUUID } = require('node:crypto');
+const crypto = require('node:crypto');
 const { test } = require('node:test');
 const Redis = require('ioredis');
 const { startApp } = require('../test-support/app');
@@ -107,8 +107,42 @@ test('random sentence generation', async (context) => {
       assert.equal(quotaCalls, previousCalls + 1);
       assert.deepEqual(quotaDebit, { field: 'random_sentence', cost: 1 });
       assert.match(llmPrompt, prompt);
+      assert.equal(
+        [...llmPrompt.matchAll(/^\d+\. Grammar: /gm)].length,
+        sentences.length,
+      );
     });
   }
+
+  await context.test('samples new cues for identical requests', async (t) => {
+    let pickLast = false;
+    t.mock.method(crypto, 'randomInt', (size) => (pickLast ? size - 1 : 0));
+    modelSentences = [...defaultSentences, 'I eat.', ' We sing. '];
+    const request = `${url}?sent_count=5&max_chars=10&topics=travel`;
+    const previousCalls = llmCalls;
+    const prompts = [];
+    for (const last of [false, true]) {
+      pickLast = last;
+      const response = await fetch(request);
+      assert.equal(response.status, 200);
+      assert.equal(response.headers.get('cache-control'), 'private, no-store');
+      assert.deepEqual(await response.json(), modelSentences);
+      assert.match(
+        llmPrompt,
+        /Generate 5 sentences with up to 10 characters about .*travel/s,
+      );
+      assert.match(llmPrompt, /simplify or skip it/);
+      const cues = [
+        ...llmPrompt.matchAll(/^\d+\. Grammar: (.+?)\. Situation: (.+?)\.$/gm),
+      ];
+      assert.equal(cues.length, 5);
+      assert.equal(new Set(cues.map((cue) => cue[1])).size, 5);
+      assert.equal(new Set(cues.map((cue) => cue[2])).size, 5);
+      prompts.push(cues[0][0]);
+    }
+    assert.equal(llmCalls, previousCalls + 2);
+    assert.notEqual(prompts[0], prompts[1]);
+  });
 
   const invalidResults = [
     ['too few sentences', ['I walk.']],
@@ -133,7 +167,7 @@ test('random sentence generation', async (context) => {
     'refunds the IP and shared Redis quotas for an invalid generation',
     { skip: !redisPort },
     async (testContext) => {
-      const prefix = `random-sentences-test:${randomUUID()}:`;
+      const prefix = `random-sentences-test:${crypto.randomUUID()}:`;
       const redis = new Redis({
         host: '127.0.0.1',
         port: Number(redisPort),
