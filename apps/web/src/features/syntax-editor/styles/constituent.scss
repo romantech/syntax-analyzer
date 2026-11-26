@@ -200,4 +200,28 @@ button.constituent-label {
   .constituent.token-group::before {
     pointer-events: none;
   }
+
+  .constituent[data-stacked-labels] > .constituent-labels[data-disclosure] {
+    --constituent-label-width: max-content;
+    width: max-content;
+    overflow: visible;
+    transition: none;
+
+    > .constituent-label-content {
+      flex-direction: column;
+      max-inline-size: var(--constituent-label-max-width);
+
+      > .constituent-label {
+        max-inline-size: 100%;
+        justify-content: center;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        text-align: center;
+      }
+    }
+  }
+
+  .constituent.token-group[data-stacked-labels] > .constituent-labels[data-disclosure] {
+    transform: translate(-50%, calc(1px - var(--constituent-label-size) / 2));
+  }
 }

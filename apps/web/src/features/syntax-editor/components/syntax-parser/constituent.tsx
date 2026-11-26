@@ -68,7 +68,9 @@ export default function Constituent({
         <span
           className="constituent-labels"
           data-disclosure={!!disclosure || undefined}
-          style={{ width }}
+          style={{
+            width: width === undefined ? undefined : `var(--constituent-label-width, ${width}px)`,
+          }}
         >
           <span className="constituent-label-content" ref={labelRef}>
             {tags.map((tag) => (
