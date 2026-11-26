@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.7.0](https://github.com/romantech/syntax-analyzer/compare/v1.6.1...v1.7.0) (2026-11-26)
+
+
+### Features
+
+* 학습용 구문 태그 정리 및 문장 성분 보강 ([#258](https://github.com/romantech/syntax-analyzer/issues/258)) ([650a4db](https://github.com/romantech/syntax-analyzer/commit/650a4dbc36da865f7697377ab70258f31636de0e))
+
+
+### Bug Fixes
+
+* show auxiliary tags in the overview ([#263](https://github.com/romantech/syntax-analyzer/issues/263)) ([b26b5f6](https://github.com/romantech/syntax-analyzer/commit/b26b5f68c644cea966c58d19f7bd9c6058ab74ed))
+
 ## [1.6.1](https://github.com/romantech/syntax-analyzer/compare/v1.6.0...v1.6.1) (2026-11-25)
 
 
