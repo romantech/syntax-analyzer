@@ -228,6 +228,34 @@
       "description": "修饰动词、形容词或其他副词的词",
       "name": "副词"
     },
+    "tag32": {
+      "description": "说明主语的身份或状态的成分",
+      "name": "主语补足语"
+    },
+    "tag33": {
+      "description": "为小句补充时间、地点、方式或原因等信息的成分",
+      "name": "状语"
+    },
+    "tag34": {
+      "description": "表示动词所要求的地点或方向的成分",
+      "name": "处所补足语"
+    },
+    "tag35": {
+      "description": "与过去分词搭配构成完成体的 have",
+      "name": "完成体助动词"
+    },
+    "tag36": {
+      "description": "与现在分词搭配构成进行体的 be",
+      "name": "进行体助动词"
+    },
+    "tag37": {
+      "description": "与过去分词搭配构成被动语态的 be",
+      "name": "被动语态助动词"
+    },
+    "tag38": {
+      "description": "用于构成疑问句、否定句或表示强调的 do",
+      "name": "do 助动词"
+    },
     "tag4": {
       "description": "表示动词动作所涉及的人或事物的单词或短语",
       "name": "宾语"

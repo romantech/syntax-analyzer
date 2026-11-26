@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { useAtomValue } from 'jotai';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TbMoodEmpty } from 'react-icons/tb';
 
@@ -17,6 +17,7 @@ import {
   useCalculateNestingLevel,
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
+import { getLearningSegment } from '../../helpers/learning-tags';
 import AllTagsButton from './all-tags-button';
 import SegmentList, { hasOverviewTags } from './segment-list';
 import '@/features/syntax-editor/styles/constituent.scss';
@@ -69,8 +70,13 @@ function AnalysisSentence({
   const selectedTag = useAtomValue(selectedTagAtom);
   const deleteMode = useAtomValue(deleteModeAtom);
   const isEditing = !!selectedTag || deleteMode;
-  const hasOverview = analysis.isAnalyzedByGPT && hasOverviewTags(segment);
+  const learningSegment = useMemo(
+    () => (analysis.isAnalyzedByGPT ? getLearningSegment(segment, analysis.sentence) : segment),
+    [analysis.isAnalyzedByGPT, analysis.sentence, segment],
+  );
+  const hasOverview = analysis.isAnalyzedByGPT && hasOverviewTags(learningSegment);
   const allTagsVisible = !hasOverview || showAllTags || isEditing;
+  const displayedSegment = isEditing ? segment : learningSegment;
 
   const markRevealedTags = (animate: boolean) => {
     if (!animate || !sentenceRef.current) {
@@ -102,7 +108,7 @@ function AnalysisSentence({
 
   useCalculateNestingLevel({
     targetRef: sentenceRef,
-    segment,
+    segment: displayedSegment,
     isTapMode,
     overviewDetails: allTagsVisible ? undefined : expanded,
     showFullTagNames,
@@ -128,7 +134,7 @@ function AnalysisSentence({
       )}
       <Sentence ref={sentenceRef} id={sentenceId} isTapMode={isTapMode}>
         <SegmentList
-          segment={segment}
+          segment={displayedSegment}
           tokenElements={TokenList({ sentence: analysis.sentence, isTapMode })}
           overview={allTagsVisible ? undefined : { expanded, toggle }}
           previouslyVisibleTags={isEditing ? undefined : previouslyVisibleTags}

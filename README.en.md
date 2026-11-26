@@ -110,7 +110,7 @@ The diagram below shows how the segments for `Global warming is a significant is
 
 # Tagging Rules
 
-AI analyses initially show the main parts of the sentence, such as the subject, verb, object, and complement, along with modifiers at that level, such as adverbs, adverbial phrases, and prepositional phrases. Select a tag to see its details. Use **Expand all tags** to see every tag and **Collapse all tags** to return to the overview. All tags are visible while adding or deleting a tag. Tags use full names in the current language by default. Turn on **Abbreviations** to show shortened names. Your choice is saved across reloads.
+The overview shows roles such as subject, verb, object, complement, and adverbial. A location required by the verb is marked as a locative complement. Expand the details to see forms such as adverbs and prepositional phrases, and to identify perfect, progressive, passive, and do-support auxiliaries. **Expand all tags** to see every tag and **Collapse all tags** to return to the overview. All tags are visible while adding or deleting a tag. Tags use full names in the current language by default. Turn on **Abbreviations** to show shortened names. Your choice is saved across reloads.
 
 On mobile, tap **Choose a tag** in the bottom toolbar. Tap the first word, then tap **Apply** to tag just that word. To tag a range, tap the first and last words before applying the tag. Tap **Clear selection** to clear the range. For long sentences, swipe horizontally on the sentence or the blank space below the tags. When the stack of tags is taller than the screen, swipe vertically in the same area. When the content overflows, the vertical scrollbar appears to the right of the tag area and the horizontal scrollbar appears below it. In delete mode, tap the tag you want to remove.
 
@@ -133,39 +133,46 @@ Disallowed: warming is / is a / is a significant
 
 The analyzer uses the grammatical categories below, and the editor uses them as tags. Turn on **Tag descriptions** to see what each grammatical category means in the tag picker. A single word is a token. Groups of two or more words are classified as phrases or clauses according to their grammatical structure.
 
-| Label                | Abbreviation | Type   | Description                                                                       |
-| -------------------- | ------------ | ------ | --------------------------------------------------------------------------------- |
-| Subject              | s            | token  | A word or phrase that tells who or what the sentence is about                     |
-| Verb                 | v            | token  | A word that expresses an action or a state in a sentence                          |
-| Modal verb           | mod          | token  | A verb used with another verb to add meaning                                      |
-| Object               | o            | token  | A word or phrase affected by the action or state expressed by the verb            |
-| Indirect object      | i.o.         | token  | A word or phrase that indicates the recipient or beneficiary of an action         |
-| Direct object        | d.o.         | token  | A word or phrase directly affected by the action of a verb                        |
-| Prepositional object | prp.o.       | token  | A word or phrase introduced by a preposition                                      |
-| Complement           | c            | token  | A word or phrase that describes or completes the meaning of the subject or object |
-| Object complement    | o.c.         | token  | A word or phrase that describes or completes the meaning of the object            |
-| To-infinitive        | to-inf       | token  | The base form of a verb used with to                                              |
-| Gerund               | g            | token  | The -ing form of a verb used as a noun                                            |
-| Participle           | pt           | token  | The present or past participle form of a verb                                     |
-| Conjunction          | conj         | token  | A word that connects grammatical elements                                         |
-| Adverb               | adv          | token  | A word that modifies a verb, adjective, or adverb                                 |
-| Participle phrase    | pt.phr       | phrase | A phrase made up of a participle and its related elements                         |
-| Prepositional phrase | prp.phr      | phrase | A phrase consisting of a preposition and its object                               |
-| Noun phrase          | n.phr        | phrase | A phrase consisting of a noun and its modifiers                                   |
-| Adverbial phrase     | adv.phr      | phrase | A phrase that functions as an adverb in a sentence                                |
-| Verb phrase          | v.phr        | phrase | A phrase that functions as a verb in a sentence                                   |
-| Adjectival phrase    | adj.phr      | phrase | A phrase that functions as an adjective in a sentence                             |
-| Gerund phrase        | g.phr        | phrase | A phrase consisting of a gerund and related words                                 |
-| Infinitive phrase    | inf.phr      | phrase | A phrase consisting of to, the base form of a verb, and related elements          |
-| Coordinating clause  | co.cl        | clause | One of two or more clauses of equal grammatical status                            |
-| Parallel clause      | p.cl         | clause | One of two or more clauses with the same grammatical structure                    |
-| Noun clause          | n.cl         | clause | A clause that functions as a noun in a sentence                                   |
-| Adjectival clause    | adj.cl       | clause | A clause that functions as an adjective in a sentence                             |
-| Adverbial clause     | adv.cl       | clause | A clause that functions as an adverb in a sentence                                |
-| Inserted clause      | i.cl         | clause | A clause inserted into another clause                                             |
-| Relative clause      | rel.cl       | clause | A clause that adds information about an element in the main clause                |
-| Dependent clause     | dep.cl       | clause | A clause that depends on another clause to form a complete sentence               |
-| Independent clause   | ind.cl       | clause | A clause that expresses a complete thought on its own                             |
+| Label                 | Abbreviation | Type   | Description                                                                            |
+| --------------------- | ------------ | ------ | -------------------------------------------------------------------------------------- |
+| Subject               | s            | token  | A word or phrase that tells who or what the sentence is about                          |
+| Verb                  | v            | token  | A word that expresses an action or a state in a sentence                               |
+| Modal verb            | mod          | token  | A verb used with another verb to add meaning                                           |
+| Object                | o            | token  | A word or phrase affected by the action or state expressed by the verb                 |
+| Indirect object       | i.o.         | token  | A word or phrase that indicates the recipient or beneficiary of an action              |
+| Direct object         | d.o.         | token  | A word or phrase directly affected by the action of a verb                             |
+| Prepositional object  | prp.o.       | token  | A word or phrase introduced by a preposition                                           |
+| Complement            | c            | token  | A word or phrase that describes or completes the meaning of the subject or object      |
+| Object complement     | o.c.         | token  | A word or phrase that describes or completes the meaning of the object                 |
+| Subject complement    | s.c.         | token  | A constituent that identifies or describes the subject                                 |
+| Adverbial             | advl         | token  | A constituent that adds information such as time, place, manner, or reason to a clause |
+| Locative complement   | loc.c.       | token  | A constituent that supplies a place or direction required by the verb                  |
+| Perfect auxiliary     | perf.aux     | token  | Have used with a past participle to form the perfect                                   |
+| Progressive auxiliary | prog.aux     | token  | Be used with a present participle to form the progressive                              |
+| Passive auxiliary     | pass.aux     | token  | Be used with a past participle to form the passive                                     |
+| Do-support auxiliary  | do.aux       | token  | Do used to form questions, negation, or emphasis                                       |
+| To-infinitive         | to-inf       | token  | The base form of a verb used with to                                                   |
+| Gerund                | g            | token  | The -ing form of a verb used as a noun                                                 |
+| Participle            | pt           | token  | The present or past participle form of a verb                                          |
+| Conjunction           | conj         | token  | A word that connects grammatical elements                                              |
+| Adverb                | adv          | token  | A word that modifies a verb, adjective, or adverb                                      |
+| Participle phrase     | pt.phr       | phrase | A phrase made up of a participle and its related elements                              |
+| Prepositional phrase  | prp.phr      | phrase | A phrase consisting of a preposition and its object                                    |
+| Noun phrase           | n.phr        | phrase | A phrase consisting of a noun and its modifiers                                        |
+| Adverbial phrase      | adv.phr      | phrase | A phrase that functions as an adverb in a sentence                                     |
+| Verb phrase           | v.phr        | phrase | A phrase that functions as a verb in a sentence                                        |
+| Adjectival phrase     | adj.phr      | phrase | A phrase that functions as an adjective in a sentence                                  |
+| Gerund phrase         | g.phr        | phrase | A phrase consisting of a gerund and related words                                      |
+| Infinitive phrase     | inf.phr      | phrase | A phrase consisting of to, the base form of a verb, and related elements               |
+| Coordinating clause   | co.cl        | clause | One of two or more clauses of equal grammatical status                                 |
+| Parallel clause       | p.cl         | clause | One of two or more clauses with the same grammatical structure                         |
+| Noun clause           | n.cl         | clause | A clause that functions as a noun in a sentence                                        |
+| Adjectival clause     | adj.cl       | clause | A clause that functions as an adjective in a sentence                                  |
+| Adverbial clause      | adv.cl       | clause | A clause that functions as an adverb in a sentence                                     |
+| Inserted clause       | i.cl         | clause | A clause inserted into another clause                                                  |
+| Relative clause       | rel.cl       | clause | A clause that adds information about an element in the main clause                     |
+| Dependent clause      | dep.cl       | clause | A clause that depends on another clause to form a complete sentence                    |
+| Independent clause    | ind.cl       | clause | A clause that expresses a complete thought on its own                                  |
 
 # Screenshots
 

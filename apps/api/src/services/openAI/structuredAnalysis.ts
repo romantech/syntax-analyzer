@@ -8,6 +8,10 @@ import {
 import { z } from 'zod';
 import { SYNTAX_CONSTITUENTS } from '@/constants/syntax-constituents';
 import { throwCustomError } from '@/utils/customError';
+import {
+  filterRedundantSyntaxTags,
+  isPunctuationToken,
+} from '@/utils/syntax-tags';
 import type { CreateChatModel } from './openAIUtils';
 
 const analysisSpansSchema = z.object({
@@ -40,7 +44,13 @@ type Segment = {
 const catalog = new Map(
   SYNTAX_CONSTITUENTS.map((entry) => [entry.label, entry]),
 );
-const punctuationOnly = /^[\p{P}\s]+$/u;
+const syntaxTagInstructions = `Use these tag rules when they differ from earlier directions:
+- Tag the sole object of a verb as "object". For a double-object construction, use "indirect object" and "direct object" on their respective spans. In "I gave a book to Mina", use "object" for "a book", "prepositional phrase" for "to Mina", and "prepositional object" for "Mina".
+- Use "subject complement" for a complement that describes or identifies the subject, and "object complement" for one that describes or identifies the object. In "They made him happy", "him" is an "object" and "happy" is an "object complement". Do not also tag either kind of complement as "complement".
+- Use a single specific clause label on a span. Prefer "relative clause" to "adjectival clause" and "dependent clause" for a relative clause. Use "coordinating clause" for coordinated clauses and omit "parallel clause". Omit "noun phrase" on a single token and "independent clause" on a span that covers the whole sentence.
+- Tag optional clause-level modifiers of time, place, manner, or reason as "adverbial", and add their form on the same span (for example, "adverb", "prepositional phrase", or "adverbial clause"). "At dawn" can have both "adverbial" and "prepositional phrase". A prepositional phrase inside a noun phrase is not automatically an adverbial.
+- Use "locative complement" for a place or direction required by the verb in that construction, as in "on the table" in "She put the book on the table". Also tag its form and any nested prepositional object. Do not add "adverbial" to that complement.
+- Tag auxiliary HAVE forming the perfect as "perfect auxiliary", BE forming the progressive as "progressive auxiliary", BE forming the passive as "passive auxiliary", and auxiliary DO in questions, negation, or emphasis as "do-support auxiliary". For example, "has" in "She has finished" is a "perfect auxiliary". Tag the verbal group with "verb" where it can be covered by a contiguous span without crossing other constituents. Otherwise tag the lexical verb and keep auxiliary tags on their own spans. Use "verb" for lexical and copular uses of BE, DO, and HAVE.`;
 
 const invalidOutput = () =>
   throwCustomError('Invalid sentence analysis.', 502, 'invalid-model-output');
@@ -71,7 +81,7 @@ const buildAnalysis = (sentence: string[], spans: Spans) => {
     if (
       begin >= end ||
       end > sentence.length ||
-      sentence.slice(begin, end).every((token) => punctuationOnly.test(token))
+      sentence.slice(begin, end).every(isPunctuationToken)
     ) {
       return null;
     }
@@ -112,6 +122,12 @@ const buildAnalysis = (sentence: string[], spans: Spans) => {
   }
 
   const fillGaps = (segment: Segment) => {
+    segment.constituents = filterRedundantSyntaxTags(
+      segment.constituents,
+      sentence,
+      segment.begin,
+      segment.end,
+    );
     if (!segment.children.length) return;
     const children: Segment[] = [];
     let begin = segment.begin;
@@ -154,17 +170,20 @@ export const generateStructuredAnalysis = async (
   for (const prompt of [initial, `${initial}\n${retryInstruction}`]) {
     signal.throwIfAborted();
     const response = await llm
-      .invoke([new SystemMessage(prompt), tokens], {
-        signal,
-        response_format: {
-          type: 'json_schema',
-          json_schema: {
-            name: 'syntax_analysis',
-            schema: outputSchema,
-            strict: true,
+      .invoke(
+        [new SystemMessage(`${prompt}\n\n${syntaxTagInstructions}`), tokens],
+        {
+          signal,
+          response_format: {
+            type: 'json_schema',
+            json_schema: {
+              name: 'syntax_analysis',
+              schema: outputSchema,
+              strict: true,
+            },
           },
         },
-      })
+      )
       .catch((error: unknown) => {
         if (
           error instanceof LengthFinishReasonError ||

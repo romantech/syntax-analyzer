@@ -228,6 +228,34 @@
       "description": "동사, 형용사, 부사를 수식하는 단어",
       "name": "부사"
     },
+    "tag32": {
+      "description": "주어가 무엇인지 또는 어떤 상태인지 설명하는 성분",
+      "name": "주격 보어"
+    },
+    "tag33": {
+      "description": "절에 시간, 장소, 방법, 이유 등의 정보를 덧붙이는 성분",
+      "name": "부사어"
+    },
+    "tag34": {
+      "description": "동사가 요구하는 장소나 방향을 나타내는 성분",
+      "name": "장소 보어"
+    },
+    "tag35": {
+      "description": "과거분사와 함께 완료형을 만드는 have",
+      "name": "완료 조동사"
+    },
+    "tag36": {
+      "description": "현재분사와 함께 진행형을 만드는 be",
+      "name": "진행 조동사"
+    },
+    "tag37": {
+      "description": "과거분사와 함께 수동태를 만드는 be",
+      "name": "수동 조동사"
+    },
+    "tag38": {
+      "description": "의문문, 부정문, 강조에 쓰이는 do",
+      "name": "do 조동사"
+    },
     "tag4": {
       "description": "동사의 동작이나 상태에 영향을 받는 단어나 구",
       "name": "목적어"
@@ -250,7 +278,7 @@
     },
     "tag9": {
       "description": "목적어를 설명하거나 보완하는 단어나 구",
-      "name": "목적보어"
+      "name": "목적격 보어"
     }
   },
   "validation": {

@@ -20,6 +20,8 @@
 
 실제 API를 실행하거나 배포하기 전에 Redis의 `analyzer:prompt` 해시에 `analysis_structured`와 `analysis_structured_retry`를 등록한다. 첫 필드에는 분석용 시스템 프롬프트를, 두 번째 필드에는 범위 검증 실패 시 덧붙일 재시도 지시문을 입력한다. 요청마다 두 필드를 함께 읽으므로 저장값이 바뀌면 다음 요청부터 적용된다. 필드가 없거나 공백이면 HTTP 500을 반환하고 할당량을 복구한다.
 
+서버는 기본 프롬프트와 재시도 프롬프트에 [학습용 태그 규칙](../apps/api/src/services/openAI/structuredAnalysis.ts)을 덧붙인다. 새 태그는 기존 `constituents` 배열에 같은 형식으로 들어간다. 기존 Redis 필드를 그대로 사용할 수 있으며, 웹은 이전 API의 응답도 읽으므로 두 앱을 독립적으로 배포할 수 있다.
+
 태그 범위가 유효하지 않으면 같은 분석 요청에서 한 번 다시 생성한다. 응답을 끝내 검증하지 못하면 HTTP 502를 반환하고 할당량을 복구한다.
 
 Vite 개발 서버는 `/api/`로 시작하는 요청에서 접두사를 제거하고 기본적으로 `http://localhost:3001`로 전달한다. 개발 API 포트를 바꾸면 아래의 `API_PROXY_TARGET`도 맞춘다. 같은 네트워크의 모바일에서는 Vite가 출력한 `Network` 주소로 접속한다. 웹 `.env.local`에 개발 API 주소를 넣거나 Express의 `CORS_ORIGIN`에 모바일 접속 주소를 추가할 필요가 없다.
