@@ -26,8 +26,14 @@ const fitLabelWidth = (element: HTMLElement): number => {
     return Math.ceil(labels.getBoundingClientRect().height / rowHeight) - 1;
   }
 
-  if (primary.getAttribute('aria-expanded') === 'true' && labels.children.length > 1) {
-    const { width, height } = primary.getBoundingClientRect();
+  const fullViewRoleId = element.dataset.fullViewRoleId;
+  const widthReference = fullViewRoleId
+    ? labels.querySelector(`[data-constituent-id="${fullViewRoleId}"]`)
+    : primary.getAttribute('aria-expanded') === 'true'
+      ? primary
+      : undefined;
+  if (widthReference && labels.children.length > 1) {
+    const { width, height } = widthReference.getBoundingClientRect();
     const availableWidth = Math.max(segmentWidth - LABEL_GAP, width);
     if (labelWidth > availableWidth) {
       element.style.setProperty('--constituent-label-max-width', `${availableWidth}px`);
