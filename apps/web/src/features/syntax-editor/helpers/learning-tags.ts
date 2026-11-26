@@ -25,15 +25,29 @@ const legacyAdverbialForms = new Set(['adverb', 'adverbial phrase', 'adverbial c
 export const getOverviewTag = ({ constituents }: TSegment) =>
   constituents.find(({ label }) => overviewRoles.has(label));
 
+const hasPassiveAuxiliary = (segment: TSegment): boolean =>
+  segment.constituents.some(({ label }) => label === 'passive auxiliary') ||
+  segment.children.some(
+    (child) =>
+      !child.constituents.some(({ type }) => type === 'clause') && hasPassiveAuxiliary(child),
+  );
+
 export function getLearningSegment(
   segment: TSegment,
   sentence: readonly string[],
   atClauseLevel = true,
+  passiveClause = hasPassiveAuxiliary(segment),
 ): TSegment {
   const { begin, end } = segment;
   const constituents = filterRedundantSyntaxTags(segment.constituents, sentence, begin, end);
   if (atClauseLevel && !constituents.some(({ label }) => overviewRoles.has(label))) {
-    const form = constituents.find(({ label }) => legacyAdverbialForms.has(label));
+    const form = constituents.find(
+      ({ label }) =>
+        legacyAdverbialForms.has(label) ||
+        (passiveClause &&
+          label === 'prepositional phrase' &&
+          sentence[begin]?.toLowerCase() === 'by'),
+    );
     if (form) {
       // A display-only role uses a distinct ID so the original form can be revealed as a detail.
       constituents.unshift({
@@ -44,14 +58,15 @@ export function getLearningSegment(
     }
   }
 
+  const isClause = constituents.some(({ type }) => type === 'clause');
   const childrenAtClauseLevel =
-    constituents.some(({ type }) => type === 'clause') ||
-    (atClauseLevel && constituents.every(({ label }) => label === 'verb phrase'));
+    isClause || (atClauseLevel && constituents.every(({ label }) => label === 'verb phrase'));
+  const childrenInPassiveClause = isClause ? hasPassiveAuxiliary(segment) : passiveClause;
   return {
     ...segment,
     constituents,
     children: segment.children.map((child) =>
-      getLearningSegment(child, sentence, childrenAtClauseLevel),
+      getLearningSegment(child, sentence, childrenAtClauseLevel, childrenInPassiveClause),
     ),
   };
 }

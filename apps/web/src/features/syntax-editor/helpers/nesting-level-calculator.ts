@@ -1,15 +1,56 @@
 import type { RefObject } from 'react';
 
 import { kebabToCamel } from '@/base';
-import {
-  CONSTITUENT_CLASSES,
-  CONSTITUENT_DATA_ATTRS,
-  getNumberAttr,
-} from '@/features/syntax-editor';
+import { CONSTITUENT_CLASSES } from '@/features/syntax-editor';
 
 const LABEL_GAP = 4;
 
-const assignCalculatedLevel = (element: HTMLElement) => {
+const fitLabelWidth = (element: HTMLElement): number => {
+  const labels = element.querySelector(':scope > .constituent-labels > .constituent-label-content');
+  if (!labels) return 0;
+
+  delete element.dataset.stackedLabels;
+  const segmentWidth = element.getBoundingClientRect().width;
+  let labelWidth = labels.getBoundingClientRect().width;
+  let extraRows = 0;
+  const primary = labels.firstElementChild;
+  if (!primary) return 0;
+
+  if (element.hasAttribute('data-detail-only')) {
+    const minimumWidth = Number.parseFloat(getComputedStyle(primary).minWidth);
+    const availableWidth = Math.max(segmentWidth, minimumWidth);
+    if (labelWidth <= availableWidth) return 0;
+    const rowHeight = primary.getBoundingClientRect().height;
+    element.style.setProperty('--constituent-label-max-width', `${availableWidth}px`);
+    element.dataset.stackedLabels = '';
+    return Math.ceil(labels.getBoundingClientRect().height / rowHeight) - 1;
+  }
+
+  const fullViewRoleId = element.dataset.fullViewRoleId;
+  const widthReference = fullViewRoleId
+    ? labels.querySelector(`[data-constituent-id="${fullViewRoleId}"]`)
+    : primary.getAttribute('aria-expanded') === 'true'
+      ? primary
+      : undefined;
+  if (widthReference && labels.children.length > 1) {
+    const { width, height } = widthReference.getBoundingClientRect();
+    const availableWidth = Math.max(segmentWidth - LABEL_GAP, width);
+    if (labelWidth > availableWidth) {
+      element.style.setProperty('--constituent-label-max-width', `${availableWidth}px`);
+      element.dataset.stackedLabels = '';
+      labelWidth = width;
+      extraRows = Math.ceil(labels.getBoundingClientRect().height / height) - 1;
+    }
+  }
+
+  const extraWidth = labelWidth + LABEL_GAP - segmentWidth;
+  if (extraWidth > 0) {
+    element.style.setProperty('--constituent-label-inline-space', `${extraWidth / 2}px`);
+  }
+  return extraRows;
+};
+
+const assignCalculatedLevel = (element: HTMLElement): number => {
   if (element.classList.contains('constituent-labels')) return 0;
   let maxChildLevel = 0;
 
@@ -28,21 +69,8 @@ const assignCalculatedLevel = (element: HTMLElement) => {
     }
   });
 
-  if (isConstituent) {
-    // Reserve space for the labels at their full width while the surrounding box animates.
-    const labels = element.querySelector(
-      ':scope > .constituent-labels > .constituent-label-content',
-    );
-    const extraWidth =
-      (labels?.getBoundingClientRect().width ?? 0) +
-      LABEL_GAP -
-      element.getBoundingClientRect().width;
-    if (extraWidth > 0) {
-      element.style.setProperty('--constituent-label-inline-space', `${extraWidth / 2}px`);
-    }
-  }
-
-  return currentLevel;
+  // Keep the connector aligned with the first row and reserve lower rows for ancestors.
+  return currentLevel + (isConstituent ? fitLabelWidth(element) : 0);
 };
 
 export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapMode = false) => {
@@ -56,12 +84,7 @@ export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapM
     constituent.style.removeProperty('--constituent-label-inline-space');
   }
 
-  Array.from(sentence.children).forEach((span) => {
-    const spanElement = span as HTMLElement;
-    if (getNumberAttr(spanElement, CONSTITUENT_DATA_ATTRS.ID)) {
-      assignCalculatedLevel(spanElement);
-    }
-  });
+  assignCalculatedLevel(sentence);
 
   // 절대 위치 라벨도 모바일 문장 스크롤 영역의 높이에 포함한다.
   sentence.style.paddingBottom = '0px';

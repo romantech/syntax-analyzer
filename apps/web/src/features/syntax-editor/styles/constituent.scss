@@ -62,10 +62,11 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   gap: 0.125rem;
   min-width: var(--constituent-label-size);
   min-height: var(--constituent-label-size);
-  padding-inline: 0.375rem;
+  padding: 0.25rem 0.375rem;
   border-radius: 0.375rem;
   font-size: 0.875rem;
   font-weight: 600;
+  line-height: 1.25;
 
   &[data-abbreviated] {
     font-style: italic;
@@ -94,6 +95,10 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
 button.constituent-label {
   cursor: pointer;
+
+  &[aria-expanded][data-abbreviated] {
+    min-width: var(--constituent-label-size);
+  }
 
   &[aria-expanded="true"] > svg {
     transform: rotate(180deg);
@@ -187,6 +192,69 @@ button.constituent-label {
   }
 }
 
+.constituent[data-stacked-labels] > .constituent-labels {
+  --constituent-label-width: max-content;
+  width: max-content;
+  overflow: visible;
+  transition: none;
+
+  &::before {
+    inset-block: 0;
+  }
+
+  &[data-disclosure]::before {
+    inset-block-start: var(--constituent-label-surface-inset);
+  }
+
+  > .constituent-label-content {
+    flex-direction: column;
+    max-inline-size: var(--constituent-label-max-width);
+
+    > .constituent-label {
+      max-inline-size: 100%;
+      justify-content: center;
+      white-space: normal;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+      text-align: center;
+
+      &:not(button) {
+        min-height: 0;
+      }
+    }
+
+    > button.constituent-label {
+      position: relative;
+      z-index: 1;
+
+      + .constituent-label {
+        margin-block-start: -0.4375rem;
+      }
+    }
+
+    > .constituent-label:only-child:not(button) {
+      inline-size: min-content;
+      max-inline-size: var(--constituent-label-max-width);
+      overflow-wrap: break-word;
+    }
+  }
+}
+
+.constituent.token-group[data-stacked-labels] > .constituent-labels {
+  transform: translate(-50%, calc(1px - var(--constituent-label-size) / 2));
+}
+
+.constituent.token-group[data-detail-only] {
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+.constituent.token-group > .constituent.token[data-detail-only]:first-child {
+  > .constituent-labels {
+    margin-inline-start: 0.25rem;
+  }
+}
+
 @media (max-width: 61.99em), (pointer: coarse) {
   .constituent {
     --constituent-label-size: 44px;
@@ -199,5 +267,12 @@ button.constituent-label {
   }
   .constituent.token-group::before {
     pointer-events: none;
+  }
+
+  .constituent[data-stacked-labels] > .constituent-labels[data-disclosure] {
+    > .constituent-label-content > .constituent-label:last-child:not(button) {
+      padding-inline: 0.5rem;
+      padding-block-end: 0.375rem;
+    }
   }
 }
