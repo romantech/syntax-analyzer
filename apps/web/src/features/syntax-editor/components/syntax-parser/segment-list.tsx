@@ -57,6 +57,7 @@ export default function SegmentList({
       begin={begin}
       end={end}
       tags={tags}
+      detailOnly={details?.detailOnly}
       overviewTagId={details?.role?.id}
       previouslyVisibleTags={previouslyVisibleTags}
       disclosure={

@@ -23,6 +23,7 @@ interface ConstituentProps {
   begin: number;
   end: number;
   overviewTagId?: number;
+  detailOnly?: boolean;
   previouslyVisibleTags?: ReadonlySet<number>;
   disclosure?: Disclosure;
 }
@@ -33,6 +34,7 @@ export default function Constituent({
   begin,
   end,
   overviewTagId,
+  detailOnly,
   previouslyVisibleTags,
   disclosure,
 }: PropsWithChildren<ConstituentProps>) {
@@ -62,6 +64,7 @@ export default function Constituent({
       data-segment-begin={primary ? begin : undefined}
       data-segment-end={primary ? end : undefined}
       data-entering={primary && entering ? true : undefined}
+      data-detail-only={primary && detailOnly ? true : undefined}
     >
       {children}
       {primary && (

@@ -14,8 +14,19 @@ const fitLabelWidth = (element: HTMLElement): number => {
   let labelWidth = labels.getBoundingClientRect().width;
   let extraRows = 0;
   const primary = labels.firstElementChild;
+  if (!primary) return 0;
 
-  if (primary?.getAttribute('aria-expanded') === 'true' && labels.children.length > 1) {
+  if (element.hasAttribute('data-detail-only')) {
+    const minimumWidth = Number.parseFloat(getComputedStyle(primary).minWidth);
+    const availableWidth = Math.max(segmentWidth, minimumWidth);
+    if (labelWidth <= availableWidth) return 0;
+    element.style.setProperty('--constituent-label-max-width', `${availableWidth}px`);
+    element.dataset.stackedLabels = '';
+    const rowHeight = Number.parseFloat(getComputedStyle(primary).minHeight);
+    return Math.ceil(labels.getBoundingClientRect().height / rowHeight) - 1;
+  }
+
+  if (primary.getAttribute('aria-expanded') === 'true' && labels.children.length > 1) {
     const { width, height } = primary.getBoundingClientRect();
     const availableWidth = Math.max(segmentWidth - LABEL_GAP, width);
     if (labelWidth > availableWidth) {

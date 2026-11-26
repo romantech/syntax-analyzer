@@ -218,6 +218,39 @@ test('저장된 동사구 안의 절 수식어를 기본 보기 부사어로 표
   assert.deepEqual(labels(adverb), ['adverb']);
 });
 
+test('저장된 수동절의 by 전치사구를 기본 보기 부사어로 표시한다', () => {
+  const sentence = [
+    'Before',
+    'dawn',
+    ',',
+    'the',
+    'lanterns',
+    'were',
+    'dimmed',
+    'by',
+    'the',
+    'caretaker',
+    '.',
+  ];
+  const saved = createAnalysis(sentence, [
+    [5, 7, 'verb'],
+    [5, 6, 'passive auxiliary'],
+    [7, 10, 'prepositional phrase'],
+  ]);
+  const [verb, auxiliary, phrase] = saved.children;
+  saved.children = [verb, phrase];
+  verb.children = [auxiliary];
+
+  const shown = getLearningSegment(saved, sentence).children[1];
+  assert.equal(getOverviewTag(shown)?.label, 'adverbial');
+  assert.deepEqual(labels(shown), ['adverbial', 'prepositional phrase']);
+  assert.deepEqual(labels(phrase), ['prepositional phrase']);
+
+  verb.children = [];
+  const active = getLearningSegment(saved, sentence).children[1];
+  assert.equal(getOverviewTag(active), undefined);
+});
+
 test('명사구와 형용사구 안의 부사는 절 수식어로 올리지 않는다', () => {
   const sentence = ['She', 'found', 'a', 'very', 'quiet', 'room', '.'];
   const wrappers: [number, number, string][] = [

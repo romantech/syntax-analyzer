@@ -7,6 +7,7 @@ interface SegmentDetails {
   role?: TConstituent;
   expanded: boolean;
   canExpand: boolean;
+  detailOnly: boolean;
 }
 
 const hasTags = (segment: TSegment): boolean =>
@@ -41,6 +42,7 @@ export function getOverviewDetails(segment: TSegment, expanded: ReadonlySet<numb
       role,
       expanded: isExpanded,
       canExpand,
+      detailOnly: showForms || !role,
     });
     return isExpanded || hasExpandedDescendant;
   }

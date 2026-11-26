@@ -191,7 +191,7 @@ button.constituent-label {
   }
 }
 
-.constituent[data-stacked-labels] > .constituent-labels[data-disclosure] {
+.constituent[data-stacked-labels] > .constituent-labels {
   --constituent-label-width: max-content;
   width: max-content;
   overflow: visible;
@@ -211,8 +211,13 @@ button.constituent-label {
   }
 }
 
-.constituent.token-group[data-stacked-labels] > .constituent-labels[data-disclosure] {
+.constituent.token-group[data-stacked-labels] > .constituent-labels {
   transform: translate(-50%, calc(1px - var(--constituent-label-size) / 2));
+}
+
+.constituent.token-group[data-detail-only] {
+  margin-inline: 0;
+  padding-inline: 0;
 }
 
 @media (max-width: 61.99em), (pointer: coarse) {
