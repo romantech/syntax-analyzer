@@ -42,17 +42,20 @@ const GenerateButtonControl = ({ count, ...buttonProps }: ButtonProps & { count:
     >
       <Icon as={RiAiGenerate} me={2} />
       <Text as="span">{t('generator.generate')}</Text>
-      <Text pl={1} as="span" fontSize="sm" fontVariantNumeric="tabular-nums">
-        (
-        <Text as="span" display="inline-grid" textAlign="end">
-          <Text as="span" gridArea="1 / 1" visibility="hidden">
-            {DAILY_SENTENCE_LIMIT}
-          </Text>
-          <Text as="span" gridArea="1 / 1">
-            {count}
-          </Text>
+      <Text
+        as="span"
+        pl={1}
+        display="grid"
+        justifyItems="center"
+        fontSize="sm"
+        fontVariantNumeric="tabular-nums"
+      >
+        <Text as="span" gridArea="1 / 1" visibility="hidden">
+          {`(${DAILY_SENTENCE_LIMIT} / ${DAILY_SENTENCE_LIMIT})`}
         </Text>
-        {` / ${DAILY_SENTENCE_LIMIT})`}
+        <Text as="span" gridArea="1 / 1">
+          {`(${count} / ${DAILY_SENTENCE_LIMIT})`}
+        </Text>
       </Text>
     </Button>
   );
