@@ -9,6 +9,7 @@ import {
 import { handleValidationErrors } from '@/middlewares/handleValidationErrors';
 import { identifyAnalyzerClient } from '@/middlewares/identifyAnalyzerClient';
 import { RANDOM_SENTENCE_CONFIG } from '@/services/openAI/openAI';
+import { randomSentenceGuidance } from '@/services/openAI/randomSentenceGuidance';
 import { ANALYZER_REDIS_SCHEMA } from '@/services/redis/redisKeys';
 import { asyncHandler, throwCustomError } from '@/utils';
 import {
@@ -53,9 +54,9 @@ const generateRandomSentences = async (
 ) => {
   const template = await redis.hget(KEYS.PROMPT, FIELDS.RANDOM_SENTENCE);
   if (!template) return throwCustomError(RETRIEVE_FAILED('template'), 500);
-  const prompt = await ChatPromptTemplate.fromTemplate(template).invoke({
-    ...query,
-  });
+  const prompt = await ChatPromptTemplate.fromTemplate(
+    `${template}\n\n${randomSentenceGuidance(query.sent_count)}`,
+  ).invoke({ ...query });
   signal.throwIfAborted();
   const llm = createModel({
     ...RANDOM_SENTENCE_CONFIG,
