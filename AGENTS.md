@@ -4,7 +4,7 @@
 
 - 시작 전 `git status -sb`, `git worktree list` 확인. 기존 변경과 로컬 전용 커밋 보존.
 - 새 브랜치는 `git fetch --prune origin` 후 `main`에서 `git merge --ff-only origin/main`을 실행해 `main`과 `origin/main`이 일치할 때 생성.
-- `git merge --ff-only origin/main` 실행 후에도 `main`과 `origin/main`이 일치하지 않으면 강제 초기화하지 않고 사용자에게 확인.
+- `git merge --ff-only origin/main`이 실패하거나 실행 후에도 `main`과 `origin/main`이 일치하지 않으면 강제 초기화하지 않고 사용자에게 확인.
 - 정리 후보는 `git branch --merged origin/main`으로 확인. 스쿼시 머지는 PR 병합과 미반영 변경 여부를 별도로 확인.
 - `main`과 사용 중인 worktree 브랜치를 제외한 완료 브랜치만 `git branch -d`로 정리. 삭제가 거부되면 보존.
 
@@ -20,7 +20,7 @@
 - 번역 키 변경 시 `pnpm i18n:extract` → [언어별 JSON](apps/web/src/i18n/locales) 갱신 → `pnpm i18n:types` → `pnpm i18n:check`.
 - 사용법, API 계약, 검증 절차 변경 시 관련 문서도 갱신.
 - Node.js와 pnpm 버전은 루트 `package.json` 기준. 코드 검증은 `pnpm lint`, `pnpm test`, `pnpm build`.
-- 수행하지 않은 검증을 완료로 표시하지 않으며, 실패하거나 수행하지 못한 검증은 사유 명시.
+- 실제 수행한 검증만 완료로 표시. 실패하거나 수행하지 못한 검증은 사유 명시.
 
 ## GitHub 이슈와 PR
 
