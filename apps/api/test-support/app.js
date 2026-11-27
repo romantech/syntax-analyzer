@@ -27,7 +27,7 @@ const startApp = async (context, options = {}) => {
 
 const modelAnalysis = () => ({
   response_metadata: { finish_reason: 'stop' },
-  text: '{"spans":[]}',
+  text: '{"spans":[{"begin":0,"end":1,"tags":["subject"]}]}',
 });
 
 const analysisPromptValues = [

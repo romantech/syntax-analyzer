@@ -1,0 +1,2 @@
+export const MAX_ANALYSIS_TOKENS = 48;
+export const MAX_ANALYSIS_TOKEN_LENGTH = 80;

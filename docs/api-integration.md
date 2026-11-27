@@ -18,7 +18,7 @@
 
 기본 분석 모델을 바꾸려면 `MODEL_ANALYSIS_BASIC`에 Structured Outputs를 지원하는 모델 ID를 지정한다.
 
-실제 API를 실행하거나 배포하기 전에 Redis의 `analyzer:prompt` 해시에 `analysis_structured`와 `analysis_structured_retry`를 등록한다. 첫 필드에는 분석용 시스템 프롬프트를, 두 번째 필드에는 범위 검증 실패 시 덧붙일 재시도 지시문을 입력한다. 요청마다 두 필드를 함께 읽으므로 저장값이 바뀌면 다음 요청부터 적용된다. 필드가 없거나 공백이면 HTTP 500을 반환하고 할당량을 복구한다.
+실제 API를 실행하거나 배포하기 전에 Redis의 `analyzer:prompt` 해시에 `analysis_structured`와 `analysis_structured_retry`를 등록한다. 첫 필드에는 분석용 시스템 프롬프트를, 두 번째 필드에는 범위가 유효하지 않거나 사용 가능한 태그가 없을 때 덧붙일 재시도 지시문을 입력한다. 요청마다 두 필드를 함께 읽으므로 저장값이 바뀌면 다음 요청부터 적용된다. 필드가 없거나 공백이면 HTTP 500을 반환하고 할당량을 복구한다.
 
 서버는 두 분석 프롬프트에 [학습용 태그 규칙](../apps/api/src/services/openAI/structuredAnalysis.ts)을 덧붙인다. 랜덤 문장 생성에 쓸 프롬프트 템플릿은 같은 해시의 `random_sentence` 필드에 등록한다.
 
@@ -55,6 +55,8 @@ HTTP 테스트는 운영과 같은 `createServer`에서 라우트와 오류 처�
 Vercel 웹과 Koyeb API는 `main`에서 각각 자동 배포된다. 웹이 새 API 계약에 의존하면 API 변경과 웹 전환을 별도 PR로 나눈다. Vercel은 저장소 루트의 [설정](../vercel.json)으로 웹을 빌드하고 `apps/web/dist`를 배포한다.
 
 ### API 선배포와 웹 전환
+
+분석 입력의 토큰 한도를 늘릴 때도 API를 먼저 배포한다. 이전 웹에서 보내던 입력은 새 API가 계속 지원한다.
 
 1. **API PR을 먼저 머지한다.** 기존 웹이 읽는 응답 필드를 유지하고 두 계약의 요청·응답과 기존 웹 동작을 검증한다. 현재 정상인 Vercel·Koyeb 배포 ID와 커밋 SHA를 PR에 기록한다.
 2. **Koyeb 운영 배포를 확인한다.** 해당 커밋의 배포가 `Healthy`이고 운영 트래픽을 받으면 [공통 체크리스트](#배포-전후-확인)를 실행한다. 운영 API의 두 계약이나 기존 운영 웹 검증에 실패하면 웹 PR 머지를 보류한다.

@@ -49,6 +49,7 @@ test('validates analysis requests before reserving quota', async (context) => {
     ['numeric token', { sentence: ['She', 42] }, 'sentence'],
     ['blank token', { sentence: ['She', ' '] }, 'sentence'],
     ['long token', { sentence: ['She', 'a'.repeat(81)] }, 'sentence'],
+    ['too many tokens', { sentence: Array(49).fill('word') }, 'sentence'],
     ['array model', { model: ['fast-ft'] }, 'model'],
     ['unknown model', { model: 'unknown' }, 'model'],
   ];
@@ -127,4 +128,10 @@ test('validates analysis requests before reserving quota', async (context) => {
       },
     );
   }
+
+  Object.assign(balances, { total: 1, user: 1 });
+  const sentence = Array(48).fill('word');
+  const response = await post(JSON.stringify({ ...validBody, sentence }));
+  assert.equal(response.status, 200);
+  assert.deepEqual((await response.json()).sentence, sentence);
 });

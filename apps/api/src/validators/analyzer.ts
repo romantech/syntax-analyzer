@@ -4,10 +4,13 @@ import {
   ERROR_MESSAGES,
   RandomSentenceParam,
 } from '@/constants';
+import {
+  MAX_ANALYSIS_TOKEN_LENGTH,
+  MAX_ANALYSIS_TOKENS,
+} from '@/constants/analysis-limits';
 
 const { MISSING_FIELD } = ERROR_MESSAGES;
 const { SENT_COUNT, TOPICS, MAX_CHARS } = RandomSentenceParam;
-const MAX_TOKEN_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 20;
 
 const isNonBlankString = (value: unknown, maxLength: number) =>
@@ -17,14 +20,14 @@ const isNonBlankString = (value: unknown, maxLength: number) =>
 
 /* POST /analyzer */
 export const checkSentenceField = body('sentence')
-  .isArray({ min: 2, max: 20 })
+  .isArray({ min: 2, max: MAX_ANALYSIS_TOKENS })
   .withMessage(MISSING_FIELD('sentence'))
   .bail()
   .custom((tokens: unknown[]) =>
-    tokens.every((token) => isNonBlankString(token, MAX_TOKEN_LENGTH)),
+    tokens.every((token) => isNonBlankString(token, MAX_ANALYSIS_TOKEN_LENGTH)),
   )
   .withMessage(
-    `Each token must be a non-blank string of up to ${MAX_TOKEN_LENGTH} characters.`,
+    `Each token must be a non-blank string of up to ${MAX_ANALYSIS_TOKEN_LENGTH} characters.`,
   );
 
 export const checkModelField = body('model')

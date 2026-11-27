@@ -5,6 +5,13 @@ export const ADVERBIAL = {
   type: 'token',
 } as const;
 
+export const CONJUNCTION = {
+  elementId: 13,
+  label: 'conjunction',
+  abbreviation: 'conj',
+  type: 'token',
+} as const;
+
 export const SYNTAX_CONSTITUENTS = [
   {
     elementId: 1,
@@ -78,12 +85,7 @@ export const SYNTAX_CONSTITUENTS = [
     abbreviation: 'pt',
     type: 'token',
   },
-  {
-    elementId: 13,
-    label: 'conjunction',
-    abbreviation: 'conj',
-    type: 'token',
-  },
+  CONJUNCTION,
   {
     elementId: 14,
     label: 'participle phrase',
