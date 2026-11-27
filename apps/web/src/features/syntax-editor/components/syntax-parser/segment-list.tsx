@@ -16,7 +16,7 @@ interface SegmentListProps {
   segment: TSegment;
   tokenElements: ReactNode[];
   overview?: Overview;
-  fullViewBaseline?: Overview['details'];
+  overviewBaseline?: Overview['details'];
   previouslyVisibleTags?: ReadonlySet<number>;
 }
 
@@ -24,12 +24,12 @@ export default function SegmentList({
   segment,
   tokenElements,
   overview,
-  fullViewBaseline,
+  overviewBaseline,
   previouslyVisibleTags,
 }: SegmentListProps) {
   const { id, begin, end } = segment;
   const details = overview?.details.get(id);
-  const fullViewRole = fullViewBaseline?.get(id)?.role;
+  const baseline = overviewBaseline?.get(id);
   const tags = details?.tags ?? segment.constituents;
   const children = overview
     ? segment.children.filter((child) => overview.details.has(child.id))
@@ -48,7 +48,7 @@ export default function SegmentList({
         segment={child}
         tokenElements={tokenElements}
         overview={overview}
-        fullViewBaseline={fullViewBaseline}
+        overviewBaseline={overviewBaseline}
         previouslyVisibleTags={previouslyVisibleTags}
       />,
     );
@@ -61,8 +61,9 @@ export default function SegmentList({
       begin={begin}
       end={end}
       tags={tags}
-      detailOnly={details?.detailOnly ?? (!!fullViewBaseline && !fullViewRole)}
-      fullViewRoleId={fullViewRole?.id}
+      detailOnly={!!overviewBaseline && (!baseline || baseline.detailOnly)}
+      baselineRoleId={baseline?.role?.id}
+      baselineDisclosure={!overview && baseline?.canExpand}
       overviewTagId={details?.role?.id}
       previouslyVisibleTags={previouslyVisibleTags}
       disclosure={

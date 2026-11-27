@@ -24,7 +24,8 @@ interface ConstituentProps {
   end: number;
   overviewTagId?: number;
   detailOnly?: boolean;
-  fullViewRoleId?: number;
+  baselineRoleId?: number;
+  baselineDisclosure?: boolean;
   previouslyVisibleTags?: ReadonlySet<number>;
   disclosure?: Disclosure;
 }
@@ -36,7 +37,8 @@ export default function Constituent({
   end,
   overviewTagId,
   detailOnly,
-  fullViewRoleId,
+  baselineRoleId,
+  baselineDisclosure,
   previouslyVisibleTags,
   disclosure,
 }: PropsWithChildren<ConstituentProps>) {
@@ -67,7 +69,8 @@ export default function Constituent({
       data-segment-end={primary ? end : undefined}
       data-entering={primary && entering ? true : undefined}
       data-detail-only={primary && detailOnly ? true : undefined}
-      data-full-view-role-id={fullViewRoleId}
+      data-baseline-role-id={baselineRoleId}
+      data-baseline-disclosure={baselineDisclosure || undefined}
     >
       {children}
       {primary && (

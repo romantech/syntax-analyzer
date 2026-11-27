@@ -82,12 +82,9 @@ function AnalysisSentence({
     () => (allTagsVisible ? undefined : getOverviewDetails(learningSegment, expanded)),
     [allTagsVisible, learningSegment, expanded],
   );
-  const fullViewBaseline = useMemo(
-    () =>
-      hasOverview && showAllTags && !isEditing
-        ? getOverviewDetails(learningSegment, new Set())
-        : undefined,
-    [hasOverview, showAllTags, isEditing, learningSegment],
+  const overviewBaseline = useMemo(
+    () => (hasOverview && !isEditing ? getOverviewDetails(learningSegment, new Set()) : undefined),
+    [hasOverview, isEditing, learningSegment],
   );
 
   const markRevealedTags = (animate: boolean) => {
@@ -149,7 +146,7 @@ function AnalysisSentence({
           segment={displayedSegment}
           tokenElements={TokenList({ sentence: analysis.sentence, isTapMode })}
           overview={overviewDetails && { details: overviewDetails, toggle }}
-          fullViewBaseline={fullViewBaseline}
+          overviewBaseline={overviewBaseline}
           previouslyVisibleTags={isEditing ? undefined : previouslyVisibleTags}
         />
       </Sentence>
