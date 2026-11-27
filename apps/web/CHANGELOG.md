@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.2](https://github.com/romantech/syntax-analyzer/compare/v1.7.1...v1.7.2) (2026-11-27)
+
+
+### Bug Fixes
+
+* prevent overlapping syntax detail labels ([#279](https://github.com/romantech/syntax-analyzer/issues/279)) ([cb5ab85](https://github.com/romantech/syntax-analyzer/commit/cb5ab8561bb11364d048155d3799f6961d6db8d6))
+* tighten nested syntax label spacing ([#283](https://github.com/romantech/syntax-analyzer/issues/283)) ([d4d125a](https://github.com/romantech/syntax-analyzer/commit/d4d125aa4987c2a4fd699afa318d7137bd9b579f))
+
 ## [1.7.1](https://github.com/romantech/syntax-analyzer/compare/v1.7.0...v1.7.1) (2026-11-26)
 
 
