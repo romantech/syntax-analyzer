@@ -440,7 +440,7 @@ test('auxiliary and wrapped phrase labels keep their spacing and connectors', as
   expect(words[1].top).toBeGreaterThan(words[0].top);
 });
 
-test('a wide auxiliary label does not add space between words', async ({ page }) => {
+test('syntax labels keep balanced padding without moving words', async ({ page, isMobile }) => {
   const sentence = 'A fresh scent has lingered in the kitchen since breakfast .'.split(' ');
   const region = await openAnalysis(page, {
     id: 'fresh-scent',
@@ -454,8 +454,13 @@ test('a wide auxiliary label does not add space between words', async ({ page })
       [],
       [
         segment(0, 3, ['subject', 'noun phrase']),
-        segment(3, 5, ['verb'], [segment(3, 4, ['perfect auxiliary'])]),
-        segment(5, 8, ['adverbial', 'prepositional phrase']),
+        segment(3, 5, ['verb'], [segment(3, 4, ['perfect auxiliary']), segment(4, 5, ['verb'])]),
+        segment(
+          5,
+          8,
+          ['adverbial', 'prepositional phrase'],
+          [segment(6, 8, ['noun phrase', 'prepositional object'])],
+        ),
         segment(8, 10, ['adverbial', 'prepositional phrase']),
       ],
     ),
@@ -476,8 +481,44 @@ test('a wide auxiliary label does not add space between words', async ({ page })
   expect(await wordLayout(region)).toEqual(baseline);
 
   await region.getByRole('button', { name: '전체 태그 펼치기' }).press('Enter');
+  const mainVerb = region.locator(
+    '[data-segment-begin="4"][data-segment-end="5"] .constituent-label',
+  );
+  await expect(mainVerb).toHaveText('동사');
   await expectCardLayout(region);
   expect(await wordLayout(region)).toEqual(baseline);
+
+  if (isMobile) {
+    await expect(region.getByText('완료 조동사', { exact: true })).toHaveCSS(
+      'padding-inline-start',
+      '10px',
+    );
+    await expect(mainVerb).toHaveCSS('padding-inline-start', '10px');
+    const objectCard = region.locator(
+      '[data-segment-begin="6"][data-stacked-labels] > .constituent-labels',
+    );
+    await expect(objectCard).toBeVisible();
+    const [top, bottom] = await objectCard.evaluate((frame) => {
+      const [first, last] = frame.querySelectorAll('.constituent-label');
+      const lineHeight = parseFloat(getComputedStyle(first).lineHeight);
+      const top = (first.getBoundingClientRect().height - lineHeight) / 2;
+      return [top, parseFloat(getComputedStyle(last).paddingBlockEnd)];
+    });
+    expect(bottom).toBeCloseTo(top);
+  }
+
+  await page.getByRole('switch', { name: '약칭' }).press('Space');
+  await expect(mainVerb).toHaveText('v');
+  if (isMobile) await expect(mainVerb).toHaveCSS('width', '32px');
+  await expectCardLayout(region);
+  expect(await wordLayout(region)).toEqual(baseline);
+
+  await region.getByRole('button', { name: '전체 태그 접기' }).press('Enter');
+  const verbDisclosure = region.getByRole('button', { name: 'v 상세 태그 (4~5 단어)' });
+  await expect(verbDisclosure).toBeVisible();
+  await expect(verbDisclosure).toHaveCSS('padding-block-start', isMobile ? '11.5px' : '6.5px');
+  await expect(verbDisclosure).toHaveCSS('padding-block-end', isMobile ? '12.5px' : '7.5px');
+  await expectDisclosureSize(verbDisclosure, isMobile);
 });
 
 test('shared clause details hide redundant buttons and keep individual details available', async ({
