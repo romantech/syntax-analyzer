@@ -5,41 +5,54 @@ import { CONSTITUENT_CLASSES } from '@/features/syntax-editor';
 
 const LABEL_GAP = 4;
 
-const fitLabelWidth = (element: HTMLElement): number => {
-  const labels = element.querySelector(':scope > .constituent-labels > .constituent-label-content');
-  if (!labels) return 0;
+const limitLabelWidth = (element: HTMLElement, labels: Element, width: number) => {
+  element.style.setProperty('--constituent-label-max-width', 'min-content');
+  element.dataset.labelWidthLimited = '';
+  if (labels.children.length > 1) element.dataset.stackedLabels = '';
 
+  // A label needs room for its longest word, padding, and disclosure caret.
+  const minimumWidth = labels.getBoundingClientRect().width;
+  element.style.setProperty('--constituent-label-max-width', `${Math.max(width, minimumWidth)}px`);
+};
+
+const measureBaselineWidth = (label: HTMLElement, withCaret: boolean) => {
+  // Measure the collapsed label even when the full view removes its disclosure button.
+  label.dataset.measureBaseline = withCaret ? 'disclosure' : '';
+  const { width } = label.getBoundingClientRect();
+  delete label.dataset.measureBaseline;
+  return width;
+};
+
+const fitLabelWidth = (element: HTMLElement, labels: Element) => {
+  delete element.dataset.labelWidthLimited;
   delete element.dataset.stackedLabels;
   const segmentWidth = element.getBoundingClientRect().width;
   let labelWidth = labels.getBoundingClientRect().width;
-  let extraRows = 0;
   const primary = labels.firstElementChild;
-  if (!primary) return 0;
+  if (!primary) return;
 
   if (element.hasAttribute('data-detail-only')) {
     const minimumWidth = Number.parseFloat(getComputedStyle(primary).minWidth);
     const availableWidth = Math.max(segmentWidth, minimumWidth);
-    if (labelWidth <= availableWidth) return 0;
-    const rowHeight = primary.getBoundingClientRect().height;
-    element.style.setProperty('--constituent-label-max-width', `${availableWidth}px`);
-    element.dataset.stackedLabels = '';
-    return Math.ceil(labels.getBoundingClientRect().height / rowHeight) - 1;
+    if (labelWidth > availableWidth) {
+      limitLabelWidth(element, labels, availableWidth);
+    }
+    return;
   }
 
-  const fullViewRoleId = element.dataset.fullViewRoleId;
-  const widthReference = fullViewRoleId
-    ? labels.querySelector(`[data-constituent-id="${fullViewRoleId}"]`)
-    : primary.getAttribute('aria-expanded') === 'true'
-      ? primary
-      : undefined;
-  if (widthReference && labels.children.length > 1) {
-    const { width, height } = widthReference.getBoundingClientRect();
-    const availableWidth = Math.max(segmentWidth - LABEL_GAP, width);
-    if (labelWidth > availableWidth) {
-      element.style.setProperty('--constituent-label-max-width', `${availableWidth}px`);
-      element.dataset.stackedLabels = '';
+  const baselineRoleId = element.dataset.baselineRoleId;
+  const withCaret = element.hasAttribute('data-baseline-disclosure');
+  if (baselineRoleId && (labels.children.length > 1 || withCaret)) {
+    const baselineLabel = labels.querySelector<HTMLElement>(
+      `[data-constituent-id="${baselineRoleId}"]`,
+    );
+    if (baselineLabel) {
+      const width = measureBaselineWidth(baselineLabel, withCaret);
+      const availableWidth = Math.max(segmentWidth - LABEL_GAP, width);
+      if (labelWidth > availableWidth) {
+        limitLabelWidth(element, labels, availableWidth);
+      }
       labelWidth = width;
-      extraRows = Math.ceil(labels.getBoundingClientRect().height / height) - 1;
     }
   }
 
@@ -47,41 +60,48 @@ const fitLabelWidth = (element: HTMLElement): number => {
   if (extraWidth > 0) {
     element.style.setProperty('--constituent-label-inline-space', `${extraWidth / 2}px`);
   }
-  return extraRows;
 };
 
-const assignCalculatedLevel = (element: HTMLElement): number => {
-  if (element.classList.contains('constituent-labels')) return 0;
+const assignCalculatedLevel = (element: HTMLElement): { level: number; bottom: number } => {
   let maxChildLevel = 0;
+  let maxChildBottom = Number.NEGATIVE_INFINITY;
 
   for (const child of element.children) {
-    const childLevel = assignCalculatedLevel(child as HTMLElement);
-    maxChildLevel = Math.max(maxChildLevel, childLevel);
+    if (child.classList.contains('constituent-labels')) continue;
+    const { level, bottom } = assignCalculatedLevel(child as HTMLElement);
+    maxChildLevel = Math.max(maxChildLevel, level);
+    maxChildBottom = Math.max(maxChildBottom, bottom);
   }
 
   const classesToCheck = [CONSTITUENT_CLASSES.TOKEN, CONSTITUENT_CLASSES.TOKEN_GROUP];
-  const isConstituent = classesToCheck.some((className) => element.classList.contains(className));
-  const currentLevel = maxChildLevel + (isConstituent ? 1 : 0);
+  const constituentClass = classesToCheck.find((className) =>
+    element.classList.contains(className),
+  );
+  if (!constituentClass) return { level: maxChildLevel, bottom: maxChildBottom };
 
-  classesToCheck.forEach((className) => {
-    if (element.classList.contains(className)) {
-      element.dataset[kebabToCamel(`${className}-lv`)] = `${currentLevel}`;
-    }
-  });
+  const level = maxChildLevel + 1;
+  element.dataset[kebabToCamel(`${constituentClass}-lv`)] = `${level}`;
+  const frame = element.querySelector(':scope > .constituent-labels');
+  if (!frame?.firstElementChild) return { level, bottom: maxChildBottom };
 
-  // Keep the connector aligned with the first row and reserve lower rows for ancestors.
-  return currentLevel + (isConstituent ? fitLabelWidth(element) : 0);
+  fitLabelWidth(element, frame.firstElementChild);
+  const { top, bottom } = frame.getBoundingClientRect();
+  // Move the label and its connector together past the measured end of the child cards.
+  const offset = Math.max(0, maxChildBottom - top);
+  if (offset > 0) element.style.setProperty('--constituent-label-offset', `${offset}px`);
+  return { level, bottom: bottom + offset };
 };
 
 export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapMode = false) => {
   const sentence = ref.current;
   if (!sentence) return;
 
-  // Recompute from the original token widths when a shorter label replaces a longer one.
+  // Recompute from the original token widths and label positions after each display change.
   for (const constituent of sentence.querySelectorAll<HTMLElement>(
     `.${CONSTITUENT_CLASSES.CONSTITUENT}`,
   )) {
     constituent.style.removeProperty('--constituent-label-inline-space');
+    constituent.style.removeProperty('--constituent-label-offset');
   }
 
   assignCalculatedLevel(sentence);
