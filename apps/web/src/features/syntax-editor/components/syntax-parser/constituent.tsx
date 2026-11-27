@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { useAtomValue } from 'jotai';
 import type { PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IoCaretDownSharp } from 'react-icons/io5';
+import { LuChevronDown } from 'react-icons/lu';
 import {
   CONSTITUENT_CLASSES,
   CONSTITUENT_COLORS,
@@ -143,7 +143,7 @@ function ConstituentLabel({
         onClick={(event) => disclosure.toggle(event.detail > 0)}
       >
         {text}
-        <IoCaretDownSharp aria-hidden />
+        <LuChevronDown aria-hidden strokeWidth={2.25} />
       </chakra.button>
     );
   }
