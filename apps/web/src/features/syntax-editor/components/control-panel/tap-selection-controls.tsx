@@ -21,7 +21,7 @@ import {
   selectedTokenRangeAtom,
   TagListAccordion,
 } from '@/features/syntax-editor';
-import { getConstituentTranslation } from '../../helpers/constituent-translation';
+import { getConstituentTranslation } from '@/features/syntax-editor/helpers/constituent-translation';
 
 import { EditorActions } from './control-panel';
 

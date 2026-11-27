@@ -13,7 +13,7 @@ import {
   showFullTagNamesAtom,
   type TConstituent,
 } from '@/features/syntax-editor';
-import { getConstituentTranslation } from '../../helpers/constituent-translation';
+import { getConstituentTranslation } from '@/features/syntax-editor/helpers/constituent-translation';
 import { useLabelWidth } from './use-label-width';
 
 type Disclosure = { expanded: boolean; toggle: (animate: boolean) => void };
