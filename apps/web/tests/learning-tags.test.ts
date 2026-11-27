@@ -37,6 +37,59 @@ function createAnalysis(sentence: string[], spans: [number, number, ...string[]]
 
 const labels = (segment: TSegment) => segment.constituents.map(({ label }) => label);
 
+test('명사절을 이끄는 that의 접속사 태그를 기본 보기에 표시한다', () => {
+  const sentence = ['She', 'said', 'that', 'he', 'left', '.'];
+  for (const clauseLabels of [['noun clause'], ['object', 'noun clause']]) {
+    for (const connectorLabels of [[], ['conjunction']]) {
+      const saved = createAnalysis(sentence, [
+        [0, 1, 'subject'],
+        [1, 2, 'verb'],
+        [2, 5, ...clauseLabels],
+        [2, 3, ...connectorLabels],
+        [3, 4, 'subject'],
+        [4, 5, 'verb'],
+      ]);
+      const [subject, verb, clause, connector, embeddedSubject, embeddedVerb] = saved.children;
+      saved.children = [subject, verb, clause];
+      clause.children = [connector, embeddedSubject, embeddedVerb];
+      const before = structuredClone(saved);
+
+      const learning = getLearningSegment(saved, sentence);
+      const collapsed = getOverviewDetails(learning, new Set());
+      assert.deepEqual(
+        collapsed.get(connector.id)?.tags.map(({ label }) => label),
+        ['conjunction'],
+      );
+      if (clauseLabels.includes('object')) {
+        assert.equal(collapsed.has(embeddedSubject.id), false);
+        const opened = getOverviewDetails(learning, new Set([clause.id]));
+        assert.equal(opened.get(embeddedSubject.id)?.tags[0]?.label, 'subject');
+        assert.equal(opened.get(connector.id)?.tags.length, 1);
+      }
+      assert.deepEqual(saved, before);
+    }
+  }
+});
+
+test('명사절 주어에 속한 지시사 that에 접속사 태그를 추가하지 않는다', () => {
+  const sentence = ['She', 'knows', 'that', 'book', 'is', 'popular', '.'];
+  const saved = createAnalysis(sentence, [
+    [2, 6, 'object', 'noun clause'],
+    [2, 4, 'subject', 'noun phrase'],
+    [2, 3],
+    [3, 4],
+    [4, 5, 'verb'],
+  ]);
+  const [clause, subject, demonstrative, noun, verb] = saved.children;
+  saved.children = [clause];
+  clause.children = [subject, verb];
+  subject.children = [demonstrative, noun];
+
+  const learning = getLearningSegment(saved, sentence);
+  const projectedSubject = learning.children[0].children[0];
+  assert.deepEqual(labels(projectedSubject.children[0]), []);
+});
+
 test('개별 태그를 펼치면 같은 범위와 상위 구·절의 태그를 표시한다', () => {
   const sentence = ['The', 'child', 'opened', 'it', ',', 'and', 'she', 'left', '.'];
   const saved = createAnalysis(sentence, [
@@ -60,7 +113,8 @@ test('개별 태그를 펼치면 같은 범위와 상위 구·절의 태그를 �
     details.get(segment.id)?.tags.map(({ label }) => label);
 
   const collapsed = overview();
-  assert.equal(collapsed.get(object.id)?.canExpand, true);
+  assert.equal(collapsed.get(verb.id)?.canExpand, true);
+  assert.equal(collapsed.get(object.id)?.canExpand, false);
   assert.deepEqual(visibleLabels(collapsed, clause), []);
 
   const subjectOpen = overview(subject.id);
@@ -68,15 +122,84 @@ test('개별 태그를 펼치면 같은 범위와 상위 구·절의 태그를 �
   assert.deepEqual(visibleLabels(subjectOpen, clause), ['independent clause']);
   assert.deepEqual(visibleLabels(subjectOpen, phrase), []);
 
-  const bothOpen = overview(subject.id, object.id);
+  const bothOpen = overview(subject.id, verb.id);
   assert.deepEqual(visibleLabels(bothOpen, phrase), ['verb phrase']);
   assert.deepEqual(visibleLabels(bothOpen, otherClause), []);
 
-  const objectOpen = overview(object.id);
-  assert.deepEqual(visibleLabels(objectOpen, subject), ['subject']);
-  assert.deepEqual(visibleLabels(objectOpen, clause), ['independent clause']);
-  assert.deepEqual(visibleLabels(objectOpen, phrase), ['verb phrase']);
+  const verbOpen = overview(verb.id);
+  assert.deepEqual(visibleLabels(verbOpen, subject), ['subject']);
+  assert.deepEqual(visibleLabels(verbOpen, clause), ['independent clause']);
+  assert.deepEqual(visibleLabels(verbOpen, phrase), ['verb phrase']);
+  assert.equal(overview().get(otherSubject.id)?.canExpand, true);
   assert.deepEqual(visibleLabels(overview(), phrase), []);
+});
+
+test('같은 명사절만 여는 버튼은 접속사에 두고 고유한 상세 버튼은 유지한다', () => {
+  const sentence = ['She', 'said', 'that', 'he', 'had', 'left', '.'];
+  const saved = createAnalysis(sentence, [
+    [2, 6, 'noun clause'],
+    [2, 3, 'conjunction'],
+    [3, 4, 'subject'],
+    [4, 6, 'verb'],
+    [4, 5, 'perfect auxiliary'],
+    [5, 6, 'verb'],
+  ]);
+  const [clause, introducer, subject, verb, auxiliary, lexicalVerb] = saved.children;
+  saved.children = [clause];
+  clause.children = [introducer, subject, verb];
+  verb.children = [auxiliary, lexicalVerb];
+
+  const learning = getLearningSegment(saved, sentence);
+  const overview = (...ids: number[]) => getOverviewDetails(learning, new Set(ids));
+  const collapsed = overview();
+  assert.equal(collapsed.get(introducer.id)?.canExpand, true);
+  assert.equal(collapsed.get(subject.id)?.canExpand, false);
+  assert.equal(collapsed.get(verb.id)?.canExpand, true);
+  assert.deepEqual(overview(subject.id).get(clause.id)?.tags, []);
+
+  const opened = overview(introducer.id);
+  assert.deepEqual(
+    opened.get(clause.id)?.tags.map(({ label }) => label),
+    ['noun clause'],
+  );
+  assert.equal(opened.has(lexicalVerb.id), false);
+  const verbOpen = overview(verb.id);
+  assert.equal(verbOpen.get(introducer.id)?.canExpand, true);
+  assert.equal(verbOpen.get(subject.id)?.canExpand, false);
+  assert.equal(verbOpen.get(lexicalVerb.id)?.role?.label, 'verb');
+});
+
+test('접속사가 생략된 명사절의 공통 버튼은 첫 라벨에 표시한다', () => {
+  const sentence = ['I', 'know', 'he', 'left', '.'];
+  const saved = createAnalysis(sentence, [
+    [2, 4, 'noun clause'],
+    [2, 3, 'subject'],
+    [3, 4, 'verb'],
+  ]);
+  const [clause, subject, verb] = saved.children;
+  saved.children = [clause];
+  clause.children = [subject, verb];
+
+  const learning = getLearningSegment(saved, sentence);
+  const collapsed = getOverviewDetails(learning, new Set());
+  assert.equal(collapsed.get(subject.id)?.canExpand, true);
+  assert.equal(collapsed.get(verb.id)?.canExpand, false);
+});
+
+test('이미 보이는 조동사만 들어 있는 동사에는 펼침 버튼을 표시하지 않는다', () => {
+  const sentence = ['She', 'will', 'go', '.'];
+  const saved = createAnalysis(sentence, [
+    [1, 3, 'verb'],
+    [1, 2, 'modal verb'],
+  ]);
+  const [verb, auxiliary] = saved.children;
+  saved.children = [verb];
+  verb.children = [auxiliary];
+
+  const learning = getLearningSegment(saved, sentence);
+  const collapsed = getOverviewDetails(learning, new Set());
+  assert.equal(collapsed.get(verb.id)?.canExpand, false);
+  assert.equal(collapsed.get(auxiliary.id)?.role?.label, 'modal verb');
 });
 
 test('접힌 상위 태그 아래의 펼침 상태로 구·절이 드러나지 않는다', () => {
@@ -187,6 +310,29 @@ test('기본 보기에서 독립된 조동사 태그를 표시한다', () => {
   }
 });
 
+test('동사 전체 범위 아래의 조동사를 접힌 상태에서 표시한다', () => {
+  const sentence = ['She', 'has', 'been', 'studying', '.'];
+  const saved = createAnalysis(sentence, [
+    [0, 1, 'subject'],
+    [1, 4, 'verb'],
+    [1, 2, 'perfect auxiliary'],
+    [2, 3, 'progressive auxiliary'],
+    [3, 4, 'participle'],
+  ]);
+  const [subject, verb, perfect, progressive, participle] = saved.children;
+  saved.children = [subject, verb];
+  verb.children = [perfect, progressive, participle];
+
+  const learning = getLearningSegment(saved, sentence);
+  const collapsed = getOverviewDetails(learning, new Set());
+  assert.equal(collapsed.get(verb.id)?.role?.label, 'verb');
+  assert.equal(collapsed.get(perfect.id)?.role?.label, 'perfect auxiliary');
+  assert.equal(collapsed.get(progressive.id)?.role?.label, 'progressive auxiliary');
+  assert.equal(collapsed.has(participle.id), false);
+  const opened = getOverviewDetails(learning, new Set([verb.id]));
+  assert.equal(opened.get(participle.id)?.tags[0]?.label, 'participle');
+});
+
 test('역할이 확인되는 옛 부사구를 기본 보기에 표시하고 전치사구의 역할을 추측하지 않는다', () => {
   const sentence = ['She', 'arrived', 'very', 'early', 'in', 'spring', '.'];
   const saved = createAnalysis(sentence, [
@@ -198,6 +344,52 @@ test('역할이 확인되는 옛 부사구를 기본 보기에 표시하고 전�
   assert.notEqual(modifier.constituents[0].id, modifier.constituents[1].id);
   assert.equal(getOverviewTag(phrase), undefined);
   assert.deepEqual(labels(phrase), ['prepositional phrase']);
+});
+
+test('절 수준의 전치사구는 기본 보기에 표시하고 전치사 목적어는 펼치면 표시한다', () => {
+  const sentence = ['She', 'said', 'to', 'staff', 'during', 'a', 'meeting', '.'];
+  const saved = createAnalysis(sentence, [
+    [1, 7, 'verb phrase'],
+    [1, 2, 'verb'],
+    [2, 4, 'prepositional phrase'],
+    [3, 4, 'prepositional object'],
+    [4, 7, 'adverbial', 'prepositional phrase'],
+  ]);
+  const [verbPhrase, verb, recipient, staff, time] = saved.children;
+  saved.children = [verbPhrase];
+  verbPhrase.children = [verb, recipient, time];
+  recipient.children = [staff];
+
+  const learning = getLearningSegment(saved, sentence);
+  const collapsed = getOverviewDetails(learning, new Set());
+  assert.equal(collapsed.get(recipient.id)?.role?.label, 'prepositional phrase');
+  assert.equal(collapsed.get(recipient.id)?.canExpand, true);
+  assert.equal(collapsed.has(staff.id), false);
+  assert.equal(collapsed.get(time.id)?.role?.label, 'adverbial');
+
+  const opened = getOverviewDetails(learning, new Set([recipient.id]));
+  assert.equal(opened.get(staff.id)?.tags[0]?.label, 'prepositional object');
+  assert.deepEqual(labels(recipient), ['prepositional phrase']);
+});
+
+test('명사에 붙은 전치사구는 기본 보기에서 숨긴다', () => {
+  const sentence = ['She', 'read', 'the', 'letter', 'to', 'staff', '.'];
+  const saved = createAnalysis(sentence, [
+    [2, 6, 'object', 'noun phrase'],
+    [4, 6, 'prepositional phrase'],
+  ]);
+  const [object, recipient] = saved.children;
+  saved.children = [object];
+  object.children = [recipient];
+
+  const learning = getLearningSegment(saved, sentence);
+  assert.equal(getOverviewDetails(learning, new Set()).has(recipient.id), false);
+  const opened = getOverviewDetails(learning, new Set([object.id]));
+  assert.equal(opened.get(recipient.id)?.tags[0]?.label, 'prepositional phrase');
+
+  object.constituents = object.constituents.filter(({ label }) => label === 'noun phrase');
+  const withoutRole = getLearningSegment(saved, sentence);
+  assert.deepEqual(getOverviewDetails(withoutRole, new Set()).get(recipient.id)?.tags, []);
 });
 
 test('저장된 동사구 안의 절 수식어를 기본 보기 부사어로 표시한다', () => {

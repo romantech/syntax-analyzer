@@ -3,7 +3,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PiTextTBold } from 'react-icons/pi';
-import { MAX_SENTENCE_LENGTH, SENTENCE_CONTROL_HEIGHT } from '@/features/syntax-analyzer/constants';
+import { SENTENCE_CONTROL_HEIGHT } from '@/features/syntax-analyzer/constants';
 import { translateValidationMessage } from '../../schemes/validation-messages';
 
 interface SentenceInputProps extends InputProps {
@@ -37,7 +37,6 @@ const SentenceInput = forwardRef<HTMLInputElement, SentenceInputProps>(function 
           size={size}
           fontSize="md"
           lineHeight="base"
-          maxLength={MAX_SENTENCE_LENGTH}
           {...inputProps}
           ref={ref}
         />

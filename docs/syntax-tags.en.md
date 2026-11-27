@@ -2,6 +2,13 @@
 
 The analyzer uses the grammatical categories below, and the editor uses them as tags. Turn on **Tag descriptions** to see what each grammatical category means in the tag picker. The table shows each tag’s base type. The analysis uses `token-group` when a `token` tag, such as a subject, spans multiple words.
 
+In the default view of an AI analysis, a clause-level prepositional phrase appears when it has no separate role tag. In `said to staff`, expand `to staff` to see the prepositional object tag on `staff`.
+
+In `She said that he left`, the default view labels `that` as a conjunction introducing the noun clause.
+In `She has been studying`, the perfect auxiliary on `has` and the progressive auxiliary on `been` stay visible when the verb tag is collapsed.
+
+The default view shows one button for identical details, giving priority to a clause introducer such as `that`. Labels with different details keep their own buttons.
+
 | Label                 | Abbreviation | Type   | Description                                                                            |
 | --------------------- | ------------ | ------ | -------------------------------------------------------------------------------------- |
 | Subject               | s            | token  | A word or phrase that tells who or what the sentence is about                          |

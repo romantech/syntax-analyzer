@@ -1,6 +1,10 @@
 import type { TFunction } from 'i18next';
 
 import {
+  MAX_ANALYSIS_TOKEN_LENGTH,
+  MAX_ANALYSIS_TOKENS,
+} from '../../../../../api/src/constants/analysis-limits.ts';
+import {
   MAX_SENTENCE_LENGTH,
   MAX_TOPIC_ADDITION,
   MAX_TOPIC_LENGTH,
@@ -16,6 +20,10 @@ export function translateValidationMessage(t: TFunction, message: string) {
       return t('validation.sentenceMin', { limit: MIN_SENTENCE_WORDS });
     case 'validation.sentenceMax':
       return t('validation.sentenceMax', { limit: MAX_SENTENCE_LENGTH });
+    case 'validation.sentenceTokenMax':
+      return t('validation.sentenceTokenMax', { limit: MAX_ANALYSIS_TOKENS });
+    case 'validation.sentenceTokenLength':
+      return t('validation.sentenceTokenLength', { limit: MAX_ANALYSIS_TOKEN_LENGTH });
     case 'validation.sentenceRequired':
       return t('validation.sentenceRequired');
     case 'validation.keywordMin':

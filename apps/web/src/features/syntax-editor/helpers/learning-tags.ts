@@ -1,15 +1,19 @@
-import { ADVERBIAL } from '../../../../../api/src/constants/syntax-constituents.ts';
+import { ADVERBIAL, CONJUNCTION } from '../../../../../api/src/constants/syntax-constituents.ts';
 import { filterRedundantSyntaxTags } from '../../../../../api/src/utils/syntax-tags.ts';
 import type { TSegment } from '../types/analysis';
 
-const overviewRoles = new Set([
-  'subject',
-  'verb',
+const auxiliaryRoles = new Set([
   'modal verb',
   'perfect auxiliary',
   'progressive auxiliary',
   'passive auxiliary',
   'do-support auxiliary',
+]);
+
+const overviewRoles = new Set([
+  'subject',
+  'verb',
+  ...auxiliaryRoles,
   'object',
   'indirect object',
   'direct object',
@@ -18,12 +22,23 @@ const overviewRoles = new Set([
   'object complement',
   'locative complement',
   'adverbial',
+  'conjunction',
 ]);
 
 const legacyAdverbialForms = new Set(['adverb', 'adverbial phrase', 'adverbial clause']);
 
 export const getOverviewTag = ({ constituents }: TSegment) =>
   constituents.find(({ label }) => overviewRoles.has(label));
+
+export const isOverviewAuxiliary = (tag: ReturnType<typeof getOverviewTag>) =>
+  tag !== undefined && auxiliaryRoles.has(tag.label);
+
+export const childrenAreAtClauseLevel = (
+  constituents: TSegment['constituents'],
+  atClauseLevel: boolean,
+) =>
+  constituents.some(({ type }) => type === 'clause') ||
+  (atClauseLevel && constituents.every(({ label }) => label === 'verb phrase'));
 
 const hasPassiveAuxiliary = (segment: TSegment): boolean =>
   segment.constituents.some(({ label }) => label === 'passive auxiliary') ||
@@ -59,14 +74,29 @@ export function getLearningSegment(
   }
 
   const isClause = constituents.some(({ type }) => type === 'clause');
-  const childrenAtClauseLevel =
-    isClause || (atClauseLevel && constituents.every(({ label }) => label === 'verb phrase'));
+  const childrenAtClauseLevel = childrenAreAtClauseLevel(constituents, atClauseLevel);
   const childrenInPassiveClause = isClause ? hasPassiveAuxiliary(segment) : passiveClause;
+  const children = segment.children.map((child) =>
+    getLearningSegment(child, sentence, childrenAtClauseLevel, childrenInPassiveClause),
+  );
+  const [first, second] = children;
+  // A separate subject after a bare "that" distinguishes the clause marker from "that book".
+  if (
+    sentence[begin]?.toLowerCase() === 'that' &&
+    constituents.some(({ label }) => label === 'noun clause') &&
+    first?.begin === begin &&
+    first.end === begin + 1 &&
+    first.constituents.length === 0 &&
+    first.children.length === 0 &&
+    second?.begin === first.end &&
+    second.constituents.some(({ label }) => label === 'subject')
+  ) {
+    children[0] = { ...first, constituents: [{ ...CONJUNCTION, id: -first.id }] };
+  }
+
   return {
     ...segment,
     constituents,
-    children: segment.children.map((child) =>
-      getLearningSegment(child, sentence, childrenAtClauseLevel, childrenInPassiveClause),
-    ),
+    children,
   };
 }
