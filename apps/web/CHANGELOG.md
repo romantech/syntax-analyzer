@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.7.3](https://github.com/romantech/syntax-analyzer/compare/v1.7.2...v1.7.3) (2026-11-27)
+
+
+### Bug Fixes
+
+* preserve prepositional object and main verb spans ([#290](https://github.com/romantech/syntax-analyzer/issues/290)) ([d55eb4c](https://github.com/romantech/syntax-analyzer/commit/d55eb4c773019c5d901141fa519a75899c8bb242)), closes [#288](https://github.com/romantech/syntax-analyzer/issues/288)
+* **web:** align syntax label spacing ([#293](https://github.com/romantech/syntax-analyzer/issues/293)) ([ee028fe](https://github.com/romantech/syntax-analyzer/commit/ee028fe6988186a1c12547f0a91c220b844fe190))
+* **web:** hide redundant tag disclosures ([#289](https://github.com/romantech/syntax-analyzer/issues/289)) ([03ebae8](https://github.com/romantech/syntax-analyzer/commit/03ebae8f4d6709f58ec78352199b77afbd962caa))
+* **web:** preserve word spacing around syntax labels ([#285](https://github.com/romantech/syntax-analyzer/issues/285)) ([10a98eb](https://github.com/romantech/syntax-analyzer/commit/10a98ebf3588c370efc283cbfd4f1861a4403054))
+* **web:** refine syntax tag disclosure styling ([#287](https://github.com/romantech/syntax-analyzer/issues/287)) ([452c282](https://github.com/romantech/syntax-analyzer/commit/452c28224c191d3ed0b4be718468f03eb66707a6))
+
 ## [1.7.2](https://github.com/romantech/syntax-analyzer/compare/v1.7.1...v1.7.2) (2026-11-27)
 
 
