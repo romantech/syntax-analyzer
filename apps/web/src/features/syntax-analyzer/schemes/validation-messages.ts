@@ -3,7 +3,7 @@ import type { TFunction } from 'i18next';
 import {
   MAX_ANALYSIS_TOKEN_LENGTH,
   MAX_ANALYSIS_TOKENS,
-} from '../../../../../api/src/constants/analysis-limits.ts';
+} from 'syntax-analyzer-shared/analysis-limits.js';
 import {
   MAX_SENTENCE_LENGTH,
   MAX_TOPIC_ADDITION,

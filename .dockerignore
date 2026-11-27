@@ -6,3 +6,5 @@
 !apps/api/package.json
 !apps/api/tsconfig.json
 !apps/api/src/**
+!packages/shared/package.json
+!packages/shared/*.js

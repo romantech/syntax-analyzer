@@ -12,6 +12,8 @@
 
 저장소 루트에서 `pnpm install`로 두 앱의 의존성을 설치한다. `pnpm lint`, `pnpm test`, `pnpm build`는 두 앱을 확인하고, `pnpm i18n:check`는 웹 번역을 확인한다.
 
+문장 성분 정의, 분석 토큰 한도, 태그 중복 제거는 웹과 API가 함께 사용하는 [공용 패키지](../packages/shared)에서 관리한다.
+
 실제 API와 연동하려면 [서버 환경 변수 예제](../apps/api/.env.example)를 기준으로 `apps/api/.env`에 개발용 Redis와 OpenAI 설정을 입력한다. 루트에서 별도 터미널로 `pnpm dev:api`와 `pnpm dev`를 실행한 뒤 <http://localhost:5173/>을 연다.
 
 `NODE_ENV`, `OPENAI_API_KEY`, 랜덤 문장 생성용 `MODEL_FAST`가 필요하다. 개발에서 `PORT`를 생략하면 3001을 사용하고, 운영에서는 서비스 포트를 명시한다. Redis 호스트와 포트를 생략하면 `localhost:6379`를 사용한다. 잘못된 필수 설정이 있으면 API는 변수 이름을 기록하고 Redis에 연결하기 전에 종료한다.

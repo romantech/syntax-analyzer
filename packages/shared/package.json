@@ -1,0 +1,11 @@
+{
+  "name": "syntax-analyzer-shared",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "tsc --ignoreConfig --noEmit --strict --allowJs --checkJs --target esnext *.js"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}
