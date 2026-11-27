@@ -69,7 +69,6 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   line-height: 1.25;
 
   &[data-abbreviated] {
-    font-style: italic;
     font-weight: 500;
 
     &:not(:only-child, [data-measure-baseline]) {
@@ -93,8 +92,8 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   &[data-measure-baseline="disclosure"]::after {
     flex: none;
     align-self: center;
-    width: 0.75rem;
-    height: 0.75rem;
+    width: 0.875rem;
+    height: 0.875rem;
   }
 }
 
