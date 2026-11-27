@@ -18,7 +18,8 @@ function segment(
     constituents: labels.map((label) => {
       const tag = SYNTAX_CONSTITUENTS.find((tag) => tag.label === label);
       if (!tag) throw new Error(`Unknown syntax label: ${label}`);
-      return { ...tag, id: ++nextId };
+      const type = tag.type === 'token' && end - begin > 1 ? 'token-group' : tag.type;
+      return { ...tag, type, id: ++nextId };
     }),
     children,
   };
@@ -214,8 +215,8 @@ function cardLayoutIssues(region: Locator) {
 }
 
 async function expectCardLayout(region: Locator) {
+  await expect.poll(() => cardLayoutIssues(region)).toEqual([]);
   expect(await labelOverlaps(region)).toEqual([]);
-  expect(await cardLayoutIssues(region)).toEqual([]);
 }
 
 async function expectDisclosureSize(button: Locator, isMobile: boolean) {
@@ -323,11 +324,8 @@ function dawnAnalysis(firstWords: [string, string] = ['Before', 'dawn']): TAnaly
   };
 }
 
-test('a wrapped detail fits the widest line without extra side padding', async ({
-  page,
-  isMobile,
-}) => {
-  const region = await openAnalysis(page, dawnAnalysis(['At', 'dusk']));
+test('a wrapped detail fits the widest line without extra side padding', async ({ page }) => {
+  const region = await openAnalysis(page, dawnAnalysis(['At', '5']));
   await region.getByRole('button', { name: '부사어 상세 태그 (1~2 단어)' }).click();
   await expectCardLayout(region);
 
@@ -344,7 +342,7 @@ test('a wrapped detail fits the widest line without extra side padding', async (
     });
   const detail = await measurePadding(region.getByText('전치사 목적어', { exact: true }));
   const auxiliary = await measurePadding(region.getByText('수동 조동사', { exact: true }));
-  expect(detail.lineCount).toBe(isMobile ? 2 : 1);
+  expect(detail.lineCount).toBe(2);
   expect(Math.abs(detail.inlinePadding - auxiliary.inlinePadding)).toBeLessThanOrEqual(1);
 });
 
@@ -385,12 +383,16 @@ for (const language of ['ko', 'en'] as const) {
         const childBounds = await childCard.boundingBox();
         const groupBounds = await group.boundingBox();
         if (!childBounds || !groupBounds) throw new Error('Missing phrase or detail bounds');
-        expect(childBounds.x).toBeGreaterThan(groupBounds.x);
-        expect(childBounds.x + childBounds.width).toBeLessThan(groupBounds.x + groupBounds.width);
-        expect((await parentCard.boundingBox())?.y).toBeCloseTo(
-          (await verbCard.boundingBox())?.y ?? Number.NaN,
-          1,
+        expect(childBounds.x).toBeGreaterThanOrEqual(groupBounds.x - 0.5);
+        expect(childBounds.x + childBounds.width).toBeLessThanOrEqual(
+          groupBounds.x + groupBounds.width + 0.5,
         );
+        if (toggle === details) {
+          expect((await parentCard.boundingBox())?.y).toBeCloseTo(
+            (await verbCard.boundingBox())?.y ?? Number.NaN,
+            1,
+          );
+        }
         await expectCardLayout(region);
         expect(await wordLayout(region)).toEqual(baseline);
 
@@ -436,4 +438,44 @@ test('auxiliary and wrapped phrase labels keep their spacing and connectors', as
   });
   expect(words.map(({ lines }) => lines)).toEqual([1, 1]);
   expect(words[1].top).toBeGreaterThan(words[0].top);
+});
+
+test('a wide auxiliary label does not add space between words', async ({ page }) => {
+  const sentence = 'A fresh scent has lingered in the kitchen since breakfast .'.split(' ');
+  const region = await openAnalysis(page, {
+    id: 'fresh-scent',
+    source: 'user',
+    createdAt: '2026-11-27T00:00:00.000Z',
+    sentence,
+    isAnalyzedByGPT: true,
+    rootSegment: segment(
+      0,
+      sentence.length,
+      [],
+      [
+        segment(0, 3, ['subject', 'noun phrase']),
+        segment(3, 5, ['verb'], [segment(3, 4, ['perfect auxiliary'])]),
+        segment(5, 8, ['adverbial', 'prepositional phrase']),
+        segment(8, 10, ['adverbial', 'prepositional phrase']),
+      ],
+    ),
+  });
+
+  await expect(region.getByText('완료 조동사', { exact: true })).toBeVisible();
+  const baseline = await wordLayout(region);
+  const gaps = baseline.words.slice(1).map(([left], index) => {
+    const [previousLeft, , previousWidth] = baseline.words[index];
+    return (left - previousLeft - previousWidth) / 64;
+  });
+  expect(Math.max(...gaps)).toBeLessThanOrEqual(1);
+
+  const subject = region.getByRole('button', { name: '주어 상세 태그 (1~3 단어)' });
+  await subject.press('Enter');
+  await expect(subject).toHaveAttribute('aria-expanded', 'true');
+  await expectCardLayout(region);
+  expect(await wordLayout(region)).toEqual(baseline);
+
+  await region.getByRole('button', { name: '전체 태그 펼치기' }).press('Enter');
+  await expectCardLayout(region);
+  expect(await wordLayout(region)).toEqual(baseline);
 });

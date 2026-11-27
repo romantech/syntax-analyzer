@@ -25,6 +25,7 @@ const Sentence = forwardRef<
       whiteSpace="nowrap"
       w="max-content"
       minW="full"
+      px="1px"
       userSelect={isTapMode ? 'none' : 'auto'}
       color="gray.700"
       _dark={{ color: 'gray.300' }}

@@ -46,7 +46,7 @@ const fitLabelWidth = (element: HTMLElement, labels: Element) => {
   delete element.dataset.stackedLabels;
   const segmentWidth = element.getBoundingClientRect().width;
   const naturalSize = labels.getBoundingClientRect();
-  let labelWidth = naturalSize.width;
+  const labelWidth = naturalSize.width;
   const primary = labels.firstElementChild;
   if (!primary) return;
 
@@ -72,13 +72,7 @@ const fitLabelWidth = (element: HTMLElement, labels: Element) => {
       if (labelWidth > availableWidth) {
         limitLabelWidth(element, labels, availableWidth);
       }
-      labelWidth = width;
     }
-  }
-
-  const extraWidth = labelWidth + LABEL_GAP - segmentWidth;
-  if (extraWidth > 0) {
-    element.style.setProperty('--constituent-label-inline-space', `${extraWidth / 2}px`);
   }
 };
 
@@ -148,8 +142,8 @@ const fitInsidePhrase = (
   }
 
   const phrase = parent.getBoundingClientRect();
-  let left = Math.max(start, phrase.left + LABEL_GAP);
-  let right = Math.min(end, phrase.right - LABEL_GAP);
+  let left = Math.max(start, phrase.left);
+  let right = Math.min(end, phrase.right);
 
   // Keep the widened label between the neighboring dashed connectors.
   for (const sibling of cards) {
@@ -161,8 +155,8 @@ const fitInsidePhrase = (
       continue;
     }
     const segment = sibling.element.getBoundingClientRect();
-    if (segment.right <= center) left = Math.max(left, segment.right + LABEL_GAP);
-    if (segment.left >= center) right = Math.min(right, segment.left - LABEL_GAP);
+    if (segment.right <= center) left = Math.max(left, segment.right);
+    if (segment.left >= center) right = Math.min(right, segment.left);
   }
   if (right - left < unwrapped.width) return;
 
@@ -177,8 +171,7 @@ const placeLabelCards = (sentence: HTMLElement, cards: LabelCard[]) => {
     ? viewport.getBoundingClientRect().left + viewport.clientLeft - viewport.scrollLeft
     : sentenceLeft;
 
-  // Measure after all inline spacing is set. Use the final content width even while
-  // a disclosure frame is transitioning to that width.
+  // Use the final content width even while a disclosure frame is transitioning.
   const measured: MeasuredCard[] = cards
     .sort((a, b) => a.level - b.level)
     .map(({ element, frame, content, unwrapped }) => {
@@ -248,11 +241,10 @@ export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapM
   const sentence = ref.current;
   if (!sentence) return;
 
-  // Recompute from the original token widths and label positions after each display change.
+  // Recompute from the original label positions after each display change.
   for (const constituent of sentence.querySelectorAll<HTMLElement>(
     `.${CONSTITUENT_CLASSES.CONSTITUENT}`,
   )) {
-    constituent.style.removeProperty('--constituent-label-inline-space');
     constituent.style.removeProperty('--constituent-label-inline-offset');
     constituent.style.removeProperty('--constituent-label-offset');
   }
