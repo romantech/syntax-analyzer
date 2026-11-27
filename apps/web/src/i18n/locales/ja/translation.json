@@ -289,6 +289,8 @@
     "sentenceMax": "{{limit}}文字以内で入力してください",
     "sentenceMin": "{{limit}}語以上の英文を入力してください",
     "sentenceRequired": "英文を入力してください",
+    "sentenceTokenLength": "1語につき{{limit}}文字以内で入力してください",
+    "sentenceTokenMax": "単語と句読点を合わせて{{limit}}個以内で入力してください",
     "topicDuplicate": "同じキーワードは追加できません",
     "topicMax": "キーワードは最大{{limit}}件まで追加できます"
   }

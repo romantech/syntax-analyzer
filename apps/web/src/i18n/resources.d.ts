@@ -291,6 +291,8 @@ export default interface Resources {
       "sentenceMax": "최대 {{limit}}자까지만 입력할 수 있어요",
       "sentenceMin": "최소 {{limit}} 단어로 이루어진 문장을 입력해 주세요",
       "sentenceRequired": "영어 문장을 입력해 주세요",
+      "sentenceTokenLength": "한 단어는 최대 {{limit}}자까지 입력할 수 있어요",
+      "sentenceTokenMax": "단어와 문장부호를 합쳐 최대 {{limit}}개까지 분석할 수 있어요",
       "topicDuplicate": "키워드는 중복될 수 없어요",
       "topicMax": "키워드는 최대 {{limit}}개까지 추가할 수 있어요"
     }

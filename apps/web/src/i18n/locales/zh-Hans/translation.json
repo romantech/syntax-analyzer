@@ -289,6 +289,8 @@
     "sentenceMax": "最多可输入 {{limit}} 个字符",
     "sentenceMin": "请输入至少含 {{limit}} 个单词的句子",
     "sentenceRequired": "请输入英语句子",
+    "sentenceTokenLength": "每个单词最多可输入 {{limit}} 个字符",
+    "sentenceTokenMax": "单词和标点符号合计最多可分析 {{limit}} 个",
     "topicDuplicate": "此关键词已存在",
     "topicMax": "最多可添加 {{limit}} 个关键词"
   }

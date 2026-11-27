@@ -289,6 +289,8 @@
     "sentenceMax": "Use at most {{limit}} characters",
     "sentenceMin": "Enter a sentence with at least {{limit}} words",
     "sentenceRequired": "Enter an English sentence",
+    "sentenceTokenLength": "Use at most {{limit}} characters per word",
+    "sentenceTokenMax": "Use at most {{limit}} words and punctuation marks combined",
     "topicDuplicate": "This keyword is already in the list",
     "topicMax": "Add up to {{limit}} keywords"
   }

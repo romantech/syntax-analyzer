@@ -1,6 +1,10 @@
 import { setTimeout } from 'node:timers/promises';
 import { nanoid } from 'nanoid';
 import type { Plugin } from 'vite';
+import {
+  MAX_ANALYSIS_TOKEN_LENGTH,
+  MAX_ANALYSIS_TOKENS,
+} from '../../api/src/constants/analysis-limits.ts';
 
 import { generateNumberID } from '../src/base/utils/identifier.ts';
 import { tokenJoiner } from '../src/base/utils/string.ts';
@@ -93,8 +97,11 @@ export const mockAnalyzer = (scenario = 'success'): Plugin => ({
         !['fast-ft', 'primary', 'primary-ft'].includes(model) ||
         !Array.isArray(sentence) ||
         sentence.length < 2 ||
-        sentence.length > 20 ||
-        !sentence.every((token) => typeof token === 'string' && token.trim())
+        sentence.length > MAX_ANALYSIS_TOKENS ||
+        !sentence.every(
+          (token) =>
+            typeof token === 'string' && token.length <= MAX_ANALYSIS_TOKEN_LENGTH && token.trim(),
+        )
       ) {
         return fail(400, 'Invalid analysis request.');
       }
