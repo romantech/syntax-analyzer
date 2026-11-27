@@ -183,11 +183,16 @@ test('serves structured basic analyses with existing quota and response fields',
     [
       analysisPromptValues[0],
       analysisPromptValues[0],
-      analysisPromptValues.join('\n'),
+      `${analysisPromptValues.join('\n')}\nReturn at least one usable grammatical tag on a non-punctuation token range.`,
     ],
   );
   for (const message of systemMessages) {
     assert.match(message, /double-object construction/);
+    assert.match(message, /tag "to staff" as "prepositional phrase"/);
+    assert.match(
+      message,
+      /Tag "that" introducing a content clause as "conjunction"/,
+    );
     assert.match(message, /Tag optional clause-level modifiers/);
     assert.match(message, /"perfect auxiliary"/);
   }
@@ -224,6 +229,43 @@ test('serves structured basic analyses with existing quota and response fields',
   assert.equal(refunds, badSpans.length + 2);
   assert.equal(reserves, refunds + 2);
   assert.equal(modelCalls, reserves + 5);
+
+  for (const spans of [
+    [],
+    [
+      { begin: 0, end: 5, tags: ['independent clause'] },
+      { begin: 0, end: 1, tags: ['noun phrase'] },
+    ],
+  ]) {
+    const before = { modelCalls, reserves, refunds };
+    const unusableCompletion = {
+      message: { role: 'assistant', content: JSON.stringify({ spans }) },
+    };
+    completion = unusableCompletion;
+    retryCompletion = {
+      message: {
+        role: 'assistant',
+        content: JSON.stringify({ spans: validSpans }),
+      },
+    };
+    const recovery = await analyze();
+    assert.equal(recovery.status, 200);
+    assert.deepEqual((await recovery.json()).sentence, sentence);
+    assert.equal(modelCalls, before.modelCalls + 2);
+    assert.equal(reserves, before.reserves + 1);
+    assert.equal(refunds, before.refunds);
+
+    completion = unusableCompletion;
+    const failure = await analyze();
+    assert.equal(failure.status, 502);
+    assert.deepEqual(await failure.json(), {
+      status: 'error',
+      message: 'Invalid sentence analysis.',
+    });
+    assert.equal(modelCalls, before.modelCalls + 4);
+    assert.equal(reserves, before.reserves + 2);
+    assert.equal(refunds, before.refunds + 1);
+  }
 
   const callsBeforeMissingPrompt = modelCalls;
   const refundsBeforeMissingPrompt = refunds;

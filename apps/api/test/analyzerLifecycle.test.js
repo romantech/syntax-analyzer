@@ -10,7 +10,7 @@ const { test } = require('node:test');
 const { setTimeout: delay } = require('node:timers/promises');
 const Redis = require('ioredis');
 const { ANALYZER_REDIS_SCHEMA } = require('../dist/services/redis/redisKeys');
-const { analysisPromptValues } = require('../test-support/app');
+const { analysisPromptValues, modelAnalysis } = require('../test-support/app');
 
 const { KEYS, FIELDS, PROMPT_FIELDS } = ANALYZER_REDIS_SCHEMA;
 const redisPort = process.env.REDIS_TEST_PORT;
@@ -289,7 +289,7 @@ test('SIGTERM stops accepting connections and refunds only unfinished requests',
     code: 'ECONNREFUSED',
   });
 
-  complete(finishedModel, JSON.stringify({ spans: [] }));
+  complete(finishedModel, modelAnalysis().text);
   const success = await finishing;
   assert.equal(success.status, 200);
   assert.deepEqual((await success.json()).sentence, analysisSentence);

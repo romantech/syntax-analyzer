@@ -69,6 +69,8 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       await clearKeys();
       const origin = 'https://syntax-analyzer.example.com';
       let failModel = false;
+      let emptyAnalysis = false;
+      let emptyAnalysisCalls = 0;
       const baseURL = await startApp(testContext, {
         corsOrigins: [origin],
         isKoyeb: true,
@@ -76,7 +78,11 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
         analyzerCookieSecret: 'integration-test-cookie-signing-secret',
         redis,
         createModel: () => ({
-          invoke: async () => modelAnalysis(),
+          invoke: async () => {
+            if (!emptyAnalysis) return modelAnalysis();
+            emptyAnalysisCalls++;
+            return { ...modelAnalysis(), text: '{"spans":[]}' };
+          },
           withStructuredOutput: () => ({
             invoke: async () => ({ sentences: failModel ? [] : ['I walk.'] }),
           }),
@@ -133,13 +139,28 @@ test('analyzer quotas on Redis', { skip: !redisPort }, async (context) => {
       const initialCounts = { analysis: 10, random_sentence: 20 };
       assert.deepEqual(await first.json(), initialCounts);
 
-      const analysis = await request('', {
-        cookie,
-        body: { model: 'primary', sentence: ['I', 'walk.'] },
-      });
+      const analysisBody = { model: 'primary', sentence: ['I', 'walk.'] };
+      const analysis = await request('', { cookie, body: analysisBody });
       assert.equal(analysis.status, 200);
       assert.equal(analysis.headers.has('set-cookie'), false);
       assert.deepEqual((await analysis.json()).sentence, ['I', 'walk.']);
+
+      const sharedAnalysisCredits = await redis.hget(
+        REMAINING.TOTAL,
+        FIELDS.ANALYSIS,
+      );
+      emptyAnalysis = true;
+      const empty = await request('', { cookie, body: analysisBody });
+      assert.equal(empty.status, 502);
+      assert.deepEqual(await empty.json(), {
+        status: 'error',
+        message: 'Invalid sentence analysis.',
+      });
+      assert.equal(emptyAnalysisCalls, 2);
+      assert.equal(
+        await redis.hget(REMAINING.TOTAL, FIELDS.ANALYSIS),
+        sharedAnalysisCredits,
+      );
 
       const sentences = await request(randomSentences, { cookie });
       assert.equal(sentences.status, 200);

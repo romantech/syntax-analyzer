@@ -26,7 +26,7 @@ POST /analyzer
 | Field      | Type            | Options                              | Required | Description                                | Constraints                                  |
 | ---------- | --------------- | ------------------------------------ | -------- | ------------------------------------------ | -------------------------------------------- |
 | `model`    | `string`        | `primary`, `primary-ft`, `fast-ft` | Yes      | Compatibility key for existing clients | One of: `primary`, `primary-ft`, `fast-ft` |
-| `sentence` | `Array<string>` | N/A                                  | Yes      | Tokens for analysis                        | 2–20 tokens, each a non-blank string of up to 80 characters |
+| `sentence` | `Array<string>` | N/A                                  | Yes      | Tokens for analysis                        | 2–48 tokens, each a non-blank string of up to 80 characters |
 
 > Example Request
 
@@ -81,7 +81,7 @@ HTTP 200 returns [`TAnalysis`](../web/src/features/syntax-editor/types/analysis.
 }
 ```
 
-If the model fails to produce a valid analysis, the API can return HTTP 502 with `{"status":"error","message":"Invalid sentence analysis."}`. See [request errors](#request-errors) for input validation.
+An analysis must contain at least one tag after redundant tags are removed. The API retries once if ranges are invalid or no usable tags remain. If the model fails to produce a valid analysis, the API can return HTTP 502 with `{"status":"error","message":"Invalid sentence analysis."}` and refunds the reserved credit. See [request errors](#request-errors) for input validation.
 
 ### Generate random sentences
 
