@@ -6,10 +6,9 @@
 
 Syntax Analyzer는 영어 문장의 다양한 구문을 자동으로 분석해 주고, 원하는 형태로 구문을 편집할 수 있는 웹 어플리케이션입니다. 자주 사용하는 30여 가지의 문법 태그를 통해 복잡한 문장 구조를 한눈에 파악할 수 있도록 도와줍니다. 입력한 주제와 연관된 랜덤 문장 생성 기능도 제공합니다.
 
-- 어플리케이션 링크: [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
-- [Express API 명세](apps/api/README.md) · [로컬 개발 및 API 변경 가이드](docs/api-integration.md)
-- 파인튜닝 레포지토리: [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
-- 프로젝트 코드 라이선스 · [GNU AGPL-3.0-only](LICENSE)
+- [어플리케이션 링크](https://syntax-analyzer.romantech.net/)
+- [API 명세](apps/api/README.md)
+- [로컬 개발 및 API 변경 가이드](docs/api-integration.md)
 
 # 목차
 
@@ -22,6 +21,7 @@ Syntax Analyzer는 영어 문장의 다양한 구문을 자동으로 분석해 �
 - [태깅 제약 조건](#태깅-제약-조건)
 - [문장 성분 목록](#문장-성분-목록)
 - [스크린샷](#스크린샷)
+- [라이선스](#라이선스)
 
 # 주요 기능
 
@@ -140,3 +140,7 @@ sequenceDiagram
 #### 랜덤 문장 생성
 
 ![generator-16-9](https://github.com/romantech/syntax-analyzer/assets/8604840/114fb4e4-e29a-4f65-a8c7-b9d963b39dbf)
+
+# 라이선스
+
+[![License: AGPL-3.0-only](https://img.shields.io/badge/License-AGPL--3.0--only-blue.svg)](LICENSE)

@@ -6,10 +6,9 @@
 
 Syntax Analyzer 是一款可自动分析英语句子结构并编辑分析结果的网页应用。它使用 30 多种常用语法标签，让复杂的句子结构一目了然。它还可以根据你输入的主题随机生成英语句子。
 
-- 网页应用 · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
-- [Express API 文档](apps/api/README.md)
-- 模型微调仓库 · [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
-- 项目代码许可证 · [GNU AGPL-3.0-only](LICENSE)
+- [网页应用](https://syntax-analyzer.romantech.net/)
+- [API 文档](apps/api/README.md)
+- [本地开发与 API 变更指南](docs/api-integration.md)
 
 # 目录
 
@@ -22,6 +21,7 @@ Syntax Analyzer 是一款可自动分析英语句子结构并编辑分析结果�
 - [标签标注规则](#标签标注规则)
 - [句子成分列表](#句子成分列表)
 - [屏幕截图](#屏幕截图)
+- [许可证](#许可证)
 
 # 主要功能
 
@@ -105,3 +105,7 @@ Syntax Analyzer 是一款可自动分析英语句子结构并编辑分析结果�
 #### 随机句子生成器
 
 ![随机句子生成器](https://github.com/romantech/syntax-analyzer/assets/8604840/114fb4e4-e29a-4f65-a8c7-b9d963b39dbf)
+
+# 许可证
+
+[![License: AGPL-3.0-only](https://img.shields.io/badge/License-AGPL--3.0--only-blue.svg)](LICENSE)
