@@ -540,3 +540,54 @@ test('shared clause details hide redundant buttons and keep individual details a
   await expect(clause).toBeHidden();
   await expect(subject).toHaveAttribute('aria-expanded', 'false');
 });
+
+test('expanded tags show complete prepositional objects and the main verb separately', async ({
+  page,
+}) => {
+  const sentence = 'Maya would weigh rent costs against a shorter commute .'.split(' ');
+  const region = await openAnalysis(page, {
+    id: 'auxiliary-and-prepositional-object',
+    source: 'user',
+    createdAt: '2026-11-27T00:00:00.000Z',
+    sentence,
+    isAnalyzedByGPT: true,
+    rootSegment: segment(
+      0,
+      sentence.length,
+      [],
+      [
+        segment(0, 1, ['subject']),
+        segment(1, 3, ['verb'], [segment(1, 2, ['modal verb']), segment(2, 3, ['verb'])]),
+        segment(3, 5, ['object', 'noun phrase']),
+        segment(
+          5,
+          9,
+          ['prepositional phrase'],
+          [segment(6, 9, ['noun phrase', 'prepositional object'])],
+        ),
+      ],
+    ),
+  });
+
+  const verbGroup = region.getByRole('button', { name: '동사 상세 태그 (2~3 단어)' });
+  const mainVerb = region
+    .locator('[data-segment-begin="2"][data-segment-end="3"]')
+    .getByText('동사', { exact: true });
+  await expect(verbGroup).toBeVisible();
+  await expect(mainVerb).toHaveCount(0);
+  await verbGroup.press('Enter');
+  await expect(mainVerb).toBeVisible();
+
+  await region.getByRole('button', { name: '전체 태그 펼치기' }).press('Enter');
+  const phrase = region.locator('[data-segment-begin="5"][data-segment-end="9"]');
+  const complement = phrase.locator('[data-segment-begin="6"][data-segment-end="9"]');
+  await expect(phrase.getByText('전치사구', { exact: true })).toBeVisible();
+  await expect(complement.getByText('명사구', { exact: true })).toBeVisible();
+  await expect(complement.getByText('전치사 목적어', { exact: true })).toBeVisible();
+  await expect(
+    region
+      .locator('[data-segment-begin="1"][data-segment-end="2"]')
+      .getByText('조동사', { exact: true }),
+  ).toBeVisible();
+  await expect(mainVerb).toBeVisible();
+});

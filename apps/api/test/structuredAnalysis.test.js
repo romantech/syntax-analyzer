@@ -191,6 +191,18 @@ test('serves structured basic analyses with existing quota and response fields',
     assert.match(message, /tag "to staff" as "prepositional phrase"/);
     assert.match(
       message,
+      /entire complement both "noun phrase" and "prepositional object" on the exact same span/,
+    );
+    assert.match(
+      message,
+      /Leave sentence-ending punctuation out of these spans/,
+    );
+    assert.match(
+      message,
+      /tag "would worry" as "verb", "would" as "modal verb", and "worry" as "verb"/,
+    );
+    assert.match(
+      message,
       /Tag "that" introducing a content clause as "conjunction"/,
     );
     assert.match(message, /Tag optional clause-level modifiers/);
@@ -283,4 +295,87 @@ test('serves structured basic analyses with existing quota and response fields',
   }
   assert.equal(modelCalls, callsBeforeMissingPrompt);
   assert.equal(refunds, refundsBeforeMissingPrompt + 2);
+});
+
+test('preserves the full prepositional object and separate verb spans in the analysis tree', async (context) => {
+  const cases = [
+    {
+      sentence: 'Maya is weighing rent costs against a shorter commute .',
+      spans: [
+        { begin: 1, end: 3, tags: ['verb'] },
+        { begin: 1, end: 2, tags: ['progressive auxiliary'] },
+        { begin: 2, end: 3, tags: ['verb'] },
+        { begin: 5, end: 9, tags: ['prepositional phrase'] },
+        { begin: 6, end: 9, tags: ['noun phrase', 'prepositional object'] },
+      ],
+    },
+    {
+      sentence: 'Yesterday , Omar corrected a typo on the meeting agenda .',
+      spans: [
+        { begin: 4, end: 10, tags: ['object', 'noun phrase'] },
+        { begin: 6, end: 10, tags: ['prepositional phrase'] },
+        { begin: 7, end: 10, tags: ['noun phrase', 'prepositional object'] },
+      ],
+    },
+    {
+      sentence: 'If Leo lost that key , his sister would worry .',
+      spans: [
+        { begin: 8, end: 10, tags: ['verb'] },
+        { begin: 8, end: 9, tags: ['modal verb'] },
+        { begin: 9, end: 10, tags: ['verb'] },
+      ],
+    },
+    {
+      sentence: 'She spoke to him .',
+      spans: [
+        { begin: 2, end: 4, tags: ['prepositional phrase'] },
+        { begin: 3, end: 4, tags: ['prepositional object'] },
+      ],
+    },
+    {
+      sentence: 'She waited by the door of the old house .',
+      spans: [
+        { begin: 2, end: 9, tags: ['prepositional phrase'] },
+        { begin: 3, end: 9, tags: ['noun phrase', 'prepositional object'] },
+        { begin: 5, end: 9, tags: ['prepositional phrase'] },
+        { begin: 6, end: 9, tags: ['noun phrase', 'prepositional object'] },
+      ],
+    },
+  ];
+  const outputs = new Map(
+    cases.map(({ sentence, spans }) => [sentence, spans]),
+  );
+  const baseURL = await startApp(context, {
+    redis: { hmget: async () => analysisPromptValues, eval: async () => 1 },
+    createModel: () => ({
+      invoke: async ([, input]) => ({
+        response_metadata: { finish_reason: 'stop' },
+        text: JSON.stringify({
+          spans: outputs.get(JSON.parse(input.text).join(' ')),
+        }),
+      }),
+    }),
+  });
+
+  function taggedSpans({ begin, end, constituents, children }) {
+    const tags = constituents.map(({ label }) => label);
+    return [
+      ...(tags.length ? [{ begin, end, tags }] : []),
+      ...children.flatMap(taggedSpans),
+    ];
+  }
+
+  for (const { sentence, spans } of cases) {
+    const response = await fetch(`${baseURL}/analyzer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'fast-ft', sentence: sentence.split(' ') }),
+    });
+    assert.equal(response.status, 200, sentence);
+    assert.deepEqual(
+      taggedSpans((await response.json()).rootSegment),
+      spans,
+      sentence,
+    );
+  }
 });
