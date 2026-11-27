@@ -6,10 +6,9 @@
 
 Syntax Analyzer is a web app that automatically analyzes English sentence structure and lets you edit the results. It uses more than 30 common grammar tags to show how complex sentences fit together. It can also generate random sentences on the topics you enter.
 
-- Web app · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
-- [Express API reference](apps/api/README.md)
-- Fine-tuning repository · [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
-- Project code license · [GNU AGPL-3.0-only](LICENSE)
+- [Web app](https://syntax-analyzer.romantech.net/)
+- [API reference](apps/api/README.md)
+- [Local development and API change guide](docs/api-integration.md)
 
 # Contents
 
@@ -22,6 +21,7 @@ Syntax Analyzer is a web app that automatically analyzes English sentence struct
 - [Tagging Rules](#tagging-rules)
 - [Sentence Constituents](#sentence-constituents)
 - [Screenshots](#screenshots)
+- [License](#license)
 
 # Features
 
@@ -105,3 +105,7 @@ Disallowed: warming is / is a / is a significant
 #### Random Sentence Generator
 
 ![Random Sentence Generator](https://github.com/romantech/syntax-analyzer/assets/8604840/114fb4e4-e29a-4f65-a8c7-b9d963b39dbf)
+
+# License
+
+[![License: AGPL-3.0-only](https://img.shields.io/badge/License-AGPL--3.0--only-blue.svg)](LICENSE)

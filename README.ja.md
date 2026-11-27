@@ -6,10 +6,9 @@
 
 Syntax Analyzer は、英文の構造を自動で分析し、その結果を自由に編集できるウェブアプリです。よく使われる30種類以上の文法タグで、複雑な英文の構造をひと目で確認できます。入力したトピックに沿って英文をランダムに生成することもできます。
 
-- ウェブアプリ · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
-- [Express API リファレンス](apps/api/README.md)
-- ファインチューニングのリポジトリ · [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
-- プロジェクトコードのライセンス · [GNU AGPL-3.0-only](LICENSE)
+- [ウェブアプリ](https://syntax-analyzer.romantech.net/)
+- [API リファレンス](apps/api/README.md)
+- [ローカル開発と API 変更ガイド](docs/api-integration.md)
 
 # 目次
 
@@ -22,6 +21,7 @@ Syntax Analyzer は、英文の構造を自動で分析し、その結果を自�
 - [タグ付けの制約](#タグ付けの制約)
 - [文の構成要素](#文の構成要素)
 - [スクリーンショット](#スクリーンショット)
+- [ライセンス](#ライセンス)
 
 # 主な機能
 
@@ -105,3 +105,7 @@ Syntax Analyzer は、英文の構造を自動で分析し、その結果を自�
 #### ランダム英文生成
 
 ![ランダム英文生成](https://github.com/romantech/syntax-analyzer/assets/8604840/114fb4e4-e29a-4f65-a8c7-b9d963b39dbf)
+
+# ライセンス
+
+[![License: AGPL-3.0-only](https://img.shields.io/badge/License-AGPL--3.0--only-blue.svg)](LICENSE)
