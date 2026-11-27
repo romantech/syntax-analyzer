@@ -9,6 +9,7 @@ Syntax Analyzer is a web app that automatically analyzes English sentence struct
 - Web app · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API reference](apps/api/README.md)
 - Fine-tuning repository · [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
+- Project code license · [GNU AGPL-3.0-only](LICENSE)
 
 # Contents
 

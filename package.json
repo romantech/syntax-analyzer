@@ -7,7 +7,7 @@
     "node": ">=26"
   },
   "author": "Romantech",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "description": "Visual tool for English syntax analysis",
   "keywords": [
     "syntax",
