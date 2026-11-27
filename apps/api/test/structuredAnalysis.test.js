@@ -297,8 +297,40 @@ test('serves structured basic analyses with existing quota and response fields',
   assert.equal(refunds, refundsBeforeMissingPrompt + 2);
 });
 
-test('preserves the full prepositional object and separate verb spans in the analysis tree', async (context) => {
+test('returns full prepositional objects and preserves the surrounding analysis', async (context) => {
+  const rugSentence =
+    'Under the rug , a loose thread is hiding in plain sight .';
+  const rugSpans = [
+    { begin: 0, end: 3, tags: ['adverbial', 'prepositional phrase'] },
+    { begin: 1, end: 3, tags: ['noun phrase', 'prepositional object'] },
+    { begin: 4, end: 7, tags: ['subject', 'noun phrase'] },
+    { begin: 7, end: 9, tags: ['verb'] },
+    { begin: 7, end: 8, tags: ['progressive auxiliary'] },
+    { begin: 8, end: 9, tags: ['verb'] },
+    { begin: 9, end: 12, tags: ['adverbial', 'prepositional phrase'] },
+    { begin: 10, end: 12, tags: ['noun phrase', 'prepositional object'] },
+  ];
   const cases = [
+    {
+      sentence: rugSentence,
+      spans: rugSpans,
+      modelSpans: [
+        rugSpans[0],
+        { begin: 2, end: 3, tags: ['prepositional object'] },
+        ...rugSpans.slice(2),
+      ],
+    },
+    {
+      sentence: 'It hid under a thick rug .',
+      spans: [
+        { begin: 2, end: 6, tags: ['adverbial', 'prepositional phrase'] },
+        { begin: 3, end: 6, tags: ['noun phrase', 'prepositional object'] },
+      ],
+      modelSpans: [
+        { begin: 2, end: 6, tags: ['adverbial', 'prepositional phrase'] },
+        { begin: 5, end: 6, tags: ['prepositional object'] },
+      ],
+    },
     {
       sentence: 'Maya is weighing rent costs against a shorter commute .',
       spans: [
@@ -308,6 +340,7 @@ test('preserves the full prepositional object and separate verb spans in the ana
         { begin: 5, end: 9, tags: ['prepositional phrase'] },
         { begin: 6, end: 9, tags: ['noun phrase', 'prepositional object'] },
       ],
+      shortObject: { begin: 8, end: 9, tags: ['prepositional object'] },
     },
     {
       sentence: 'Yesterday , Omar corrected a typo on the meeting agenda .',
@@ -316,6 +349,7 @@ test('preserves the full prepositional object and separate verb spans in the ana
         { begin: 6, end: 10, tags: ['prepositional phrase'] },
         { begin: 7, end: 10, tags: ['noun phrase', 'prepositional object'] },
       ],
+      shortObject: { begin: 8, end: 10, tags: ['prepositional object'] },
     },
     {
       sentence: 'If Leo lost that key , his sister would worry .',
@@ -326,11 +360,33 @@ test('preserves the full prepositional object and separate verb spans in the ana
       ],
     },
     {
-      sentence: 'She spoke to him .',
+      sentence: 'She spoke with him .',
       spans: [
         { begin: 2, end: 4, tags: ['prepositional phrase'] },
         { begin: 3, end: 4, tags: ['prepositional object'] },
       ],
+    },
+    {
+      sentence: 'She kept it in sight .',
+      spans: [
+        { begin: 3, end: 5, tags: ['prepositional phrase'] },
+        { begin: 4, end: 5, tags: ['prepositional object'] },
+      ],
+    },
+    {
+      sentence: 'She was on a par with him .',
+      spans: [
+        { begin: 2, end: 7, tags: ['prepositional phrase'] },
+        { begin: 6, end: 7, tags: ['prepositional object'] },
+      ],
+    },
+    {
+      sentence: 'It was hiding in plain sight .',
+      spans: [
+        { begin: 3, end: 6, tags: ['adverbial', 'prepositional phrase'] },
+        { begin: 4, end: 6, tags: ['noun phrase', 'prepositional object'] },
+      ],
+      shortObject: { begin: 5, end: 6, tags: ['prepositional object'] },
     },
     {
       sentence: 'She waited by the door of the old house .',
@@ -343,7 +399,17 @@ test('preserves the full prepositional object and separate verb spans in the ana
     },
   ];
   const outputs = new Map(
-    cases.map(({ sentence, spans }) => [sentence, spans]),
+    cases.map(({ sentence, spans, modelSpans, shortObject }) => [
+      sentence,
+      modelSpans ??
+        (shortObject
+          ? [
+              ...spans.slice(0, -1),
+              { ...spans.at(-1), tags: ['noun phrase'] },
+              shortObject,
+            ]
+          : spans),
+    ]),
   );
   const baseURL = await startApp(context, {
     redis: { hmget: async () => analysisPromptValues, eval: async () => 1 },

@@ -47,7 +47,7 @@ const catalog = new Map(
 const syntaxTagInstructions = `Use these tag rules when they differ from earlier directions:
 - Tag the sole object of a verb as "object". For a double-object construction, use "indirect object" and "direct object" on their respective spans. In "I gave a book to Mina", use "object" for "a book", "prepositional phrase" for "to Mina", and "prepositional object" for "Mina".
 - Include prepositional phrases that identify a recipient or addressee. In "She said to staff that the plan had changed", tag "to staff" as "prepositional phrase" and "staff" as "prepositional object". Do not tag "to staff" as an "indirect object".
-- When a preposition takes a multiword noun phrase, give the entire complement both "noun phrase" and "prepositional object" on the exact same span. Include its determiners and all modifiers, including any trailing phrase or clause that modifies the noun. Leave sentence-ending punctuation out of these spans and the enclosing prepositional phrase. In "against a shorter commute", tag the whole expression as "prepositional phrase" and "a shorter commute" as both "noun phrase" and "prepositional object". In "a typo on the meeting agenda", "on the meeting agenda" modifies "typo" inside the larger noun phrase, and both complement tags cover "the meeting agenda", including "the". In "by the door of the old house", the object of "by" is "the door of the old house" and the object of "of" is "the old house". Give each its own pair of tags. Do not tag a shorter piece of the same complement as another "prepositional object". For a single noun or pronoun, tag that token as "prepositional object".
+- When a preposition takes a multiword noun phrase, give the entire complement both "noun phrase" and "prepositional object" on the exact same span. Include its determiners and all modifiers, including any trailing phrase or clause that modifies the noun. Leave sentence-ending punctuation out of these spans and the enclosing prepositional phrase. For the tokens ["Under", "the", "rug", ","], the prepositional phrase is [0, 3) and both complement tags cover [1, 3). Both tags also cover "plain sight" in "in plain sight". In "against a shorter commute", tag the whole expression as "prepositional phrase" and "a shorter commute" as both "noun phrase" and "prepositional object". In "a typo on the meeting agenda", "on the meeting agenda" modifies "typo" inside the larger noun phrase, and both complement tags cover "the meeting agenda", including "the". In "by the door of the old house", the object of "by" is "the door of the old house" and the object of "of" is "the old house". Give each its own pair of tags. Do not tag a shorter piece of the same complement as another "prepositional object". For a single noun or pronoun, tag that token as "prepositional object".
 - Tag "that" introducing a content clause as "conjunction" on its own token. Include it in the span tagged "noun clause", as in "She said [that he left]". This rule applies to clause introducers; a demonstrative in "that book" is part of the noun phrase.
 - Use "subject complement" for a complement that describes or identifies the subject, and "object complement" for one that describes or identifies the object. In "They made him happy", "him" is an "object" and "happy" is an "object complement". Do not also tag either kind of complement as "complement".
 - Use a single specific clause label on a span. Prefer "relative clause" to "adjectival clause" and "dependent clause" for a relative clause. Use "coordinating clause" for coordinated clauses and omit "parallel clause". Omit "noun phrase" on a single token and "independent clause" on a span that covers the whole sentence.
@@ -58,6 +58,9 @@ const syntaxTagInstructions = `Use these tag rules when they differ from earlier
 
 const invalidOutput = () =>
   throwCustomError('Invalid sentence analysis.', 502, 'invalid-model-output');
+
+const hasTag = (segment: Segment, tag: CatalogEntry['label']) =>
+  segment.constituents.some(({ label }) => label === tag);
 
 const buildAnalysis = (sentence: string[], spans: Spans) => {
   const ids = new Set<number>();
@@ -74,6 +77,21 @@ const buildAnalysis = (sentence: string[], spans: Spans) => {
     constituents: [],
     children: [],
   });
+  const addTag = (segment: Segment, label: CatalogEntry['label']) => {
+    const entry = catalog.get(label);
+    if (!entry) return false;
+    if (!hasTag(segment, label)) {
+      segment.constituents.push({
+        ...entry,
+        id: allocateId(),
+        type:
+          entry.type === 'token' && segment.end - segment.begin > 1
+            ? 'token-group'
+            : entry.type,
+      });
+    }
+    return true;
+  };
 
   const rootSegment = makeSegment(0, sentence.length);
   const stack = [rootSegment];
@@ -105,28 +123,63 @@ const buildAnalysis = (sentence: string[], spans: Spans) => {
     }
 
     for (const label of tags) {
-      const entry = catalog.get(label);
-      if (!entry) return null;
-      if (
-        segment.constituents.some(
-          ({ elementId }) => elementId === entry.elementId,
-        )
-      ) {
-        continue;
-      }
-      segment.constituents.push({
-        ...entry,
-        id: allocateId(),
-        type:
-          entry.type === 'token' && end - begin > 1
-            ? 'token-group'
-            : entry.type,
-      });
+      if (!addTag(segment, label)) return null;
     }
   }
 
+  const completePrepositionalObject = (phrase: Segment) => {
+    if (!hasTag(phrase, 'prepositional phrase')) return;
+    const tail = phrase.children.at(-1);
+    if (
+      !tail ||
+      tail.begin <= phrase.begin ||
+      hasTag(tail, 'prepositional phrase') ||
+      !sentence.slice(tail.end, phrase.end).every(isPunctuationToken)
+    ) {
+      return;
+    }
+
+    if (hasTag(tail, 'noun phrase')) {
+      const objects = tail.children.filter(
+        (child) =>
+          hasTag(child, 'prepositional object') &&
+          !hasTag(child, 'prepositional phrase'),
+      );
+      if (objects.length === 1) {
+        const [object] = objects;
+        object.constituents = object.constituents.filter(
+          ({ label }) => label !== 'prepositional object',
+        );
+        addTag(tail, 'prepositional object');
+      }
+    }
+
+    const begin = phrase.begin + 1;
+    // shortcut: infer only an article and one modifier until longer preposition boundaries are known.
+    if (
+      phrase.children.length !== 1 ||
+      !hasTag(tail, 'prepositional object') ||
+      !/^(?:a|an|the)(?: [\p{L}\p{N}-]+)?$/iu.test(
+        sentence.slice(begin, tail.begin).join(' '),
+      )
+    ) {
+      return;
+    }
+
+    const complement = makeSegment(begin, tail.end);
+    addTag(complement, 'noun phrase');
+    addTag(complement, 'prepositional object');
+    tail.constituents = tail.constituents.filter(
+      ({ label }) =>
+        label !== 'noun phrase' && label !== 'prepositional object',
+    );
+    complement.children = tail.constituents.length ? [tail] : tail.children;
+    phrase.children[0] = complement;
+  };
+
   let hasUsableTags = false;
   const fillGaps = (segment: Segment) => {
+    completePrepositionalObject(segment);
     segment.constituents = filterRedundantSyntaxTags(
       segment.constituents,
       sentence,
