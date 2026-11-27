@@ -164,9 +164,51 @@ test('같은 명사절만 여는 버튼은 접속사에 두고 고유한 상세 
   );
   assert.equal(opened.has(lexicalVerb.id), false);
   const verbOpen = overview(verb.id);
-  assert.equal(verbOpen.get(introducer.id)?.canExpand, true);
+  assert.equal(verbOpen.get(introducer.id)?.canExpand, false);
   assert.equal(verbOpen.get(subject.id)?.canExpand, false);
   assert.equal(verbOpen.get(lexicalVerb.id)?.role?.label, 'verb');
+});
+
+test('공유 등위절이 보이면 현재 태그를 바꾸는 버튼만 표시한다', () => {
+  const sentence = 'Our town has banned lawn watering , so the grass looks brown .'.split(' ');
+  const saved = createAnalysis(sentence, [
+    [0, 6, 'coordinating clause'],
+    [0, 2, 'subject'],
+    [2, 4, 'verb'],
+    [2, 3, 'perfect auxiliary'],
+    [3, 4, 'verb'],
+    [4, 6, 'object', 'noun phrase'],
+  ]);
+  const [clause, subject, verb, auxiliary, lexicalVerb, object] = saved.children;
+  saved.children = [clause];
+  clause.children = [subject, verb, object];
+  verb.children = [auxiliary, lexicalVerb];
+
+  const learning = getLearningSegment(saved, sentence);
+  const overview = (...ids: number[]) => getOverviewDetails(learning, new Set(ids));
+  const collapsed = overview();
+  assert.equal(collapsed.get(subject.id)?.canExpand, true);
+  assert.deepEqual(collapsed.get(clause.id)?.tags, []);
+
+  for (const first of [verb, object]) {
+    const second = first === verb ? object : verb;
+    const opened = overview(first.id);
+    assert.equal(opened.get(clause.id)?.tags[0]?.label, 'coordinating clause');
+    assert.equal(opened.get(subject.id)?.canExpand, false);
+    assert.equal(opened.get(second.id)?.canExpand, true);
+
+    const bothOpen = overview(first.id, second.id);
+    assert.equal(bothOpen.get(first.id)?.canExpand, true);
+    assert.equal(bothOpen.get(second.id)?.canExpand, true);
+  }
+
+  const subjectAndVerbOpen = overview(subject.id, verb.id);
+  assert.equal(subjectAndVerbOpen.get(subject.id)?.canExpand, false);
+  assert.equal(subjectAndVerbOpen.get(verb.id)?.canExpand, true);
+  const subjectOpen = overview(subject.id);
+  assert.equal(subjectOpen.get(subject.id)?.canExpand, true);
+  assert.equal(subjectOpen.get(subject.id)?.expanded, true);
+  assert.equal(subjectOpen.get(clause.id)?.tags.length, 1);
 });
 
 test('접속사가 생략된 명사절의 공통 버튼은 첫 라벨에 표시한다', () => {
