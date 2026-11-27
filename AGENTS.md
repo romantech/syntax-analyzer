@@ -19,6 +19,7 @@
 - 저장 형식 변경 시 `localStorage`의 기존 `userAnalysisList` 데이터 호환성과 저장 후 다시 열기 확인.
 - 번역 키 변경 시 `pnpm i18n:extract` → [언어별 JSON](apps/web/src/i18n/locales) 갱신 → `pnpm i18n:types` → `pnpm i18n:check`.
 - 사용법, API 계약, 검증 절차 변경 시 관련 문서도 갱신.
+- 구현 세부사항이나 린트·타입 검사로 이미 보장되는 내용을 반복 검증하는 테스트는 지양. 주요 정상 동작, 경계 조건, 실패 시나리오에서 호출자나 사용자가 관찰할 수 있는 결과와 상태 변화를 검증.
 - Node.js와 pnpm 버전은 루트 `package.json` 기준. 코드 검증은 `pnpm lint`, `pnpm test`, `pnpm build`.
 - 실제 수행한 검증만 완료로 표시. 실패하거나 수행하지 못한 검증은 사유 명시.
 
