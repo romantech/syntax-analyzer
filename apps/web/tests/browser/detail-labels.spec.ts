@@ -280,6 +280,134 @@ test('conditional cards that fit stay on the same row', async ({ page }) => {
   expect(conjunction?.y).toBeCloseTo(subject?.y ?? Number.NaN, 1);
 });
 
+function dawnAnalysis(firstWords: [string, string] = ['Before', 'dawn']): TAnalysis {
+  const sentence = [
+    ...firstWords,
+    ',',
+    'the',
+    'lanterns',
+    'were',
+    'dimmed',
+    'by',
+    'the',
+    'caretaker',
+    '.',
+  ];
+  return {
+    id: 'dawn',
+    source: 'user',
+    createdAt: '2026-11-27T00:00:00.000Z',
+    sentence,
+    isAnalyzedByGPT: true,
+    rootSegment: segment(
+      0,
+      sentence.length,
+      [],
+      [
+        segment(
+          0,
+          2,
+          ['adverbial', 'prepositional phrase'],
+          [segment(1, 2, ['prepositional object'])],
+        ),
+        segment(3, 5, ['subject', 'noun phrase']),
+        segment(5, 7, ['verb'], [segment(5, 6, ['passive auxiliary'])]),
+        segment(
+          7,
+          10,
+          ['adverbial', 'prepositional phrase'],
+          [segment(8, 10, ['prepositional object', 'noun phrase'])],
+        ),
+      ],
+    ),
+  };
+}
+
+test('a wrapped detail fits the widest line without extra side padding', async ({
+  page,
+  isMobile,
+}) => {
+  const region = await openAnalysis(page, dawnAnalysis(['At', 'dusk']));
+  await region.getByRole('button', { name: '부사어 상세 태그 (1~2 단어)' }).click();
+  await expectCardLayout(region);
+
+  const measurePadding = (label: Locator) =>
+    label.evaluate((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const lines = [...range.getClientRects()];
+      return {
+        lineCount: lines.length,
+        inlinePadding:
+          element.getBoundingClientRect().width - Math.max(...lines.map((line) => line.width)),
+      };
+    });
+  const detail = await measurePadding(region.getByText('전치사 목적어', { exact: true }));
+  const auxiliary = await measurePadding(region.getByText('수동 조동사', { exact: true }));
+  expect(detail.lineCount).toBe(isMobile ? 2 : 1);
+  expect(Math.abs(detail.inlinePadding - auxiliary.inlinePadding)).toBeLessThanOrEqual(1);
+});
+
+for (const language of ['ko', 'en'] as const) {
+  test(`nested detail uses available space inside its phrase (${language})`, async ({
+    page,
+    isMobile,
+  }) => {
+    const region = await openAnalysis(page, dawnAnalysis(), language);
+    const group = region.locator('[data-segment-begin="0"][data-segment-end="2"]');
+    const parentCard = group.locator(':scope > .constituent-labels');
+    const childCard = group.locator('[data-segment-begin="1"] > .constituent-labels');
+    const verbCard = region.locator(
+      '[data-segment-begin="5"][data-segment-end="7"] > .constituent-labels',
+    );
+    const details = parentCard.getByRole('button');
+    const expandAll = region.getByRole('button', { name: /전체 태그 펼치기|Expand all tags/ });
+    const collapseAll = region.getByRole('button', { name: /전체 태그 접기|Collapse all tags/ });
+    const abbreviations = page.getByRole('switch', { name: /약칭|Abbreviations/ });
+
+    for (const abbreviated of [false, true]) {
+      if (abbreviated) {
+        await abbreviations.press('Space');
+        await expect(abbreviations).toBeChecked();
+      }
+      const baseline = await wordLayout(region);
+      await expectDisclosureSize(details, isMobile);
+
+      for (const toggle of [details, expandAll]) {
+        await toggle.press('Enter');
+        await expect(childCard).toBeVisible();
+        const lineCount = await childCard.locator('.constituent-label').evaluate((label) => {
+          const range = document.createRange();
+          range.selectNodeContents(label);
+          return range.getClientRects().length;
+        });
+        expect(lineCount).toBe(1);
+        const childBounds = await childCard.boundingBox();
+        const groupBounds = await group.boundingBox();
+        if (!childBounds || !groupBounds) throw new Error('Missing phrase or detail bounds');
+        expect(childBounds.x).toBeGreaterThan(groupBounds.x);
+        expect(childBounds.x + childBounds.width).toBeLessThan(groupBounds.x + groupBounds.width);
+        expect((await parentCard.boundingBox())?.y).toBeCloseTo(
+          (await verbCard.boundingBox())?.y ?? Number.NaN,
+          1,
+        );
+        await expectCardLayout(region);
+        expect(await wordLayout(region)).toEqual(baseline);
+
+        if (toggle === details) {
+          await expect(details).toBeFocused();
+          await expectDisclosureSize(details, isMobile);
+          await details.press('Enter');
+        } else {
+          await collapseAll.press('Enter');
+        }
+        await expect(childCard).toBeHidden();
+        expect(await wordLayout(region)).toEqual(baseline);
+      }
+    }
+  });
+}
+
 test('auxiliary and wrapped phrase labels keep their spacing and connectors', async ({ page }) => {
   const region = await openAnalysis(page, printingAnalysis());
   const baseline = await wordLayout(region);
