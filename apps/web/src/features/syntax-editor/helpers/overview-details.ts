@@ -16,20 +16,40 @@ const hasTags = (segment: TSegment): boolean =>
 const collapsedState = new Set<number>();
 const suppressedByAnalysis = new WeakMap<TSegment, ReadonlySet<number>>();
 
+export function toggleOverviewExpansion(expanded: ReadonlySet<number>, id: number) {
+  const next = new Set(expanded);
+  if (!next.delete(id)) next.add(id);
+  return next;
+}
+
+function visibleTagIds(details: ReadonlyMap<number, SegmentDetails>) {
+  return new Set([...details.values()].flatMap(({ tags }) => tags.map(({ id }) => id)));
+}
+
 export function getOverviewDetails(segment: TSegment, expanded: ReadonlySet<number>) {
   let suppressed = suppressedByAnalysis.get(segment);
   if (!suppressed) {
     suppressed = findRedundantDisclosures(segment);
     suppressedByAnalysis.set(segment, suppressed);
   }
-  return projectOverview(segment, expanded, suppressed);
+  const details = projectOverview(segment, expanded, suppressed);
+  if (!expanded.size) return details;
+
+  // A shared tag can already be visible through another disclosure.
+  const visible = visibleTagIds(details);
+  for (const [id, detail] of details) {
+    if (!detail.canExpand) continue;
+    const next = visibleTagIds(
+      projectOverview(segment, toggleOverviewExpansion(expanded, id), suppressed),
+    );
+    detail.canExpand = visible.size !== next.size || [...next].some((tagId) => !visible.has(tagId));
+  }
+  return details;
 }
 
 function findRedundantDisclosures(segment: TSegment) {
   const baseline = projectOverview(segment, collapsedState);
-  const visibleTags = new Set(
-    [...baseline.values()].flatMap(({ tags }) => tags.map(({ id }) => id)),
-  );
+  const visibleTags = visibleTagIds(baseline);
   const startBySegment = new Map<number, number>();
 
   // Visit in sentence order so the first eligible label wins when there is no clause introducer.

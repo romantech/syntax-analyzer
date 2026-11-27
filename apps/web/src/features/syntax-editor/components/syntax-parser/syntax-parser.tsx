@@ -18,7 +18,10 @@ import {
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
 import { getLearningSegment } from '@/features/syntax-editor/helpers/learning-tags';
-import { getOverviewDetails } from '@/features/syntax-editor/helpers/overview-details';
+import {
+  getOverviewDetails,
+  toggleOverviewExpansion,
+} from '@/features/syntax-editor/helpers/overview-details';
 import AllTagsButton from './all-tags-button';
 import SegmentList, { hasOverviewTags } from './segment-list';
 import '@/features/syntax-editor/styles/constituent.scss';
@@ -101,12 +104,7 @@ function AnalysisSentence({
 
   const toggle = (segmentId: number, animate: boolean) => {
     markRevealedTags(animate && !expanded.has(segmentId));
-    setExpanded((previous) => {
-      const next = new Set(previous);
-      if (next.has(segmentId)) next.delete(segmentId);
-      else next.add(segmentId);
-      return next;
-    });
+    setExpanded((previous) => toggleOverviewExpansion(previous, segmentId));
   };
 
   useEffect(() => {

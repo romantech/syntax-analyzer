@@ -479,3 +479,64 @@ test('a wide auxiliary label does not add space between words', async ({ page })
   await expectCardLayout(region);
   expect(await wordLayout(region)).toEqual(baseline);
 });
+
+test('shared clause details hide redundant buttons and keep individual details available', async ({
+  page,
+  isMobile,
+}) => {
+  const sentence = 'Our town has banned lawn watering , so the grass looks brown .'.split(' ');
+  const verbChildren = [segment(2, 3, ['perfect auxiliary']), segment(3, 4, ['verb'])];
+  const firstClause = segment(
+    0,
+    6,
+    ['coordinating clause'],
+    [
+      segment(0, 2, ['subject']),
+      segment(2, 4, ['verb'], verbChildren),
+      segment(4, 6, ['object', 'noun phrase']),
+    ],
+  );
+  const region = await openAnalysis(page, {
+    id: 'lawn-watering',
+    source: 'user',
+    createdAt: '2026-11-27T00:00:00.000Z',
+    sentence,
+    isAnalyzedByGPT: true,
+    rootSegment: segment(
+      0,
+      sentence.length,
+      [],
+      [
+        firstClause,
+        segment(7, 8, ['conjunction']),
+        segment(8, 10, ['subject', 'noun phrase']),
+        segment(10, 11, ['verb']),
+        segment(11, 12, ['subject complement']),
+      ],
+    ),
+  });
+
+  const subject = region.getByRole('button', { name: '주어 상세 태그 (1~2 단어)' });
+  const verb = region.getByRole('button', { name: '동사 상세 태그 (3~4 단어)' });
+  const object = region.getByRole('button', { name: '목적어 상세 태그 (5~6 단어)' });
+  const clause = region.getByText('등위절', { exact: true });
+
+  await expect(subject).toHaveAttribute('aria-expanded', 'false');
+  if (isMobile) await verb.tap();
+  else await verb.press('Enter');
+  await expect(clause).toBeVisible();
+  await expect(subject).toHaveCount(0);
+  await expect(verb).toHaveAttribute('aria-expanded', 'true');
+  if (!isMobile) await expect(verb).toBeFocused();
+
+  await object.press('Enter');
+  await expect(region.getByText('명사구', { exact: true })).toBeVisible();
+  await verb.press('Enter');
+  await expect(clause).toBeVisible();
+  await expect(subject).toHaveCount(0);
+
+  await object.press('Enter');
+  await expect(object).toBeFocused();
+  await expect(clause).toBeHidden();
+  await expect(subject).toHaveAttribute('aria-expanded', 'false');
+});
