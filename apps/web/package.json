@@ -1,6 +1,7 @@
 {
   "name": "syntax-analyzer-web",
   "private": true,
+  "license": "AGPL-3.0-only",
   "version": "1.7.2",
   "type": "module",
   "lint-staged": {

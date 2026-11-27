@@ -1,6 +1,7 @@
 {
   "name": "syntax-analyzer-shared",
   "private": true,
+  "license": "AGPL-3.0-only",
   "type": "module",
   "scripts": {
     "lint": "tsc --ignoreConfig --noEmit --strict --allowJs --checkJs --target esnext *.js"

@@ -9,6 +9,7 @@ Syntax Analyzer は、英文の構造を自動で分析し、その結果を自�
 - ウェブアプリ · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API リファレンス](apps/api/README.md)
 - ファインチューニングのリポジトリ · [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
+- プロジェクトコードのライセンス · [GNU AGPL-3.0-only](LICENSE)
 
 # 目次
 

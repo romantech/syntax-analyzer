@@ -9,6 +9,7 @@ Syntax Analyzer는 영어 문장의 다양한 구문을 자동으로 분석해 �
 - 어플리케이션 링크: [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API 명세](apps/api/README.md) · [로컬 개발 및 API 변경 가이드](docs/api-integration.md)
 - 파인튜닝 레포지토리: [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
+- 프로젝트 코드 라이선스 · [GNU AGPL-3.0-only](LICENSE)
 
 # 목차
 

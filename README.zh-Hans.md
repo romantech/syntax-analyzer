@@ -9,6 +9,7 @@ Syntax Analyzer 是一款可自动分析英语句子结构并编辑分析结果�
 - 网页应用 · [https://syntax-analyzer.romantech.net](https://syntax-analyzer.romantech.net/)
 - [Express API 文档](apps/api/README.md)
 - 模型微调仓库 · [https://github.com/romantech/openai-fine-tuning](https://github.com/romantech/openai-fine-tuning)
+- 项目代码许可证 · [GNU AGPL-3.0-only](LICENSE)
 
 # 目录
 
