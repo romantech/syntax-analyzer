@@ -208,20 +208,14 @@ button.constituent-label {
   overflow: visible;
   transition: none;
 
-  > .constituent-label-content {
+  > .constituent-label-content > .constituent-label {
     max-inline-size: var(--constituent-label-max-width);
+    justify-content: center;
+    white-space: normal;
+    text-align: center;
 
-    > .constituent-label {
-      max-inline-size: var(--constituent-label-max-width);
-      justify-content: center;
-      white-space: normal;
+    &:lang(ko) {
       word-break: keep-all;
-      overflow-wrap: anywhere;
-      text-align: center;
-
-      &:only-child:not(button) {
-        overflow-wrap: break-word;
-      }
     }
   }
 }

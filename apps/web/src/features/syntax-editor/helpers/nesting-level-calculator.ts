@@ -5,10 +5,14 @@ import { CONSTITUENT_CLASSES } from '@/features/syntax-editor';
 
 const LABEL_GAP = 4;
 
-const limitLabelWidth = (element: HTMLElement, width: number, stacked: boolean) => {
-  element.style.setProperty('--constituent-label-max-width', `${width}px`);
+const limitLabelWidth = (element: HTMLElement, labels: Element, width: number) => {
+  element.style.setProperty('--constituent-label-max-width', 'min-content');
   element.dataset.labelWidthLimited = '';
-  if (stacked) element.dataset.stackedLabels = '';
+  if (labels.children.length > 1) element.dataset.stackedLabels = '';
+
+  // A label needs room for its longest word, padding, and disclosure caret.
+  const minimumWidth = labels.getBoundingClientRect().width;
+  element.style.setProperty('--constituent-label-max-width', `${Math.max(width, minimumWidth)}px`);
 };
 
 const measureBaselineWidth = (label: HTMLElement, withCaret: boolean) => {
@@ -31,7 +35,7 @@ const fitLabelWidth = (element: HTMLElement, labels: Element) => {
     const minimumWidth = Number.parseFloat(getComputedStyle(primary).minWidth);
     const availableWidth = Math.max(segmentWidth, minimumWidth);
     if (labelWidth > availableWidth) {
-      limitLabelWidth(element, availableWidth, labels.children.length > 1);
+      limitLabelWidth(element, labels, availableWidth);
     }
     return;
   }
@@ -46,7 +50,7 @@ const fitLabelWidth = (element: HTMLElement, labels: Element) => {
       const width = measureBaselineWidth(baselineLabel, withCaret);
       const availableWidth = Math.max(segmentWidth - LABEL_GAP, width);
       if (labelWidth > availableWidth) {
-        limitLabelWidth(element, availableWidth, true);
+        limitLabelWidth(element, labels, availableWidth);
       }
       labelWidth = width;
     }
