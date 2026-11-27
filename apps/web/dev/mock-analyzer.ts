@@ -1,10 +1,10 @@
 import { setTimeout } from 'node:timers/promises';
 import { nanoid } from 'nanoid';
-import type { Plugin } from 'vite';
 import {
   MAX_ANALYSIS_TOKEN_LENGTH,
   MAX_ANALYSIS_TOKENS,
-} from '../../api/src/constants/analysis-limits.ts';
+} from 'syntax-analyzer-shared/analysis-limits.js';
+import type { Plugin } from 'vite';
 
 import { generateNumberID } from '../src/base/utils/identifier.ts';
 import { tokenJoiner } from '../src/base/utils/string.ts';

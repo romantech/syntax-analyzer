@@ -17,8 +17,8 @@ import {
   useCalculateNestingLevel,
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
-import { getLearningSegment } from '../../helpers/learning-tags';
-import { getOverviewDetails } from '../../helpers/overview-details';
+import { getLearningSegment } from '@/features/syntax-editor/helpers/learning-tags';
+import { getOverviewDetails } from '@/features/syntax-editor/helpers/overview-details';
 import AllTagsButton from './all-tags-button';
 import SegmentList, { hasOverviewTags } from './segment-list';
 import '@/features/syntax-editor/styles/constituent.scss';

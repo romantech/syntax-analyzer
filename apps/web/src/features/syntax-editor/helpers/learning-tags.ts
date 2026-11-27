@@ -1,5 +1,5 @@
-import { ADVERBIAL, CONJUNCTION } from '../../../../../api/src/constants/syntax-constituents.ts';
-import { filterRedundantSyntaxTags } from '../../../../../api/src/utils/syntax-tags.ts';
+import { ADVERBIAL, CONJUNCTION } from 'syntax-analyzer-shared/syntax-constituents.js';
+import { filterRedundantSyntaxTags } from 'syntax-analyzer-shared/syntax-tags.js';
 import type { TSegment } from '../types/analysis';
 
 const auxiliaryRoles = new Set([

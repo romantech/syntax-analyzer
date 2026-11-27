@@ -4,6 +4,8 @@
     "module": "commonjs",
     "rootDir": "src",
     "outDir": "dist",
+    "allowJs": true,
+    "maxNodeModuleJsDepth": 1,
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,

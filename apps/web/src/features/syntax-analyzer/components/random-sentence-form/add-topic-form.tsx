@@ -10,7 +10,7 @@ import {
   type RandomSentenceFormValues,
   SENTENCE_CONTROL_HEIGHT,
 } from '@/features/syntax-analyzer';
-import { translateValidationMessage } from '../../schemes/validation-messages';
+import { translateValidationMessage } from '@/features/syntax-analyzer/schemes/validation-messages';
 
 export default function AddTopicForm(stackProps: StackProps) {
   const { t } = useTranslation();

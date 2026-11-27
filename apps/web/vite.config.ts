@@ -119,7 +119,12 @@ export default defineConfig(({ command, isPreview, mode }) => ({
   server: {
     open: true,
     host: true,
-    fs: { allow: [fileURLToPath(new URL('.', import.meta.url))] },
+    fs: {
+      allow: [
+        fileURLToPath(new URL('.', import.meta.url)),
+        fileURLToPath(new URL('../../packages/shared', import.meta.url)),
+      ],
+    },
     proxy:
       command === 'serve' && !isPreview && mode !== 'mock'
         ? {

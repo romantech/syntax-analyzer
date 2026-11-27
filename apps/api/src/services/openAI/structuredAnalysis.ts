@@ -5,13 +5,13 @@ import {
   ContentFilterFinishReasonError,
   LengthFinishReasonError,
 } from 'openai/core/error';
-import { z } from 'zod';
-import { SYNTAX_CONSTITUENTS } from '@/constants/syntax-constituents';
-import { throwCustomError } from '@/utils/customError';
+import { SYNTAX_CONSTITUENTS } from 'syntax-analyzer-shared/syntax-constituents.js';
 import {
   filterRedundantSyntaxTags,
   isPunctuationToken,
-} from '@/utils/syntax-tags';
+} from 'syntax-analyzer-shared/syntax-tags.js';
+import { z } from 'zod';
+import { throwCustomError } from '@/utils/customError';
 import type { CreateChatModel } from './openAIUtils';
 
 const analysisSpansSchema = z.object({

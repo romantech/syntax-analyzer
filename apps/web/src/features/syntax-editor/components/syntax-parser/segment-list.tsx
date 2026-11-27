@@ -1,8 +1,8 @@
 import { Fragment, type ReactNode } from 'react';
 
 import { Constituent, type TSegment } from '@/features/syntax-editor';
-import { getOverviewTag } from '../../helpers/learning-tags';
-import type { getOverviewDetails } from '../../helpers/overview-details';
+import { getOverviewTag } from '@/features/syntax-editor/helpers/learning-tags';
+import type { getOverviewDetails } from '@/features/syntax-editor/helpers/overview-details';
 
 export const hasOverviewTags = (segment: TSegment): boolean =>
   !!getOverviewTag(segment) || segment.children.some(hasOverviewTags);

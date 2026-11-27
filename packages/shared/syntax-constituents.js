@@ -1,18 +1,18 @@
-export const ADVERBIAL = {
+export const ADVERBIAL = /** @type {const} */ ({
   elementId: 33,
   label: 'adverbial',
   abbreviation: 'advl',
   type: 'token',
-} as const;
+});
 
-export const CONJUNCTION = {
+export const CONJUNCTION = /** @type {const} */ ({
   elementId: 13,
   label: 'conjunction',
   abbreviation: 'conj',
   type: 'token',
-} as const;
+});
 
-export const SYNTAX_CONSTITUENTS = [
+export const SYNTAX_CONSTITUENTS = /** @type {const} */ ([
   {
     elementId: 1,
     label: 'subject',
@@ -231,4 +231,4 @@ export const SYNTAX_CONSTITUENTS = [
     abbreviation: 'do.aux',
     type: 'token',
   },
-] as const;
+]);

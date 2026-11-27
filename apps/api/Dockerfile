@@ -3,6 +3,7 @@ WORKDIR /workspace
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json apps/api/package.json
+COPY packages/shared/ packages/shared/
 RUN npm install --global "$(node -p 'require("./package.json").packageManager')" \
     && pnpm --filter syntax-analyzer-api install --frozen-lockfile --ignore-scripts
 

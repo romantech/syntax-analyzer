@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
-import { SYNTAX_CONSTITUENTS } from '../../../api/src/constants/syntax-constituents';
+import { SYNTAX_CONSTITUENTS } from 'syntax-analyzer-shared/syntax-constituents.js';
 import type { TAnalysis, TSegment } from '../../src/features/syntax-editor/types/analysis';
 
 let nextId = 0;

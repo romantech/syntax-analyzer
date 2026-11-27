@@ -4,7 +4,7 @@ import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PiTextTBold } from 'react-icons/pi';
 import { SENTENCE_CONTROL_HEIGHT } from '@/features/syntax-analyzer/constants';
-import { translateValidationMessage } from '../../schemes/validation-messages';
+import { translateValidationMessage } from '@/features/syntax-analyzer/schemes/validation-messages';
 
 interface SentenceInputProps extends InputProps {
   errorMessage?: string;

@@ -4,6 +4,8 @@
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable", "webworker"],
     "module": "ESNext",
+    "allowJs": true,
+    "maxNodeModuleJsDepth": 1,
     "skipLibCheck": true,
 
     /* Bundler mode */

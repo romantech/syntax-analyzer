@@ -8,7 +8,7 @@ import {
   selectedTagActionAtom,
   tagInfoModeAtom,
 } from '@/features/syntax-editor';
-import { getConstituentTranslation } from '../../helpers/constituent-translation';
+import { getConstituentTranslation } from '@/features/syntax-editor/helpers/constituent-translation';
 
 interface TagButtonProps {
   constituent: ConstituentWithoutId;

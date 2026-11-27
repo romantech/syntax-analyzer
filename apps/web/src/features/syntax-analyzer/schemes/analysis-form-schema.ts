@@ -1,9 +1,8 @@
-import * as yup from 'yup';
-
 import {
   MAX_ANALYSIS_TOKEN_LENGTH,
   MAX_ANALYSIS_TOKENS,
-} from '../../../../../api/src/constants/analysis-limits.ts';
+} from 'syntax-analyzer-shared/analysis-limits.js';
+import * as yup from 'yup';
 import { tokenizeAnalysisSentence } from '../helpers/tokenize-analysis-sentence';
 import { englishSentenceSchema } from './english-sentence-schema';
 

@@ -1,13 +1,13 @@
 import { body, query } from 'express-validator';
 import {
+  MAX_ANALYSIS_TOKEN_LENGTH,
+  MAX_ANALYSIS_TOKENS,
+} from 'syntax-analyzer-shared/analysis-limits.js';
+import {
   ANALYSIS_REQUEST_MODEL_KEYS,
   ERROR_MESSAGES,
   RandomSentenceParam,
 } from '@/constants';
-import {
-  MAX_ANALYSIS_TOKEN_LENGTH,
-  MAX_ANALYSIS_TOKENS,
-} from '@/constants/analysis-limits';
 
 const { MISSING_FIELD } = ERROR_MESSAGES;
 const { SENT_COUNT, TOPICS, MAX_CHARS } = RandomSentenceParam;
