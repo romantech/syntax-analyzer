@@ -35,3 +35,4 @@ stats.*
 # Tooling
 .qodo/
 .vercel/
+test-results/

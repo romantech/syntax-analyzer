@@ -18,6 +18,7 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   --constituent-label-size: 2rem;
   --constituent-label-surface-inset: 3px;
   --constituent-label-inline-space: 0px;
+  --constituent-label-inline-offset: 0px;
   --constituent-label-offset: 0px;
   position: relative;
   padding-inline: var(--constituent-label-inline-space);
@@ -27,7 +28,7 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
     z-index: 2;
     display: inline-flex;
     align-items: center;
-    left: 50%;
+    left: calc(50% + var(--constituent-label-inline-offset));
     transform: translateX(-50%);
     isolation: isolate;
     white-space: nowrap;

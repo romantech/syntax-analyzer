@@ -62,34 +62,97 @@ const fitLabelWidth = (element: HTMLElement, labels: Element) => {
   }
 };
 
-const assignCalculatedLevel = (element: HTMLElement): { level: number; bottom: number } => {
+interface LabelCard {
+  element: HTMLElement;
+  frame: Element;
+  content: Element;
+  level: number;
+}
+
+const assignCalculatedLevel = (element: HTMLElement, cards: LabelCard[]): number => {
   let maxChildLevel = 0;
-  let maxChildBottom = Number.NEGATIVE_INFINITY;
 
   for (const child of element.children) {
-    if (child.classList.contains('constituent-labels')) continue;
-    const { level, bottom } = assignCalculatedLevel(child as HTMLElement);
-    maxChildLevel = Math.max(maxChildLevel, level);
-    maxChildBottom = Math.max(maxChildBottom, bottom);
+    if (!(child instanceof HTMLElement) || child.classList.contains('constituent-labels')) continue;
+    maxChildLevel = Math.max(maxChildLevel, assignCalculatedLevel(child, cards));
   }
 
   const classesToCheck = [CONSTITUENT_CLASSES.TOKEN, CONSTITUENT_CLASSES.TOKEN_GROUP];
   const constituentClass = classesToCheck.find((className) =>
     element.classList.contains(className),
   );
-  if (!constituentClass) return { level: maxChildLevel, bottom: maxChildBottom };
+  if (!constituentClass) return maxChildLevel;
 
   const level = maxChildLevel + 1;
   element.dataset[kebabToCamel(`${constituentClass}-lv`)] = `${level}`;
   const frame = element.querySelector(':scope > .constituent-labels');
-  if (!frame?.firstElementChild) return { level, bottom: maxChildBottom };
+  const content = frame?.firstElementChild;
+  if (frame && content) {
+    fitLabelWidth(element, content);
+    cards.push({ element, frame, content, level });
+  }
+  return level;
+};
 
-  fitLabelWidth(element, frame.firstElementChild);
-  const { top, bottom } = frame.getBoundingClientRect();
-  // Move the label and its connector together past the measured end of the child cards.
-  const offset = Math.max(0, maxChildBottom - top);
-  if (offset > 0) element.style.setProperty('--constituent-label-offset', `${offset}px`);
-  return { level, bottom: bottom + offset };
+interface CardBounds {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
+
+const placeLabelCards = (sentence: HTMLElement, cards: LabelCard[]) => {
+  const { left: sentenceLeft, right: sentenceRight } = sentence.getBoundingClientRect();
+  const viewport = sentence.closest<HTMLElement>('[role="region"]');
+  const start = viewport
+    ? viewport.getBoundingClientRect().left + viewport.clientLeft - viewport.scrollLeft
+    : sentenceLeft;
+
+  // Measure after all inline spacing is set. Use the final content width even while
+  // a disclosure frame is transitioning to that width.
+  const measured = cards
+    .sort((a, b) => a.level - b.level)
+    .map(({ element, frame, content }) => {
+      const { x, width, top, height } = frame.getBoundingClientRect();
+      const contentWidth = content.getBoundingClientRect().width;
+      const centeredLeft = x + (width - contentWidth) / 2;
+      // Keep edge labels readable within the existing horizontal scroll area.
+      const left = Math.max(start, Math.min(centeredLeft, sentenceRight - contentWidth));
+      return {
+        element,
+        left,
+        right: left + contentWidth,
+        inlineOffset: left - centeredLeft,
+        top,
+        height,
+      };
+    });
+
+  const placed: CardBounds[] = [];
+  const childBottoms = new Map<Element, number>();
+  let labelBottom = Number.NEGATIVE_INFINITY;
+  for (const { element, left, right, inlineOffset, top, height } of measured) {
+    let nextTop = Math.max(top, childBottoms.get(element) ?? top);
+    for (const card of placed) {
+      if (card.top >= nextTop + height) break;
+      if (left < card.right && right > card.left && nextTop < card.bottom) {
+        nextTop = card.bottom;
+      }
+    }
+    const offset = nextTop - top;
+    if (offset > 0) element.style.setProperty('--constituent-label-offset', `${offset}px`);
+    if (inlineOffset !== 0) {
+      element.style.setProperty('--constituent-label-inline-offset', `${inlineOffset}px`);
+    }
+
+    const bottom = nextTop + height;
+    placed.push({ left, right, top: nextTop, bottom });
+    placed.sort((a, b) => a.top - b.top);
+    const parent = element.parentElement?.closest(`.${CONSTITUENT_CLASSES.CONSTITUENT}`);
+    if (parent) childBottoms.set(parent, Math.max(childBottoms.get(parent) ?? bottom, bottom));
+    labelBottom = Math.max(labelBottom, bottom);
+  }
+  return labelBottom;
 };
 
 export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapMode = false) => {
@@ -101,20 +164,16 @@ export const calculateNestingLevel = (ref: RefObject<HTMLElement | null>, isTapM
     `.${CONSTITUENT_CLASSES.CONSTITUENT}`,
   )) {
     constituent.style.removeProperty('--constituent-label-inline-space');
+    constituent.style.removeProperty('--constituent-label-inline-offset');
     constituent.style.removeProperty('--constituent-label-offset');
   }
 
-  assignCalculatedLevel(sentence);
+  const cards: LabelCard[] = [];
+  assignCalculatedLevel(sentence, cards);
+  const labelBottom = placeLabelCards(sentence, cards);
 
   // 절대 위치 라벨도 모바일 문장 스크롤 영역의 높이에 포함한다.
   sentence.style.paddingBottom = '0px';
   const bottom = sentence.getBoundingClientRect().bottom;
-  const labelBottom = Math.max(
-    bottom,
-    ...Array.from(
-      sentence.querySelectorAll('.constituent-labels'),
-      (label) => label.getBoundingClientRect().bottom,
-    ),
-  );
-  sentence.style.paddingBottom = `${labelBottom - bottom + (isTapMode ? 16 : 8)}px`;
+  sentence.style.paddingBottom = `${Math.max(0, labelBottom - bottom) + (isTapMode ? 16 : 8)}px`;
 };

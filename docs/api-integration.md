@@ -44,6 +44,17 @@ HTTP 테스트는 운영과 같은 `createServer`에서 라우트와 오류 처�
 - 분석과 문장 생성은 각각 성공한 요청당 1회 차감한다. 횟수는 개발 서버 메모리에 저장하며 서버를 다시 시작하면 초기화된다.
 - 생성에는 주제와 무관한 고정 문장을 사용한다. 첫 번째 샘플과 입력 토큰이 일치하면 편집기 샘플의 세그먼트 트리를 반환한다. 다른 입력에는 입력 토큰 전체를 감싸는 루트 세그먼트만 반환한다.
 
+### 상세 태그 브라우저 테스트
+
+Google Chrome이 설치된 환경에서 WebKit을 설치한 뒤 테스트를 실행한다.
+
+```bash
+pnpm --filter syntax-analyzer-web exec playwright install webkit
+pnpm --filter syntax-analyzer-web test:browser
+```
+
+테스트는 목 개발 서버를 시작하거나 같은 주소에서 실행 중인 서버를 재사용한다. 고정된 분석 응답으로 Chrome과 320px 모바일 WebKit에서 상세 태그의 겹침, 잘림, 펼침 전후의 단어 위치와 가로 스크롤 폭을 확인한다.
+
 ### 샘플 분석 확인
 
 1. `/analyzer`에서 문장을 생성하고 첫 번째 문장인 `The idea that she proposed was innovative.`를 분석 입력에 넣는다.
