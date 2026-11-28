@@ -34,6 +34,7 @@ Syntax Analyzer is a web app that automatically analyzes English sentence struct
 3. Generate random English sentences on the topics you enter.
 
 After choosing `Expand all tags`, use the arrow next to a label to collapse or reopen that group's details.
+If you open every detail individually, the button changes to `Collapse all tags`.
 
 # Tech Stack
 

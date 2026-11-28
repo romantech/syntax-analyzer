@@ -367,6 +367,35 @@ function dawnAnalysis(firstWords: [string, string] = ['Before', 'dawn']): TAnaly
   };
 }
 
+test('opening the last nested detail updates the all-tags button', async ({ page }) => {
+  const region = await openAnalysis(page, dawnAnalysis());
+  const expandAll = region.getByRole('button', { name: '전체 태그 펼치기' });
+  const collapseAll = region.getByRole('button', { name: '전체 태그 접기' });
+  const time = region.getByRole('button', { name: '부사어 상세 태그 (1~2 단어)' });
+  const subject = region.getByRole('button', { name: '주어 상세 태그 (4~5 단어)' });
+  const agent = region.getByRole('button', { name: '부사어 상세 태그 (8~10 단어)' });
+  const nested = region.getByRole('button', { name: '전치사 목적어 상세 태그 (9~10 단어)' });
+
+  await time.press('Enter');
+  await subject.press('Enter');
+  await agent.press('Enter');
+  await expect(nested).toHaveAttribute('aria-expanded', 'false');
+  await expect(expandAll).toHaveAttribute('aria-expanded', 'false');
+
+  await nested.press('Enter');
+  await expect(collapseAll).toHaveAttribute('aria-expanded', 'true');
+  await nested.press('Enter');
+  await expect(expandAll).toHaveAttribute('aria-expanded', 'false');
+  await nested.press('Enter');
+  await collapseAll.press('Enter');
+
+  await expect(expandAll).toHaveAttribute('aria-expanded', 'false');
+  await expect(time).toHaveAttribute('aria-expanded', 'false');
+  await expect(subject).toHaveAttribute('aria-expanded', 'false');
+  await expect(agent).toHaveAttribute('aria-expanded', 'false');
+  await expect(nested).toBeHidden();
+});
+
 for (const theme of ['light', 'dark']) {
   test(`subject tags keep their order, colors, and spacing in both expansion modes (${theme})`, async ({
     page,

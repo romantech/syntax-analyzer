@@ -26,6 +26,16 @@ function visibleTagIds(details: ReadonlyMap<number, SegmentDetails>) {
   return new Set([...details.values()].flatMap(({ tags }) => tags.map(({ id }) => id)));
 }
 
+export function areAllOverviewTagsVisible(
+  segment: TSegment,
+  details: ReadonlyMap<number, SegmentDetails>,
+): boolean {
+  return (
+    (details.get(segment.id)?.tags.length ?? 0) === segment.constituents.length &&
+    segment.children.every((child) => areAllOverviewTagsVisible(child, details))
+  );
+}
+
 export function getOverviewDetails(
   segment: TSegment,
   toggled: ReadonlySet<number>,

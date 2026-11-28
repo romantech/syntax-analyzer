@@ -19,6 +19,7 @@ import {
 } from '@/features/syntax-editor';
 import { getLearningSegment } from '@/features/syntax-editor/helpers/learning-tags';
 import {
+  areAllOverviewTagsVisible,
   getOverviewDetails,
   toggleOverviewExpansion,
 } from '@/features/syntax-editor/helpers/overview-details';
@@ -88,7 +89,10 @@ function AnalysisSentence({
     [hasOverview, isEditing, learningSegment, toggled, showAllTags],
   );
   const allTagsVisible =
-    isEditing || (showAllTags && ![...toggled].some((id) => overviewDetails?.get(id)?.canExpand));
+    isEditing ||
+    (!!overviewDetails &&
+      (showAllTags || toggled.size > 0) &&
+      areAllOverviewTagsVisible(learningSegment, overviewDetails));
   const overviewBaseline = useMemo(
     () => (hasOverview && !isEditing ? getOverviewDetails(learningSegment, new Set()) : undefined),
     [hasOverview, isEditing, learningSegment],
