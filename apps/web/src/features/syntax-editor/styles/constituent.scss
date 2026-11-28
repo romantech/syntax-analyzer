@@ -125,6 +125,17 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
       padding-inline-start: 0.25rem;
     }
   }
+
+  &[data-abbreviated] {
+    > button:first-child {
+      padding-inline-start: 0.5rem;
+    }
+
+    > .constituent-chevron {
+      justify-items: end;
+      padding-inline: 0.125rem 0.5rem;
+    }
+  }
 }
 
 button.constituent-label,

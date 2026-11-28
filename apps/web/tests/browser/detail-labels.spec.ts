@@ -749,6 +749,27 @@ test('syntax labels keep balanced padding without moving words', async ({ page, 
   await expect(verbDisclosure).toHaveCSS('padding-block-start', isMobile ? '11.5px' : '6.5px');
   await expect(verbDisclosure).toHaveCSS('padding-block-end', isMobile ? '12.5px' : '7.5px');
   await expectDisclosureSize(verbDisclosure, isMobile);
+
+  if (isMobile) {
+    for (const abbreviation of ['s', 'v', 'advl']) {
+      const label = region.getByRole('button', { name: abbreviation, exact: true }).first();
+      await expectDisclosureSize(label, true);
+      const [left, right, gap] = await label.evaluate((button) => {
+        const card = button.closest('.constituent-labels');
+        const chevron = button.nextElementSibling?.querySelector('svg');
+        if (!card || !chevron) throw new Error('Missing disclosure card or chevron');
+        const range = document.createRange();
+        range.selectNodeContents(button);
+        const text = range.getBoundingClientRect();
+        const icon = chevron.getBoundingClientRect();
+        const frame = card.getBoundingClientRect();
+        return [text.left - frame.left, frame.right - icon.right, icon.left - text.right];
+      });
+      expect(left).toBeGreaterThanOrEqual(7.5);
+      expect(right).toBeGreaterThanOrEqual(7.5);
+      expect(gap).toBeLessThanOrEqual(8);
+    }
+  }
 });
 
 test('shared clause details hide redundant buttons and keep individual details available', async ({
