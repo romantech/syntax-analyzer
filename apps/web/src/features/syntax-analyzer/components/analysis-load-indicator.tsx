@@ -50,7 +50,7 @@ export default function AnalysisLoadIndicator({
     >
       {/* The animation has transparent padding below the artwork. */}
       <Box
-        w={{ base: 60, md: 32, lg: 350 }}
+        w={{ base: 64, md: 32, lg: 350 }}
         maxW={{ mdDown: 'min(100%, 45svh)' }}
         mb={{ mdDown: -8 }}
         aspectRatio={1}
@@ -62,7 +62,10 @@ export default function AnalysisLoadIndicator({
           style={{ width: '100%', height: '100%' }}
         />
       </Box>
-      <Stack gap={{ base: 2, lg: 5 }}>
+      <Stack
+        gap={{ base: 2, lg: 5 }}
+        css={{ mdDown: { '@media (orientation: portrait)': { position: 'relative', top: -5 } } }}
+      >
         <Heading
           fontSize={{ base: '4xl', md: '3xl', lg: '6xl' }}
           lineHeight={{ base: 1.2, lg: 1 }}
