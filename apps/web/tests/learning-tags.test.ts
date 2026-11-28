@@ -209,6 +209,22 @@ test('공유 등위절이 보이면 현재 태그를 바꾸는 버튼만 표시�
   assert.equal(subjectOpen.get(subject.id)?.canExpand, true);
   assert.equal(subjectOpen.get(subject.id)?.expanded, true);
   assert.equal(subjectOpen.get(clause.id)?.tags.length, 1);
+
+  const all = getOverviewDetails(learning, new Set(), true);
+  assert.equal(all.get(verb.id)?.expanded, true);
+  assert.equal(all.get(object.id)?.expanded, true);
+  assert.equal(all.get(subject.id)?.canExpand, false);
+
+  const verbClosed = getOverviewDetails(learning, new Set([verb.id]), true);
+  assert.equal(verbClosed.has(lexicalVerb.id), false);
+  assert.equal(verbClosed.get(auxiliary.id)?.tags[0]?.label, 'perfect auxiliary');
+  assert.equal(verbClosed.get(object.id)?.tags[1]?.label, 'noun phrase');
+  assert.equal(verbClosed.get(clause.id)?.tags[0]?.label, 'coordinating clause');
+
+  const subjectOnly = getOverviewDetails(learning, new Set([verb.id, object.id]), true);
+  assert.equal(subjectOnly.get(subject.id)?.canExpand, true);
+  const allClosed = getOverviewDetails(learning, new Set([verb.id, object.id, subject.id]), true);
+  assert.deepEqual(allClosed.get(clause.id)?.tags, []);
 });
 
 test('접속사가 생략된 명사절의 공통 버튼은 첫 라벨에 표시한다', () => {

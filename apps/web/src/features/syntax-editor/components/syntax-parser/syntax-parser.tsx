@@ -69,7 +69,7 @@ function AnalysisSentence({
   const sentenceId = useId();
   const showFullTagNames = useAtomValue(showFullTagNamesAtom);
   const [showAllTags, setShowAllTags] = useState(false);
-  const [expanded, setExpanded] = useState<ReadonlySet<number>>(() => new Set());
+  const [toggled, setToggled] = useState<ReadonlySet<number>>(() => new Set());
   const [previouslyVisibleTags, setPreviouslyVisibleTags] = useState<ReadonlySet<number>>();
   const selectedTag = useAtomValue(selectedTagAtom);
   const deleteMode = useAtomValue(deleteModeAtom);
@@ -79,12 +79,16 @@ function AnalysisSentence({
     [analysis.isAnalyzedByGPT, analysis.sentence, segment],
   );
   const hasOverview = analysis.isAnalyzedByGPT && hasOverviewTags(learningSegment);
-  const allTagsVisible = !hasOverview || showAllTags || isEditing;
   const displayedSegment = isEditing ? segment : learningSegment;
   const overviewDetails = useMemo(
-    () => (allTagsVisible ? undefined : getOverviewDetails(learningSegment, expanded)),
-    [allTagsVisible, learningSegment, expanded],
+    () =>
+      hasOverview && !isEditing
+        ? getOverviewDetails(learningSegment, toggled, showAllTags)
+        : undefined,
+    [hasOverview, isEditing, learningSegment, toggled, showAllTags],
   );
+  const allTagsVisible =
+    isEditing || (showAllTags && ![...toggled].some((id) => overviewDetails?.get(id)?.canExpand));
   const overviewBaseline = useMemo(
     () => (hasOverview && !isEditing ? getOverviewDetails(learningSegment, new Set()) : undefined),
     [hasOverview, isEditing, learningSegment],
@@ -103,8 +107,8 @@ function AnalysisSentence({
   };
 
   const toggle = (segmentId: number, animate: boolean) => {
-    markRevealedTags(animate && !expanded.has(segmentId));
-    setExpanded((previous) => toggleOverviewExpansion(previous, segmentId));
+    markRevealedTags(animate && !overviewDetails?.get(segmentId)?.expanded);
+    setToggled((previous) => toggleOverviewExpansion(previous, segmentId));
   };
 
   useEffect(() => {
@@ -117,7 +121,7 @@ function AnalysisSentence({
     targetRef: sentenceRef,
     segment: displayedSegment,
     isTapMode,
-    overviewDetails: allTagsVisible ? undefined : expanded,
+    overviewDetails,
     showFullTagNames,
     language: i18n.resolvedLanguage,
   });
@@ -132,9 +136,9 @@ function AnalysisSentence({
             disabled={isEditing}
             isTapMode={isTapMode}
             onClick={(event) => {
-              markRevealedTags(event.detail > 0 && !showAllTags);
-              if (showAllTags) setExpanded(new Set());
-              setShowAllTags(!showAllTags);
+              markRevealedTags(event.detail > 0 && !allTagsVisible);
+              setToggled(new Set());
+              setShowAllTags(!allTagsVisible);
             }}
           />
         </Box>
