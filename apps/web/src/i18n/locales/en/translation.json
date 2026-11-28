@@ -8,7 +8,7 @@
     "enterSentence": "Enter an English sentence",
     "exhausted": "You've reached the daily limit. Please try again tomorrow.",
     "loading": "Analyzing the sentence",
-    "loadingTime": "This can take up to <time>1 minute</time>",
+    "loadingTime": "Usually finishes within <time>5 seconds</time>",
     "remaining": "Analyses remaining: {{remaining}}",
     "remainingLabel": "Remaining analysis count",
     "sentence": "English sentence",
