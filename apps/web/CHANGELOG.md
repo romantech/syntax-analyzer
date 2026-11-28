@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.8.0](https://github.com/romantech/syntax-analyzer/compare/v1.7.3...v1.8.0) (2026-11-28)
+
+
+### Features
+
+* **web:** allow individual collapse after expanding all tags ([#303](https://github.com/romantech/syntax-analyzer/issues/303)) ([7bfd9cd](https://github.com/romantech/syntax-analyzer/commit/7bfd9cd898361215c8357f4475308f56a4841405))
+* **web:** show descriptions on sentence tags ([#306](https://github.com/romantech/syntax-analyzer/issues/306)) ([48fe0f6](https://github.com/romantech/syntax-analyzer/commit/48fe0f637fc27452431d8aba09fc0a35272485a9)), closes [#255](https://github.com/romantech/syntax-analyzer/issues/255)
+
+
+### Bug Fixes
+
+* **web:** balance mobile abbreviation spacing ([#308](https://github.com/romantech/syntax-analyzer/issues/308)) ([25745dc](https://github.com/romantech/syntax-analyzer/commit/25745dca468e3ba4f2ef1382bbd041906425a0c3))
+* **web:** improve mobile analysis loading ([#309](https://github.com/romantech/syntax-analyzer/issues/309)) ([ecfa930](https://github.com/romantech/syntax-analyzer/commit/ecfa9302c76e9aa631eb3b3006504edc91cdc242))
+* **web:** stabilize mobile tag connectors ([#307](https://github.com/romantech/syntax-analyzer/issues/307)) ([03ea975](https://github.com/romantech/syntax-analyzer/commit/03ea9755e293e2aab8b52a184681599984c9bc93))
+* **web:** unify tag appearance across expansion modes ([#305](https://github.com/romantech/syntax-analyzer/issues/305)) ([1c29aa5](https://github.com/romantech/syntax-analyzer/commit/1c29aa5c402454918505f5fbc78a710b153c36bf))
+
 ## [1.7.3](https://github.com/romantech/syntax-analyzer/compare/v1.7.2...v1.7.3) (2026-11-27)
 
 
