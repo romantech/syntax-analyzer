@@ -38,6 +38,7 @@ export default function AnalysisLoadIndicator({
       role="status"
       direction={{ base: 'column', lg: 'row' }}
       align="center"
+      gap={{ base: 0, md: 2 }}
       isLoading={play}
       w="max-content"
       maxW="calc(100% - 32px)"
@@ -45,7 +46,13 @@ export default function AnalysisLoadIndicator({
       pointerEvents="none"
       {...stackProps}
     >
-      <Box w={{ base: 32, lg: 350 }} aspectRatio={1}>
+      {/* The animation has transparent padding below the artwork. */}
+      <Box
+        w={{ base: 48, md: 32, lg: 350 }}
+        maxW={{ mdDown: 'min(100%, 45svh)' }}
+        mb={{ mdDown: -8 }}
+        aspectRatio={1}
+      >
         <DotLottieReact
           loop
           data={loadingAnimation}
@@ -55,13 +62,14 @@ export default function AnalysisLoadIndicator({
       </Box>
       <Stack gap={{ base: 2, lg: 5 }}>
         <Heading
-          fontSize={{ base: '2xl', md: '3xl', lg: '6xl' }}
-          lineHeight={{ base: 1.33, md: 1.2, lg: 1 }}
+          fontSize={{ base: '3xl', lg: '6xl' }}
+          lineHeight={{ base: 1.2, lg: 1 }}
           fontWeight="bold"
+          textWrap={{ mdDown: 'balance' }}
         >
           {t('analyzer.loading')}
         </Heading>
-        <Text fontSize={{ base: 'md', lg: '2xl' }}>
+        <Text fontSize={{ base: 'lg', md: 'md', lg: '2xl' }}>
           <Trans
             t={t}
             i18nKey="analyzer.loadingTime"
