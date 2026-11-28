@@ -9,6 +9,7 @@ interface UseCalculateNestedLevelProps {
   isTapMode: boolean;
   overviewDetails: ReturnType<typeof getOverviewDetails> | undefined;
   showFullTagNames: boolean;
+  showTagDescriptions: boolean;
   language: string | undefined;
 }
 
@@ -18,6 +19,7 @@ export const useCalculateNestingLevel = ({
   isTapMode,
   overviewDetails,
   showFullTagNames,
+  showTagDescriptions,
   language,
 }: UseCalculateNestedLevelProps) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: rendered tags and label text determine the layout.
@@ -26,5 +28,13 @@ export const useCalculateNestingLevel = ({
     updateLayout();
     document.fonts.addEventListener('loadingdone', updateLayout);
     return () => document.fonts.removeEventListener('loadingdone', updateLayout);
-  }, [segment, overviewDetails, showFullTagNames, language, targetRef, isTapMode]);
+  }, [
+    segment,
+    overviewDetails,
+    showFullTagNames,
+    showTagDescriptions,
+    language,
+    targetRef,
+    isTapMode,
+  ]);
 };

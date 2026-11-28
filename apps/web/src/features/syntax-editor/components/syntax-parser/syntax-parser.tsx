@@ -14,6 +14,7 @@ import {
   type TAnalysis,
   TokenList,
   type TSegment,
+  tagInfoModeAtom,
   useCalculateNestingLevel,
   useSyntaxParserAnalysis,
 } from '@/features/syntax-editor';
@@ -75,6 +76,7 @@ function AnalysisSentence({
   const selectedTag = useAtomValue(selectedTagAtom);
   const deleteMode = useAtomValue(deleteModeAtom);
   const isEditing = !!selectedTag || deleteMode;
+  const showTagDescriptions = useAtomValue(tagInfoModeAtom) && !isEditing;
   const learningSegment = useMemo(
     () => (analysis.isAnalyzedByGPT ? getLearningSegment(segment, analysis.sentence) : segment),
     [analysis.isAnalyzedByGPT, analysis.sentence, segment],
@@ -127,6 +129,7 @@ function AnalysisSentence({
     isTapMode,
     overviewDetails,
     showFullTagNames,
+    showTagDescriptions,
     language: i18n.resolvedLanguage,
   });
 
@@ -154,6 +157,7 @@ function AnalysisSentence({
           overview={overviewDetails && { details: overviewDetails, toggle }}
           overviewBaseline={overviewBaseline}
           previouslyVisibleTags={isEditing ? undefined : previouslyVisibleTags}
+          descriptionMode={showTagDescriptions ? (isTapMode ? 'tap' : 'hover') : undefined}
         />
       </Sentence>
     </>

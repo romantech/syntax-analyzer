@@ -56,19 +56,20 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
 
 .constituent-label {
   --constituent-label-padding-block: calc(var(--constituent-label-surface-inset) + 0.25rem);
+  --label-padding-start: calc(
+    var(--constituent-label-padding-block) - var(--constituent-label-content-offset, 0px)
+  );
+  --label-padding-end: calc(
+    var(--constituent-label-padding-block-end, var(--constituent-label-padding-block)) +
+      var(--constituent-label-content-offset, 0px)
+  );
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.125rem;
   min-width: var(--constituent-label-size);
   min-height: var(--constituent-label-size);
-  padding-block: calc(
-      var(--constituent-label-padding-block) - var(--constituent-label-content-offset, 0px)
-    )
-    calc(
-      var(--constituent-label-padding-block-end, var(--constituent-label-padding-block)) +
-        var(--constituent-label-content-offset, 0px)
-    );
+  padding-block: var(--label-padding-start) var(--label-padding-end);
   padding-inline: 0.375rem;
   border-radius: 0.375rem;
   font-size: 0.875rem;
@@ -98,6 +99,7 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   }
 
   > svg,
+  .constituent-chevron > svg,
   &[data-measure-baseline="disclosure"]::after {
     flex: none;
     align-self: center;
@@ -106,7 +108,27 @@ $token-initial-pos-factor: 1; // 첫번째 토큰과 글자 사이 간격 (낮�
   }
 }
 
-button.constituent-label {
+.constituent-label[data-split-disclosure] {
+  align-items: stretch;
+  gap: 0;
+  min-width: var(--constituent-label-size);
+  padding: 0;
+
+  > button {
+    display: grid;
+    place-items: center;
+    min-width: 24px;
+    padding-block: var(--label-padding-start) var(--label-padding-end);
+    border-radius: inherit;
+
+    &:first-child {
+      padding-inline-start: 0.25rem;
+    }
+  }
+}
+
+button.constituent-label,
+.constituent-label[data-split-disclosure] > button {
   cursor: pointer;
 
   &[aria-expanded][data-abbreviated] {
@@ -128,7 +150,8 @@ button.constituent-label {
     transition: width 160ms ease-out;
   }
 
-  button.constituent-label[aria-expanded] > svg {
+  .constituent-chevron > svg,
+  .constituent-label[aria-expanded] > svg {
     transition: transform 160ms ease-out;
   }
 
@@ -224,7 +247,7 @@ button.constituent-label {
 .constituent[data-stacked-labels] > .constituent-labels > .constituent-label-content {
   flex-direction: column;
 
-  > .constituent-label + span.constituent-label {
+  > .constituent-label + .constituent-label[data-static-label] {
     --constituent-label-padding-block: 0.25rem;
     min-height: 0;
 
@@ -237,11 +260,11 @@ button.constituent-label {
     }
   }
 
-  > button.constituent-label {
+  > .constituent-label:is([aria-expanded], [data-split-disclosure]) {
     position: relative;
     z-index: 1;
 
-    + span.constituent-label {
+    + .constituent-label[data-static-label] {
       margin-block-start: -0.4375rem;
     }
   }
@@ -262,7 +285,8 @@ button.constituent-label {
     --token-spacing: 2.75rem;
   }
 
-  .constituent-label-content > span.constituent-label:only-child:not([data-measure-baseline]) {
+  .constituent-label-content
+    > .constituent-label[data-static-label]:only-child:not([data-measure-baseline]) {
     &:not([data-abbreviated]):is(
         [data-constituent-label="perfect auxiliary"],
         [data-constituent-label="verb"]

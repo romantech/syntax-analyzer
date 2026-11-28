@@ -222,9 +222,127 @@ async function expectCardLayout(region: Locator) {
 async function expectDisclosureSize(button: Locator, isMobile: boolean) {
   if (!isMobile) return;
   const rect = await button.boundingBox();
-  expect(rect?.width).toBeGreaterThanOrEqual(44);
+  expect(rect?.width).toBeGreaterThanOrEqual(24);
   expect(rect?.height).toBeGreaterThanOrEqual(44);
 }
+
+test('abbreviated sentence tags show descriptions without changing tag expansion', async ({
+  page,
+  isMobile,
+}) => {
+  const region = await openAnalysis(page, conditionalAnalysis('If I am late'));
+  await page.getByRole('switch', { name: '약칭' }).press('Space');
+  const card = region.locator(
+    '[data-segment-begin="0"][data-segment-end="4"] > .constituent-labels',
+  );
+  const expand = card.getByRole('button', { name: 'advl 상세 태그 (1~4 단어)' });
+  const label = isMobile ? card.getByRole('button', { name: 'advl', exact: true }) : expand;
+  const description = page.getByRole('tooltip').filter({ hasText: '부사어' });
+
+  if (isMobile) await label.tap();
+  else await label.hover();
+  await expect(description).toBeVisible();
+  await expect(description).toContainText('부사어');
+  await expect(expand).toHaveAttribute('aria-expanded', 'false');
+
+  if (isMobile) {
+    await label.tap();
+    await expect(description).toBeHidden();
+    await label.tap();
+    await expect(description).toBeVisible();
+    await region.getByText('If', { exact: true }).tap();
+    await expect(description).toBeHidden();
+    await label.tap();
+    await expect
+      .poll(() =>
+        description.evaluate((element) => {
+          const { left, right, top, bottom } = element.getBoundingClientRect();
+          return left >= 0 && right <= innerWidth && top >= 0 && bottom <= innerHeight;
+        }),
+      )
+      .toBe(true);
+    expect(await region.evaluate((element) => (element.scrollLeft += 100))).toBeGreaterThan(0);
+    await expect(description).toBeHidden();
+    await expand.tap();
+  } else {
+    await page.mouse.move(0, 0);
+    await expect(description).toBeHidden();
+    await page.keyboard.press('Tab');
+    await label.focus();
+    await expect(description).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(description).toBeHidden();
+    await expand.press('Enter');
+  }
+  await expect(expand).toHaveAttribute('aria-expanded', 'true');
+  await expect(region.locator('[data-constituent-label="conjunction"]')).toBeVisible();
+
+  await page.getByRole('switch', { name: '태그 설명' }).press('Space');
+  await expect(description).toBeHidden();
+  await expect(card.getByRole('button', { name: 'advl', exact: true })).toHaveCount(0);
+  await expand.press('Enter');
+  await expect(expand).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('sentence tag descriptions stay out of range selection and deletion', async ({
+  page,
+  isMobile,
+}) => {
+  await page.addInitScript(() => localStorage.setItem('syntax-analyzer-language', 'ko'));
+  await page.goto('/editor/sample/0');
+  // The devtools launcher covers the editor toolbar at this mobile viewport size.
+  await page.addStyleTag({ content: '#jotai-devtools-root { display: none }' });
+  const region = page.getByRole('region', { name: '구문 문장' });
+  const subject = region.getByRole('button', { name: '주어', exact: true });
+  const description = page.getByRole('tooltip').filter({ hasText: '문장의 주체를 나타내는' });
+  if (isMobile) await subject.tap();
+  else await subject.hover();
+  await expect(description).toBeVisible();
+
+  if (isMobile) await page.getByRole('button', { name: '태그 선택', exact: true }).tap();
+  await page.getByRole('button', { name: '간접 목적어', exact: true }).click();
+  await expect(description).toBeHidden();
+  await expect(subject).toHaveCount(0);
+
+  const applyRange = async (firstWord: string) => {
+    const first = region.getByText(firstWord, { exact: true });
+    const last = region.getByText('is', { exact: true });
+    if (isMobile) {
+      await first.tap();
+      await last.tap();
+      await page.getByRole('button', { name: '적용', exact: true }).tap();
+      return;
+    }
+    const start = await first.boundingBox();
+    const end = await last.boundingBox();
+    if (!start || !end) throw new Error('Missing sample words');
+    await page.mouse.move(start.x + start.width / 2, start.y + start.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(end.x + end.width / 2, end.y + end.height / 2, { steps: 4 });
+    await page.mouse.up();
+  };
+
+  await applyRange('warming');
+  await expect(
+    page.getByRole('alert').filter({ hasText: '구/절은 서로 교차할 수 없어요' }),
+  ).toBeVisible();
+  const addedTag = region.getByText('간접 목적어', { exact: true });
+  await expect(addedTag).toHaveCount(0);
+  if (isMobile) await page.getByRole('button', { name: '선택 취소' }).tap();
+  await applyRange('Global');
+  await expect(addedTag).toBeVisible();
+
+  const deleteMode = page.getByRole('button', { name: '태그 삭제', exact: true });
+  if (isMobile) {
+    await deleteMode.tap();
+    await addedTag.tap();
+  } else {
+    await deleteMode.click();
+    await addedTag.click();
+  }
+  await expect(addedTag).toHaveCount(0);
+  await expect(region.getByText('주어', { exact: true }).first()).toBeVisible();
+});
 
 for (const language of ['ko', 'en'] as const) {
   test(`individual and full disclosures preserve the sentence layout (${language})`, async ({
@@ -470,7 +588,7 @@ for (const language of ['ko', 'en'] as const) {
     const verbCard = region.locator(
       '[data-segment-begin="5"][data-segment-end="7"] > .constituent-labels',
     );
-    const details = parentCard.getByRole('button');
+    const details = parentCard.getByRole('button', { name: /상세 태그|details \(words/ });
     const expandAll = region.getByRole('button', { name: /전체 태그 펼치기|Expand all tags/ });
     const collapseAll = region.getByRole('button', { name: /전체 태그 접기|Collapse all tags/ });
     const abbreviations = page.getByRole('switch', { name: /약칭|Abbreviations/ });
