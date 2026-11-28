@@ -43,12 +43,13 @@ export default function AnalysisLoadIndicator({
       w="max-content"
       maxW="calc(100% - 32px)"
       textAlign={{ base: 'center', lg: 'start' }}
+      textWrap={{ mdDown: 'balance' }}
       pointerEvents="none"
       {...stackProps}
     >
       {/* The animation has transparent padding below the artwork. */}
       <Box
-        w={{ base: 48, md: 32, lg: 350 }}
+        w={{ base: 56, md: 32, lg: 350 }}
         maxW={{ mdDown: 'min(100%, 45svh)' }}
         mb={{ mdDown: -8 }}
         aspectRatio={1}
@@ -62,14 +63,13 @@ export default function AnalysisLoadIndicator({
       </Box>
       <Stack gap={{ base: 2, lg: 5 }}>
         <Heading
-          fontSize={{ base: '3xl', lg: '6xl' }}
+          fontSize={{ base: '4xl', md: '3xl', lg: '6xl' }}
           lineHeight={{ base: 1.2, lg: 1 }}
           fontWeight="bold"
-          textWrap={{ mdDown: 'balance' }}
         >
           {t('analyzer.loading')}
         </Heading>
-        <Text fontSize={{ base: 'lg', md: 'md', lg: '2xl' }}>
+        <Text fontSize={{ base: 'xl', md: 'md', lg: '2xl' }}>
           <Trans
             t={t}
             i18nKey="analyzer.loadingTime"
