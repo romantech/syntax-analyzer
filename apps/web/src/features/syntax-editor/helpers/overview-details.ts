@@ -16,8 +16,8 @@ const hasTags = (segment: TSegment): boolean =>
 const collapsedState = new Set<number>();
 const suppressedByAnalysis = new WeakMap<TSegment, ReadonlySet<number>>();
 
-export function toggleOverviewExpansion(expanded: ReadonlySet<number>, id: number) {
-  const next = new Set(expanded);
+export function toggleOverviewExpansion(toggled: ReadonlySet<number>, id: number) {
+  const next = new Set(toggled);
   if (!next.delete(id)) next.add(id);
   return next;
 }
@@ -26,21 +26,25 @@ function visibleTagIds(details: ReadonlyMap<number, SegmentDetails>) {
   return new Set([...details.values()].flatMap(({ tags }) => tags.map(({ id }) => id)));
 }
 
-export function getOverviewDetails(segment: TSegment, expanded: ReadonlySet<number>) {
+export function getOverviewDetails(
+  segment: TSegment,
+  toggled: ReadonlySet<number>,
+  expandAll = false,
+) {
   let suppressed = suppressedByAnalysis.get(segment);
   if (!suppressed) {
     suppressed = findRedundantDisclosures(segment);
     suppressedByAnalysis.set(segment, suppressed);
   }
-  const details = projectOverview(segment, expanded, suppressed);
-  if (!expanded.size) return details;
+  const details = projectOverview(segment, toggled, suppressed, expandAll);
+  if (!expandAll && !toggled.size) return details;
 
   // A shared tag can already be visible through another disclosure.
   const visible = visibleTagIds(details);
   for (const [id, detail] of details) {
     if (!detail.canExpand) continue;
     const next = visibleTagIds(
-      projectOverview(segment, toggleOverviewExpansion(expanded, id), suppressed),
+      projectOverview(segment, toggleOverviewExpansion(toggled, id), suppressed, expandAll),
     );
     detail.canExpand = visible.size !== next.size || [...next].some((tagId) => !visible.has(tagId));
   }
@@ -100,8 +104,9 @@ function findRedundantDisclosures(segment: TSegment) {
 
 function projectOverview(
   segment: TSegment,
-  expanded: ReadonlySet<number>,
+  toggled: ReadonlySet<number>,
   suppressed?: ReadonlySet<number>,
+  expandAll = false,
 ) {
   const details = new Map<number, SegmentDetails>();
 
@@ -110,7 +115,8 @@ function projectOverview(
     showForms: boolean,
     hasAncestorDetails: boolean,
     atClauseLevel: boolean,
-  ): boolean {
+    showAll: boolean,
+  ): { expanded: boolean; collapsed: boolean } {
     const { id, constituents, children } = segment;
     const role =
       getOverviewTag(segment) ??
@@ -122,21 +128,32 @@ function projectOverview(
       !!role &&
       !suppressed?.has(id) &&
       (hasAncestorDetails || otherTags.length > 0 || children.some(hasTags));
-    const isExpanded = canExpand && expanded.has(id);
+    const isToggled = toggled.has(id);
+    const isCollapsed = showAll && canExpand && isToggled;
+    const showAllHere = showAll && !isCollapsed;
+    const isExpanded = canExpand && (expandAll ? showAllHere : isToggled);
 
     let hasExpandedDescendant = false;
-    if (!role || isExpanded) {
+    let hasCollapsedDescendant = false;
+    if (showAllHere || !role || isExpanded) {
       // An expanded parent already reveals the context it shares with every child.
       const childHasAncestorDetails = !isExpanded && (hasAncestorDetails || contextTags.length > 0);
       const childrenAtClauseLevel = childrenAreAtClauseLevel(constituents, atClauseLevel);
       for (const child of children) {
-        if (visit(child, showForms || isExpanded, childHasAncestorDetails, childrenAtClauseLevel)) {
-          hasExpandedDescendant = true;
-        }
+        const childState = visit(
+          child,
+          showForms || isExpanded,
+          childHasAncestorDetails,
+          childrenAtClauseLevel,
+          showAllHere,
+        );
+        hasExpandedDescendant ||= childState.expanded;
+        hasCollapsedDescendant ||= childState.collapsed;
       }
     } else if (role.label === 'verb') {
       for (const child of children) {
-        if (isOverviewAuxiliary(getOverviewTag(child))) visit(child, showForms, false, false);
+        if (isOverviewAuxiliary(getOverviewTag(child)))
+          visit(child, showForms, false, false, false);
       }
     } else {
       const introducer = children[0];
@@ -146,21 +163,29 @@ function projectOverview(
         getOverviewTag(introducer)?.label === 'conjunction' &&
         constituents.some(({ label }) => label === 'noun clause')
       ) {
-        visit(introducer, false, false, true);
+        visit(introducer, false, false, true, false);
       }
     }
 
     const visibleDetails = isExpanded ? otherTags : hasExpandedDescendant ? contextTags : [];
+    // Keep shared context until the last disclosure that reveals it is closed.
+    const hideSharedContext = !role && hasCollapsedDescendant && !hasExpandedDescendant;
+    const fullTags = hideSharedContext
+      ? constituents.filter((tag) => !contextTags.includes(tag))
+      : constituents;
     details.set(id, {
-      tags: role ? [role, ...visibleDetails] : visibleDetails,
+      tags: showAllHere ? fullTags : role ? [role, ...visibleDetails] : visibleDetails,
       role,
       expanded: isExpanded,
       canExpand,
       detailOnly: showForms || !role,
     });
-    return isExpanded || hasExpandedDescendant;
+    return {
+      expanded: isExpanded || hasExpandedDescendant,
+      collapsed: isCollapsed || (!role && hasCollapsedDescendant),
+    };
   }
 
-  visit(segment, false, false, true);
+  visit(segment, false, false, true, expandAll);
   return details;
 }

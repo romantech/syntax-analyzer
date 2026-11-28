@@ -269,6 +269,49 @@ for (const language of ['ko', 'en'] as const) {
   });
 }
 
+test('individual disclosures toggle independently after expanding all tags', async ({
+  page,
+  isMobile,
+}) => {
+  const region = await openAnalysis(page, conditionalAnalysis('If I am late'));
+  const adverbial = region.getByRole('button', { name: '부사어 상세 태그 (1~4 단어)' });
+  const subject = region.getByRole('button', { name: '주어 상세 태그 (6~7 단어)' });
+  const adverbialClause = region.getByText('부사절', { exact: true });
+  const conjunction = region.getByText('접속사', { exact: true });
+  const expandAll = region.getByRole('button', { name: '전체 태그 펼치기' });
+  const collapseAll = region.getByRole('button', { name: '전체 태그 접기' });
+
+  await expandAll.press('Enter');
+  await expect(adverbial).toHaveAttribute('aria-expanded', 'true');
+  await expectDisclosureSize(adverbial, isMobile);
+  await expect(adverbialClause).toBeVisible();
+  await expect(conjunction).toBeVisible();
+
+  if (isMobile) await adverbial.tap();
+  else await adverbial.press('Enter');
+  await expect(adverbial).toHaveAttribute('aria-expanded', 'false');
+  if (!isMobile) await expect(adverbial).toBeFocused();
+  await expect(adverbialClause).toBeHidden();
+  await expect(conjunction).toBeHidden();
+  await expect(subject).toHaveAttribute('aria-expanded', 'true');
+  await expect(expandAll).toHaveAttribute('aria-expanded', 'false');
+  await expectCardLayout(region);
+
+  await adverbial.press('Enter');
+  await expect(adverbialClause).toBeVisible();
+  await expect(conjunction).toBeVisible();
+  await expect(collapseAll).toHaveAttribute('aria-expanded', 'true');
+
+  await subject.press('Enter');
+  await expect(subject).toHaveAttribute('aria-expanded', 'false');
+  await expandAll.press('Enter');
+  await expect(subject).toHaveAttribute('aria-expanded', 'true');
+  await collapseAll.press('Enter');
+  await expect(subject).toHaveAttribute('aria-expanded', 'false');
+  await expect(adverbial).toHaveAttribute('aria-expanded', 'false');
+  await expect(adverbialClause).toBeHidden();
+});
+
 test('conditional cards that fit stay on the same row', async ({ page }) => {
   const region = await openAnalysis(page, conditionalAnalysis('If guests arrive late'));
   await region.getByRole('button', { name: '부사어 상세 태그 (1~4 단어)' }).click();

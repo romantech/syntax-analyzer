@@ -1,12 +1,13 @@
 import { type RefObject, useLayoutEffect } from 'react';
 
 import { calculateNestingLevel, type TSegment } from '@/features/syntax-editor';
+import type { getOverviewDetails } from '@/features/syntax-editor/helpers/overview-details';
 
 interface UseCalculateNestedLevelProps {
   targetRef: RefObject<HTMLElement | null>;
   segment: TSegment;
   isTapMode: boolean;
-  overviewDetails: ReadonlySet<number> | undefined;
+  overviewDetails: ReturnType<typeof getOverviewDetails> | undefined;
   showFullTagNames: boolean;
   language: string | undefined;
 }

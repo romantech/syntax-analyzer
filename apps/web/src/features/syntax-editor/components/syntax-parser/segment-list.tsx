@@ -63,7 +63,7 @@ export default function SegmentList({
       tags={tags}
       detailOnly={!!overviewBaseline && (!baseline || baseline.detailOnly)}
       baselineRoleId={baseline?.role?.id}
-      baselineDisclosure={!overview && baseline?.canExpand}
+      baselineDisclosure={baseline?.canExpand && !details?.canExpand}
       overviewTagId={details?.role?.id}
       previouslyVisibleTags={previouslyVisibleTags}
       disclosure={
