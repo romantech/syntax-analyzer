@@ -8,7 +8,7 @@
     "enterSentence": "英文を入力",
     "exhausted": "本日の上限に達しました。明日もう一度お試しください。",
     "loading": "英文を分析中",
-    "loadingTime": "最長<time>1分</time>ほどかかる場合があります",
+    "loadingTime": "通常は<time>5秒</time>以内に完了します",
     "remaining": "分析の残り回数：{{remaining}}回",
     "remainingLabel": "分析の残り回数",
     "sentence": "英文",

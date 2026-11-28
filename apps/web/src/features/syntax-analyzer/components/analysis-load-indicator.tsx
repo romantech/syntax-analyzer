@@ -38,14 +38,23 @@ export default function AnalysisLoadIndicator({
       role="status"
       direction={{ base: 'column', lg: 'row' }}
       align="center"
+      gap={{ base: 0, md: 2 }}
       isLoading={play}
       w="max-content"
       maxW="calc(100% - 32px)"
       textAlign={{ base: 'center', lg: 'start' }}
+      textWrap={{ mdDown: 'balance' }}
       pointerEvents="none"
+      css={{ mdDown: { '@media (orientation: portrait)': { mt: -6 } } }}
       {...stackProps}
     >
-      <Box w={{ base: 32, lg: 350 }} aspectRatio={1}>
+      {/* The animation has transparent padding below the artwork. */}
+      <Box
+        w={{ base: 64, md: 32, lg: 350 }}
+        maxW={{ mdDown: 'min(100%, 45svh)' }}
+        mb={{ mdDown: -8 }}
+        aspectRatio={1}
+      >
         <DotLottieReact
           loop
           data={loadingAnimation}
@@ -53,15 +62,18 @@ export default function AnalysisLoadIndicator({
           style={{ width: '100%', height: '100%' }}
         />
       </Box>
-      <Stack gap={{ base: 2, lg: 5 }}>
+      <Stack
+        gap={{ base: 2, lg: 5 }}
+        css={{ mdDown: { '@media (orientation: portrait)': { position: 'relative', top: -5 } } }}
+      >
         <Heading
-          fontSize={{ base: '2xl', md: '3xl', lg: '6xl' }}
-          lineHeight={{ base: 1.33, md: 1.2, lg: 1 }}
+          fontSize={{ base: '4xl', md: '3xl', lg: '6xl' }}
+          lineHeight={{ base: 1.2, lg: 1 }}
           fontWeight="bold"
         >
           {t('analyzer.loading')}
         </Heading>
-        <Text fontSize={{ base: 'md', lg: '2xl' }}>
+        <Text fontSize={{ base: 'xl', md: 'md', lg: '2xl' }}>
           <Trans
             t={t}
             i18nKey="analyzer.loadingTime"

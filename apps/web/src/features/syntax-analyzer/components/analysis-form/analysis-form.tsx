@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   type ButtonProps,
   Field,
@@ -53,7 +54,11 @@ export default function AnalysisForm({ ...stackProps }: StackProps) {
           />
           <AnalysisButton disabled={!canAnalyze || isPending} />
         </SentenceInputRow>
-        {remainingCount === 0 && <UsageLimitMessage />}
+        {remainingCount === 0 && (
+          <Box mt={{ smDown: 2 }}>
+            <UsageLimitMessage />
+          </Box>
+        )}
         <SentenceInputHelp />
       </Field.Root>
       <ConfirmModal

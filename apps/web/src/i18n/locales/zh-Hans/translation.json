@@ -8,7 +8,7 @@
     "enterSentence": "输入英语句子",
     "exhausted": "今日额度已用完，请明天再试。",
     "loading": "正在分析句子",
-    "loadingTime": "这可能需要最多 <time>1 分钟</time>",
+    "loadingTime": "通常在 <time>5 秒</time>内完成",
     "remaining": "剩余分析次数：{{remaining}}",
     "remainingLabel": "剩余分析次数",
     "sentence": "英语句子",
