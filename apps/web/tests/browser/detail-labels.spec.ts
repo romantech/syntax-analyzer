@@ -354,7 +354,7 @@ function dawnAnalysis(firstWords: [string, string] = ['Before', 'dawn']): TAnaly
           ['adverbial', 'prepositional phrase'],
           [segment(1, 2, ['prepositional object'])],
         ),
-        segment(3, 5, ['subject', 'noun phrase']),
+        segment(3, 5, ['noun phrase', 'subject']),
         segment(5, 7, ['verb'], [segment(5, 6, ['passive auxiliary'])]),
         segment(
           7,
@@ -365,6 +365,75 @@ function dawnAnalysis(firstWords: [string, string] = ['Before', 'dawn']): TAnaly
       ],
     ),
   };
+}
+
+test('opening the last nested detail updates the all-tags button', async ({ page }) => {
+  const region = await openAnalysis(page, dawnAnalysis());
+  const expandAll = region.getByRole('button', { name: '전체 태그 펼치기' });
+  const collapseAll = region.getByRole('button', { name: '전체 태그 접기' });
+  const time = region.getByRole('button', { name: '부사어 상세 태그 (1~2 단어)' });
+  const subject = region.getByRole('button', { name: '주어 상세 태그 (4~5 단어)' });
+  const agent = region.getByRole('button', { name: '부사어 상세 태그 (8~10 단어)' });
+  const nested = region.getByRole('button', { name: '전치사 목적어 상세 태그 (9~10 단어)' });
+
+  await time.press('Enter');
+  await subject.press('Enter');
+  await agent.press('Enter');
+  await expect(nested).toHaveAttribute('aria-expanded', 'false');
+  await expect(expandAll).toHaveAttribute('aria-expanded', 'false');
+
+  await nested.press('Enter');
+  await expect(collapseAll).toHaveAttribute('aria-expanded', 'true');
+  await nested.press('Enter');
+  await expect(expandAll).toHaveAttribute('aria-expanded', 'false');
+  await nested.press('Enter');
+  await collapseAll.press('Enter');
+
+  await expect(expandAll).toHaveAttribute('aria-expanded', 'false');
+  await expect(time).toHaveAttribute('aria-expanded', 'false');
+  await expect(subject).toHaveAttribute('aria-expanded', 'false');
+  await expect(agent).toHaveAttribute('aria-expanded', 'false');
+  await expect(nested).toBeHidden();
+});
+
+for (const theme of ['light', 'dark']) {
+  test(`subject tags keep their order, colors, and spacing in both expansion modes (${theme})`, async ({
+    page,
+  }) => {
+    await page.addInitScript((mode) => localStorage.setItem('chakra-ui-color-mode', mode), theme);
+    const region = await openAnalysis(page, dawnAnalysis());
+    await expect(page.locator('html')).toHaveClass(new RegExp(`\\b${theme}\\b`));
+    const group = region.locator('[data-segment-begin="3"][data-segment-end="5"]');
+    const subject = group.getByRole('button', { name: '주어 상세 태그 (4~5 단어)' });
+    const labels = group.locator('.constituent-label');
+    const measureGroup = () =>
+      group.evaluate((element) => {
+        const frame = element.querySelector('.constituent-labels');
+        const word = element.querySelector('[data-token-index]');
+        if (!frame || !word) throw new Error('Missing subject card or word');
+        const connector = getComputedStyle(element, '::before');
+        return {
+          wordColor: getComputedStyle(word).color,
+          connectorColor: connector.borderBottomColor,
+          labelColors: Array.from(
+            frame.querySelectorAll('.constituent-label'),
+            (label) => getComputedStyle(label).color,
+          ),
+          cardHeight: frame.getBoundingClientRect().height,
+        };
+      });
+
+    await subject.press('Enter');
+    await expect(labels).toHaveText(['주어', '명사구']);
+    const individual = await measureGroup();
+    await subject.press('Enter');
+    await expect(labels).toHaveText(['주어']);
+
+    await region.getByRole('button', { name: '전체 태그 펼치기' }).press('Enter');
+    await expect(labels).toHaveText(['주어', '명사구']);
+    await expect.poll(measureGroup).toEqual(individual);
+    await expectCardLayout(region);
+  });
 }
 
 test('a wrapped detail fits the widest line without extra side padding', async ({ page }) => {

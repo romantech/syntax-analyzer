@@ -26,6 +26,16 @@ function visibleTagIds(details: ReadonlyMap<number, SegmentDetails>) {
   return new Set([...details.values()].flatMap(({ tags }) => tags.map(({ id }) => id)));
 }
 
+export function areAllOverviewTagsVisible(
+  segment: TSegment,
+  details: ReadonlyMap<number, SegmentDetails>,
+): boolean {
+  return (
+    (details.get(segment.id)?.tags.length ?? 0) === segment.constituents.length &&
+    segment.children.every((child) => areAllOverviewTagsVisible(child, details))
+  );
+}
+
 export function getOverviewDetails(
   segment: TSegment,
   toggled: ReadonlySet<number>,
@@ -167,14 +177,15 @@ function projectOverview(
       }
     }
 
-    const visibleDetails = isExpanded ? otherTags : hasExpandedDescendant ? contextTags : [];
     // Keep shared context until the last disclosure that reveals it is closed.
     const hideSharedContext = !role && hasCollapsedDescendant && !hasExpandedDescendant;
-    const fullTags = hideSharedContext
-      ? constituents.filter((tag) => !contextTags.includes(tag))
-      : constituents;
+    const fullDetails = hideSharedContext
+      ? otherTags.filter((tag) => !contextTags.includes(tag))
+      : otherTags;
+    const visibleDetails =
+      showAllHere || isExpanded ? fullDetails : hasExpandedDescendant ? contextTags : [];
     details.set(id, {
-      tags: showAllHere ? fullTags : role ? [role, ...visibleDetails] : visibleDetails,
+      tags: role ? [role, ...visibleDetails] : visibleDetails,
       role,
       expanded: isExpanded,
       canExpand,
