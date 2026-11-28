@@ -50,7 +50,7 @@ export default function AnalysisLoadIndicator({
     >
       {/* The animation has transparent padding below the artwork. */}
       <Box
-        w={{ base: 56, md: 32, lg: 350 }}
+        w={{ base: 60, md: 32, lg: 350 }}
         maxW={{ mdDown: 'min(100%, 45svh)' }}
         mb={{ mdDown: -8 }}
         aspectRatio={1}
