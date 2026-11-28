@@ -302,4 +302,15 @@ button.constituent-label,
   .constituent.token-group::before {
     pointer-events: none;
   }
+
+  @media (forced-colors: none) {
+    .constituent.token-group[data-token-group-lv]::before {
+      // Anchor both vertical strokes at the top so adjacent brackets share the same dash pattern.
+      --vertical-dashes: repeating-linear-gradient(currentColor 0 6px, transparent 6px 12px);
+      border-inline-width: 0;
+      background:
+        var(--vertical-dashes) left top / #{$constituent-border-width} 100% no-repeat,
+        var(--vertical-dashes) right top / #{$constituent-border-width} 100% no-repeat;
+    }
+  }
 }
