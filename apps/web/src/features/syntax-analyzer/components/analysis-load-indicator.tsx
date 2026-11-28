@@ -45,6 +45,7 @@ export default function AnalysisLoadIndicator({
       textAlign={{ base: 'center', lg: 'start' }}
       textWrap={{ mdDown: 'balance' }}
       pointerEvents="none"
+      css={{ mdDown: { '@media (orientation: portrait)': { mt: -6 } } }}
       {...stackProps}
     >
       {/* The animation has transparent padding below the artwork. */}
