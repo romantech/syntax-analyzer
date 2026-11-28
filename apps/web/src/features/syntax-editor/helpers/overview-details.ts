@@ -167,14 +167,15 @@ function projectOverview(
       }
     }
 
-    const visibleDetails = isExpanded ? otherTags : hasExpandedDescendant ? contextTags : [];
     // Keep shared context until the last disclosure that reveals it is closed.
     const hideSharedContext = !role && hasCollapsedDescendant && !hasExpandedDescendant;
-    const fullTags = hideSharedContext
-      ? constituents.filter((tag) => !contextTags.includes(tag))
-      : constituents;
+    const fullDetails = hideSharedContext
+      ? otherTags.filter((tag) => !contextTags.includes(tag))
+      : otherTags;
+    const visibleDetails =
+      showAllHere || isExpanded ? fullDetails : hasExpandedDescendant ? contextTags : [];
     details.set(id, {
-      tags: showAllHere ? fullTags : role ? [role, ...visibleDetails] : visibleDetails,
+      tags: role ? [role, ...visibleDetails] : visibleDetails,
       role,
       expanded: isExpanded,
       canExpand,
