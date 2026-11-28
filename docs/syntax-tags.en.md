@@ -1,6 +1,8 @@
 # Sentence Constituents
 
-The analyzer uses the grammatical categories below, and the editor uses them as tags. Turn on **Tag descriptions** to see what each grammatical category means in the tag picker. The table shows each tag’s base type. The analysis uses `token-group` when a `token` tag, such as a subject, spans multiple words.
+The analyzer uses the grammatical categories below, and the editor uses them as tags. Turn on **Tag descriptions** to see explanations in the tag picker and on sentence tags. On desktop, hover over or focus a sentence tag. On mobile, tap the tag name to open its description, then tap the same tag or tap outside to close it. Tap the arrow to expand or collapse detail tags. When abbreviations are enabled, the description also shows the full name.
+
+The table shows each tag’s base type. The analysis uses `token-group` when a `token` tag, such as a subject, spans multiple words.
 
 In the default view of an AI analysis, a clause-level prepositional phrase appears when it has no separate role tag. In `said to staff`, expand `to staff` to see the prepositional object tag on `staff`.
 
